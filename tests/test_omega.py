@@ -51,7 +51,7 @@ class OmegaTests(unittest.TestCase):
         self.assertIn('$(touch NEVER)',result['output'])
 
     def test_gate_failure_propagates(self):
-        with patch.object(app,'CONFIG',{'gates':{'bad':[sys.executable,'-c','raise SystemExit(5)']},'limits':app.CONFIG['limits']}):
+        with patch.object(app,'CONFIG',{'gates':{name:[sys.executable,'-c','raise SystemExit(5)' if name=='tests' else 'pass'] for name in ('build','tests','security','regression')},'limits':app.CONFIG['limits']}):
             self.assertFalse(app.gates()['passed'])
 
     def test_benchmark_detects_regression(self):
@@ -75,10 +75,10 @@ class OmegaTests(unittest.TestCase):
 
     def test_hook_denies_escape_and_policy_edit(self):
         for path in ('/tmp/outside','../outside','.git/config','.claude/agents/test.md','omega/config.json','.env','.env.local'):
-            self.assertFalse(authorize({'hook_event_name':'PreToolUse','tool_name':'Write','tool_input':{'file_path':path}})[0])
+            self.assertFalse(authorize({'hook_event_name':'PreToolUse','cwd':str(app.ROOT),'tool_name':'Write','tool_input':{'file_path':path}})[0])
 
     def test_hook_scoped_edit(self):
-        self.assertTrue(authorize({'hook_event_name':'PreToolUse','tool_name':'Edit','tool_input':{'file_path':str(app.ROOT/'docs/example.md')}})[0])
+        self.assertTrue(authorize({'hook_event_name':'PreToolUse','cwd':str(app.ROOT),'tool_name':'Edit','tool_input':{'file_path':str(app.ROOT/'docs/example.md')}})[0])
 
     def test_hook_denies_shell_bypass(self):
         for cmd in ('rm -rf /','git status --short; echo bypass','git push','curl https://example.com','python3 -c "print(1)"'):

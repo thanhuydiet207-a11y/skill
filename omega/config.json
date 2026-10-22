@@ -7,7 +7,8 @@
     "max_gate_seconds": 120,
     "max_context_bytes": 24000,
     "max_evidence_bytes": 16000,
-    "max_estimated_tokens": 16000
+    "max_estimated_tokens": 16000,
+    "max_output_bytes": 1048576
   },
   "gates": {
     "build": [
@@ -21,11 +22,7 @@
     "tests": [
       "python3",
       "-m",
-      "unittest",
-      "discover",
-      "-s",
-      "tests",
-      "-v"
+      "omega.test_runner"
     ],
     "security": [
       "python3",

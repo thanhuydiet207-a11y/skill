@@ -18,11 +18,9 @@ def packet(root, selections, max_bytes=24000):
     for selection in selections:
         match=re.fullmatch(r'(.+?):([1-9][0-9]*):([1-9][0-9]*)',selection)
         name=match[1] if match else selection
-        path=(root/name).resolve()
-        if not path.is_relative_to(root) or path==root: raise ValueError('Source escapes repository')
+        from omega.safety import source_path
+        path=source_path(root,name)
         relative=path.relative_to(root)
-        if any(part in ('.git','.omega','.aws') for part in relative.parts) or path.name=='.env' or path.name.startswith('.env.'):
-            raise ValueError('Private/runtime sources excluded')
         if not path.is_file() or path.stat().st_size > 1_000_000: raise ValueError('Missing or oversized source')
         raw=path.read_bytes()
         if b'\x00' in raw: raise ValueError('Binary source excluded')

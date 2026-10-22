@@ -6,8 +6,6 @@ import os
 from pathlib import Path
 import re
 import shutil
-import signal
-import subprocess
 import sys
 import time
 import uuid
@@ -24,40 +22,31 @@ def confined(path):
 
 
 def run(argv, timeout=120):
-    """Shell-free bounded execution; kill process group on timeout (POSIX)."""
-    started = time.monotonic()
-    with __import__('tempfile').TemporaryFile() as output:
-        p = subprocess.Popen(argv, cwd=ROOT, stdout=output, stderr=subprocess.STDOUT,
-                             start_new_session=True)
-        try:
-            code = p.wait(timeout=timeout)
-        except subprocess.TimeoutExpired:
-            os.killpg(p.pid, signal.SIGKILL)
-            p.wait()
-            code = 124
-        output.seek(0)
-        raw = output.read(CONFIG['limits']['max_evidence_bytes'] + 1)
-        truncated = len(raw) > CONFIG['limits']['max_evidence_bytes']
-        data = raw[:CONFIG['limits']['max_evidence_bytes']].decode(errors='replace')
-    return {'command': argv, 'exit_code': code, 'seconds': round(time.monotonic()-started, 3), 'output': data, 'truncated': truncated}
+    from omega.process import execute
+    return execute(argv,ROOT,timeout,CONFIG['limits']['max_evidence_bytes'],
+                   CONFIG['limits'].get('max_output_bytes',1048576))
 
 
-def git(*args):
+def git(*args, raw=False):
     result = run(['git', *args])
     if result['truncated']:
         raise ValueError('Git control output truncated; operation refused, narrow scope or increase reviewed limit')
+    if result.get('invalid_utf8'):
+        raise ValueError('Git output is not valid UTF-8; operation refused')
     if result['exit_code']:
         raise ValueError(result['output'])
-    return result['output'].strip()
+    return result['output'] if raw else result['output'].strip()
 
 
 def save(kind, data):
-    directory = confined('.omega/' + kind)
+    from omega.safety import artifact_path
+    directory = artifact_path(ROOT,'.omega/' + kind + '/placeholder',kind,False).parent
     directory.mkdir(parents=True, exist_ok=True)
     dest = confined(str(directory.relative_to(ROOT) / (str(time.time_ns())+'-'+uuid.uuid4().hex[:8]+'.json')))
     payload = {'schema': 1, 'project': str(ROOT), 'head': git('rev-parse','HEAD'),
                'created_utc': __import__('datetime').datetime.now(__import__('datetime').timezone.utc).isoformat(), **data}
-    dest.write_text(json.dumps(payload, indent=2, ensure_ascii=False)+'\n')
+    with dest.open('x',encoding='utf-8') as out:
+        out.write(json.dumps(payload, indent=2, ensure_ascii=False)+'\n')
     return str(dest.relative_to(ROOT))
 
 
@@ -72,10 +61,10 @@ def plan(complexity, conflict=False):
 
 
 def inventory():
-    paths = git('ls-files','--cached','--others','--exclude-standard').splitlines()
+    paths = [x for x in git('ls-files','-z','--cached','--others','--exclude-standard',raw=True).split('\0') if x]
     safe, skipped = [], []
     used = 0
-    for name in paths:
+    for name in dict.fromkeys(paths):
         try:
             p = confined(name)
             if not p.is_file():
@@ -125,13 +114,26 @@ def benchmark():
             'scope':'deterministic router contract only; native LLM skill efficacy not evaluated'}
 
 
+def validate_gates():
+    commands=CONFIG.get('gates')
+    required={'build','tests','security','regression'}
+    if not isinstance(commands,dict) or not required.issubset(commands):
+        raise ValueError('Missing required gates: build, tests, security, regression')
+    for name,argv in commands.items():
+        if not isinstance(name,str) or not name or not isinstance(argv,list) or not argv or any(not isinstance(x,str) or not x or '\0' in x for x in argv):
+            raise ValueError('Invalid gate argv')
+    seconds=CONFIG['limits']['max_gate_seconds']
+    if isinstance(seconds,bool) or not isinstance(seconds,(int,float)) or not 0 < seconds <= 600:
+        raise ValueError('Gate timeout must be between 0 and 600 seconds')
+
+
 def gates():
+    validate_gates()  # Validate ALL policy before executing the first command.
     results=[]
     for name,argv in CONFIG['gates'].items():
-        # Config is executable policy. Review edits as code; never shell-expand.
         result=run(argv, CONFIG['limits']['max_gate_seconds'])
         results.append({'gate':name,**result})
-    return {'passed':all(r['exit_code']==0 for r in results),'results':results}
+    return {'passed':bool(results) and all(r['exit_code']==0 for r in results),'results':results}
 
 
 def fingerprint(skill):
