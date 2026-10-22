@@ -121,5 +121,12 @@
     "promotion": "not performed; native evaluation and human review still required"
   },
   "native_claude": "not installed; not executed",
-  "github_ci": "configured; not executed on GitHub"
+  "github_ci": "workflow pushed; API inspection Forbidden; execution status unverified",
+  "publication": {
+    "branch": "omega/bootstrap",
+    "implementation_commit": "0f4033c4ce46940dd6ecd192d7a25e59b9bad36d",
+    "push_exit_code": 0,
+    "remote_sha_verified": true,
+    "merged_to_main": false
+  }
 }

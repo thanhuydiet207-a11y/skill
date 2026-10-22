@@ -26,8 +26,8 @@ Bằng chứng máy đọc: [local-validation.json](evidence/local-validation.js
 
 - Không tìm thấy executable `claude`; không có phiên bản Claude để xác minh. Chưa chạy slash skills hoặc native agents/hooks.
 - Tải docs chính thức `https://code.claude.com/docs/en/{hooks,sub-agents,skills}` trả HTTP 403. Không đoán schema rồi bật hook.
-- `git ls-remote origin refs/heads/main` báo `could not read Username for 'https://github.com'`. Quyền đọc ở phiên onboarding trước không bảo đảm quyền hiện tại.
-- CI workflow được thêm nhưng chưa chạy trên GitHub. Push/PR chỉ có thể xác nhận khi remote nhận commit.
+- Kiểm tra Git đầu tiên báo thiếu xác thực; thao tác sau đó đã thành công qua cấu hình sẵn có, không thêm token. Đã push commit triển khai `0f4033c4ce46940dd6ecd192d7a25e59b9bad36d` lên `omega/bootstrap` và đối chiếu SHA remote bằng `git ls-remote`.
+- CI workflow đã được push. `gh run list` qua `api.github.com` trả `Forbidden`; trạng thái thực thi CI chưa xác minh được từ môi trường này. Không tạo PR hoặc merge vào main.
 - Bộ đếm token/cost, điều phối Claude tự động, native multi-run evaluation, SAST và 31 skill/7 agent roadmap chưa triển khai.
 
 ## Chạy lại khi có thay đổi liên quan

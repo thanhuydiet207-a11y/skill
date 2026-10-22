@@ -84,6 +84,6 @@ Audit hiện **không** là SAST, scanner dependency, pentest hoặc secret scan
 - [ ] Chạy slash skill và giao agent thực tế bằng một phiên Claude được xác thực.
 - [ ] Xác minh schema hooks/permissions theo phiên bản Claude cài đặt.
 - [ ] Benchmark nhiều lượt bằng Claude để đo chất lượng/tokens/cost.
-- [ ] Push GitHub khi có quyền xác thực hoạt động.
+- [x] Push branch `omega/bootstrap` lên GitHub, đối chiếu SHA bằng `git ls-remote`.
 
 Giai đoạn kế: xác minh native → task corpus đa dạng → đo hiệu quả và ngân sách → thêm từng skill khi có nhu cầu. Không triển khai 31 skill còn lại trước bằng chứng giá trị.
