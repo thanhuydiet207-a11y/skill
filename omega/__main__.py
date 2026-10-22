@@ -109,9 +109,11 @@ def benchmark():
     for case in cases:
         actual = plan(case['complexity'],case['conflict'])
         results.append({'id':case['id'], 'passed':all(actual[k] == case[k] for k in ('agents','isolation'))})
-    suite_hash = hashlib.sha256((ROOT/'benchmarks/cases.json').read_bytes() + Path(__file__).read_bytes()).hexdigest()
-    return {'suite':'router-contract-v1','suite_sha256':suite_hash,'cases':results,'passed':bool(results) and all(x['passed'] for x in results),
-            'scope':'deterministic router contract only; native LLM skill efficacy not evaluated'}
+    from omega.skills import assess, suite_digest, COMMANDS
+    skills=[assess(ROOT,name) for name in COMMANDS]
+    suite_hash = suite_digest(ROOT)
+    return {'suite':'router-contract-v1','suite_sha256':suite_hash,'cases':results,'skills':skills,'passed':bool(results) and all(x['passed'] for x in results) and all(x['passed'] for x in skills),
+            'scope':'router and offline skill contracts; native LLM skill efficacy not evaluated'}
 
 
 def validate_gates():
@@ -143,7 +145,8 @@ def gates():
 def fingerprint(skill):
     if skill not in {p.name for p in (ROOT/'.claude/skills').iterdir() if p.is_dir()}:
         raise ValueError('Unknown implemented skill')
-    return hashlib.sha256(confined(f'.claude/skills/{skill}/SKILL.md').read_bytes()).hexdigest()
+    from omega.safety import source_path
+    return hashlib.sha256(source_path(ROOT,f'.claude/skills/{skill}/SKILL.md').read_bytes()).hexdigest()
 
 
 def main():
@@ -163,6 +166,7 @@ def main():
     parser.add_argument('--evidence',action='append',default=[])
     args=parser.parse_args()
     if args.summary and args.command != 'gates': parser.error('--summary requires gates')
+    if args.candidate and not (args.command=='compare' or args.command=='benchmark' and args.skill):parser.error('--candidate requires compare or benchmark --skill')
     code=0
     if args.command=='context':
         from omega.context import packet
@@ -173,7 +177,20 @@ def main():
     elif args.command=='audit':
         result=audit();code=0 if result['passed'] else 1
     elif args.command=='benchmark':
-        result=benchmark();code=0 if result['passed'] else 1
+        if args.skill:
+            from omega.skills import assess, suite_digest
+            from omega.records import workspace
+            assessment=assess(ROOT,args.skill,args.candidate)
+            before=workspace(ROOT,git)
+            scenarios=run(['python3','-m','omega.test_runner','--start','tests','--pattern','test_workflows.py'],CONFIG['limits']['max_gate_seconds'])
+            result={'kind':'skill-evaluation','skill':args.skill,'assessment':assessment,
+                    'candidate_sha256':assessment['sha256'],'suite_sha256':suite_digest(ROOT),
+                    'workspace_sha256':before,'workspace_unchanged':before==workspace(ROOT,git),
+                    'scenarios':scenarios,'native_quality':'UNVERIFIED'}
+            result['passed']=assessment['passed'] and scenarios['exit_code']==0 and result['workspace_unchanged']
+            result['evidence']=save('evidence',result)
+        else:result=benchmark()
+        code=0 if result['passed'] else 1
     elif args.command=='gates':
         result=gates();code=0 if result['passed'] else 1
         result['evidence']=save('evidence',result)
@@ -222,9 +239,11 @@ def main():
                 'runtime_rollback':'not applicable: no deployed service or migration'}
         code=0 if result['diff_check']['exit_code']==0 else 1
     elif args.command=='candidate':
-        result={'skill':args.skill,'sha256':fingerprint(args.skill),'benchmark':benchmark(),
+        from omega.skills import assess
+        result={'skill':args.skill,'sha256':fingerprint(args.skill),'skill_contract':assess(ROOT,args.skill),'benchmark':benchmark(),
                 'promotion':'manual only; gates plus review required'}
-        candidate = confined('.omega/candidates/' + args.skill + '-' + uuid.uuid4().hex + '.md')
+        from omega.safety import artifact_path
+        candidate = artifact_path(ROOT,'.omega/candidates/' + args.skill + '-' + uuid.uuid4().hex + '.md','candidates',False)
         candidate.parent.mkdir(parents=True, exist_ok=True)
         candidate.write_bytes(confined(f'.claude/skills/{args.skill}/SKILL.md').read_bytes())
         result['candidate'] = str(candidate.relative_to(ROOT))
@@ -232,17 +251,33 @@ def main():
         code=0 if result['benchmark']['passed'] else 1
     else:
         if not args.baseline:raise ValueError('--baseline required')
-        baseline=json.loads(confined(args.baseline).read_text())
+        from omega.records import load, workspace
+        from omega.skills import assess
+        from omega.safety import artifact_path
+        _,baseline=load(ROOT,args.baseline,'baselines')
         current=benchmark()
         same_suite=baseline['benchmark'].get('suite_sha256')==current['suite_sha256'] and baseline['benchmark']['suite']==current['suite'] and [x['id'] for x in baseline['benchmark']['cases']]==[x['id'] for x in current['cases']]
-        candidate = confined(args.candidate or baseline['candidate'])
-        if not candidate.is_relative_to(confined('.omega/candidates')) or not candidate.is_file():
-            raise ValueError('Candidate must be an existing file in .omega/candidates')
+        candidate = artifact_path(ROOT,args.candidate or baseline['candidate'],'candidates')
+        contract=assess(ROOT,baseline['skill'],str(candidate))
         stable_modified = baseline['sha256'] != fingerprint(baseline['skill'])
-        passed=same_suite and not stable_modified and baseline['benchmark']['passed'] and current['passed']
+        passed=same_suite and not stable_modified and baseline['benchmark']['passed'] and current['passed'] and contract['advanced_passed'] and contract['score']>=baseline['skill_contract']['score']
+        gate_ok=False;scenario_ok=False;checks=[]
+        for name in args.evidence:
+            _,ev=load(ROOT,name,'evidence')
+            fresh=ev.get('workspace_sha256')==workspace(ROOT,git) and ev.get('workspace_unchanged') is True and ev.get('head')==git('rev-parse','HEAD') and ev.get('passed') is True
+            if ev.get('kind')=='skill-evaluation':
+                valid=fresh and ev.get('skill')==baseline['skill'] and ev.get('candidate_sha256')==contract['sha256'] and ev.get('suite_sha256')==current['suite_sha256']
+                scenario_ok=scenario_ok or valid
+            else:
+                valid=fresh and isinstance(ev.get('results'),list) and {r.get('gate') for r in ev['results']}>=set(CONFIG['gates']) and all(r.get('exit_code')==0 for r in ev['results'])
+                gate_ok=gate_ok or valid
+            checks.append({'path':name,'valid':valid})
+        passed=passed and all(x['valid'] for x in checks)
         result={'passed':passed,'skill':baseline['skill'],'before':baseline['sha256'],
                 'after':hashlib.sha256(candidate.read_bytes()).hexdigest(),'benchmark':current,'stable_modified':stable_modified,
-                'promotion':'not performed; native evaluation and human review still required'}
+                'candidate_contract':contract,'baseline_contract':baseline['skill_contract'],'evidence_checks':checks,
+                'eligible_for_review':passed and gate_ok and scenario_ok,
+                'promotion':'not performed; human review required; native quality remains UNVERIFIED'}
         code=0 if passed else 1
     from omega.context import encode
     print(encode(result,args.compact))

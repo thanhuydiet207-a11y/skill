@@ -95,27 +95,29 @@ class OmegaTests(unittest.TestCase):
 
     def test_candidate_compare_missing_baseline(self):
         with patch.object(sys,'argv',['omega','compare','--baseline','.omega/absent.json']):
-            with self.assertRaises(OSError):app.main()
+            with self.assertRaises((OSError,ValueError)):app.main()
 
     def test_candidate_lifecycle_preserves_stable(self):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d)
             (root/'.claude/skills/repo-map').mkdir(parents=True)
             stable=root/'.claude/skills/repo-map/SKILL.md'
-            stable.write_text('stable')
+            stable_text='---\nname: repo-map\ndescription: Fixture\ndisable-model-invocation: true\n---\npython3 -m omega map\npython3 -m omega plan\n'
+            stable.write_text(stable_text)
             report={'suite':'test','suite_sha256':'identity','cases':[{'id':'one','passed':True}],'passed':True}
             with patch.object(app,'ROOT',root),patch.object(app,'git',return_value='abc'),patch.object(app,'benchmark',return_value=report):
                 captured=io.StringIO()
                 with patch.object(sys,'argv',['omega','candidate','--skill','repo-map']),contextlib.redirect_stdout(captured):
                     self.assertEqual(app.main(),0)
                 result=json.loads(captured.getvalue())
-                (root/result['candidate']).write_text('candidate edit')
+                from omega.skills import HEADINGS
+                (root/result['candidate']).write_text(stable_text+'\n'+'\n'.join('## '+h+'\nFixture evidence and limits.' for h in HEADINGS))
                 with patch.object(sys,'argv',['omega','compare','--baseline',result['baseline']]),contextlib.redirect_stdout(io.StringIO()):
                     self.assertEqual(app.main(),0)
-                    self.assertEqual(stable.read_text(),'stable')
+                    self.assertEqual(stable.read_text(),stable_text)
                     stable.write_text('unauthorized stable edit')
                     self.assertEqual(app.main(),1)
-                    stable.write_text('stable')
+                    stable.write_text(stable_text)
                     report['suite_sha256']='changed-fixtures'
                     self.assertEqual(app.main(),1)
 
