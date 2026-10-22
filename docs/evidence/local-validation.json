@@ -1,0 +1,125 @@
+{
+  "schema": 1,
+  "kind": "local execution evidence, not Claude-native evaluation",
+  "python": "Python 3.12.14",
+  "git": "git version 2.52.0",
+  "source_sha256": {
+    "omega/__init__.py": "91447944015cec709e8aa7655f7e9d64e1e4508e7023a57fe3746911c0fc6fed",
+    "omega/__main__.py": "be846ec6375ba648d2f9c467019717625e14e948cab03951135d474796178895",
+    "omega/catalog.json": "6b79c77b9b756ea5b298a7cf07fcc10dc3e3108e9fb171bc891fa8d7a1a72fd2",
+    "omega/config.json": "febe24da3c5a879b886c4c1817e63ebad4241e9d49b93ac844d6b617fa853325",
+    "omega/hook.py": "ba9213ea89d20ba1d8f6de7dcb9092fc3b905b5dcb89cc7c16d04ec1879f9bfb",
+    "tests/test_omega.py": "47b9c0465b9f9964ef5cb3b4b86ed924e0fc903fe70a3d434fb3f5dd70fe3e35",
+    "benchmarks/cases.json": "aa8b72d73b0be7ebcb53dd3049f83c6b181148b0248cf1cb1ed6c607a0fd87bc",
+    "benchmarks/demo.py": "8dc4b1071f4f09c737f1a9fb2a3b75f04fa5c26f49ee9463c3e8284026a1a006"
+  },
+  "gates": {
+    "passed": true,
+    "results": [
+      {
+        "gate": "build",
+        "command": [
+          "python3",
+          "-m",
+          "compileall",
+          "-q",
+          "omega",
+          "tests"
+        ],
+        "exit_code": 0,
+        "seconds": 0.067,
+        "output": "",
+        "truncated": false
+      },
+      {
+        "gate": "tests",
+        "command": [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-v"
+        ],
+        "exit_code": 0,
+        "seconds": 0.316,
+        "output": "test_benchmark_detects_regression (test_omega.OmegaTests.test_benchmark_detects_regression) ... ok\ntest_candidate_compare_missing_baseline (test_omega.OmegaTests.test_candidate_compare_missing_baseline) ... ok\ntest_candidate_lifecycle_preserves_stable (test_omega.OmegaTests.test_candidate_lifecycle_preserves_stable) ... ok\ntest_catalog_36_unique_and_five_active (test_omega.OmegaTests.test_catalog_36_unique_and_five_active) ... ok\ntest_dirty_checkout_refused (test_omega.OmegaTests.test_dirty_checkout_refused) ... ok\ntest_gate_failure_propagates (test_omega.OmegaTests.test_gate_failure_propagates) ... ok\ntest_git_truncation_refused (test_omega.OmegaTests.test_git_truncation_refused) ... ok\ntest_hook_denies_escape_and_policy_edit (test_omega.OmegaTests.test_hook_denies_escape_and_policy_edit) ... ok\ntest_hook_denies_shell_bypass (test_omega.OmegaTests.test_hook_denies_shell_bypass) ... ok\ntest_hook_rejects_malformed (test_omega.OmegaTests.test_hook_rejects_malformed) ... ok\ntest_hook_scoped_edit (test_omega.OmegaTests.test_hook_scoped_edit) ... ok\ntest_memory_scoped_and_commit_stamped (test_omega.OmegaTests.test_memory_scoped_and_commit_stamped) ... ok\ntest_memory_secret_rejection (test_omega.OmegaTests.test_memory_secret_rejection) ... ok\ntest_no_shell_expansion (test_omega.OmegaTests.test_no_shell_expansion) ... ok\ntest_path_escape (test_omega.OmegaTests.test_path_escape) ... ok\ntest_router_complexity (test_omega.OmegaTests.test_router_complexity) ... ok\ntest_router_contract (test_omega.OmegaTests.test_router_contract) ... ok\ntest_subprocess_failure (test_omega.OmegaTests.test_subprocess_failure) ... ok\ntest_symlink_escape (test_omega.OmegaTests.test_symlink_escape) ... ok\ntest_three_agent_specs (test_omega.OmegaTests.test_three_agent_specs) ... ok\ntest_timeout (test_omega.OmegaTests.test_timeout) ... ok\n\n----------------------------------------------------------------------\nRan 21 tests in 0.154s\n\nOK\n",
+        "truncated": false
+      },
+      {
+        "gate": "security",
+        "command": [
+          "python3",
+          "-m",
+          "omega",
+          "audit"
+        ],
+        "exit_code": 0,
+        "seconds": 0.064,
+        "output": "{\n  \"passed\": true,\n  \"findings\": [],\n  \"scope\": \"Claude config bypass patterns only; no dependency/SAST/secret coverage\"\n}\n",
+        "truncated": false
+      },
+      {
+        "gate": "regression",
+        "command": [
+          "python3",
+          "-m",
+          "omega",
+          "benchmark"
+        ],
+        "exit_code": 0,
+        "seconds": 0.065,
+        "output": "{\n  \"suite\": \"router-contract-v1\",\n  \"suite_sha256\": \"b730fca1ce99f9a22de680a7183581dedcc96268815d853ca7678951af6f353d\",\n  \"cases\": [\n    {\n      \"id\": \"low\",\n      \"passed\": true\n    },\n    {\n      \"id\": \"medium\",\n      \"passed\": true\n    },\n    {\n      \"id\": \"high-conflict\",\n      \"passed\": true\n    }\n  ],\n  \"passed\": true,\n  \"scope\": \"deterministic router contract only; native LLM skill efficacy not evaluated\"\n}\n",
+        "truncated": false
+      }
+    ],
+    "evidence": ".omega/evidence/1792691183817216485-07fd10a1.json"
+  },
+  "demo": {
+    "fixture": ".omega/demo/52f6dcf641964a9e8a52d3f272852c08",
+    "baseline_commit": "d0368bac98f6e9e4850592f002d160799d1526cb",
+    "before_passed": false,
+    "after_passed": true,
+    "regression_tests": 1,
+    "isolated_branch": "omega/demo-fix",
+    "worktree_created": true,
+    "baseline_recoverable": true,
+    "memory": ".omega/memory/1792691184754496532-fc9e3180.json",
+    "candidate_passed": true,
+    "stable_modified": false,
+    "rollback_diff_exit": 0,
+    "native_claude_executed": false,
+    "network_used": false
+  },
+  "candidate_comparison": {
+    "passed": true,
+    "skill": "repo-map",
+    "before": "c0657e68cd3367663566d1f45639d2fdbfe3c495d382437256948e8e485eade3",
+    "after": "c0657e68cd3367663566d1f45639d2fdbfe3c495d382437256948e8e485eade3",
+    "benchmark": {
+      "suite": "router-contract-v1",
+      "suite_sha256": "b730fca1ce99f9a22de680a7183581dedcc96268815d853ca7678951af6f353d",
+      "cases": [
+        {
+          "id": "low",
+          "passed": true
+        },
+        {
+          "id": "medium",
+          "passed": true
+        },
+        {
+          "id": "high-conflict",
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "scope": "deterministic router contract only; native LLM skill efficacy not evaluated"
+    },
+    "stable_modified": false,
+    "promotion": "not performed; native evaluation and human review still required"
+  },
+  "native_claude": "not installed; not executed",
+  "github_ci": "configured; not executed on GitHub"
+}

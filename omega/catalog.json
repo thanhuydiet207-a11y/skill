@@ -1,0 +1,182 @@
+[
+  {
+    "group": "Intelligence",
+    "name": "repo-map",
+    "state": "implemented"
+  },
+  {
+    "group": "Intelligence",
+    "name": "task-triage",
+    "state": "planned"
+  },
+  {
+    "group": "Intelligence",
+    "name": "dependency-map",
+    "state": "planned"
+  },
+  {
+    "group": "Intelligence",
+    "name": "impact-analysis",
+    "state": "planned"
+  },
+  {
+    "group": "Intelligence",
+    "name": "root-cause",
+    "state": "planned"
+  },
+  {
+    "group": "Intelligence",
+    "name": "architecture-review",
+    "state": "planned"
+  },
+  {
+    "group": "Engineering",
+    "name": "controlled-change",
+    "state": "implemented"
+  },
+  {
+    "group": "Engineering",
+    "name": "bug-fix",
+    "state": "planned"
+  },
+  {
+    "group": "Engineering",
+    "name": "refactor",
+    "state": "planned"
+  },
+  {
+    "group": "Engineering",
+    "name": "api-change",
+    "state": "planned"
+  },
+  {
+    "group": "Engineering",
+    "name": "migration",
+    "state": "planned"
+  },
+  {
+    "group": "Engineering",
+    "name": "integration",
+    "state": "planned"
+  },
+  {
+    "group": "Quality",
+    "name": "quality-gates",
+    "state": "implemented"
+  },
+  {
+    "group": "Quality",
+    "name": "test-design",
+    "state": "planned"
+  },
+  {
+    "group": "Quality",
+    "name": "regression-analysis",
+    "state": "planned"
+  },
+  {
+    "group": "Quality",
+    "name": "security-review",
+    "state": "planned"
+  },
+  {
+    "group": "Quality",
+    "name": "performance-check",
+    "state": "planned"
+  },
+  {
+    "group": "Quality",
+    "name": "rollback-check",
+    "state": "planned"
+  },
+  {
+    "group": "Knowledge",
+    "name": "project-memory",
+    "state": "implemented"
+  },
+  {
+    "group": "Knowledge",
+    "name": "evidence-index",
+    "state": "planned"
+  },
+  {
+    "group": "Knowledge",
+    "name": "decision-record",
+    "state": "planned"
+  },
+  {
+    "group": "Knowledge",
+    "name": "context-pack",
+    "state": "planned"
+  },
+  {
+    "group": "Knowledge",
+    "name": "knowledge-refresh",
+    "state": "planned"
+  },
+  {
+    "group": "Knowledge",
+    "name": "handoff",
+    "state": "planned"
+  },
+  {
+    "group": "Operations",
+    "name": "environment-doctor",
+    "state": "planned"
+  },
+  {
+    "group": "Operations",
+    "name": "workspace-isolation",
+    "state": "planned"
+  },
+  {
+    "group": "Operations",
+    "name": "release-plan",
+    "state": "planned"
+  },
+  {
+    "group": "Operations",
+    "name": "incident-response",
+    "state": "planned"
+  },
+  {
+    "group": "Operations",
+    "name": "dependency-health",
+    "state": "planned"
+  },
+  {
+    "group": "Operations",
+    "name": "observability",
+    "state": "planned"
+  },
+  {
+    "group": "Evolution",
+    "name": "skill-benchmark",
+    "state": "implemented"
+  },
+  {
+    "group": "Evolution",
+    "name": "skill-evaluation",
+    "state": "planned"
+  },
+  {
+    "group": "Evolution",
+    "name": "skill-candidate",
+    "state": "planned"
+  },
+  {
+    "group": "Evolution",
+    "name": "skill-promotion",
+    "state": "planned"
+  },
+  {
+    "group": "Evolution",
+    "name": "cost-review",
+    "state": "planned"
+  },
+  {
+    "group": "Evolution",
+    "name": "workflow-retrospective",
+    "state": "planned"
+  }
+]

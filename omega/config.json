@@ -1,0 +1,47 @@
+{
+  "schema": 1,
+  "limits": {
+    "max_agents": 2,
+    "max_repair_attempts": 2,
+    "max_task_seconds": 1800,
+    "max_gate_seconds": 120,
+    "max_context_bytes": 24000,
+    "max_evidence_bytes": 16000,
+    "max_estimated_tokens": 16000
+  },
+  "gates": {
+    "build": [
+      "python3",
+      "-m",
+      "compileall",
+      "-q",
+      "omega",
+      "tests"
+    ],
+    "tests": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-v"
+    ],
+    "security": [
+      "python3",
+      "-m",
+      "omega",
+      "audit"
+    ],
+    "regression": [
+      "python3",
+      "-m",
+      "omega",
+      "benchmark"
+    ]
+  },
+  "mcp": {
+    "enabled": false,
+    "servers": []
+  }
+}
