@@ -1,4 +1,4 @@
-# OMEGA 0.3 — kết hợp skill và chạy trên project khác
+# OMEGA 0.4 — kết hợp skill và chạy trên project khác
 
 ## Những gì đã thực thi được
 
@@ -47,17 +47,17 @@ Input:
 ]}
 ```
 
-`workflow-handoff-contract --input INPUT` kiểm tra DAG, một orchestrator, tối đa một owner/resource, exact write paths và unordered writers. Chỉ orchestrator được khai báo agents=0; worker không được bỏ chi phí agent. Trả lịch batch trong budget không vượt cấu hình engine và tối đa 2 agent; không tự tạo agent. Không yêu cầu workflow không dùng memory phải có owner memory. Plan có thể nhận JSON `{intent,complexity,conflict,workflow}` để chọn một trong change/investigate/verify/knowledge/evolve/interoperability. Intent là đầu vào tường minh, không phải tự suy luận từ mọi prompt.
+`workflow-handoff-contract --input INPUT` kiểm tra DAG, một orchestrator đi trước workers, tối đa một owner/resource và unordered reader/writer hoặc writer/writer. writes/reads khai exact files, write_dirs/read_dirs khai subtree; không hỗ trợ glob hoặc node field viết sai. Invalid contract trả schedule rỗng. Chỉ orchestrator được khai báo agents=0; worker không được bỏ chi phí agent. Trả lịch batch trong budget không vượt cấu hình engine và tối đa 2 agent; không tự tạo agent. Không yêu cầu workflow không dùng memory phải có owner memory. Plan có thể nhận JSON `{intent,complexity,conflict,workflow}` để chọn một trong change/investigate/verify/knowledge/evolve/interoperability. Intent là đầu vào tường minh, không phải tự suy luận từ mọi prompt.
 
 ## Project workflow adapter và test outcomes
 
 `project-workflow-adapter` đọc manifest và đề xuất build/test cho Node/Go/Python. Nó trả proposal-needs-review và exit 1, không tự viết config hay cài gói. Cần chọn security/regression thật theo dự án; không biến compile thành security assurance. Config hợp lệ về hình thức vẫn là executable policy cần review.
 
-Adapters: omega marker; Jest JSON; Go `test -json`; JUnit XML. Exit zero, zero-test, all-skipped, counts mâu thuẫn, structured output bị cắt hoặc XML entity không đủ để pass. Go package-pass không tính là test. Jest adapter chỉ phù hợp khi script test thực sự xuất Jest JSON. Kiểm thử local có Python target thật; Jest/Go/JUnit parser dùng fixture được gắn nhãn, không tuyên bố đã chạy mọi framework native.
+Adapters: omega marker; Jest JSON; Go `test -json`; JUnit XML. Exit zero, zero-test, all-skipped, counts mâu thuẫn, structured output bị cắt hoặc XML entity không đủ để pass. Go package-pass không tính là test. Jest adapter chỉ phù hợp khi script test thực sự xuất Jest JSON. Kiểm thử local có Python target thật; Node built-in JUnit đã có benchmark thực thi thật; Jest/Go vẫn là parser fixtures. Không tuyên bố đã chạy mọi framework native. Đề xuất npm/Jest mặc định không được coi là clean JSON vì stdout/stderr có thể trộn log; proposal yêu cầu review thay vì xuất command không bảo đảm phù hợp.
 
 ## Evidence và scope
 
-Fingerprint nguồn gồm nội dung, permission mode và Git index entries. Known execution fingerprint thêm interpreter/tool metadata, config và hash policy project; không đọc/in secret hoặc credential values. Không đại diện toàn bộ dependencies bị ignore, managed/global policy, API, model hoặc môi trường dịch vụ.
+Fingerprint nguồn gồm nội dung, permission mode và Git index entries. Known execution fingerprint thêm interpreter/tool metadata, config, hash policy project, hash whitelist environment và optional runtime_inputs tường minh; không đọc/in secret hoặc credential values. Không đại diện toàn bộ dependencies bị ignore, managed/global policy, API, model hoặc môi trường dịch vụ.
 
 `evidence-reconciler --record RECORD` hoặc lặp --evidence phân biệt current, stale-source, stale/unbound execution context, cùng source nhưng khác HEAD và record không phải gate thành công. Không sửa report cũ hoặc tự coi khác HEAD là đạt. Input source/index thay đổi sau check thì chạy lại phần cần thiết. Stage thay đổi dự kiến trước final gates để không làm proof cũ sau đó.
 
@@ -92,3 +92,7 @@ Fixture trong tests/test_new_skill_workflows.py và tests/test_interop_safety.py
 Frontmatter safe subset chấp nhận metadata/license và các trường nhận biết, không tự chạy hooks/commands. Section rỗng không đạt advanced contract. Contract completeness không là quality score: quality_evaluated=false và quality_score=null. Candidate bundle hash ràng buộc SKILL.md cùng các references nhận diện được; vẫn cần kê khai/review tài nguyên động chưa được phát hiện tự động.
 
 Ghi candidate trước sửa, benchmark đúng pattern workflow, gates cùng source/runtime, compare kèm cả evidence. `eligible_for_review` chỉ là offline tooling review; native_release_eligible=false. CLI không tự promote, push hoặc deploy. Bản sửa stable cần user authorization đã có và review diff; sau áp dụng chạy lại kiểm tra.
+
+## Cập nhật 0.4
+
+Security gate quét .claude và omega bằng targeted static rules; source bị thiếu/symlink/binary/quá budget làm fail, generated __pycache__ có exclusions tường minh. Memory CLI kiểm tra source/runtime của evidence đính kèm; blob không đổi chưa đủ current. Gate config thêm optional runtime_inputs. Chi tiết và bằng chứng: docs/UPGRADE_0_4.md. Python core và TypeScript facade: docs/PYTHON_TYPESCRIPT_BOUNDARY.md; MCP server/UI vẫn chưa triển khai.

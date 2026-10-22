@@ -143,22 +143,9 @@ def doctor():
             'effective_policy':'Not resolved: user, managed and plugin settings were not inspected'}
 
 
-def audit():
-    findings = []
-    # Narrow source policy scan, NOT a vulnerability or secret scanner.
-    base=ROOT/'.claude'
-    if base.is_symlink():findings.append({'path':'.claude','rule':'symlink-policy'})
-    for p in (() if base.is_symlink() else base.rglob('*')):
-        if p.is_symlink():
-            findings.append({'path':str(p.relative_to(ROOT)),'rule':'symlink-policy'})
-        elif p.is_file():
-            path = confined(str(p.relative_to(ROOT)))
-            text = path.read_text()
-            for forbidden in ('--dangerously-skip-permissions', '"bypassPermissions"', 'curl -k ', 'verify=False'):
-                if forbidden in text:
-                    findings.append({'path': str(p.relative_to(ROOT)), 'rule': forbidden})
-    return {'passed': not findings, 'findings': findings,
-            'scope': 'Claude config bypass patterns only; no dependency/SAST/secret coverage'}
+def audit(selections=()):
+    from omega.security import audit as inspect
+    return inspect(ROOT,selections)
 
 
 def benchmark():
@@ -227,9 +214,9 @@ def _dispatch():
         from omega.safety import artifact_path
         artifact_path(ROOT,args.gate_config,'configs')
         policy=read_json(ROOT,args.gate_config)
-        if not isinstance(policy,dict) or type(policy.get('schema')) is not int or policy.get('schema')!=1 or set(policy)-{'schema','gates','test_adapter'}:raise ValueError('Invalid gate policy schema')
+        if not isinstance(policy,dict) or type(policy.get('schema')) is not int or policy.get('schema')!=1 or set(policy)-{'schema','gates','test_adapter','runtime_inputs'}:raise ValueError('Invalid gate policy schema')
         if policy.get('test_adapter','omega') not in ('omega','go','jest','junit'):raise ValueError('Unknown test adapter')
-        CONFIG={**CONFIG,'gates':policy.get('gates'),'test_adapter':policy.get('test_adapter','omega')}
+        CONFIG={**CONFIG,'gates':policy.get('gates'),'test_adapter':policy.get('test_adapter','omega'),'runtime_inputs':policy.get('runtime_inputs',[])}
     if ROOT!=ENGINE_ROOT and args.project_root:
         if args.command=='gates' and not args.gate_config:raise ValueError('External project gates require an explicit reviewed --gate-config')
         if args.command in ('candidate','compare','benchmark'):raise ValueError('Skill release management must target the engine repository')
@@ -252,7 +239,8 @@ def _dispatch():
         elif args.command=='evidence-reconciler':result=reconcile_evidence(ROOT,args.evidence or ([args.record] if args.record else []),git,CONFIG)
         elif args.command=='memory-reconciliation':
             names=[args.record] if args.record else document.get('records',[]) if isinstance(document,dict) else []
-            result=reconcile_memory(ROOT,names,git('rev-parse','HEAD'))
+            from omega.records import current_context
+            result=reconcile_memory(ROOT,names,git('rev-parse','HEAD'),current_context(ROOT,git,CONFIG))
         else:result=context_check(ROOT,document)
         code=0 if result.get('passed',result.get('allowed',False)) else 1
     elif args.command=='context':
@@ -274,7 +262,7 @@ def _dispatch():
         result=plan(doc.get('complexity',args.complexity),doc.get('conflict',args.conflict),doc.get('intent','change'),doc.get('workflow'))
         code=1 if result['workflow_contract'] is not None and not result['workflow_contract']['passed'] else 0
     elif args.command=='audit':
-        result=audit();code=0 if result['passed'] else 1
+        result=audit(args.select);code=0 if result['passed'] else 1
     elif args.command=='benchmark':
         if args.skill:
             from omega.skills import assess, suite_digest
@@ -299,10 +287,10 @@ def _dispatch():
             from omega.context import gate_summary
             result=gate_summary(result)
     elif args.command=='memory-read':
-        from omega.records import memory_status
+        from omega.records import memory_status,current_context
         if not args.record:raise ValueError('--record required')
-        result=memory_status(ROOT,args.record,git('rev-parse','HEAD'))
-        code=1 if result['stale'] else 0
+        result=memory_status(ROOT,args.record,git('rev-parse','HEAD'),current_context(ROOT,git,CONFIG))
+        code=1 if result['requires_validation'] else 0
     elif args.command=='change-plan':
         from omega.change import create
         result=create(ROOT,git,args.allow,args.acceptance,CONFIG['limits'],args.include_existing)

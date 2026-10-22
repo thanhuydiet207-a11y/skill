@@ -17,7 +17,9 @@
       "compileall",
       "-q",
       "omega",
-      "tests"
+      "tests",
+      "benchmarks",
+      "omega_cli.py"
     ],
     "tests": [
       "python3",
@@ -28,7 +30,11 @@
       "python3",
       "-m",
       "omega",
-      "audit"
+      "audit",
+      "--select",
+      ".claude",
+      "--select",
+      "omega"
     ],
     "regression": [
       "python3",

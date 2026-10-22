@@ -1,6 +1,6 @@
 # OMEGA
 
-Hệ thống AI Engineering tối giản, có bằng chứng: Skills + Subagents + hook adapter tùy chọn. Lõi chạy bằng Python chuẩn, không dependency bên thứ ba.
+Hệ thống AI Engineering có bằng chứng: Skills + Subagents + hook adapter tùy chọn. Python stdlib làm lõi; TypeScript là bridge điều phối/giao tiếp. Không dependency bên thứ ba cho hai lớp hiện tại.
 
 ```bash
 python3 -m omega doctor
@@ -14,9 +14,9 @@ python3 -m omega gates
 - [Bằng chứng kiểm thử và giới hạn](docs/VALIDATION.md)
 - [Quy tắc điều phối Claude](CLAUDE.md)
 
-**Bản 0.3: nâng cấp 5 skill nền tảng và thêm 8 skill hoạt động bằng CLI**, tổng 13 SKILL.md và 3 agent spec. Catalog có 44 mục; 31 skill và 7 vai trò còn lại là thiết kế, không có file giả.
+**Bản 0.4: tiếp tục củng cố kiểm chứng và thêm bridge TypeScript; 13 skill hoạt động bằng CLI**, tổng 13 SKILL.md và 3 agent spec. Catalog có 44 mục; 31 skill và 7 vai trò còn lại là thiết kế, không có file giả.
 
-[Hướng dẫn kết hợp skill, policy, workflow, adapters và evidence](docs/INTEROPERABILITY_GUIDE.md). [Đánh giá từng skill và các giới hạn còn lại](docs/UPGRADE_0_3.md).
+[Nâng cấp 0.4 và giới hạn còn lại](docs/UPGRADE_0_4.md) · [Python core + TypeScript bridge, MCP/UI boundary](docs/PYTHON_TYPESCRIPT_BOUNDARY.md) · [Hướng dẫn sử dụng](docs/INTEROPERABILITY_GUIDE.md).
 
 Đã xác minh CLI Claude Code 2.1.308 bằng version/help. Chưa có phiên xác thực để nghiệm thu slash skills, subagent runtime, hook registration hay đo token model. Hook không tự kích hoạt; MCP local không được cấu hình. Trạng thái managed/user/plugin bên ngoài vẫn chưa quan sát được.
 

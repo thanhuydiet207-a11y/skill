@@ -17,3 +17,5 @@ Giữ stable skill cho đến benchmark, gates và review theo user authorizatio
 Hướng dẫn hiện tại chỉ đọc phần cần: docs/INTEROPERABILITY_GUIDE.md. Intent interoperability trong plan chọn audit/policy/handoff; không dispatch tự động. Mỗi workflow/Git/gates/memory có tối đa một owner; skill khác không tự thay owner hoặc nới quyền.
 Trong project khác dùng runner omega_cli.py tuyệt đối với --project-root, không import module omega từ target. .omega/ phải được review ignore và không có state tracked trước khi ghi. External gates cần --gate-config đã review.
 Evidence cần khớp HEAD, nội dung/mode/index và known execution fingerprint; memory stale phải xác minh lại. Tests exit 0 thiếu số test thực sự pass chưa đủ ready. Trước final gates, hoàn thành stage các thay đổi dự kiến.
+
+Python là lõi policy/analysis/evidence. TypeScript bridge chỉ expose read commands, gọi cùng Python CLI; không thêm policy engine riêng. Xem docs/PYTHON_TYPESCRIPT_BOUNDARY.md khi cần tích hợp. Gate config có thể khai runtime_inputs cho file dependency bị ignore; không đọc secret để fingerprint. Security audit là targeted static rules, không phải security assurance toàn diện.

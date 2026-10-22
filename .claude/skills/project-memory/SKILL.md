@@ -12,6 +12,8 @@ Kiến thức cần tái sử dụng, project hiện tại, provenance, source/e
 
 ## Workflow
 
+Khi đọc lại, kiểm tra requires_validation và evidence_checks: blob không đổi chưa đủ nếu source/runtime phía sau đã đổi. Với external gates, truyền lại --gate-config đã review để dùng cùng runtime_inputs; evidence unbound/not-checked phải xác minh, không coi là current. Library không có context không được tự chứng nhận current. Đọc docs/UPGRADE_0_4.md khi cần phân loại.
+
 1. Viết context → alternatives → decision → consequences → verification → follow-up. Tách fact/hypothesis/recommendation; chưa chứng minh thì ghi proposed/unknown.
 2. Chạy `python3 -m omega memory --title "ADR" --body "bối cảnh và quyết định" --key decision-key --select PATH --evidence EVIDENCE --compact`. Refs tùy nguồn thật; không giả record để làm body đáng tin.
 3. Trước dùng lại chạy `python3 -m omega memory-read --record RECORD --compact`. Phân biệt stale soft chỉ HEAD với hard source/evidence drift; cả hai vẫn cần review, không tự đổi thành current.

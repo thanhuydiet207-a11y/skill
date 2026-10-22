@@ -1,5 +1,7 @@
 # OMEGA 0.3: đánh giá và nâng cấp có kiểm chứng
 
+> Báo cáo lịch sử 0.3. Bản hiện tại và những giới hạn đã được xử lý thêm: [UPGRADE_0_4.md](UPGRADE_0_4.md).
+
 ## Phạm vi hoàn thành
 
 Nâng cấp lần lượt 5 skill nền tảng, thêm 8 skill với command và scenario thật; không tạo thêm agent hoặc placeholder. Catalog giữ 36 capability gốc và 8 extension, tổng 44 mục/6 nhóm: 13 implemented, 31 planned. 3 agent spec hiện có giữ nguyên quyền và chưa nghiệm thu native. Tooling dùng Python stdlib, không cài dependency mới trong đợt này.

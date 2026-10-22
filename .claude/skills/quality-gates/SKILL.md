@@ -12,6 +12,8 @@ Acceptance, diff/risk map, project root và đủ argv build/tests/security/regr
 
 ## Workflow
 
+Kiểm tra cả aggregate JUnit root/nested và terminal Go package; timeout/output-limit/invalid UTF-8 luôn phủ quyết success marker. Runtime_inputs chỉ khai file dependency cần ràng buộc và không private. Node built-in JUnit có benchmark thật `python3 benchmarks/native_runners.py`; Jest/Go vẫn cần nghiệm thu native. Đọc docs/UPGRADE_0_4.md theo nhu cầu.
+
 1. Review commands, adapter và prerequisites trước thực thi. Dùng project-workflow-adapter chỉ để lấy proposal; security/regression còn thiếu phải được cấu hình thật, không thay bằng lệnh luôn trả 0.
 2. Chạy `python3 -m omega gates --summary --compact` trong engine; target ngoài dùng runner tuyệt đối, --project-root và --gate-config. Mở output qua evidence refs khi cần, không chạy lại chỉ để xem log.
 3. Đối chiếu outcomes với adapter omega/Jest/Go/JUnit. Zero tests, all-skipped, inconsistent counts hoặc truncated structured output không đủ ready; Go package-pass không phải test. Fixture parser pass không chứng minh mọi framework đã chạy native.

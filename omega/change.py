@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 import re
 import time
+import math
 from omega.records import load, workspace,workspace_entries
 from omega.safety import source_path
 
@@ -34,8 +35,9 @@ def validate(record,limits):
     if not isinstance(record.get('allowed_paths'),list) or not record['allowed_paths'] or any(not isinstance(x,str) or not x for x in record['allowed_paths']):raise ValueError('Missing scope')
     if type(record.get('max_attempts')) is not int or not 1<=record['max_attempts']<=limits['max_repair_attempts']:
         raise ValueError('Invalid attempt limit')
+    if len(record['attempts'])>record['max_attempts']:raise ValueError('Attempt count exceeds budget')
     opened=record.get('opened_at');deadline=record.get('deadline')
-    if not isinstance(opened,(int,float)) or not isinstance(deadline,(int,float)) or not 0<deadline-opened<=limits['max_task_seconds']:
+    if type(opened) not in (int,float) or type(deadline) not in (int,float) or not math.isfinite(opened) or not math.isfinite(deadline) or not 0<deadline-opened<=limits['max_task_seconds']:
         raise ValueError('Invalid task deadline')
     return opened<=time.time()<=deadline
 
@@ -80,10 +82,13 @@ def attempt(root,name,reason,limits):
     with path.open('r+',encoding='utf-8') as stream:
         try:fcntl.flock(stream,fcntl.LOCK_EX|fcntl.LOCK_NB)
         except BlockingIOError:raise ValueError('Repair ledger busy; retry after current operation')
-        record=json.load(stream)
+        from omega.io import bounded_json
+        record=bounded_json(stream.read())
+        if not isinstance(record,dict) or type(record.get('schema')) is not int or record.get('schema')!=1 or record.get('project')!=str(Path(root).resolve()):raise ValueError('Locked ledger schema/project mismatch')
         if not validate(record,limits):raise ValueError('Task deadline exceeded')
         if len(record['attempts'])>=record['max_attempts']:raise ValueError('Repair budget exhausted')
         record['attempts'].append({'number':len(record['attempts'])+1,'reason':reason,'at':time.time()})
-        stream.seek(0);stream.write(json.dumps(record,indent=2,ensure_ascii=False)+'\n');stream.truncate();stream.flush();os.fsync(stream.fileno())
+        encoded=json.dumps(record,indent=2,ensure_ascii=False)+'\n';bounded_json(encoded)
+        stream.seek(0);stream.write(encoded);stream.truncate();stream.flush();os.fsync(stream.fileno())
     return {'attempt':len(record['attempts']),'remaining':record['max_attempts']-len(record['attempts']),
             'deadline':record['deadline']}

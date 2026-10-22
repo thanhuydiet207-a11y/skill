@@ -2,7 +2,7 @@
 
 ## Yêu cầu
 
-Python >=3.10, Git, POSIX (kill process group và flock), checkout này. Không cần pip/npm install. Trong engine dùng module; project khác dùng omega_cli.py tuyệt đối và --project-root theo [hướng dẫn 0.3](INTEROPERABILITY_GUIDE.md). Không ghi bên ngoài repository đích; branch/worktree do người dùng ủy quyền và cleanup cần review riêng. Trước khi tạo state, CLI kiểm tra .omega/ đã ignore và chưa có file tracked, không tự sửa ignore.
+Python >=3.10, Git, POSIX (kill process group và flock), checkout này. Không cần pip/npm install. Trong engine dùng module; project khác dùng omega_cli.py tuyệt đối và --project-root theo [hướng dẫn hiện tại](INTEROPERABILITY_GUIDE.md). Không ghi bên ngoài repository đích; branch/worktree do người dùng ủy quyền và cleanup cần review riêng. Trước khi tạo state, CLI kiểm tra .omega/ đã ignore và chưa có file tracked, không tự sửa ignore.
 
 ```bash
 python3 -m omega doctor
@@ -91,7 +91,7 @@ CLI ràng buộc SHA-256 của toàn fixture và implementation benchmark, so su
 - Dirty checkout: báo và giữ nguyên file; không stash/reset tự động.
 - Timeout: exit 124, xem output được giữ 16 KB; chia nhỏ target hoặc điều chỉnh timeout có review.
 - GitHub authentication: dùng Git/proxy hiện tại; không dump credentials. Không yêu cầu dán token trong chat. Khôi phục kết nối qua môi trường rồi retry read trước push.
-- Gate security pass chỉ bao phủ bypass-pattern trong `.claude`; không thay security review toàn hệ thống.
+- Gate security quét .claude và omega bằng targeted Python AST/bypass/possible-secret rules, có coverage/exclusions; không thay security review toàn hệ thống.
 
 ## Tác vụ mẫu có lỗi thực
 
@@ -104,3 +104,7 @@ Dùng `--compact` để giữ nguyên JSON với ít khoảng trắng hơn; `gat
 ## Lịch sử phiên bản 0.2
 
 5 skill đã có workflow sâu trong 0.2; playbook [SKILL_PLAYBOOKS.md](SKILL_PLAYBOOKS.md) và [DEEP_HARDENING.md](DEEP_HARDENING.md) là lịch sử. Bản 0.3 dùng [INTEROPERABILITY_GUIDE.md](INTEROPERABILITY_GUIDE.md). Tests mặc định dùng omega.test_runner; external test_adapter hỗ trợ omega/Jest/Go/JUnit với outcome thật, không nhận exit 0 đơn thuần là đủ.
+
+## Bản 0.4
+
+Chạy `python3 benchmarks/native_runners.py` để kiểm chứng Node built-in JUnit đỏ → xanh; `node --test integration/typescript/omega-bridge.test.mjs` để kiểm tra TS facade. Không cần npm install. Schema runtime_inputs, workflow read/write directory scopes và memory evidence currentness: [UPGRADE_0_4.md](UPGRADE_0_4.md). Kiến trúc Python/TypeScript và giới hạn MCP/UI: [PYTHON_TYPESCRIPT_BOUNDARY.md](PYTHON_TYPESCRIPT_BOUNDARY.md).

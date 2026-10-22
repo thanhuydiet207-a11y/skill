@@ -12,6 +12,8 @@ Record gate thật trong project hiện tại và gate config đã review; khôn
 
 ## Workflow
 
+Đối chiếu fingerprint có hash whitelist runtime environment và các runtime_inputs được khai tường minh; đọc lại cùng --gate-config của lúc thực thi. Process timeout/output-limit/invalid UTF-8 phủ quyết readiness dù exit code trong record là 0. Chưa ràng buộc được dependency/service/policy ngoài fingerprint phải ghi unverified, không tự coi là tương đương; xem docs/UPGRADE_0_4.md.
+
 Chạy `python3 -m omega evidence-reconciler --record RECORD --compact` hoặc lặp --evidence. So source/mode/index, HEAD, known execution fingerprint và test outcomes; đọc lý do stale trước quyết định chạy lại.
 
 ## Evidence

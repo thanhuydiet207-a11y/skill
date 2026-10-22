@@ -1,12 +1,13 @@
 """Strict test outcome adapters. Exit zero alone never proves tests ran."""
 import json
 import xml.etree.ElementTree as ET
+from omega.io import bounded_json
 
 KEYS=('run','passed','failed','errors','skipped','expected_failures','unexpected_successes')
 
 
 def normalized(counts):
-    if not isinstance(counts,dict) or any(type(counts.get(k)) is not int or counts[k]<0 for k in KEYS):return None
+    if not isinstance(counts,dict) or set(counts)!=set(KEYS) or any(type(counts.get(k)) is not int or counts[k]<0 for k in KEYS):return None
     if counts['run']!=sum(counts[k] for k in KEYS if k!='run') or counts['passed']<=0:return None
     if any(counts[k] for k in ('failed','errors','unexpected_successes')):return None
     return {k:counts[k] for k in KEYS}
@@ -15,29 +16,39 @@ def normalized(counts):
 def outcomes(result,adapter='omega'):
     if not isinstance(result,dict):return None
     if type(result.get('exit_code')) is not int or result['exit_code']!=0:return None
+    if any(result.get(k) for k in ('timed_out','output_limit_exceeded','invalid_utf8')):return None
     text=result.get('output','')
     if not isinstance(text,str) or len(text.encode())>1048576:return None
     try:
         counts=dict.fromkeys(KEYS,0)
         if adapter=='omega':
             text=result.get('output_tail') or text
-            if not isinstance(text,str):return None
+            if not isinstance(text,str) or len(text.encode())>1048576:return None
             lines=[line[18:] for line in text.splitlines() if line.startswith('OMEGA_TEST_RESULT ')]
-            return normalized(json.loads(lines[0])) if len(lines)==1 else None
+            if not text.rstrip().splitlines() or not text.rstrip().splitlines()[-1].startswith('OMEGA_TEST_RESULT '):return None
+            return normalized(bounded_json(lines[0])) if len(lines)==1 else None
         if result.get('truncated'):return None
         if adapter=='jest':
-            data=json.loads(text)
+            data=bounded_json(text)
             fields=('numTotalTests','numPassedTests','numFailedTests','numPendingTests','numTodoTests')
             if not isinstance(data,dict) or any(type(data.get(k)) is not int or data[k]<0 for k in fields):return None
             counts.update(run=data['numTotalTests'],passed=data['numPassedTests'],failed=data['numFailedTests'],skipped=data['numPendingTests']+data['numTodoTests'])
             if data.get('success') is not True:return None
+            if 'numFailedTestSuites' in data and (type(data['numFailedTestSuites']) is not int or data['numFailedTestSuites']!=0):return None
+            if 'testResults' in data:
+                suites=data['testResults']
+                if not isinstance(suites,list) or any(not isinstance(s,dict) or s.get('status')=='failed' for s in suites):return None
         elif adapter=='go':
-            terminal={};started=set()
+            terminal={};started=set();packages={};seen_packages=set()
             for line in text.splitlines():
-                event=json.loads(line)
+                event=bounded_json(line)
                 if not isinstance(event,dict):return None
                 package=event.get('Package');test=event.get('Test');action=event.get('Action')
-                if action=='fail' and not test:return None
+                if not isinstance(package,str) or not package:return None
+                seen_packages.add(package)
+                if action in ('pass','fail','skip') and not test:
+                    if package in packages or action=='fail':return None
+                    packages[package]=action
                 if test:
                     if not isinstance(test,str) or not isinstance(package,str):return None
                     key=(package,test)
@@ -47,21 +58,27 @@ def outcomes(result,adapter='omega'):
                     if action in ('pass','fail','skip'):
                         if key in terminal:return None
                         terminal[key]=action
-            if not terminal or any(k not in terminal for k in started):return None
+            if not terminal or set(terminal)!=started or set(packages)!=seen_packages or any(packages.get(package)!='pass' for package,_ in terminal):return None
             counts.update(run=len(terminal),passed=sum(x=='pass' for x in terminal.values()),failed=sum(x=='fail' for x in terminal.values()),skipped=sum(x=='skip' for x in terminal.values()))
         elif adapter=='junit':
             if '<!DOCTYPE' in text.upper() or '<!ENTITY' in text.upper():return None
             tree=ET.fromstring(text)
             if tree.tag not in ('testsuites','testsuite'):return None
             cases=list(tree.iter('testcase'))
+            case_results={id(child) for case in cases for child in case if child.tag in ('failure','error','skipped')}
+            if any(id(node) not in case_results for node in tree.iter() if node.tag in ('failure','error','skipped')):return None
             for case in cases:
                 types=[tag for tag in ('failure','error','skipped') if case.find(tag) is not None]
                 if len(types)>1:return None
                 counts['run']+=1
                 counts[{'failure':'failed','error':'errors','skipped':'skipped'}.get(types[0] if types else '', 'passed')]+=1
-            for suite in tree.iter('testsuite'):
-                actual=len(list(suite.iter('testcase')))
-                if 'tests' in suite.attrib and int(suite.attrib['tests'])!=actual:return None
+            for suite in tree.iter():
+                if suite.tag not in ('testsuite','testsuites'):continue
+                subset=list(suite.iter('testcase'))
+                actual={'tests':len(subset),'failures':sum(c.find('failure') is not None for c in subset),
+                        'errors':sum(c.find('error') is not None for c in subset),'skipped':sum(c.find('skipped') is not None for c in subset)}
+                for field,total in actual.items():
+                    if field in suite.attrib and (not suite.attrib[field].isdigit() or int(suite.attrib[field])!=total):return None
         else:return None
         return normalized(counts)
     except (ValueError,TypeError,KeyError,RecursionError,ET.ParseError):return None

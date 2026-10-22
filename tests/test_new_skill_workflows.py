@@ -62,8 +62,11 @@ class NewSkillWorkflows(unittest.TestCase):
     def test_project_adapter_cli_proposes_without_installing_or_writing_config(self):
         (self.root/'package.json').write_text(json.dumps({'scripts':{'build':'tsc','test':'jest'}}))
         p,r=self.cli('project-workflow-adapter');self.assertEqual(p.returncode,1)
-        self.assertEqual(r['proposals'][0]['tests'],['npm','test','--','--json']);self.assertFalse(r['dependencies_installed'])
+        self.assertIsNone(r['proposals'][0]['tests']);self.assertFalse(r['dependencies_installed'])
         self.assertFalse((self.root/'.omega/configs').exists())
+        (self.root/'package.json').write_text(json.dumps({'scripts':{'test':'node --test'}}))
+        p,r=self.cli('project-workflow-adapter');self.assertEqual(r['proposals'][0]['test_adapter'],'junit')
+        self.assertEqual(r['proposals'][0]['tests'],['node','--test','--test-reporter=junit'])
         for invalid in ('[]','['*1100+'0'+']'*1100):
             (self.root/'package.json').write_text(invalid)
             p,r=self.cli('project-workflow-adapter');self.assertEqual(p.returncode,2);self.assertNotIn('Traceback',p.stderr)

@@ -1,0 +1,7 @@
+{
+  "name": "omega-readonly-bridge",
+  "private": true,
+  "type": "module",
+  "engines": {"node": ">=24.0.0"},
+  "scripts": {"test": "node --test omega-bridge.test.mjs"}
+}

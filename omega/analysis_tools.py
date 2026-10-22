@@ -55,15 +55,15 @@ def reconcile_evidence(root,names,git,config):
             'scope':'known local source/runtime fingerprint only; external platform policy remains unobserved'}
 
 
-def reconcile_memory(root,names,head):
+def reconcile_memory(root,names,head,context=None):
     if not names or len(names)>32:raise ValueError('Expected 1..32 explicit memory records')
     groups=defaultdict(list);stale=[]
     for name in names:
-        result=memory_status(root,name,head);record=result['record'];key=record.get('decision_key') or record['title'].strip().casefold()
+        result=memory_status(root,name,head,context);record=result['record'];key=record.get('decision_key') or record['title'].strip().casefold()
         if not isinstance(key,str) or not key.strip():raise ValueError('Invalid decision key')
         groups[key].append({'record':name,'body_sha256':hashlib.sha256(record['body'].encode()).hexdigest(),
                             'stale':result['stale'],'staleness':result.get('staleness','unknown')})
-        if result['stale']:stale.append(name)
+        if result['requires_validation']:stale.append(name)
     conflicts=[{'decision_key':key,'records':items,'action':'review alternatives; no automatic winner'} for key,items in groups.items() if len({x['body_sha256'] for x in items})>1]
     return {'passed':not conflicts and not stale,'conflicts':conflicts,'stale_records':stale,
             'groups':dict(groups),'files_written':False,'scope':'different wording is a review signal, not proof of logical contradiction'}

@@ -62,9 +62,9 @@ def assess(root,skill,candidate=None):
 def suite_digest(root):
     # Discover additions as well as edits: a new test/module must invalidate a baseline.
     root=Path(root).resolve();h=hashlib.sha256()
-    for folder in ('omega','tests','benchmarks'):
+    for folder in ('omega','tests','benchmarks','integration/typescript'):
         h.update(folder.encode()+b'\0')
-        paths=sorted(p for p in (root/folder).rglob('*') if p.is_file() and p.suffix in ('.py','.json') and '__pycache__' not in p.parts)
+        paths=sorted(p for p in (root/folder).rglob('*') if p.is_file() and p.suffix in ('.py','.json','.ts','.mjs') and '__pycache__' not in p.parts)
         for path in paths:
             name=str(path.relative_to(root));verified=source_path(root,name)
             h.update(name.encode()+b'\0'+verified.read_bytes()+b'\0')

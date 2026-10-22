@@ -92,13 +92,19 @@ def handoff(root,document,maximum_agents=2):
     nodes={};issues=[]
     for node in document['nodes']:
         if not isinstance(node,dict) or not isinstance(node.get('id'),str) or not re.fullmatch('[a-z][a-z0-9-]{0,63}',node['id']) or node['id'] in nodes:raise ValueError('Invalid/duplicate node id')
+        if set(node)-{'id','role','agents','after','writes','reads','write_dirs','read_dirs','owns'}:raise ValueError('Unknown workflow node field; review scope declaration')
         if node.get('role') not in ('orchestrator','worker','reviewer','memory'):raise ValueError('Unknown workflow role')
         if type(node.get('agents',1)) is not int or not 0<=node.get('agents',1)<=budget:raise ValueError('Node exceeds agent budget')
-        for key in ('after','writes','owns'):
-            if not isinstance(node.get(key,[]),list) or any(not isinstance(x,str) for x in node.get(key,[])):raise ValueError('Invalid workflow list')
+        lists=('after','writes','reads','write_dirs','read_dirs','owns')
+        for key in lists:
+            if not isinstance(node.get(key,[]),list) or len(node.get(key,[]))>128 or any(not isinstance(x,str) for x in node.get(key,[])):raise ValueError('Invalid workflow list')
         if node['role']!='orchestrator' and node.get('agents',1)==0:raise ValueError('Only the orchestrator can declare zero dispatched agents')
-        if any(len(set(node.get(k,[])))!=len(node.get(k,[])) for k in ('after','writes','owns')):raise ValueError('Duplicate workflow declaration')
-        copy=dict(node);copy['writes']=[str(source_path(root,x).relative_to(root)) for x in node.get('writes',[])]
+        if any(len(set(node.get(k,[])))!=len(node.get(k,[])) for k in lists):raise ValueError('Duplicate workflow declaration')
+        copy=dict(node)
+        for key in ('writes','reads','write_dirs','read_dirs'):
+            copy[key]=[str(source_path(root,x).relative_to(root)) for x in node.get(key,[])]
+            if any(any(c in path for c in '*?[]{}') for path in copy[key]):raise ValueError('Workflow paths must be explicit; glob scopes are unsupported')
+            if key.endswith('_dirs') and any((Path(root)/path).exists() and not (Path(root)/path).is_dir() for path in copy[key]):raise ValueError('Directory scope points to a file')
         nodes[node['id']]=copy
     if sum(n['role']=='orchestrator' for n in nodes.values())!=1:issues.append('Exactly one orchestrator is required')
     owners=defaultdict(list)
@@ -123,12 +129,23 @@ def handoff(root,document,maximum_agents=2):
         batches.append(batch);done.update(batch);remaining.difference_update(batch)
     ids=sorted(nodes)
     if not remaining:
+        orchestrators=[name for name in nodes if nodes[name]['role']=='orchestrator']
+        if len(orchestrators)==1:
+            for name in nodes:
+                if name!=orchestrators[0] and orchestrators[0] not in ancestors[name]:issues.append('Orchestrator must precede '+name)
+        def scopes(node,access):return [(path,False) for path in node[access]]+[(path,True) for path in node['write_dirs' if access=='writes' else 'read_dirs']]
+        def overlaps(left,right):
+            a,ad=left;b,bd=right
+            return a==b or ad and Path(b).is_relative_to(a) or bd and Path(a).is_relative_to(b)
         for i,left in enumerate(ids):
             for right in ids[i+1:]:
-                shared=set(nodes[left]['writes'])&set(nodes[right]['writes'])
-                if shared and left not in ancestors[right] and right not in ancestors[left]:
-                    issues.append('Unordered writers '+left+' / '+right+': '+', '.join(sorted(shared)))
-    return {'passed':not issues,'issues':issues,'schedule':batches,'owners':dict(owners),'max_agents':budget,
+                if left in ancestors[right] or right in ancestors[left]:continue
+                if any(overlaps(a,b) for a in scopes(nodes[left],'writes') for b in scopes(nodes[right],'writes')):
+                    issues.append('Unordered writers '+left+' / '+right)
+                if any(overlaps(a,b) for writer,reader in ((left,right),(right,left)) for a in scopes(nodes[writer],'writes') for b in scopes(nodes[reader],'reads')):
+                    issues.append('Unordered reader/writer '+left+' / '+right)
+    return {'passed':not issues,'issues':issues,'schedule':batches if not issues else [],'owners':dict(owners),'max_agents':budget,
+            'scope':'declared exact files and directory subtrees only; undeclared access is not inferred or locked',
             'execution':'validated plan only; this command does not dispatch agents or mutate Git'}
 
 
@@ -139,10 +156,12 @@ def project_adapter(root):
         data=bounded_json(bounded_text(source_path(root,'package.json'),1048576))
         if not isinstance(data,dict):raise ValueError('Invalid package manifest object')
         scripts=data.get('scripts',{})
-        if not isinstance(scripts,dict):raise ValueError('Invalid package scripts')
+        if not isinstance(scripts,dict) or any(not isinstance(value,str) for value in scripts.values()):raise ValueError('Invalid package scripts')
+        builtin=scripts.get('test','').strip()=='node --test'
         options.append({'stack':'node','build':['npm','run','build'] if 'build' in scripts else None,
-                        'tests':['npm','test','--','--json'] if 'test' in scripts else None,
-                        'test_adapter':'jest','assumption':'Only use Jest adapter if test script actually emits Jest JSON; other runners need another adapter'})
+                        'tests':['node','--test','--test-reporter=junit'] if builtin else None,
+                        'test_adapter':'junit' if builtin else 'review-required',
+                        'assumption':'Node built-in JUnit proposal requires a verified supporting Node version. npm/Jest merged logs are not clean JSON; configure a reviewed structured report path/runner before using that adapter.'})
     if (root/'go.mod').is_file():options.append({'stack':'go','build':['go','build','./...'],'tests':['go','test','-json','./...'],'test_adapter':'go'})
     if any((root/x).is_file() for x in ('pyproject.toml','requirements.txt')) or (root/'tests').is_dir():
         options.append({'stack':'python','build':['python3','-m','compileall','-q','.'],

@@ -57,6 +57,9 @@ class SkillEvolution(unittest.TestCase):
         h=suite_digest(self.root);(self.root/'tests').mkdir()
         (self.root/'tests/test_new.py').write_text('new regression')
         self.assertNotEqual(h,suite_digest(self.root))
+        h=suite_digest(self.root);(self.root/'integration/typescript').mkdir(parents=True)
+        (self.root/'integration/typescript/bridge.ts').write_text('export type Task = string;')
+        self.assertNotEqual(h,suite_digest(self.root))
 
     def test_missing_sections_cannot_pass_comparison(self):
         with patch.object(app,'ROOT',self.root),patch.object(app,'git',side_effect=lambda *a: '' if a[0] in ('ls-files','check-ignore') else 'abc'),patch.object(app,'benchmark',return_value=self.report()):

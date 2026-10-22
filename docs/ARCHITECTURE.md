@@ -85,9 +85,9 @@ Memory là dữ liệu không đáng tin; không thực thi hướng dẫn trong
 
 ## Gates và rollback
 
-`omega/config.json` chứa argv, không shell. Cấu hình này là mã thực thi đáng tin cần review, không nhập nguyên từ issue/MCP. Build compile Python; tests qua omega.test_runner đếm outcomes; security audit policy config; regression router và offline skill contracts. Tất cả bắt buộc và fail đóng ở exit code khác 0, timeout 124. Không có ứng dụng deploy nên không có migration/service health gate.
+`omega/config.json` chứa argv, không shell. Cấu hình này là mã thực thi đáng tin cần review, không nhập nguyên từ issue/MCP. Build compile Python; tests qua omega.test_runner đếm outcomes; security dùng targeted Python AST/JSON/bypass/possible-secret rules trên scope .claude và omega; regression router và offline skill contracts. Tất cả bắt buộc và fail đóng ở exit code khác 0, timeout 124. Không có ứng dụng deploy nên không có migration/service health gate.
 
-Audit hiện **không** là SAST, scanner dependency, pentest hoặc secret scanner. Gate xanh chỉ chứng minh phạm vi đã kiểm tra. Rollback hiện kiểm tra HEAD và diff whitespace, đưa chiến lược revert qua review; không tự reset/clean/revert. Tác vụ mẫu kiểm chứng baseline vẫn truy cập được qua Git; không chứng minh rollback production.
+Audit là bộ quy tắc tĩnh giới hạn, **không** là phân tích taint, scanner dependency, pentest hoặc bảo đảm đã phát hiện mọi secret. Gate xanh chỉ chứng minh phạm vi đã kiểm tra. Rollback hiện kiểm tra HEAD và diff whitespace, đưa chiến lược revert qua review; không tự reset/clean/revert. Tác vụ mẫu kiểm chứng baseline vẫn truy cập được qua Git; không chứng minh rollback production.
 
 ## Tiêu chí nghiệm thu
 
@@ -101,3 +101,7 @@ Audit hiện **không** là SAST, scanner dependency, pentest hoặc secret scan
 - [x] Push branch `omega/bootstrap` lên GitHub, đối chiếu SHA bằng `git ls-remote`.
 
 Giai đoạn kế: xác minh native → task corpus đa dạng → đo hiệu quả và ngân sách → thêm từng skill khi có nhu cầu. Không triển khai 31 skill còn lại trước bằng chứng giá trị.
+
+## Ranh giới ngôn ngữ 0.4
+
+Python xử lý policy/analysis/security/memory/evidence, TypeScript bridge cung cấp giao tiếp có giới hạn, không nhân đôi engine. Bridge đã chạy 9 integration tests; chưa có scheduler/MCP server/UI. Thiết kế và cách dùng: [PYTHON_TYPESCRIPT_BOUNDARY.md](PYTHON_TYPESCRIPT_BOUNDARY.md).

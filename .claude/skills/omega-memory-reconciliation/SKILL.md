@@ -12,6 +12,8 @@ Danh sách record tường minh, decision key hoặc title, nguồn/evidence ref
 
 ## Workflow
 
+CLI so context hiện tại với evidence gốc, không chỉ hash blob. Unbound/not-checked hoặc source/runtime drift cần review trước tái sử dụng; caller library phải truyền context nếu muốn kết luận current. Với project có gate config riêng, truyền lại --gate-config. Giữ cả alternatives và ghi rõ bằng chứng chưa xác minh; xem docs/UPGRADE_0_4.md.
+
 Chạy `python3 -m omega memory-reconciliation --input INPUT --compact`. Nhóm theo key, đối chiếu body hashes và stale status; đọc nguồn thật trước quyết định. Khác câu chữ là tín hiệu review, không tự suy ra mâu thuẫn logic.
 
 ## Evidence

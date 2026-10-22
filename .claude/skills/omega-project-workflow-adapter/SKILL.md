@@ -12,6 +12,8 @@ Root Git tường minh, manifests/CI và quyền đọc project; xác định en
 
 ## Workflow
 
+Chỉ khi test script đúng node --test mới đề xuất Node built-in JUnit sau khi kiểm tra runtime hỗ trợ. Không coi npm/Jest merged logs là clean JSON; runner khác phải review config/output channel trước, proposal chưa sẵn sàng vẫn exit 1. Python là lõi kiểm chứng; TypeScript giao tiếp qua bridge ở docs/PYTHON_TYPESCRIPT_BOUNDARY.md, không viết lại policy. Xem docs/UPGRADE_0_4.md.
+
 Chạy `python3 -m omega project-workflow-adapter --compact`. Đối chiếu proposals với scripts và runner thật; review đầy đủ argv build/tests/security/regression trước lưu config riêng. Dùng runner tuyệt đối và --project-root ở project ngoài OMEGA.
 
 ## Evidence

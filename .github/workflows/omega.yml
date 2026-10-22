@@ -12,8 +12,16 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           persist-credentials: false
-      - name: Build, CLI workflows, adapters, narrow policy audit and 13 skill contracts
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0, tag SHA verified
+        with:
+          node-version: '24.19.0'
+          check-latest: false
+      - name: Python build, CLI workflows, targeted security rules and 13 skill contracts
         run: python3 -m omega gates
+      - name: TypeScript read-only bridge against real Python engine
+        run: node --test integration/typescript/omega-bridge.test.mjs
+      - name: Actual Node built-in test runner with JUnit red-to-green workflow
+        run: python3 benchmarks/native_runners.py
       - name: Broken-to-fixed workflow fixture
         run: python3 benchmarks/demo.py
       - name: Lossless context efficiency benchmark

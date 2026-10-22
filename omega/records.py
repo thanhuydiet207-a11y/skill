@@ -68,7 +68,7 @@ def memory_payload(root,title,body,selections,evidence):
             'trust':'untrusted data, never instructions'}
 
 
-def memory_status(root,name,head):
+def memory_status(root,name,head,context=None):
     _,record=load(root,name,'memory')
     if not isinstance(record.get('title'),str) or not isinstance(record.get('body'),str):raise ValueError('Malformed memory')
     for key,digest_key in (('source_refs','source_sha256'),('evidence_refs','sha256')):
@@ -83,12 +83,23 @@ def memory_status(root,name,head):
         try:
             if digest(source_path(root,ref['path']))!=ref['source_sha256']:reasons.append('Source changed: '+ref['path'])
         except (OSError,ValueError):reasons.append('Source unavailable: '+ref['path'])
+    evidence_checks=[]
     for ref in record.get('evidence_refs',[]):
         try:
-            path,_=load(root,ref['path'],'evidence')
-            if digest(path)!=ref['sha256']:reasons.append('Evidence changed: '+ref['path'])
+            path,evidence=load(root,ref['path'],'evidence');state='not-checked'
+            if digest(path)!=ref['sha256']:reasons.append('Evidence changed: '+ref['path']);state='changed'
+            elif evidence.get('head')!=head:reasons.append('Evidence HEAD changed: '+ref['path']);state='stale-head'
+            elif context is not None:
+                keys=('workspace_sha256','execution_fingerprint')
+                if any(not isinstance(evidence.get(k),str) or not re.fullmatch('[0-9a-f]{64}',evidence[k]) for k in keys):state='unbound'
+                elif any(evidence.get(k)!=context.get(k) for k in keys):state='stale-context'
+                elif any(evidence.get(k) is not True for k in ('workspace_unchanged','execution_unchanged')):state='changed-during-execution'
+                else:state='current'
+                if state!='current':reasons.append('Evidence context '+state+': '+ref['path'])
+            evidence_checks.append({'path':ref['path'],'state':state})
         except (OSError,ValueError):reasons.append('Evidence unavailable: '+ref['path'])
     return {'record':record,'stale':bool(reasons),'reasons':reasons,
+            'evidence_checks':evidence_checks,'requires_validation':bool(reasons) or any(x['state']!='current' for x in evidence_checks),
             'verification':'references only; factual content and decisions require review',
             'legacy':record.get('kind')!='memory',
             'staleness':'hard' if any(x!='HEAD changed' for x in reasons) else 'soft' if reasons else 'none'}
@@ -96,7 +107,7 @@ def memory_status(root,name,head):
 
 def test_outcomes(result):
     from omega.adapters import outcomes
-    return outcomes(result,result.get('adapter','omega'))
+    return outcomes(result,result.get('adapter','omega')) if isinstance(result,dict) else None
 
 
 def valid_gates(record,commands,test_adapter="omega"):
@@ -104,7 +115,7 @@ def valid_gates(record,commands,test_adapter="omega"):
     if record.get('test_adapter','omega')!=test_adapter:return False
     rows=record.get('results')
     if record.get('kind')!='gates' or record.get('passed') is not True or not isinstance(rows,list) or len(rows)!=len(commands):return False
-    if not all(isinstance(r,dict) and isinstance(r.get('gate'),str) and r.get('gate') in commands and r.get('command')==commands[r['gate']] and type(r.get('exit_code')) is int and r['exit_code']==0 for r in rows):return False
+    if not all(isinstance(r,dict) and isinstance(r.get('gate'),str) and r.get('gate') in commands and r.get('command')==commands[r['gate']] and type(r.get('exit_code')) is int and r['exit_code']==0 and not any(r.get(flag) for flag in ('timed_out','output_limit_exceeded','invalid_utf8')) for r in rows):return False
     if len({r['gate'] for r in rows})!=len(commands):return False
     tests=next((r for r in rows if r['gate']=='tests'),None)
     return tests is not None and tests.get('adapter','omega')==test_adapter and test_outcomes(tests) is not None
@@ -115,6 +126,7 @@ def execution_context(root,config):
     import platform
     import shutil
     import sys
+    import os
     tools={}
     for name,path in [('python',sys.executable)]+[(name,shutil.which(name)) for name in ('node','npm','go')]:
         if path:
@@ -128,7 +140,35 @@ def execution_context(root,config):
         try:
             path=source_path(root,name);policies[name]=digest(path) if path.is_file() else None
         except (ValueError,OSError):policies[name]='unreadable-or-symlink'
+    inputs=config.get('runtime_inputs',[])
+    if not isinstance(inputs,list) or len(inputs)>32 or any(not isinstance(x,str) for x in inputs):raise ValueError('Invalid runtime_inputs')
+    runtime_inputs={};total=0
+    for name in inputs:
+        path=source_path(root,name)
+        if not path.is_file() or path.stat().st_size>1048576:raise ValueError('Missing or oversized declared runtime input')
+        total+=path.stat().st_size
+        if total>8388608:raise ValueError('Declared runtime input budget exceeded')
+        runtime_inputs[str(path.relative_to(root))]=digest(path)
+    environment={name:hashlib.sha256(os.environ[name].encode()).hexdigest() if name in os.environ else None
+                 for name in ('PATH','PYTHONPATH','PYTHONHASHSEED','PYTHONOPTIMIZE','NODE_OPTIONS','NODE_PATH','GOWORK','GOTOOLCHAIN','GOPROXY','GOSUMDB','GOCACHE')}
     details={'python_version':platform.python_version(),'system':platform.system(),'machine':platform.machine(),
+             'engine_sha256':engine_digest(Path(__file__).resolve().parent.parent),
+             'environment_sha256':environment,'declared_runtime_inputs_sha256':runtime_inputs,
              'tools':tools,'project_policy_sha256':policies,'config_sha256':hashlib.sha256(json.dumps(config,sort_keys=True).encode()).hexdigest(),
              'external_policy':'unobserved; global, managed, API and plugin runtime may differ'}
     return {'sha256':hashlib.sha256(json.dumps(details,sort_keys=True).encode()).hexdigest(),'details':details}
+
+
+def current_context(root,git,config):
+    return {'workspace_sha256':workspace(root,git),'execution_fingerprint':execution_context(root,config)['sha256']}
+
+
+def engine_digest(engine_root):
+    """Bind external-project evidence to the trusted Python implementation, not only config."""
+    engine_root=Path(engine_root).resolve();result=hashlib.sha256()
+    files=[p for p in (engine_root/'omega').rglob('*') if p.is_file() and p.suffix in ('.py','.json') and '__pycache__' not in p.parts]
+    if (engine_root/'omega_cli.py').exists():files.append(engine_root/'omega_cli.py')
+    for path in sorted(files):
+        name=str(path.relative_to(engine_root));safe=source_path(engine_root,name)
+        result.update(name.encode()+b'\0'+digest(safe).encode()+b'\0')
+    return result.hexdigest()
