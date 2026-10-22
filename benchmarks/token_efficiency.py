@@ -34,8 +34,9 @@ def main():
     restored=copy.deepcopy(summary)
     artifact=json.loads((ROOT/full['evidence']).read_text())
     for i,row in enumerate(restored['results']):
-        if 'output_ref' in row:
-            del row['output_ref'];row['output']=artifact['results'][i]['output']
+        for key in ('output','output_tail'):
+            if key+'_ref' in row:
+                del row[key+'_ref'];row[key]=artifact['results'][i][key]
     cases.append(measurement('gate-logs-by-reference',encode(full),encode(summary,True),restored==full))
     result={'suite':'token-efficiency-v1','metric':'UTF-8 bytes; actual tokens and native LLM quality unmeasured',
             'passed':all(c['data_equivalent'] and c['after_utf8_bytes']<c['before_utf8_bytes'] for c in cases),

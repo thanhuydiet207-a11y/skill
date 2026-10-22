@@ -83,3 +83,27 @@ def memory_status(root,name,head):
     return {'record':record,'stale':bool(reasons),'reasons':reasons,
             'verification':'references only; factual content and decisions require review',
             'legacy':record.get('kind')!='memory'}
+
+
+def test_outcomes(result):
+    """Use the runner's explicit counts, including when prefix capture was truncated."""
+    if type(result.get('exit_code')) is not int or result['exit_code']!=0:return None
+    text=result.get('output_tail') or result.get('output','')
+    lines=[x[len('OMEGA_TEST_RESULT '):] for x in text.splitlines() if x.startswith('OMEGA_TEST_RESULT ')]
+    if len(lines)!=1:return None
+    try:counts=json.loads(lines[0])
+    except (ValueError,TypeError):return None
+    keys=('run','passed','failed','errors','skipped','expected_failures','unexpected_successes')
+    if not isinstance(counts,dict) or any(type(counts.get(x)) is not int or counts[x]<0 for x in keys):return None
+    if counts['run']!=sum(counts[x] for x in keys if x!='run') or counts['passed']<=0:return None
+    if any(counts[x] for x in ('failed','errors','unexpected_successes')):return None
+    return counts
+
+
+def valid_gates(record,commands):
+    rows=record.get('results')
+    if record.get('kind')!='gates' or record.get('passed') is not True or not isinstance(rows,list) or len(rows)!=len(commands):return False
+    if not all(isinstance(r,dict) and isinstance(r.get('gate'),str) and r.get('gate') in commands and r.get('command')==commands[r['gate']] and type(r.get('exit_code')) is int and r['exit_code']==0 for r in rows):return False
+    if len({r['gate'] for r in rows})!=len(commands):return False
+    tests=next((r for r in rows if r['gate']=='tests'),None)
+    return tests is not None and test_outcomes(tests) is not None

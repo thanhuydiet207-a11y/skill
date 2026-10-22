@@ -6,7 +6,7 @@ installed Claude Code before enabling. This is defense in depth, not a sandbox.
 import json
 from pathlib import Path
 import sys
-from omega.__main__ import ROOT
+ROOT = Path(__file__).resolve().parent.parent
 from omega.safety import source_path
 
 READ_COMMANDS = {'git status --short', 'git diff --check', 'git diff --stat',

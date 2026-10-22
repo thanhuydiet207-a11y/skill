@@ -14,6 +14,8 @@ python3 -m omega gates
 - [Bằng chứng kiểm thử và giới hạn](docs/VALIDATION.md)
 - [Quy tắc điều phối Claude](CLAUDE.md)
 
-Đã tạo 5 skill và 3 agent spec. CLI được kiểm thử độc lập; Claude Code chưa có trên máy, nên chưa nghiệm thu slash skills, subagent runtime hoặc hook registration. Hook không tự kích hoạt; MCP không cần cho workflow local và tắt mặc định. 31 skill và 7 agent còn lại chỉ là thiết kế.
+Đã tạo 5 skill và 3 agent spec. CLI được kiểm thử độc lập; đã xác minh CLI Claude Code 2.1.308 trong tool cục bộ, nhưng chưa có xác thực để nghiệm thu slash skills, subagent runtime hoặc hook registration. Hook không tự kích hoạt; MCP không cần cho workflow local và tắt mặc định. 31 skill và 7 agent còn lại chỉ là thiết kế.
 
 Tối ưu context không đổi quality gates: [Token efficiency](docs/TOKEN_EFFICIENCY.md).
+
+Bản 0.2 nâng cấp sâu 5 skill, kiểm tra phạm vi thay đổi, memory provenance và evidence freshness: [Deep hardening](docs/DEEP_HARDENING.md).

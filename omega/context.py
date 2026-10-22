@@ -42,8 +42,14 @@ def packet(root, selections, max_bytes=24000):
 
 
 def gate_summary(result):
-    """Keep outcomes; full logs remain in evidence. Never discard failed output."""
-    return {**{k:v for k,v in result.items() if k!='results'},
-            'results':[{**{k:v for k,v in row.items() if k!='output'},
-                        **({'output':row['output']} if row['exit_code'] else {'output_ref':f"{result['evidence']}#/results/{i}/output"})}
-                       for i,row in enumerate(result['results'])]}
+    """Keep all outcomes; successful prefix/tail logs remain in referenced evidence."""
+    rows=[]
+    for i,source in enumerate(result['results']):
+        row=dict(source)
+        if row['exit_code']==0:
+            for key in ('output','output_tail'):
+                if key in row:
+                    del row[key]
+                    row[key+'_ref']=f"{result['evidence']}#/results/{i}/{key}"
+        rows.append(row)
+    return {**{k:v for k,v in result.items() if k!='results'},'results':rows}

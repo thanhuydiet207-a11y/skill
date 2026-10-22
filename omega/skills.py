@@ -47,13 +47,12 @@ def assess(root,skill,candidate=None):
 
 
 def suite_digest(root):
-    files=('omega/__main__.py','omega/skills.py','omega/change.py','omega/records.py','omega/process.py',
-           'omega/safety.py','omega/context.py','omega/test_runner.py','omega/config.json',
-           'benchmarks/cases.json','tests/test_workflows.py','tests/test_skill_evolution.py')
-    h=hashlib.sha256()
-    for name in files:
-        p=Path(root)/name
-        h.update(name.encode()+b'\0')
-        h.update(p.read_bytes() if p.is_file() else b'<missing>')
-        h.update(b'\0')
+    # Discover additions as well as edits: a new test/module must invalidate a baseline.
+    root=Path(root).resolve();h=hashlib.sha256()
+    for folder in ('omega','tests','benchmarks'):
+        h.update(folder.encode()+b'\0')
+        paths=sorted(p for p in (root/folder).rglob('*') if p.is_file() and p.suffix in ('.py','.json') and '__pycache__' not in p.parts)
+        for path in paths:
+            name=str(path.relative_to(root));verified=source_path(root,name)
+            h.update(name.encode()+b'\0'+verified.read_bytes()+b'\0')
     return h.hexdigest()

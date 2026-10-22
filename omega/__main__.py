@@ -47,6 +47,7 @@ def save(kind, data):
                'created_utc': __import__('datetime').datetime.now(__import__('datetime').timezone.utc).isoformat(), **data}
     with os.fdopen(os.open(dest,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,0o600),'w',encoding='utf-8') as out:
         out.write(json.dumps(payload, indent=2, ensure_ascii=False)+'\n')
+        out.flush();os.fsync(out.fileno())
     return str(dest.relative_to(ROOT))
 
 
@@ -55,7 +56,7 @@ def plan(complexity, conflict=False):
              'high': ['omega-investigator','omega-engineer','omega-verifier']}
     return {'complexity': complexity, 'agents': roles[complexity],
             'schedule': 'sequential; parallel only independent read tasks',
-            'max_concurrent_agents': 2, 'isolation': 'worktree' if conflict else 'branch',
+            'max_concurrent_agents': min(2,CONFIG['limits']['max_agents']), 'isolation': 'worktree' if conflict else 'branch',
             'skills': ['repo-map','controlled-change','quality-gates','project-memory'],
             'limits': CONFIG['limits'], 'execution': 'manual Claude orchestration; no API calls'}
 
@@ -82,18 +83,32 @@ def inventory():
 
 
 def doctor():
-    binary = shutil.which('claude')
-    return {'python': sys.version.split()[0], 'git': git('--version'),
-            'claude': run([binary,'--version']) if binary else {'available':False},
-            'native_integration': 'UNVERIFIED: verify skills, agents, hook schemas and permissions with installed Claude help/docs',
-            'hooks_enabled': False, 'mcp_enabled': False}
+    from omega.process import execute
+    from omega.safety import artifact_path
+    binary=shutil.which('claude');source='PATH' if binary else None
+    local=ROOT/'.omega/tools/claude/node_modules/.bin/claude'
+    if not binary and local.is_file() and local.resolve().is_relative_to((ROOT/'.omega/tools/claude').resolve()):
+        binary=str(local);source='project-local'
+    native={'available':False}
+    if binary:
+        state=artifact_path(ROOT,'.omega/claude-state/runtime.marker','claude-state',False).parent
+        state.mkdir(parents=True,exist_ok=True)
+        environment=dict(os.environ);environment['CLAUDE_CONFIG_DIR']=str(state)
+        native={'available':True,'source':source,**execute([binary,'--version'],ROOT,timeout=15,env=environment)}
+    return {'python':sys.version.split()[0],'git':git('--version'),'claude':native,
+            'native_integration':'Version probe only; skills, agents and hook behavior remain UNVERIFIED',
+            'hooks_enabled':False,'mcp_enabled':False}
 
 
 def audit():
     findings = []
     # Narrow source policy scan, NOT a vulnerability or secret scanner.
-    for p in (ROOT / '.claude').rglob('*'):
-        if p.is_file():
+    base=ROOT/'.claude'
+    if base.is_symlink():findings.append({'path':'.claude','rule':'symlink-policy'})
+    for p in (() if base.is_symlink() else base.rglob('*')):
+        if p.is_symlink():
+            findings.append({'path':str(p.relative_to(ROOT)),'rule':'symlink-policy'})
+        elif p.is_file():
             path = confined(str(p.relative_to(ROOT)))
             text = path.read_text()
             for forbidden in ('--dangerously-skip-permissions', '"bypassPermissions"', 'curl -k ', 'verify=False'):
@@ -131,14 +146,15 @@ def validate_gates():
 
 def gates():
     validate_gates()  # Validate ALL policy before executing the first command.
-    from omega.records import workspace
+    from omega.records import workspace, test_outcomes
     before=workspace(ROOT,git)
     results=[]
     for name,argv in CONFIG['gates'].items():
         result=run(argv, CONFIG['limits']['max_gate_seconds'])
         results.append({'gate':name,**result})
     after=workspace(ROOT,git)
-    return {'passed':bool(results) and before==after and all(r['exit_code']==0 for r in results),
+    counts=test_outcomes(next(r for r in results if r['gate']=='tests'))
+    return {'kind':'gates','test_outcomes':counts,'passed':bool(results) and counts is not None and before==after and all(r['exit_code']==0 for r in results),
             'workspace_sha256':before,'workspace_unchanged':before==after,'results':results}
 
 
@@ -179,15 +195,15 @@ def main():
     elif args.command=='benchmark':
         if args.skill:
             from omega.skills import assess, suite_digest
-            from omega.records import workspace
+            from omega.records import workspace, test_outcomes
             assessment=assess(ROOT,args.skill,args.candidate)
             before=workspace(ROOT,git)
             scenarios=run(['python3','-m','omega.test_runner','--start','tests','--pattern','test_workflows.py'],CONFIG['limits']['max_gate_seconds'])
             result={'kind':'skill-evaluation','skill':args.skill,'assessment':assessment,
                     'candidate_sha256':assessment['sha256'],'suite_sha256':suite_digest(ROOT),
                     'workspace_sha256':before,'workspace_unchanged':before==workspace(ROOT,git),
-                    'scenarios':scenarios,'native_quality':'UNVERIFIED'}
-            result['passed']=assessment['passed'] and scenarios['exit_code']==0 and result['workspace_unchanged']
+                    'scenarios':scenarios,'test_outcomes':test_outcomes(scenarios),'native_quality':'UNVERIFIED'}
+            result['passed']=assessment['passed'] and result['test_outcomes'] is not None and result['workspace_unchanged']
             result['evidence']=save('evidence',result)
         else:result=benchmark()
         code=0 if result['passed'] else 1
@@ -209,7 +225,7 @@ def main():
     elif args.command=='change-check':
         from omega.change import check
         if not args.record:raise ValueError('--record required')
-        result=check(ROOT,args.record,git,CONFIG['limits'],args.evidence)
+        result=check(ROOT,args.record,git,CONFIG['limits'],args.evidence,CONFIG['gates'])
         code=0 if result['passed'] else 1
     elif args.command=='change-attempt':
         from omega.change import attempt
@@ -228,8 +244,8 @@ def main():
         if git('status','--porcelain'): raise ValueError('Dirty checkout: preserve changes before isolation')
         branch='omega/'+args.name
         if args.worktree:
-            p=confined(args.worktree)
-            if not p.is_relative_to(confined('.omega/worktrees')): raise ValueError('Worktree must be below .omega/worktrees')
+            from omega.safety import artifact_path
+            p=artifact_path(ROOT,args.worktree,'worktrees',False)
             if p.exists():raise ValueError('Destination exists')
             result={'output':git('worktree','add','-b',branch,str(p),'HEAD')}
         else:result={'output':git('switch','-c',branch)}
@@ -251,7 +267,7 @@ def main():
         code=0 if result['benchmark']['passed'] else 1
     else:
         if not args.baseline:raise ValueError('--baseline required')
-        from omega.records import load, workspace
+        from omega.records import load, workspace, valid_gates, test_outcomes
         from omega.skills import assess
         from omega.safety import artifact_path
         _,baseline=load(ROOT,args.baseline,'baselines')
@@ -266,10 +282,10 @@ def main():
             _,ev=load(ROOT,name,'evidence')
             fresh=ev.get('workspace_sha256')==workspace(ROOT,git) and ev.get('workspace_unchanged') is True and ev.get('head')==git('rev-parse','HEAD') and ev.get('passed') is True
             if ev.get('kind')=='skill-evaluation':
-                valid=fresh and ev.get('skill')==baseline['skill'] and ev.get('candidate_sha256')==contract['sha256'] and ev.get('suite_sha256')==current['suite_sha256']
+                valid=fresh and ev.get('skill')==baseline['skill'] and ev.get('candidate_sha256')==contract['sha256'] and ev.get('suite_sha256')==current['suite_sha256'] and isinstance(ev.get('scenarios'),dict) and test_outcomes(ev['scenarios']) is not None
                 scenario_ok=scenario_ok or valid
             else:
-                valid=fresh and isinstance(ev.get('results'),list) and {r.get('gate') for r in ev['results']}>=set(CONFIG['gates']) and all(r.get('exit_code')==0 for r in ev['results'])
+                valid=fresh and valid_gates(ev,CONFIG['gates'])
                 gate_ok=gate_ok or valid
             checks.append({'path':name,'valid':valid})
         passed=passed and all(x['valid'] for x in checks)

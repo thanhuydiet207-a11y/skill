@@ -2,7 +2,7 @@
 
 ## Yêu cầu
 
-Python >=3.10, Git, POSIX (kill process group), checkout này. Không cần pip/npm install. Chạy mọi lệnh ở gốc repository. Không ghi bên ngoài repository; branch/worktree do người dùng ủy quyền và cleanup cần review riêng.
+Python >=3.10, Git, POSIX (kill process group và flock), checkout này. Không cần pip/npm install. Chạy mọi lệnh ở gốc repository. Không ghi bên ngoài repository; branch/worktree do người dùng ủy quyền và cleanup cần review riêng.
 
 ```bash
 python3 -m omega doctor
@@ -71,7 +71,7 @@ CLI ràng buộc SHA-256 của toàn fixture và implementation benchmark, so su
 
 ## Troubleshooting
 
-- Claude absent: CLI local vẫn chạy; người dùng cung cấp runtime đã cài/được duyệt và authentication để nghiệm thu native. OMEGA không tự cài gói không cần thiết.
+- Claude: tool cục bộ 2.1.308 đã xác minh version/help, chưa xác thực để nghiệm thu native. CLI OMEGA vẫn dùng độc lập; xem [CLAUDE_COMPATIBILITY.md](CLAUDE_COMPATIBILITY.md).
 - Dirty checkout: báo và giữ nguyên file; không stash/reset tự động.
 - Timeout: exit 124, xem output được giữ 16 KB; chia nhỏ target hoặc điều chỉnh timeout có review.
 - GitHub authentication: dùng Git/proxy hiện tại; không dump credentials. Không yêu cầu dán token trong chat. Khôi phục kết nối qua môi trường rồi retry read trước push.
@@ -84,3 +84,7 @@ CLI ràng buộc SHA-256 của toàn fixture và implementation benchmark, so su
 ## Context tiết kiệm
 
 Dùng `--compact` để giữ nguyên JSON với ít khoảng trắng hơn; `gates --summary --compact` vẫn chạy mọi gate và giữ log bằng evidence reference. `context --select PATH:START:END --compact` đọc nguồn tường minh. Xem [TOKEN_EFFICIENCY.md](TOKEN_EFFICIENCY.md) để biết budget, kiểm tra dữ liệu tương đương và giới hạn số đo. Hook adapter bảo thủ chưa allowlist mọi biến thể lệnh mới; nếu sau này kích hoạt hook, cần review allowlist đúng lệnh, không tự nới quyền.
+
+## Phiên bản 0.2
+
+5 skill đã có workflow sâu và playbook đọc theo nhu cầu: [SKILL_PLAYBOOKS.md](SKILL_PLAYBOOKS.md). Các lệnh change-plan/change-check/change-attempt, memory-read và benchmark --skill cùng giới hạn mới: [DEEP_HARDENING.md](DEEP_HARDENING.md). Tests dùng `omega.test_runner`; gate tests cần marker kết quả có ít nhất một test thực sự pass, command exit 0 đơn thuần không đủ. Gate config khác runner cần adapter cung cấp hợp đồng outcomes tương ứng trước khi dùng.

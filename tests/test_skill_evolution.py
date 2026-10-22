@@ -54,6 +54,9 @@ class SkillEvolution(unittest.TestCase):
         h=suite_digest(self.root)
         p=self.root/'omega';p.mkdir();(p/'process.py').write_text('new runner')
         self.assertNotEqual(h,suite_digest(self.root))
+        h=suite_digest(self.root);(self.root/'tests').mkdir()
+        (self.root/'tests/test_new.py').write_text('new regression')
+        self.assertNotEqual(h,suite_digest(self.root))
 
     def test_missing_sections_cannot_pass_comparison(self):
         with patch.object(app,'ROOT',self.root),patch.object(app,'git',return_value='abc'),patch.object(app,'benchmark',return_value=self.report()):
@@ -71,9 +74,9 @@ class SkillEvolution(unittest.TestCase):
         with patch.object(app,'ROOT',self.root),patch.object(app,'git',return_value='abc'),patch.object(app,'benchmark',return_value=self.report()),patch('omega.records.workspace',return_value='current-workspace'):
             b=self.baseline();(self.root/b['candidate']).write_text(self.advanced())
             assessment=assess(self.root,'repo-map',b['candidate'])
-            common={'passed':True,'workspace_sha256':'current-workspace','workspace_unchanged':True}
-            gate=app.save('evidence',{**common,'results':[{'gate':name,'exit_code':0} for name in app.CONFIG['gates']]})
-            scenario=app.save('evidence',{**common,'kind':'skill-evaluation','skill':'repo-map','candidate_sha256':assessment['sha256'],'suite_sha256':'stable-suite'})
+            common={'kind':'gates','passed':True,'workspace_sha256':'current-workspace','workspace_unchanged':True}
+            gate=app.save('evidence',{**common,'results':[{'gate':name,'command':app.CONFIG['gates'][name],'exit_code':0,'output':'OMEGA_TEST_RESULT {"run": 1, "passed": 1, "failed": 0, "errors": 0, "skipped": 0, "expected_failures": 0, "unexpected_successes": 0}' if name=='tests' else ''} for name in app.CONFIG['gates']]})
+            scenario=app.save('evidence',{**common,'kind':'skill-evaluation','skill':'repo-map','candidate_sha256':assessment['sha256'],'suite_sha256':'stable-suite','scenarios':{'exit_code':0,'output':'OMEGA_TEST_RESULT {"run": 1, "passed": 1, "failed": 0, "errors": 0, "skipped": 0, "expected_failures": 0, "unexpected_successes": 0}'}})
             code,result=self.invoke('compare','--baseline',b['baseline'],'--evidence',gate,'--evidence',scenario)
             self.assertEqual(code,0);self.assertTrue(result['eligible_for_review'])
             (self.root/b['candidate']).write_text(self.advanced()+'\nchanged after scenario')
@@ -83,6 +86,6 @@ class SkillEvolution(unittest.TestCase):
     def test_stale_gate_evidence_refused(self):
         with patch.object(app,'ROOT',self.root),patch.object(app,'git',return_value='abc'),patch.object(app,'benchmark',return_value=self.report()),patch('omega.records.workspace',return_value='new-workspace'):
             b=self.baseline();(self.root/b['candidate']).write_text(self.advanced())
-            ev=app.save('evidence',{'passed':True,'workspace_sha256':'old-workspace','workspace_unchanged':True,'results':[{'gate':name,'exit_code':0} for name in app.CONFIG['gates']]})
+            ev=app.save('evidence',{'passed':True,'workspace_sha256':'old-workspace','workspace_unchanged':True,'results':[{'gate':name,'command':app.CONFIG['gates'][name],'exit_code':0,'output':'OMEGA_TEST_RESULT {"run": 1, "passed": 1, "failed": 0, "errors": 0, "skipped": 0, "expected_failures": 0, "unexpected_successes": 0}' if name=='tests' else ''} for name in app.CONFIG['gates']]})
             code,result=self.invoke('compare','--baseline',b['baseline'],'--evidence',ev)
             self.assertEqual(code,1);self.assertFalse(result['eligible_for_review'])

@@ -1,4 +1,6 @@
-# OMEGA — kiến trúc và phạm vi v0.1
+# OMEGA — kiến trúc và phạm vi
+
+Bản nâng cấp 0.2 và bằng chứng hiện tại: [DEEP_HARDENING.md](DEEP_HARDENING.md). Phần dưới giữ thiết kế tổng thể; playbook thực thi mới nằm trong [SKILL_PLAYBOOKS.md](SKILL_PLAYBOOKS.md).
 
 ## Luồng xử lý
 
@@ -17,7 +19,7 @@ flowchart TD
     F -->|có| H[Review của người dùng]
 ```
 
-CLI stdlib hỗ trợ kế hoạch và bằng chứng; Claude Code mới là runtime suy luận và giao việc. Không có lời gọi LLM/MCP ngầm. Native runtime chưa được kiểm chứng trên máy này. Không tuyên bố agent tự chạy hoặc hooks đã bảo vệ phiên làm việc.
+CLI stdlib hỗ trợ kế hoạch và bằng chứng; Claude Code mới là runtime suy luận và giao việc. Không có lời gọi LLM/MCP ngầm. CLI Claude Code 2.1.308 đã chạy version/help; native task execution chưa được kiểm chứng do chưa xác thực. Không tuyên bố agent tự chạy hoặc hooks đã bảo vệ phiên làm việc.
 
 ## 36 skill, 6 nhóm
 
@@ -61,7 +63,7 @@ Mẫu giao việc: `{task_id, objective, allowed_paths, prohibited_actions, bran
 - Complexity do người điều phối chọn dựa trên số component, mức không chắc chắn, rủi ro dữ liệu/API và khả năng rollback; CLI không tự đo chính xác complexity.
 - Skill `disable-model-invocation: true` chủ ý chỉ gọi tường minh. Không tải catalog đầy đủ vào mỗi agent; chỉ gửi acceptance, file liên quan, vài evidence tốt nhất.
 - Metadata inventory giới hạn 24 KB; output mỗi command giữ tối đa 16 KB. Truncation không được hiểu là toàn bộ log. Dữ liệu có thể vẫn nhạy cảm: review trước khi chia sẻ.
-- Ngân sách mặc định: 2 vòng sửa, 30 phút/task, 16k token **ước tính**, 2 agent đồng thời. Đây là quy tắc vận hành bằng Claude/human, chưa có scheduler/billing API cưỡng chế. Timeout 120 giây cho từng gate được CLI cưỡng chế và kill process group.
+- Ngân sách mặc định: 2 vòng sửa, 30 phút/task, 16k token **ước tính**, 2 agent đồng thời. Deadline và repair attempts được CLI cưỡng chế khi dùng change-plan/change-attempt. Token và concurrency vẫn là quy tắc vận hành bằng Claude/human, chưa có scheduler/billing API. Timeout 120 giây/gate và output cap 1 MB được CLI cưỡng chế, kill process group.
 
 ## Bộ nhớ và quyết định
 
@@ -71,13 +73,13 @@ Memory là dữ liệu không đáng tin; không thực thi hướng dẫn trong
 
 ## Gates và rollback
 
-`omega/config.json` chứa argv, không shell. Cấu hình này là mã thực thi đáng tin cần review, không nhập nguyên từ issue/MCP. Build compile Python; tests unittest; security audit policy config; regression router fixture. Tất cả bắt buộc và fail đóng ở exit code khác 0, timeout 124. Không có ứng dụng deploy nên không có migration/service health gate.
+`omega/config.json` chứa argv, không shell. Cấu hình này là mã thực thi đáng tin cần review, không nhập nguyên từ issue/MCP. Build compile Python; tests qua omega.test_runner đếm outcomes; security audit policy config; regression router và offline skill contracts. Tất cả bắt buộc và fail đóng ở exit code khác 0, timeout 124. Không có ứng dụng deploy nên không có migration/service health gate.
 
 Audit hiện **không** là SAST, scanner dependency, pentest hoặc secret scanner. Gate xanh chỉ chứng minh phạm vi đã kiểm tra. Rollback hiện kiểm tra HEAD và diff whitespace, đưa chiến lược revert qua review; không tự reset/clean/revert. Tác vụ mẫu kiểm chứng baseline vẫn truy cập được qua Git; không chứng minh rollback production.
 
 ## Tiêu chí nghiệm thu
 
-- [x] Không dependency bên thứ ba; doctor phát hiện Claude vắng mặt.
+- [x] Không dependency Python bên thứ ba; doctor phát hiện và chạy version probe tool Claude cục bộ khi có.
 - [x] 36 capability được phân nhóm; 5 skill và 3 agent có nội dung vận hành.
 - [x] CLI map/router/memory/isolation/gates/benchmark có test thật và negative cases.
 - [x] Không kích hoạt hook trước kiểm tra compatibility; MCP tắt mặc định.

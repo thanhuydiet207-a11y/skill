@@ -1,6 +1,7 @@
 """Explicit scope and finite repair ledger for one isolated change."""
 import fcntl
 import json
+import os
 from pathlib import Path
 import re
 import time
@@ -35,7 +36,7 @@ def validate(record,limits):
     return opened<=time.time()<=deadline
 
 
-def check(root,name,git,limits,evidence=()):
+def check(root,name,git,limits,evidence=(),gate_commands=None):
     _,record=load(root,name,'changes')
     active=validate(record,limits)
     names=git('diff','--no-renames','--name-only','-z','HEAD',raw=True).split('\0')
@@ -48,10 +49,12 @@ def check(root,name,git,limits,evidence=()):
         if resolved not in record['allowed_paths']:outside.append(path)
     same_head=record['base_head']==git('rev-parse','HEAD')
     same_branch=record['branch']==git('branch','--show-current')
+    from omega.records import valid_gates
+    if evidence and gate_commands is None:raise ValueError('Gate policy required to verify evidence')
     checks=[]
     for name in evidence:
         _,ev=load(root,name,'evidence')
-        checks.append({'path':name,'passed':ev.get('passed') is True and ev.get('workspace_unchanged') is True and
+        checks.append({'path':name,'passed':valid_gates(ev,gate_commands) and ev.get('workspace_unchanged') is True and
                        ev.get('workspace_sha256')==workspace(root,git) and ev.get('head')==record['base_head']})
     return {'passed':not outside and active and same_head and same_branch and all(x['passed'] for x in checks),
             'changed_paths':changed,'outside_scope':outside,'active':active,
@@ -71,6 +74,6 @@ def attempt(root,name,reason,limits):
         if not validate(record,limits):raise ValueError('Task deadline exceeded')
         if len(record['attempts'])>=record['max_attempts']:raise ValueError('Repair budget exhausted')
         record['attempts'].append({'number':len(record['attempts'])+1,'reason':reason,'at':time.time()})
-        stream.seek(0);stream.write(json.dumps(record,indent=2,ensure_ascii=False)+'\n');stream.truncate();stream.flush()
+        stream.seek(0);stream.write(json.dumps(record,indent=2,ensure_ascii=False)+'\n');stream.truncate();stream.flush();os.fsync(stream.fileno())
     return {'attempt':len(record['attempts']),'remaining':record['max_attempts']-len(record['attempts']),
             'deadline':record['deadline']}

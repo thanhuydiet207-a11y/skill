@@ -1,0 +1,1298 @@
+{
+  "schema": 1,
+  "release": "0.2.0",
+  "scope": "local tools and offline skill contracts; no native LLM quality claim",
+  "unique_tests": 82,
+  "workflow_subsuite_unique_tests": 18,
+  "workflow_subsuite_repeated_per_skill": true,
+  "staged_validation": [
+    {
+      "stage": "foundation",
+      "passed": true,
+      "test_outcomes": {
+        "errors": 0,
+        "expected_failures": 0,
+        "failed": 0,
+        "passed": 44,
+        "run": 44,
+        "skipped": 0,
+        "unexpected_successes": 0
+      },
+      "gate_exit_codes": {
+        "build": 0,
+        "tests": 0,
+        "security": 0,
+        "regression": 0
+      }
+    },
+    {
+      "stage": "scope-memory",
+      "passed": true,
+      "test_outcomes": {
+        "errors": 0,
+        "expected_failures": 0,
+        "failed": 0,
+        "passed": 58,
+        "run": 58,
+        "skipped": 0,
+        "unexpected_successes": 0
+      },
+      "gate_exit_codes": {
+        "build": 0,
+        "tests": 0,
+        "security": 0,
+        "regression": 0
+      }
+    },
+    {
+      "stage": "skill-engine",
+      "passed": true,
+      "test_outcomes": {
+        "errors": 0,
+        "expected_failures": 0,
+        "failed": 0,
+        "passed": 67,
+        "run": 67,
+        "skipped": 0,
+        "unexpected_successes": 0
+      },
+      "gate_exit_codes": {
+        "build": 0,
+        "tests": 0,
+        "security": 0,
+        "regression": 0
+      }
+    },
+    {
+      "stage": "post-apply",
+      "passed": true,
+      "test_outcomes": {
+        "errors": 0,
+        "expected_failures": 0,
+        "failed": 0,
+        "passed": 67,
+        "run": 67,
+        "skipped": 0,
+        "unexpected_successes": 0
+      },
+      "gate_exit_codes": {
+        "build": 0,
+        "tests": 0,
+        "security": 0,
+        "regression": 0
+      }
+    },
+    {
+      "stage": "adversarial-review",
+      "passed": true,
+      "test_outcomes": {
+        "errors": 0,
+        "expected_failures": 0,
+        "failed": 0,
+        "passed": 78,
+        "run": 78,
+        "skipped": 0,
+        "unexpected_successes": 0
+      },
+      "gate_exit_codes": {
+        "build": 0,
+        "tests": 0,
+        "security": 0,
+        "regression": 0
+      }
+    },
+    {
+      "stage": "release",
+      "passed": true,
+      "test_outcomes": {
+        "errors": 0,
+        "expected_failures": 0,
+        "failed": 0,
+        "passed": 82,
+        "run": 82,
+        "skipped": 0,
+        "unexpected_successes": 0
+      },
+      "gate_exit_codes": {
+        "build": 0,
+        "tests": 0,
+        "security": 0,
+        "regression": 0
+      }
+    }
+  ],
+  "gates": {
+    "schema": 1,
+    "project": "/workspace/skill",
+    "head": "c4de73819ea4516cb1dcc62e421b7465a5119204",
+    "created_utc": "2026-10-22T18:34:23.934882+00:00",
+    "kind": "gates",
+    "test_outcomes": {
+      "errors": 0,
+      "expected_failures": 0,
+      "failed": 0,
+      "passed": 82,
+      "run": 82,
+      "skipped": 0,
+      "unexpected_successes": 0
+    },
+    "passed": true,
+    "workspace_sha256": "d7c0f0255bc562c353626681797d207372d9d7fd8ddc9cb09f3a00a09512a6e7",
+    "workspace_unchanged": true,
+    "results": [
+      {
+        "gate": "build",
+        "command": [
+          "python3",
+          "-m",
+          "compileall",
+          "-q",
+          "omega",
+          "tests"
+        ],
+        "exit_code": 0,
+        "seconds": 0.043,
+        "output": "",
+        "truncated": false,
+        "output_tail": "",
+        "timed_out": false,
+        "output_limit_exceeded": false,
+        "total_output_bytes": 0,
+        "invalid_utf8": false
+      },
+      {
+        "gate": "tests",
+        "command": [
+          "python3",
+          "-m",
+          "omega.test_runner"
+        ],
+        "exit_code": 0,
+        "seconds": 1.716,
+        "output": "test_budget_fails_without_silent_truncation (test_context.ContextTests.test_budget_fails_without_silent_truncation) ... ok\ntest_changed_source_changes_fingerprint (test_context.ContextTests.test_changed_source_changes_fingerprint) ... ok\ntest_cli_compact_preserves_default_plan (test_context.ContextTests.test_cli_compact_preserves_default_plan) ... ok\ntest_cli_packet_budget_fails (test_context.ContextTests.test_cli_packet_budget_fails) ... ok\ntest_lossless_unicode_and_whitespace (test_context.ContextTests.test_lossless_unicode_and_whitespace) ... ok\ntest_missing_empty_and_ranges_fail (test_context.ContextTests.test_missing_empty_and_ranges_fail) ... ok\ntest_packet_preserves_source_and_deduplicates (test_context.ContextTests.test_packet_preserves_source_and_deduplicates) ... ok\ntest_private_binary_and_escape_rejected (test_context.ContextTests.test_private_binary_and_escape_rejected) ... ok\ntest_summary_keeps_failure_and_links_success (test_context.ContextTests.test_summary_keeps_failure_and_links_success) ... ok\ntest_audit_refuses_symlinked_policy_directory (test_hardening.AdapterSafety.test_audit_refuses_symlinked_policy_directory) ... ok\ntest_hook_does_not_import_executable_gate_config (test_hardening.AdapterSafety.test_hook_does_not_import_executable_gate_config) ... ok\ntest_local_cli_probe_uses_isolated_state (test_hardening.CompatibilitySafety.test_local_cli_probe_uses_isolated_state) ... ok\ntest_process_environment_override_does_not_mutate_parent (test_hardening.CompatibilitySafety.test_process_environment_override_does_not_mutate_parent) ... ok\ntest_empty_failed_or_inconsistent_test_marker_rejected (test_hardening.EvidenceSafety.test_empty_failed_or_inconsistent_test_marker_rejected) ... ok\ntest_exit_zero_without_test_execution_is_not_ready (test_hardening.EvidenceSafety.test_exit_zero_without_test_execution_is_not_ready) ... ok\ntest_hook_background_gate_requires_review (test_hardening.EvidenceSafety.test_hook_background_gate_requires_review) ... ok\ntest_hook_rejects_missing_cwd_and_policy_test_changes (test_hardening.EvidenceSafety.test_hook_rejects_missing_cwd_and_policy_test_changes) ... ok\ntest_private_parent_symlink_inside_repo_is_refused (test_hardening.EvidenceSafety.test_private_parent_symlink_inside_repo_is_refused) ... ok\ntest_scenario_record_is_not_gate_evidence (test_hardening.EvidenceSafety.test_scenario_record_is_not_gate_evidence) ... ok\ntest_test_marker_survives_truncated_prefix (test_hardening.EvidenceSafety.test_test_marker_survives_truncated_prefix) ... ok\ntest_artifact_namespace_and_traversal (test_hardening.PolicySafety.test_artifact_namespace_and_traversal) ... ok\ntest_artifact_symlink_inside_repo_refused (test_hardening.PolicySafety.test_artifact_symlink_inside_repo_refused) ... ok\ntest_empty_or_missing_gate_fails_before_execution (test_hardening.PolicySafety.test_empty_or_missing_gate_fails_before_execution) ... ok\ntest_invalid_later_gate_prevents_any_execution (test_hardening.PolicySafety.test_invalid_later_gate_prevents_any_execution) ... ok\ntest_map_uses_nul_and_preserves_odd_filename (test_hardening.PolicySafety.test_map_uses_nul_and_preserves_odd_filename) ... ok\ntest_private_alias_names_are_refused (test_hardening.PolicySafety.test_private_alias_names_are_refused) ... ok\ntest_capture_is_prefix_and_failure_exit_preserved (test_hardening.ProcessSafety.test_capture_is_prefix_and_failure_exit_preserved) ... ok\ntest_child_inheriting_stdout_is_bounded (test_hardening.ProcessSafety.test_child_inheriting_stdout_is_bounded) ... ok\ntest_flood_is_killed_without_unbounded_spool (test_hardening.ProcessSafety.test_flood_is_killed_without_unbounded_spool) ... ok\ntest_invalid_limits_refused (test_hardening.ProcessSafety.test_invalid_limits_refused) ... ok\ntest_missing_executable_is_reported (test_hardening.ProcessSafety.test_missing_executable_is_reported) ... ok\ntest_all_skipped_fails (test_hardening.TestRunnerSafety.test_all_skipped_fails) ... ok\ntest_expected_failure_alone_is_not_readiness (test_hardening.TestRunnerSafety.test_expected_failure_alone_is_not_readiness) ... ok\ntest_no_tests_fails (test_hardening.TestRunnerSafety.test_no_tests_fails) ... ok\ntest_benchmark_detects_regression (test_omega.OmegaTests.test_benchmark_detects_regression) ... ok\ntest_candidate_compare_missing_baseline (test_omega.OmegaTests.test_candidate_compare_missing_baseline) ... ok\ntest_candidate_lifecycle_preserves_stable (test_omega.OmegaTests.test_candidate_lifecycle_preserves_stable) ... ok\ntest_catalog_36_unique_and_five_active (test_omega.OmegaTests.test_catalog_36_unique_and_five_active) ... ok\ntest_dirty_checkout_refused (test_omega.OmegaTests.test_dirty_checkout_refused) ... ok\ntest_gate_failure_propagates (test_omega.OmegaTests.test_gate_failure_propagates) ... ok\ntest_git_truncation_refused (test_omega.OmegaTests.test_git_truncation_refused) ... ok\ntest_hook_denies_escape_and_policy_edit (test_omega.OmegaTests.test_hook_denies_escape_and_policy_edit) ... ok\ntest_hook_denies_shell_bypass (test_omega.OmegaTests.test_hook_denies_shell_bypass) ... ok\ntest_hook_rejects_malformed (test_omega.OmegaTests.test_hook_rejects_malformed) ... ok\ntest_hook_scoped_edit (test_omega.OmegaTests.test_hook_scoped_edit) ... ok\ntest_memory_scoped_and_commit_stamped (test_omega.OmegaTests.test_memory_scoped_and_commit_stamped) ... ok\ntest_memory_secret_rejection (test_omega.OmegaTests.test_memory_secret_rejection) ... ok\ntest_no_shell_expansion (test_omega.OmegaTests.test_no_shell_expansion) ... ok\ntest_path_escape (test_omega.OmegaTests.test_path_escape) ... ok\ntest_router_complexity (test_omega.OmegaTests.test_router_complexity) ... ok\ntest_router_contract (test_omega.OmegaTests.test_router_contract) ... ok\ntest_subprocess_failure (test_omega.OmegaTests.test_subprocess_failure) ... ok\ntest_symlink_escape (test_omega.OmegaTests.test_symlink_escape) ... ok\ntest_three_agent_specs (test_omega.OmegaTests.test_three_agent_specs) ... ok\ntest_timeout (test_omega.OmegaTests.test_timeout) ... ok\ntest_benchmark_hash_tracks_execution_code (test_skill_evolution.SkillEvolution.test_benchmark_hash_tracks_execution_code) ... ok\ntest_bypass_wrong_identity_and_missing_command_rejected (test_skill_evolution.SkillEvolution.test_bypass_wrong_identity_and_missing_command_rejected) ... ok\ntest_current_gate_and_scenario_evidence_required (test_skill_evolution.SkillEvolution.test_current_gate_and_scenario_evidence_required) ... ok\ntest_duplicate_or_unknown_frontmatter_refused (test_skill_evolution.SkillEvolution.test_duplicate_or_unknown_frontmatter_refused) ... ok\ntest_legacy_contract_is_valid_but_needs_advanced_sections (test_skill_evolution.SkillEvolution.test_legacy_contract_is_valid_but_needs_advanced_sections) ... ok\ntest_missing_sections_cannot_pass_comparison (test_skill_evolution.SkillEvolution.test_missing_sections_cannot_pass_comparison) ... ok\ntest_no_evidence_is_not_eligible_for_review (test_skill_evolution.SkillEvolution.test_no_evidence_is_not_eligible_for_review) ... ok\ntest_oversized_skill_and_candidate_namespace (test_skill_evolution.SkillEvolution.test_oversized_skill_and_candidate_namespace) ... ok\ntest_stale_gate_evidence_refused (test_skill_evolution.SkillEvolution.test_stale_gate_evidence_refused) ... ok\ntest_branch_or_head_change_is_detected (test_workflows.ChangeWorkflow.test_branch_or_head_change_is_detected) ... ok\ntest_expired_plan_refuses_repair_and_readiness (test_workflows.ChangeWorkflow.test_expired_plan_refuses_repair_and_readiness) ... ok\ntest_gate_failure_if_command_mutates_workspace (test_workflows.ChangeWorkflow.test_gate_failure_if_command_mutates_workspace) ... ok\ntest_gate_record_invalidated_by_source_change (test_workflows.ChangeWorkflow.test_gate_record_invalidated_by_source_change) ... ok\ntest_plan_requires_clean_isolated_checkout (test_workflows.ChangeWorkflow.test_plan_requires_clean_isolated_checkout) ... ok\ntest_rename_checks_old_and_new_paths (test_workflows.ChangeWorkflow.test_rename_checks_old_and_new_paths) ... ok\ntest_repair_budget_enforced (test_workflows.ChangeWorkflow.test_repair_budget_enforced) ... ok\ntest_scoped_change_and_outside_path_detection (test_workflows.ChangeWorkflow.test_scoped_change_and_outside_path_detection) ... ok\ntest_cli_read_returns_nonzero_for_stale_memory (test_workflows.MemoryWorkflow.test_cli_read_returns_nonzero_for_stale_memory) ... ok\ntest_evidence_tamper_and_project_binding (test_workflows.MemoryWorkflow.test_evidence_tamper_and_project_binding) ... ok\ntest_missing_evidence_does_not_create_memory (test_workflows.MemoryWorkflow.test_missing_evidence_does_not_create_memory) ... ok\ntest_source_and_head_staleness (test_workflows.MemoryWorkflow.test_source_and_head_staleness) ... ok\ntest_duplicate_keys_and_malformed_memory_rejected (test_workflows.RecordSafety.test_duplicate_keys_and_malformed_memory_rejected) ... ok\ntest_repair_lock_prevents_concurrent_updates (test_workflows.RecordSafety.test_repair_lock_prevents_concurrent_updates) ... ok\ntest_scenario_evidence_cannot_replace_gates (test_workflows.RecordSafety.test_scenario_evidence_cannot_replace_gates) ... ok\ntest_worktree_container_itself_refused (test_workflows.RecordSafety.test_worktree_container_itself_refused) ... ok\ntest_actual_git_odd_filename_roundtrip (test_workflows.RepositoryWorkflow.test_actual_git_odd_filename_roundtrip) ... ok\ntest_workspace_hash_tracks_untracked_and_deleted (test_workflows.RepositoryWorkflow.test_workspace_hash_tracks_untracked_and_deleted) ... ok\n\n----------------------------------------------------------------------\nRan 82 tests in 1.533s\n\nOK\nOMEGA_TEST_RESULT {\"errors\": 0, \"expected_failures\": 0, \"failed\": 0, \"passed\": 82, \"run\": 82, \"skipped\": 0, \"unexpected_successes\": 0}\n",
+        "truncated": false,
+        "output_tail": "",
+        "timed_out": false,
+        "output_limit_exceeded": false,
+        "total_output_bytes": 9691,
+        "invalid_utf8": false
+      },
+      {
+        "gate": "security",
+        "command": [
+          "python3",
+          "-m",
+          "omega",
+          "audit"
+        ],
+        "exit_code": 0,
+        "seconds": 0.045,
+        "output": "{\n  \"passed\": true,\n  \"findings\": [],\n  \"scope\": \"Claude config bypass patterns only; no dependency/SAST/secret coverage\"\n}\n",
+        "truncated": false,
+        "output_tail": "",
+        "timed_out": false,
+        "output_limit_exceeded": false,
+        "total_output_bytes": 124,
+        "invalid_utf8": false
+      },
+      {
+        "gate": "regression",
+        "command": [
+          "python3",
+          "-m",
+          "omega",
+          "benchmark"
+        ],
+        "exit_code": 0,
+        "seconds": 0.05,
+        "output": "{\n  \"suite\": \"router-contract-v1\",\n  \"suite_sha256\": \"561db385193de2cb191bec27326d0a0411dd97129ead097234ae6730efa96fcd\",\n  \"cases\": [\n    {\n      \"id\": \"low\",\n      \"passed\": true\n    },\n    {\n      \"id\": \"medium\",\n      \"passed\": true\n    },\n    {\n      \"id\": \"high-conflict\",\n      \"passed\": true\n    }\n  ],\n  \"skills\": [\n    {\n      \"skill\": \"repo-map\",\n      \"sha256\": \"e4c63065881369617db310a6af66ab141115f80227d35d50cb687c3a66f4bee4\",\n      \"checks\": [\n        {\n          \"id\": \"frontmatter\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"identity\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"description\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"explicit-invocation\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"no-permission-bypass\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"command:map\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"command:plan\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"section:Inputs\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Workflow\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Evidence\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Failure handling\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Stop conditions\",\n          \"passed\": true,\n          \"required\": false\n        }\n      ],\n      \"passed\": true,\n      \"advanced_passed\": true,\n      \"score\": 100.0,\n      \"scope\": \"offline document contract, not LLM instruction adherence or reasoning quality\"\n    },\n    {\n      \"skill\": \"controlled-change\",\n      \"sha256\": \"7db190308bab9f28269b625605b2b082fd43c742fbddf2899ef20bdf9d833849\",\n      \"checks\": [\n        {\n          \"id\": \"frontmatter\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"identity\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"description\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"explicit-invocation\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"no-permission-bypass\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"command:isolate\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"section:Inputs\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Workflow\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Evidence\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Failure handling\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Stop conditions\",\n          \"passed\": true,\n          \"required\": false\n        }\n      ],\n      \"passed\": true,\n      \"advanced_passed\": true,\n      \"score\": 100.0,\n      \"scope\": \"offline document contract, not LLM instruction adherence or reasoning quality\"\n    },\n    {\n      \"skill\": \"quality-gates\",\n      \"sha256\": \"9c814e22a4836f74b0ac3dbc8e77de148339cffd189e4ff3d9fd32a6ea640339\",\n      \"checks\": [\n        {\n          \"id\": \"frontmatter\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"identity\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"description\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"explicit-invocation\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"no-permission-bypass\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"command:gates\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"command:rollback-check\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"section:Inputs\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Workflow\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Evidence\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Failure handling\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Stop conditions\",\n          \"passed\": true,\n          \"required\": false\n        }\n      ],\n      \"passed\": true,\n      \"advanced_passed\": true,\n      \"score\": 100.0,\n      \"scope\": \"offline document contract, not LLM instruction adherence or reasoning quality\"\n    },\n    {\n      \"skill\": \"project-memory\",\n      \"sha256\": \"664dc93b4aec835906eb853bb6a263b17324eeb49ed42ca009bde6e7c30fedb8\",\n      \"checks\": [\n        {\n          \"id\": \"frontmatter\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"identity\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"description\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"explicit-invocation\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"no-permission-bypass\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"command:memory\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"section:Inputs\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Workflow\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Evidence\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Failure handling\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Stop conditions\",\n          \"passed\": true,\n          \"required\": false\n        }\n      ],\n      \"passed\": true,\n      \"advanced_passed\": true,\n      \"score\": 100.0,\n      \"scope\": \"offline document contract, not LLM instruction adherence or reasoning quality\"\n    },\n    {\n      \"skill\": \"skill-benchmark\",\n      \"sha256\": \"afab76926eb54036f588a3aad01fff6219bf81d4bb1c0a0e9d97437ef8798218\",\n      \"checks\": [\n        {\n          \"id\": \"frontmatter\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"identity\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"description\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"explicit-invocation\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"no-permission-bypass\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"command:candidate\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"command:compare\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"command:benchmark\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"section:Inputs\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Workflow\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Evidence\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Failure handling\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Stop conditions\",\n          \"passed\": true,\n          \"required\": false\n        }\n      ],\n      \"passed\": true,\n      \"advanced_passed\": true,\n      \"score\": 100.0,\n      \"scope\": \"offline document contract, not LLM instruction adherence or reasoning quality\"\n    }\n  ],\n  \"passed\": true,\n  \"scope\": \"router and offline skill contracts; native LLM skill efficacy not evaluated\"\n}\n",
+        "truncated": false,
+        "output_tail": "",
+        "timed_out": false,
+        "output_limit_exceeded": false,
+        "total_output_bytes": 8581,
+        "invalid_utf8": false
+      }
+    ]
+  },
+  "skills": {
+    "project-memory": {
+      "before_sha256": "5653e558c069d391bbb2274d159da8038a27b2880d26381c6ef73bc371332871",
+      "after_sha256": "664dc93b4aec835906eb853bb6a263b17324eeb49ed42ca009bde6e7c30fedb8",
+      "before_contract": {
+        "skill": "project-memory",
+        "sha256": "5653e558c069d391bbb2274d159da8038a27b2880d26381c6ef73bc371332871",
+        "checks": [
+          {
+            "id": "frontmatter",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "identity",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "description",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "explicit-invocation",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "no-permission-bypass",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "command:memory",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "section:Inputs",
+            "passed": false,
+            "required": false
+          },
+          {
+            "id": "section:Workflow",
+            "passed": false,
+            "required": false
+          },
+          {
+            "id": "section:Evidence",
+            "passed": false,
+            "required": false
+          },
+          {
+            "id": "section:Failure handling",
+            "passed": false,
+            "required": false
+          },
+          {
+            "id": "section:Stop conditions",
+            "passed": false,
+            "required": false
+          }
+        ],
+        "passed": true,
+        "advanced_passed": false,
+        "score": 54.55,
+        "scope": "offline document contract, not LLM instruction adherence or reasoning quality"
+      },
+      "after_contract": {
+        "skill": "project-memory",
+        "sha256": "664dc93b4aec835906eb853bb6a263b17324eeb49ed42ca009bde6e7c30fedb8",
+        "checks": [
+          {
+            "id": "frontmatter",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "identity",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "description",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "explicit-invocation",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "no-permission-bypass",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "command:memory",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "section:Inputs",
+            "passed": true,
+            "required": false
+          },
+          {
+            "id": "section:Workflow",
+            "passed": true,
+            "required": false
+          },
+          {
+            "id": "section:Evidence",
+            "passed": true,
+            "required": false
+          },
+          {
+            "id": "section:Failure handling",
+            "passed": true,
+            "required": false
+          },
+          {
+            "id": "section:Stop conditions",
+            "passed": true,
+            "required": false
+          }
+        ],
+        "passed": true,
+        "advanced_passed": true,
+        "score": 100.0,
+        "scope": "offline document contract, not LLM instruction adherence or reasoning quality"
+      },
+      "workflow_outcomes": {
+        "errors": 0,
+        "expected_failures": 0,
+        "failed": 0,
+        "passed": 18,
+        "run": 18,
+        "skipped": 0,
+        "unexpected_successes": 0
+      },
+      "scenario_execution": {
+        "command": [
+          "python3",
+          "-m",
+          "omega.test_runner",
+          "--start",
+          "tests",
+          "--pattern",
+          "test_workflows.py"
+        ],
+        "exit_code": 0,
+        "seconds": 0.739,
+        "output": "test_branch_or_head_change_is_detected (test_workflows.ChangeWorkflow.test_branch_or_head_change_is_detected) ... ok\ntest_expired_plan_refuses_repair_and_readiness (test_workflows.ChangeWorkflow.test_expired_plan_refuses_repair_and_readiness) ... ok\ntest_gate_failure_if_command_mutates_workspace (test_workflows.ChangeWorkflow.test_gate_failure_if_command_mutates_workspace) ... ok\ntest_gate_record_invalidated_by_source_change (test_workflows.ChangeWorkflow.test_gate_record_invalidated_by_source_change) ... ok\ntest_plan_requires_clean_isolated_checkout (test_workflows.ChangeWorkflow.test_plan_requires_clean_isolated_checkout) ... ok\ntest_rename_checks_old_and_new_paths (test_workflows.ChangeWorkflow.test_rename_checks_old_and_new_paths) ... ok\ntest_repair_budget_enforced (test_workflows.ChangeWorkflow.test_repair_budget_enforced) ... ok\ntest_scoped_change_and_outside_path_detection (test_workflows.ChangeWorkflow.test_scoped_change_and_outside_path_detection) ... ok\ntest_cli_read_returns_nonzero_for_stale_memory (test_workflows.MemoryWorkflow.test_cli_read_returns_nonzero_for_stale_memory) ... ok\ntest_evidence_tamper_and_project_binding (test_workflows.MemoryWorkflow.test_evidence_tamper_and_project_binding) ... ok\ntest_missing_evidence_does_not_create_memory (test_workflows.MemoryWorkflow.test_missing_evidence_does_not_create_memory) ... ok\ntest_source_and_head_staleness (test_workflows.MemoryWorkflow.test_source_and_head_staleness) ... ok\ntest_duplicate_keys_and_malformed_memory_rejected (test_workflows.RecordSafety.test_duplicate_keys_and_malformed_memory_rejected) ... ok\ntest_repair_lock_prevents_concurrent_updates (test_workflows.RecordSafety.test_repair_lock_prevents_concurrent_updates) ... ok\ntest_scenario_evidence_cannot_replace_gates (test_workflows.RecordSafety.test_scenario_evidence_cannot_replace_gates) ... ok\ntest_worktree_container_itself_refused (test_workflows.RecordSafety.test_worktree_container_itself_refused) ... ok\ntest_actual_git_odd_filename_roundtrip (test_workflows.RepositoryWorkflow.test_actual_git_odd_filename_roundtrip) ... ok\ntest_workspace_hash_tracks_untracked_and_deleted (test_workflows.RepositoryWorkflow.test_workspace_hash_tracks_untracked_and_deleted) ... ok\n\n----------------------------------------------------------------------\nRan 18 tests in 0.594s\n\nOK\nOMEGA_TEST_RESULT {\"errors\": 0, \"expected_failures\": 0, \"failed\": 0, \"passed\": 18, \"run\": 18, \"skipped\": 0, \"unexpected_successes\": 0}\n",
+        "truncated": false,
+        "output_tail": "",
+        "timed_out": false,
+        "output_limit_exceeded": false,
+        "total_output_bytes": 2462,
+        "invalid_utf8": false
+      },
+      "current_validation_eligible_for_review": true,
+      "evaluation_evidence": ".omega/evidence/1792694067753466052-67e266d3.json",
+      "pre_application_review": true,
+      "native_quality": "UNVERIFIED"
+    },
+    "repo-map": {
+      "before_sha256": "c0657e68cd3367663566d1f45639d2fdbfe3c495d382437256948e8e485eade3",
+      "after_sha256": "e4c63065881369617db310a6af66ab141115f80227d35d50cb687c3a66f4bee4",
+      "before_contract": {
+        "skill": "repo-map",
+        "sha256": "c0657e68cd3367663566d1f45639d2fdbfe3c495d382437256948e8e485eade3",
+        "checks": [
+          {
+            "id": "frontmatter",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "identity",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "description",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "explicit-invocation",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "no-permission-bypass",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "command:map",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "command:plan",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "section:Inputs",
+            "passed": false,
+            "required": false
+          },
+          {
+            "id": "section:Workflow",
+            "passed": false,
+            "required": false
+          },
+          {
+            "id": "section:Evidence",
+            "passed": false,
+            "required": false
+          },
+          {
+            "id": "section:Failure handling",
+            "passed": false,
+            "required": false
+          },
+          {
+            "id": "section:Stop conditions",
+            "passed": false,
+            "required": false
+          }
+        ],
+        "passed": true,
+        "advanced_passed": false,
+        "score": 58.33,
+        "scope": "offline document contract, not LLM instruction adherence or reasoning quality"
+      },
+      "after_contract": {
+        "skill": "repo-map",
+        "sha256": "e4c63065881369617db310a6af66ab141115f80227d35d50cb687c3a66f4bee4",
+        "checks": [
+          {
+            "id": "frontmatter",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "identity",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "description",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "explicit-invocation",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "no-permission-bypass",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "command:map",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "command:plan",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "section:Inputs",
+            "passed": true,
+            "required": false
+          },
+          {
+            "id": "section:Workflow",
+            "passed": true,
+            "required": false
+          },
+          {
+            "id": "section:Evidence",
+            "passed": true,
+            "required": false
+          },
+          {
+            "id": "section:Failure handling",
+            "passed": true,
+            "required": false
+          },
+          {
+            "id": "section:Stop conditions",
+            "passed": true,
+            "required": false
+          }
+        ],
+        "passed": true,
+        "advanced_passed": true,
+        "score": 100.0,
+        "scope": "offline document contract, not LLM instruction adherence or reasoning quality"
+      },
+      "workflow_outcomes": {
+        "errors": 0,
+        "expected_failures": 0,
+        "failed": 0,
+        "passed": 18,
+        "run": 18,
+        "skipped": 0,
+        "unexpected_successes": 0
+      },
+      "scenario_execution": {
+        "command": [
+          "python3",
+          "-m",
+          "omega.test_runner",
+          "--start",
+          "tests",
+          "--pattern",
+          "test_workflows.py"
+        ],
+        "exit_code": 0,
+        "seconds": 0.765,
+        "output": "test_branch_or_head_change_is_detected (test_workflows.ChangeWorkflow.test_branch_or_head_change_is_detected) ... ok\ntest_expired_plan_refuses_repair_and_readiness (test_workflows.ChangeWorkflow.test_expired_plan_refuses_repair_and_readiness) ... ok\ntest_gate_failure_if_command_mutates_workspace (test_workflows.ChangeWorkflow.test_gate_failure_if_command_mutates_workspace) ... ok\ntest_gate_record_invalidated_by_source_change (test_workflows.ChangeWorkflow.test_gate_record_invalidated_by_source_change) ... ok\ntest_plan_requires_clean_isolated_checkout (test_workflows.ChangeWorkflow.test_plan_requires_clean_isolated_checkout) ... ok\ntest_rename_checks_old_and_new_paths (test_workflows.ChangeWorkflow.test_rename_checks_old_and_new_paths) ... ok\ntest_repair_budget_enforced (test_workflows.ChangeWorkflow.test_repair_budget_enforced) ... ok\ntest_scoped_change_and_outside_path_detection (test_workflows.ChangeWorkflow.test_scoped_change_and_outside_path_detection) ... ok\ntest_cli_read_returns_nonzero_for_stale_memory (test_workflows.MemoryWorkflow.test_cli_read_returns_nonzero_for_stale_memory) ... ok\ntest_evidence_tamper_and_project_binding (test_workflows.MemoryWorkflow.test_evidence_tamper_and_project_binding) ... ok\ntest_missing_evidence_does_not_create_memory (test_workflows.MemoryWorkflow.test_missing_evidence_does_not_create_memory) ... ok\ntest_source_and_head_staleness (test_workflows.MemoryWorkflow.test_source_and_head_staleness) ... ok\ntest_duplicate_keys_and_malformed_memory_rejected (test_workflows.RecordSafety.test_duplicate_keys_and_malformed_memory_rejected) ... ok\ntest_repair_lock_prevents_concurrent_updates (test_workflows.RecordSafety.test_repair_lock_prevents_concurrent_updates) ... ok\ntest_scenario_evidence_cannot_replace_gates (test_workflows.RecordSafety.test_scenario_evidence_cannot_replace_gates) ... ok\ntest_worktree_container_itself_refused (test_workflows.RecordSafety.test_worktree_container_itself_refused) ... ok\ntest_actual_git_odd_filename_roundtrip (test_workflows.RepositoryWorkflow.test_actual_git_odd_filename_roundtrip) ... ok\ntest_workspace_hash_tracks_untracked_and_deleted (test_workflows.RepositoryWorkflow.test_workspace_hash_tracks_untracked_and_deleted) ... ok\n\n----------------------------------------------------------------------\nRan 18 tests in 0.628s\n\nOK\nOMEGA_TEST_RESULT {\"errors\": 0, \"expected_failures\": 0, \"failed\": 0, \"passed\": 18, \"run\": 18, \"skipped\": 0, \"unexpected_successes\": 0}\n",
+        "truncated": false,
+        "output_tail": "",
+        "timed_out": false,
+        "output_limit_exceeded": false,
+        "total_output_bytes": 2462,
+        "invalid_utf8": false
+      },
+      "current_validation_eligible_for_review": true,
+      "evaluation_evidence": ".omega/evidence/1792694068721966648-b447706d.json",
+      "pre_application_review": true,
+      "native_quality": "UNVERIFIED"
+    },
+    "skill-benchmark": {
+      "before_sha256": "6d42cbbfaa415f74f5fda5a4905f549e6c0635d906df925f0ea14731987eece1",
+      "after_sha256": "afab76926eb54036f588a3aad01fff6219bf81d4bb1c0a0e9d97437ef8798218",
+      "before_contract": {
+        "skill": "skill-benchmark",
+        "sha256": "6d42cbbfaa415f74f5fda5a4905f549e6c0635d906df925f0ea14731987eece1",
+        "checks": [
+          {
+            "id": "frontmatter",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "identity",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "description",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "explicit-invocation",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "no-permission-bypass",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "command:candidate",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "command:compare",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "command:benchmark",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "section:Inputs",
+            "passed": false,
+            "required": false
+          },
+          {
+            "id": "section:Workflow",
+            "passed": false,
+            "required": false
+          },
+          {
+            "id": "section:Evidence",
+            "passed": false,
+            "required": false
+          },
+          {
+            "id": "section:Failure handling",
+            "passed": false,
+            "required": false
+          },
+          {
+            "id": "section:Stop conditions",
+            "passed": false,
+            "required": false
+          }
+        ],
+        "passed": true,
+        "advanced_passed": false,
+        "score": 61.54,
+        "scope": "offline document contract, not LLM instruction adherence or reasoning quality"
+      },
+      "after_contract": {
+        "skill": "skill-benchmark",
+        "sha256": "afab76926eb54036f588a3aad01fff6219bf81d4bb1c0a0e9d97437ef8798218",
+        "checks": [
+          {
+            "id": "frontmatter",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "identity",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "description",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "explicit-invocation",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "no-permission-bypass",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "command:candidate",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "command:compare",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "command:benchmark",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "section:Inputs",
+            "passed": true,
+            "required": false
+          },
+          {
+            "id": "section:Workflow",
+            "passed": true,
+            "required": false
+          },
+          {
+            "id": "section:Evidence",
+            "passed": true,
+            "required": false
+          },
+          {
+            "id": "section:Failure handling",
+            "passed": true,
+            "required": false
+          },
+          {
+            "id": "section:Stop conditions",
+            "passed": true,
+            "required": false
+          }
+        ],
+        "passed": true,
+        "advanced_passed": true,
+        "score": 100.0,
+        "scope": "offline document contract, not LLM instruction adherence or reasoning quality"
+      },
+      "workflow_outcomes": {
+        "errors": 0,
+        "expected_failures": 0,
+        "failed": 0,
+        "passed": 18,
+        "run": 18,
+        "skipped": 0,
+        "unexpected_successes": 0
+      },
+      "scenario_execution": {
+        "command": [
+          "python3",
+          "-m",
+          "omega.test_runner",
+          "--start",
+          "tests",
+          "--pattern",
+          "test_workflows.py"
+        ],
+        "exit_code": 0,
+        "seconds": 0.746,
+        "output": "test_branch_or_head_change_is_detected (test_workflows.ChangeWorkflow.test_branch_or_head_change_is_detected) ... ok\ntest_expired_plan_refuses_repair_and_readiness (test_workflows.ChangeWorkflow.test_expired_plan_refuses_repair_and_readiness) ... ok\ntest_gate_failure_if_command_mutates_workspace (test_workflows.ChangeWorkflow.test_gate_failure_if_command_mutates_workspace) ... ok\ntest_gate_record_invalidated_by_source_change (test_workflows.ChangeWorkflow.test_gate_record_invalidated_by_source_change) ... ok\ntest_plan_requires_clean_isolated_checkout (test_workflows.ChangeWorkflow.test_plan_requires_clean_isolated_checkout) ... ok\ntest_rename_checks_old_and_new_paths (test_workflows.ChangeWorkflow.test_rename_checks_old_and_new_paths) ... ok\ntest_repair_budget_enforced (test_workflows.ChangeWorkflow.test_repair_budget_enforced) ... ok\ntest_scoped_change_and_outside_path_detection (test_workflows.ChangeWorkflow.test_scoped_change_and_outside_path_detection) ... ok\ntest_cli_read_returns_nonzero_for_stale_memory (test_workflows.MemoryWorkflow.test_cli_read_returns_nonzero_for_stale_memory) ... ok\ntest_evidence_tamper_and_project_binding (test_workflows.MemoryWorkflow.test_evidence_tamper_and_project_binding) ... ok\ntest_missing_evidence_does_not_create_memory (test_workflows.MemoryWorkflow.test_missing_evidence_does_not_create_memory) ... ok\ntest_source_and_head_staleness (test_workflows.MemoryWorkflow.test_source_and_head_staleness) ... ok\ntest_duplicate_keys_and_malformed_memory_rejected (test_workflows.RecordSafety.test_duplicate_keys_and_malformed_memory_rejected) ... ok\ntest_repair_lock_prevents_concurrent_updates (test_workflows.RecordSafety.test_repair_lock_prevents_concurrent_updates) ... ok\ntest_scenario_evidence_cannot_replace_gates (test_workflows.RecordSafety.test_scenario_evidence_cannot_replace_gates) ... ok\ntest_worktree_container_itself_refused (test_workflows.RecordSafety.test_worktree_container_itself_refused) ... ok\ntest_actual_git_odd_filename_roundtrip (test_workflows.RepositoryWorkflow.test_actual_git_odd_filename_roundtrip) ... ok\ntest_workspace_hash_tracks_untracked_and_deleted (test_workflows.RepositoryWorkflow.test_workspace_hash_tracks_untracked_and_deleted) ... ok\n\n----------------------------------------------------------------------\nRan 18 tests in 0.596s\n\nOK\nOMEGA_TEST_RESULT {\"errors\": 0, \"expected_failures\": 0, \"failed\": 0, \"passed\": 18, \"run\": 18, \"skipped\": 0, \"unexpected_successes\": 0}\n",
+        "truncated": false,
+        "output_tail": "",
+        "timed_out": false,
+        "output_limit_exceeded": false,
+        "total_output_bytes": 2462,
+        "invalid_utf8": false
+      },
+      "current_validation_eligible_for_review": true,
+      "evaluation_evidence": ".omega/evidence/1792694069659945150-6fb452af.json",
+      "pre_application_review": true,
+      "native_quality": "UNVERIFIED"
+    },
+    "controlled-change": {
+      "before_sha256": "ddbf1c126f0ce163bd0f326236c413fa18a91077d6df0bef1ac42d14d7441fae",
+      "after_sha256": "7db190308bab9f28269b625605b2b082fd43c742fbddf2899ef20bdf9d833849",
+      "before_contract": {
+        "skill": "controlled-change",
+        "sha256": "ddbf1c126f0ce163bd0f326236c413fa18a91077d6df0bef1ac42d14d7441fae",
+        "checks": [
+          {
+            "id": "frontmatter",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "identity",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "description",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "explicit-invocation",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "no-permission-bypass",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "command:isolate",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "section:Inputs",
+            "passed": false,
+            "required": false
+          },
+          {
+            "id": "section:Workflow",
+            "passed": false,
+            "required": false
+          },
+          {
+            "id": "section:Evidence",
+            "passed": false,
+            "required": false
+          },
+          {
+            "id": "section:Failure handling",
+            "passed": false,
+            "required": false
+          },
+          {
+            "id": "section:Stop conditions",
+            "passed": false,
+            "required": false
+          }
+        ],
+        "passed": true,
+        "advanced_passed": false,
+        "score": 54.55,
+        "scope": "offline document contract, not LLM instruction adherence or reasoning quality"
+      },
+      "after_contract": {
+        "skill": "controlled-change",
+        "sha256": "7db190308bab9f28269b625605b2b082fd43c742fbddf2899ef20bdf9d833849",
+        "checks": [
+          {
+            "id": "frontmatter",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "identity",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "description",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "explicit-invocation",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "no-permission-bypass",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "command:isolate",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "section:Inputs",
+            "passed": true,
+            "required": false
+          },
+          {
+            "id": "section:Workflow",
+            "passed": true,
+            "required": false
+          },
+          {
+            "id": "section:Evidence",
+            "passed": true,
+            "required": false
+          },
+          {
+            "id": "section:Failure handling",
+            "passed": true,
+            "required": false
+          },
+          {
+            "id": "section:Stop conditions",
+            "passed": true,
+            "required": false
+          }
+        ],
+        "passed": true,
+        "advanced_passed": true,
+        "score": 100.0,
+        "scope": "offline document contract, not LLM instruction adherence or reasoning quality"
+      },
+      "workflow_outcomes": {
+        "errors": 0,
+        "expected_failures": 0,
+        "failed": 0,
+        "passed": 18,
+        "run": 18,
+        "skipped": 0,
+        "unexpected_successes": 0
+      },
+      "scenario_execution": {
+        "command": [
+          "python3",
+          "-m",
+          "omega.test_runner",
+          "--start",
+          "tests",
+          "--pattern",
+          "test_workflows.py"
+        ],
+        "exit_code": 0,
+        "seconds": 1.143,
+        "output": "test_branch_or_head_change_is_detected (test_workflows.ChangeWorkflow.test_branch_or_head_change_is_detected) ... ok\ntest_expired_plan_refuses_repair_and_readiness (test_workflows.ChangeWorkflow.test_expired_plan_refuses_repair_and_readiness) ... ok\ntest_gate_failure_if_command_mutates_workspace (test_workflows.ChangeWorkflow.test_gate_failure_if_command_mutates_workspace) ... ok\ntest_gate_record_invalidated_by_source_change (test_workflows.ChangeWorkflow.test_gate_record_invalidated_by_source_change) ... ok\ntest_plan_requires_clean_isolated_checkout (test_workflows.ChangeWorkflow.test_plan_requires_clean_isolated_checkout) ... ok\ntest_rename_checks_old_and_new_paths (test_workflows.ChangeWorkflow.test_rename_checks_old_and_new_paths) ... ok\ntest_repair_budget_enforced (test_workflows.ChangeWorkflow.test_repair_budget_enforced) ... ok\ntest_scoped_change_and_outside_path_detection (test_workflows.ChangeWorkflow.test_scoped_change_and_outside_path_detection) ... ok\ntest_cli_read_returns_nonzero_for_stale_memory (test_workflows.MemoryWorkflow.test_cli_read_returns_nonzero_for_stale_memory) ... ok\ntest_evidence_tamper_and_project_binding (test_workflows.MemoryWorkflow.test_evidence_tamper_and_project_binding) ... ok\ntest_missing_evidence_does_not_create_memory (test_workflows.MemoryWorkflow.test_missing_evidence_does_not_create_memory) ... ok\ntest_source_and_head_staleness (test_workflows.MemoryWorkflow.test_source_and_head_staleness) ... ok\ntest_duplicate_keys_and_malformed_memory_rejected (test_workflows.RecordSafety.test_duplicate_keys_and_malformed_memory_rejected) ... ok\ntest_repair_lock_prevents_concurrent_updates (test_workflows.RecordSafety.test_repair_lock_prevents_concurrent_updates) ... ok\ntest_scenario_evidence_cannot_replace_gates (test_workflows.RecordSafety.test_scenario_evidence_cannot_replace_gates) ... ok\ntest_worktree_container_itself_refused (test_workflows.RecordSafety.test_worktree_container_itself_refused) ... ok\ntest_actual_git_odd_filename_roundtrip (test_workflows.RepositoryWorkflow.test_actual_git_odd_filename_roundtrip) ... ok\ntest_workspace_hash_tracks_untracked_and_deleted (test_workflows.RepositoryWorkflow.test_workspace_hash_tracks_untracked_and_deleted) ... ok\n\n----------------------------------------------------------------------\nRan 18 tests in 0.991s\n\nOK\nOMEGA_TEST_RESULT {\"errors\": 0, \"expected_failures\": 0, \"failed\": 0, \"passed\": 18, \"run\": 18, \"skipped\": 0, \"unexpected_successes\": 0}\n",
+        "truncated": false,
+        "output_tail": "",
+        "timed_out": false,
+        "output_limit_exceeded": false,
+        "total_output_bytes": 2462,
+        "invalid_utf8": false
+      },
+      "current_validation_eligible_for_review": true,
+      "evaluation_evidence": ".omega/evidence/1792694071019666707-ab41dc7a.json",
+      "pre_application_review": true,
+      "native_quality": "UNVERIFIED"
+    },
+    "quality-gates": {
+      "before_sha256": "ecac267e45c97ab7ac0b3d3252aabfbcb8413e661a912a6aa20e6421b029e90c",
+      "after_sha256": "9c814e22a4836f74b0ac3dbc8e77de148339cffd189e4ff3d9fd32a6ea640339",
+      "before_contract": {
+        "skill": "quality-gates",
+        "sha256": "ecac267e45c97ab7ac0b3d3252aabfbcb8413e661a912a6aa20e6421b029e90c",
+        "checks": [
+          {
+            "id": "frontmatter",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "identity",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "description",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "explicit-invocation",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "no-permission-bypass",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "command:gates",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "command:rollback-check",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "section:Inputs",
+            "passed": false,
+            "required": false
+          },
+          {
+            "id": "section:Workflow",
+            "passed": false,
+            "required": false
+          },
+          {
+            "id": "section:Evidence",
+            "passed": false,
+            "required": false
+          },
+          {
+            "id": "section:Failure handling",
+            "passed": false,
+            "required": false
+          },
+          {
+            "id": "section:Stop conditions",
+            "passed": false,
+            "required": false
+          }
+        ],
+        "passed": true,
+        "advanced_passed": false,
+        "score": 58.33,
+        "scope": "offline document contract, not LLM instruction adherence or reasoning quality"
+      },
+      "after_contract": {
+        "skill": "quality-gates",
+        "sha256": "9c814e22a4836f74b0ac3dbc8e77de148339cffd189e4ff3d9fd32a6ea640339",
+        "checks": [
+          {
+            "id": "frontmatter",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "identity",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "description",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "explicit-invocation",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "no-permission-bypass",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "command:gates",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "command:rollback-check",
+            "passed": true,
+            "required": true
+          },
+          {
+            "id": "section:Inputs",
+            "passed": true,
+            "required": false
+          },
+          {
+            "id": "section:Workflow",
+            "passed": true,
+            "required": false
+          },
+          {
+            "id": "section:Evidence",
+            "passed": true,
+            "required": false
+          },
+          {
+            "id": "section:Failure handling",
+            "passed": true,
+            "required": false
+          },
+          {
+            "id": "section:Stop conditions",
+            "passed": true,
+            "required": false
+          }
+        ],
+        "passed": true,
+        "advanced_passed": true,
+        "score": 100.0,
+        "scope": "offline document contract, not LLM instruction adherence or reasoning quality"
+      },
+      "workflow_outcomes": {
+        "errors": 0,
+        "expected_failures": 0,
+        "failed": 0,
+        "passed": 18,
+        "run": 18,
+        "skipped": 0,
+        "unexpected_successes": 0
+      },
+      "scenario_execution": {
+        "command": [
+          "python3",
+          "-m",
+          "omega.test_runner",
+          "--start",
+          "tests",
+          "--pattern",
+          "test_workflows.py"
+        ],
+        "exit_code": 0,
+        "seconds": 0.867,
+        "output": "test_branch_or_head_change_is_detected (test_workflows.ChangeWorkflow.test_branch_or_head_change_is_detected) ... ok\ntest_expired_plan_refuses_repair_and_readiness (test_workflows.ChangeWorkflow.test_expired_plan_refuses_repair_and_readiness) ... ok\ntest_gate_failure_if_command_mutates_workspace (test_workflows.ChangeWorkflow.test_gate_failure_if_command_mutates_workspace) ... ok\ntest_gate_record_invalidated_by_source_change (test_workflows.ChangeWorkflow.test_gate_record_invalidated_by_source_change) ... ok\ntest_plan_requires_clean_isolated_checkout (test_workflows.ChangeWorkflow.test_plan_requires_clean_isolated_checkout) ... ok\ntest_rename_checks_old_and_new_paths (test_workflows.ChangeWorkflow.test_rename_checks_old_and_new_paths) ... ok\ntest_repair_budget_enforced (test_workflows.ChangeWorkflow.test_repair_budget_enforced) ... ok\ntest_scoped_change_and_outside_path_detection (test_workflows.ChangeWorkflow.test_scoped_change_and_outside_path_detection) ... ok\ntest_cli_read_returns_nonzero_for_stale_memory (test_workflows.MemoryWorkflow.test_cli_read_returns_nonzero_for_stale_memory) ... ok\ntest_evidence_tamper_and_project_binding (test_workflows.MemoryWorkflow.test_evidence_tamper_and_project_binding) ... ok\ntest_missing_evidence_does_not_create_memory (test_workflows.MemoryWorkflow.test_missing_evidence_does_not_create_memory) ... ok\ntest_source_and_head_staleness (test_workflows.MemoryWorkflow.test_source_and_head_staleness) ... ok\ntest_duplicate_keys_and_malformed_memory_rejected (test_workflows.RecordSafety.test_duplicate_keys_and_malformed_memory_rejected) ... ok\ntest_repair_lock_prevents_concurrent_updates (test_workflows.RecordSafety.test_repair_lock_prevents_concurrent_updates) ... ok\ntest_scenario_evidence_cannot_replace_gates (test_workflows.RecordSafety.test_scenario_evidence_cannot_replace_gates) ... ok\ntest_worktree_container_itself_refused (test_workflows.RecordSafety.test_worktree_container_itself_refused) ... ok\ntest_actual_git_odd_filename_roundtrip (test_workflows.RepositoryWorkflow.test_actual_git_odd_filename_roundtrip) ... ok\ntest_workspace_hash_tracks_untracked_and_deleted (test_workflows.RepositoryWorkflow.test_workspace_hash_tracks_untracked_and_deleted) ... ok\n\n----------------------------------------------------------------------\nRan 18 tests in 0.715s\n\nOK\nOMEGA_TEST_RESULT {\"errors\": 0, \"expected_failures\": 0, \"failed\": 0, \"passed\": 18, \"run\": 18, \"skipped\": 0, \"unexpected_successes\": 0}\n",
+        "truncated": false,
+        "output_tail": "",
+        "timed_out": false,
+        "output_limit_exceeded": false,
+        "total_output_bytes": 2462,
+        "invalid_utf8": false
+      },
+      "current_validation_eligible_for_review": true,
+      "evaluation_evidence": ".omega/evidence/1792694072246418376-94e57353.json",
+      "pre_application_review": true,
+      "native_quality": "UNVERIFIED"
+    }
+  },
+  "demo": {
+    "fixture": ".omega/demo/3fdfc0f7bcf04076880185d53e358f52",
+    "baseline_commit": "088aa08650e0f25527369f27559c8926ebf74b56",
+    "before_passed": false,
+    "after_passed": true,
+    "regression_tests": 1,
+    "isolated_branch": "omega/demo-fix",
+    "worktree_created": true,
+    "baseline_recoverable": true,
+    "memory": ".omega/memory/1792694064694972486-28bb2bdd.json",
+    "candidate_passed": true,
+    "stable_modified": false,
+    "rollback_diff_exit": 0,
+    "native_claude_executed": false,
+    "network_used": false
+  },
+  "efficiency": {
+    "suite": "token-efficiency-v1",
+    "metric": "UTF-8 bytes; actual tokens and native LLM quality unmeasured",
+    "passed": true,
+    "cases": [
+      {
+        "case": "plan-low",
+        "before_utf8_bytes": 585,
+        "after_utf8_bytes": 478,
+        "reduction_percent": 18.29,
+        "data_equivalent": true
+      },
+      {
+        "case": "plan-medium",
+        "before_utf8_bytes": 634,
+        "after_utf8_bytes": 514,
+        "reduction_percent": 18.93,
+        "data_equivalent": true
+      },
+      {
+        "case": "plan-high",
+        "before_utf8_bytes": 660,
+        "after_utf8_bytes": 535,
+        "reduction_percent": 18.94,
+        "data_equivalent": true
+      },
+      {
+        "case": "explicit-source-packet",
+        "before_utf8_bytes": 1117,
+        "after_utf8_bytes": 1043,
+        "reduction_percent": 6.62,
+        "data_equivalent": true
+      },
+      {
+        "case": "gate-logs-by-reference",
+        "before_utf8_bytes": 21432,
+        "after_utf8_bytes": 1884,
+        "reduction_percent": 91.21,
+        "data_equivalent": true
+      }
+    ],
+    "sources_sha256": {
+      "omega/context.py": "568903e03917424a87bf39717dab9eda7cb07bf714cdcee372536dcfb949c83a",
+      "omega/__main__.py": "d4459250fe7e2c111c2f7886a1e0f4130bcb2dfc6f31989f890789eacbe3ff48",
+      "tests/test_context.py": "324992baa7c5185803fa1adce6955e1b865787452e0413ac5fb838e831414fae",
+      "benchmarks/token_efficiency.py": "a4871db783e0d71d6ce845924a1d046fab67b9c1d8621165b3ab4eb8fa00bbd6"
+    },
+    "claude_native_evaluated": false
+  },
+  "claude_compatibility": {
+    "version": "2.1.308",
+    "version_exit_code": 0,
+    "help_exit_code": 0,
+    "auth_status_exit_code": 1,
+    "logged_in": false,
+    "credential_variable_presence": {
+      "ANTHROPIC_API_KEY": false,
+      "CLAUDE_CODE_OAUTH_TOKEN": false
+    },
+    "model_request_sent": false,
+    "skills_runtime_discovery_verified": false,
+    "custom_subagents_discovery_verified": false,
+    "hooks_activated": false,
+    "configuration_scope": "project-local CLAUDE_CONFIG_DIR; no credential values inspected or copied by OMEGA",
+    "limitation": "version/help/auth metadata only, not native skill/agent behavior",
+    "packages": {
+      "node_modules/@anthropic-ai/claude-code": {
+        "version": "2.1.308",
+        "integrity": "sha512-b2HnszgyN73wRTFP+IYPDJNn9ADXnG6jr26ibL+w03HSKqfb6GqE8Jnfr4mz37Zv4AT/NP+B5/3c1F89WTdWSA==",
+        "installed": true
+      },
+      "node_modules/@anthropic-ai/claude-code-darwin-arm64": {
+        "version": "2.1.308",
+        "integrity": "sha512-fdIEbsrjlOiB8XLD3HWMi7fFGNrRzz7vPUmstgL/7qf4DLWzoWpgpCYaovrX8fp2wRsexiNok/9WZea938jJUw==",
+        "installed": false
+      },
+      "node_modules/@anthropic-ai/claude-code-darwin-x64": {
+        "version": "2.1.308",
+        "integrity": "sha512-GdddpKPDe/tvxdScf0P59eSqF7QQJbwZa21vsRIzEyZPLhE7Qc43YBx2jtGRZMNpFh+dnkRoZoo6b8a1bWQQyw==",
+        "installed": false
+      },
+      "node_modules/@anthropic-ai/claude-code-linux-arm64": {
+        "version": "2.1.308",
+        "integrity": "sha512-xtT2Cd7n+yZN9PiWbWHaZf9w25YflV+7VOX5IBPB/IWErKZFhsst2/Ay1tSgq/Mzp1vp56xwFRqPa6UAI9BZIw==",
+        "installed": false
+      },
+      "node_modules/@anthropic-ai/claude-code-linux-arm64-musl": {
+        "version": "2.1.308",
+        "integrity": "sha512-TglRcmHDXvWQA5Ev4IsMAWQsg9a7NUdtuJTxLt8OYWX4he6KIsb7D2Eyokaxs2jIieH40X8KLsILwErH6VQMww==",
+        "installed": false
+      },
+      "node_modules/@anthropic-ai/claude-code-linux-x64": {
+        "version": "2.1.308",
+        "integrity": "sha512-ffUryevpH7POStPJ/xpUI5R1ozYbH9o/Dbh/xPSmyVJehELnRMZmRnejdQmq0TejOW/SbNnJFhCGMgwIsOqFTQ==",
+        "installed": true
+      },
+      "node_modules/@anthropic-ai/claude-code-linux-x64-musl": {
+        "version": "2.1.308",
+        "integrity": "sha512-sZFBtLoYQQEjgW/GL6wS+Rrm73DvIlQh/mjD0OicgzFunXRZl9/qRogZ6E54NxFGWtBkBdY5YyRBygM15lEm5A==",
+        "installed": false
+      },
+      "node_modules/@anthropic-ai/claude-code-win32-arm64": {
+        "version": "2.1.308",
+        "integrity": "sha512-GUSYZn0Rwz02SnYSO7USmoHOOOiEEOQsW8NbsDouwLurFLsaC+JTd9CKbmIAx/fMxUWmljqBPkyU6PDftxoh9g==",
+        "installed": false
+      },
+      "node_modules/@anthropic-ai/claude-code-win32-x64": {
+        "version": "2.1.308",
+        "integrity": "sha512-OxskS6onyOdKqdvd9/33M5//ItBdAnoI/cjdp0PU47KDMDF5WWE82Slo0ISq8kpNr2wK0lXB5Z2Rv1weJR0znw==",
+        "installed": false
+      }
+    },
+    "native_binary_sha256": "356733f185fa988e6bf3aa9a555269fdd167982a2e2a80d3c8a78037bb92ad58",
+    "doctor": {
+      "python": "3.12.14",
+      "git": "git version 2.52.0",
+      "claude": {
+        "available": true,
+        "source": "project-local",
+        "command": [
+          "/workspace/skill/.omega/tools/claude/node_modules/.bin/claude",
+          "--version"
+        ],
+        "exit_code": 0,
+        "seconds": 0.024,
+        "output": "2.1.308 (Claude Code)\n",
+        "truncated": false,
+        "output_tail": "",
+        "timed_out": false,
+        "output_limit_exceeded": false,
+        "total_output_bytes": 22,
+        "invalid_utf8": false
+      },
+      "native_integration": "Version probe only; skills, agents and hook behavior remain UNVERIFIED",
+      "hooks_enabled": false,
+      "mcp_enabled": false
+    }
+  },
+  "source_sha256": {
+    "omega/__init__.py": "667d4a15b970b851e20d17510224670c14646cfb6d5a1e388ca6b9cc6da8bf41",
+    "omega/__main__.py": "d4459250fe7e2c111c2f7886a1e0f4130bcb2dfc6f31989f890789eacbe3ff48",
+    "omega/catalog.json": "6b79c77b9b756ea5b298a7cf07fcc10dc3e3108e9fb171bc891fa8d7a1a72fd2",
+    "omega/change.py": "7d6c2d778a9fe9183a192dac374670fa65f32ead0c82c9f14f5b15661a2ac688",
+    "omega/config.json": "4fc70d24fd825bb3274adf1f17f6be2f607f619cefbf631391d2788af5e334db",
+    "omega/context.py": "568903e03917424a87bf39717dab9eda7cb07bf714cdcee372536dcfb949c83a",
+    "omega/hook.py": "f41d71436ec9c8f15ef8009830e9fdc3083e9ff4750977cd78bb28d7879543c3",
+    "omega/process.py": "905beab210c8bcda3727a7afd94ae7e389bda38ee560a403d0ec4a4e0e1cdea6",
+    "omega/records.py": "ca71c9b5becc915d6144398d792cfb1e5dc4eac8a0e5b9dd37cd2cad82aafbef",
+    "omega/safety.py": "1b46371315bb887301c356c0ab8386f6d6d31cd75f3e07eee01047417f490832",
+    "omega/skills.py": "da1573ba9ae07ba87ef2e40abe29eecbd87d8289e15724f7e10e7c0f2a8961f2",
+    "omega/test_runner.py": "d8420f55b8b60dcacbc861a056912494d02bad4e3ecf1e74b1648275230681bd",
+    "tests/test_context.py": "324992baa7c5185803fa1adce6955e1b865787452e0413ac5fb838e831414fae",
+    "tests/test_hardening.py": "7b9a0352055eab889def8532df24ff2dbe8bf40f23830fe9a5e4aa52aff66621",
+    "tests/test_omega.py": "f58af7fbe996c2398eb68e9b2566f7b95d6e288fb44dca32dc5d5fc9cc38f9ee",
+    "tests/test_skill_evolution.py": "2a2cb1215111b7ff62787070b384926fd12370a82edd50a56b0e0abadf139d36",
+    "tests/test_workflows.py": "b685be0585a3524e5649bc7bd7e6b6d30c4930b485af2f14b7b4e33ab3359d08",
+    "benchmarks/cases.json": "aa8b72d73b0be7ebcb53dd3049f83c6b181148b0248cf1cb1ed6c607a0fd87bc",
+    "benchmarks/demo.py": "923e2fd753faf79c90bd869623757ac5aef3b8ece7c57dd6302120f8265ad20f",
+    "benchmarks/token_efficiency.py": "a4871db783e0d71d6ce845924a1d046fab67b9c1d8621165b3ab4eb8fa00bbd6",
+    ".claude/agents/omega-engineer.md": "1bf3176faefb03d160a0fbf8adbc18dd2529982882f13d18e7de5f8d4e43c229",
+    ".claude/agents/omega-investigator.md": "b76492b0b1798315633cfa2447dc2096066f4ef5d8fbafa7c4c7baba8eff91a7",
+    ".claude/agents/omega-verifier.md": "b0a00fb047c59bdf946882b9cf18e76fbad327061871c23c9c610d7ee6e94bd1",
+    ".claude/skills/controlled-change/SKILL.md": "7db190308bab9f28269b625605b2b082fd43c742fbddf2899ef20bdf9d833849",
+    ".claude/skills/project-memory/SKILL.md": "664dc93b4aec835906eb853bb6a263b17324eeb49ed42ca009bde6e7c30fedb8",
+    ".claude/skills/quality-gates/SKILL.md": "9c814e22a4836f74b0ac3dbc8e77de148339cffd189e4ff3d9fd32a6ea640339",
+    ".claude/skills/repo-map/SKILL.md": "e4c63065881369617db310a6af66ab141115f80227d35d50cb687c3a66f4bee4",
+    ".claude/skills/skill-benchmark/SKILL.md": "afab76926eb54036f588a3aad01fff6219bf81d4bb1c0a0e9d97437ef8798218",
+    ".github/workflows/omega.yml": "20201ef6cf4b3f67e9627cac9bddcdbc6c27e11e4f0a5fd82241dfdb48307721",
+    "CLAUDE.md": "9d1fbc0a0787e848d7a02eef2ee5d121cc9b6f062d2b3b7f38be4575202bd751",
+    "README.md": "1ae082c7798b4003f811b1c0eb5982fdbf6502af4b7233004a45251b4654828c",
+    "docs/DEEP_HARDENING.md": "ad91b52ae746d1ff9b2d68f7bbb71e748063df3b03ba8e55b303f3de9c7433de",
+    "docs/SKILL_PLAYBOOKS.md": "1f8f245055b78bead524516601ad8024d77b1aa74928b0551711241deff4913c",
+    "docs/CLAUDE_COMPATIBILITY.md": "3690d8910ff5199653cf0705c071c8ed7483d1b9b646855483955effd91fc594",
+    "docs/VALIDATION.md": "1a88675efb54324a83c472a4ddcf39f5e75031cc075da4a4ec2a63673399884e",
+    "docs/OPERATIONS.md": "9a7f00cdac7a2f09e073eae41e1d63a4ef224f02bc0e263cb85e0af8dc4f8b9f",
+    "docs/ARCHITECTURE.md": "d0cc59426b1230313689781e57d28ee472d747fae93218f6f987159d2de7cae3",
+    "docs/TOKEN_EFFICIENCY.md": "b226b08597bbded26caba18b2dd0f7d1f8a5925158d1e0285b27ea646db9353a"
+  },
+  "evidence_notes": "Workspace hashes describe source state when each run executed, before report publication. Manifest excludes generated reports to avoid self-reference; source hashes identify tested files.",
+  "limitations": [
+    "native LLM skills/agents/hooks unverified; isolated auth status loggedIn=false",
+    "offline score measures document contract completeness, not reasoning quality",
+    "security policy scan is narrow; no production SAST/pentest or rollback proof",
+    "local artifacts are not signed and do not resist a malicious filesystem owner",
+    "token/cost/agent concurrency remain advisory; repair/deadline enforcement applies only through workflow ledger",
+    "GitHub Actions status not verified via API"
+  ]
+}
