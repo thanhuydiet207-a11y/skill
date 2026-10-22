@@ -27,3 +27,7 @@ npm install --prefix "$PWD/.omega/tools/claude" --cache "$PWD/.omega/npm-cache" 
 Sau cài, đọc install.cjs và metadata platform package, rồi chạy riêng `node .omega/tools/claude/node_modules/@anthropic-ai/claude-code/install.cjs` nếu phù hợp. OMEGA doctor không tự download/cài tool.
 
 Để nghiệm thu LLM, người dùng đăng nhập bằng flow hỗ trợ của Claude hoặc cấu hình credential qua cơ chế bảo mật của môi trường. Không dán secret vào chat/Git. Sau thay đổi xác thực, kiểm tra lại operation trước khi yêu cầu thêm binding. Chỉ bắt đầu native task corpus khi có ngân sách/đích API/quyền phù hợp; không suy ra access từ biến có mặt hoặc help chạy được.
+
+## Bản 0.3
+
+Doctor trả hooks_enabled/mcp_enabled=unknown vì không quan sát đủ managed/user/plugin policy. Version probe không là bằng chứng discovery/permissions. Grammar CLI và hook adapter đã dùng chung; adapter vẫn chưa được đăng ký trong Claude. State probe chỉ tạo trong .omega đã review ignore và không có file tracked.

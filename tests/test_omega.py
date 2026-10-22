@@ -12,11 +12,12 @@ from omega.hook import authorize
 
 
 class OmegaTests(unittest.TestCase):
-    def test_catalog_36_unique_and_five_active(self):
+    def test_catalog_foundation_and_eight_extensions(self):
         catalog=json.loads((app.ROOT/'omega/catalog.json').read_text())
-        self.assertEqual(len(catalog),36)
-        self.assertEqual(len({x['name'] for x in catalog}),36)
-        self.assertEqual(sum(x['state']=='implemented' for x in catalog),5)
+        self.assertEqual(len(catalog),44)
+        self.assertEqual(sum(x.get("origin")=="foundation" for x in catalog),36)
+        self.assertEqual(len({x['name'] for x in catalog}),44)
+        self.assertEqual(sum(x['state']=='implemented' for x in catalog),13)
         self.assertEqual(len({x['group'] for x in catalog}),6)
         for item in catalog:
             self.assertEqual((app.ROOT/'.claude/skills'/item['name']/'SKILL.md').exists(),item['state']=='implemented')
@@ -63,11 +64,14 @@ class OmegaTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'Possible secret'):app.main()
 
     def test_memory_scoped_and_commit_stamped(self):
-        with tempfile.TemporaryDirectory() as d,patch.object(app,'ROOT',Path(d)),patch.object(app,'git',return_value='abc'):
+        with tempfile.TemporaryDirectory() as d,patch.object(app,'ROOT',Path(d)),patch.object(app,'git',side_effect=lambda *a: '' if a[0] in ('ls-files','check-ignore') else 'abc'):
             dest=app.save('memory',{'title':'ADR','body':'use stdlib'})
             payload=json.loads((Path(d)/dest).read_text())
             self.assertEqual(payload['head'],'abc')
             self.assertEqual(payload['project'],d)
+            for invalid in ({'body':'x'*1048576},{'rows':list(range(2001))}):
+                with self.assertRaises(ValueError):app.save('memory',invalid)
+            self.assertEqual(len(list((Path(d)/'.omega/memory').iterdir())),1)
 
     def test_dirty_checkout_refused(self):
         with patch.object(sys,'argv',['omega','isolate','--name','test']),patch.object(app,'git',return_value=' M file'):
@@ -87,8 +91,9 @@ class OmegaTests(unittest.TestCase):
     def test_hook_rejects_malformed(self):
         for payload in (None,{},[],{'hook_event_name':'PreToolUse','tool_name':'Bash','tool_input':None}):
             self.assertFalse(authorize(payload)[0])
-        p=subprocess.run([sys.executable,'-m','omega.hook'],input='{',text=True,capture_output=True,cwd=app.ROOT)
-        self.assertEqual(p.returncode,2)
+        for text in ('{','['*1100+'0'+']'*1100,'{"cwd":"one","cwd":"two"}'):
+            p=subprocess.run([sys.executable,'-m','omega.hook'],input=text,text=True,capture_output=True,cwd=app.ROOT)
+            self.assertEqual(p.returncode,2);self.assertNotIn('Traceback',p.stderr)
 
     def test_three_agent_specs(self):
         self.assertEqual(len(list((app.ROOT/'.claude/agents').glob('*.md'))),3)
@@ -105,7 +110,7 @@ class OmegaTests(unittest.TestCase):
             stable_text='---\nname: repo-map\ndescription: Fixture\ndisable-model-invocation: true\n---\npython3 -m omega map\npython3 -m omega plan\n'
             stable.write_text(stable_text)
             report={'suite':'test','suite_sha256':'identity','cases':[{'id':'one','passed':True}],'passed':True}
-            with patch.object(app,'ROOT',root),patch.object(app,'git',return_value='abc'),patch.object(app,'benchmark',return_value=report):
+            with patch.object(app,'ROOT',root),patch.object(app,'git',side_effect=lambda *a: '' if a[0] in ('ls-files','check-ignore') else 'abc'),patch.object(app,'benchmark',return_value=report):
                 captured=io.StringIO()
                 with patch.object(sys,'argv',['omega','candidate','--skill','repo-map']),contextlib.redirect_stdout(captured):
                     self.assertEqual(app.main(),0)

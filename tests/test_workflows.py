@@ -67,10 +67,10 @@ class ChangeWorkflow(ProjectFixture):
 
     def test_gate_record_invalidated_by_source_change(self):
         name=self.plan();state=records.workspace(self.root,app.git)
-        ev=app.save('evidence',{'kind':'gates','passed':True,'workspace_unchanged':True,'workspace_sha256':state,'results':[{'gate':k,'command':v,'exit_code':0,'output':'OMEGA_TEST_RESULT {"run": 1, "passed": 1, "failed": 0, "errors": 0, "skipped": 0, "expected_failures": 0, "unexpected_successes": 0}' if k=='tests' else ''} for k,v in app.CONFIG['gates'].items()]})
-        self.assertTrue(change.check(self.root,name,app.git,app.CONFIG['limits'],[ev],app.CONFIG['gates'])['passed'])
+        ev=app.save('evidence',{'kind':'gates','execution_fingerprint':records.execution_context(self.root,app.CONFIG)['sha256'],'execution_unchanged':True,'passed':True,'workspace_unchanged':True,'workspace_sha256':state,'results':[{'gate':k,'command':v,'exit_code':0,'output':'OMEGA_TEST_RESULT {"run": 1, "passed": 1, "failed": 0, "errors": 0, "skipped": 0, "expected_failures": 0, "unexpected_successes": 0}' if k=='tests' else ''} for k,v in app.CONFIG['gates'].items()]})
+        self.assertTrue(change.check(self.root,name,app.git,app.CONFIG['limits'],[ev],app.CONFIG['gates'],expected_execution=records.execution_context(self.root,app.CONFIG)['sha256'])['passed'])
         (self.root/'calc.py').write_text('changed after evidence')
-        self.assertFalse(change.check(self.root,name,app.git,app.CONFIG['limits'],[ev],app.CONFIG['gates'])['passed'])
+        self.assertFalse(change.check(self.root,name,app.git,app.CONFIG['limits'],[ev],app.CONFIG['gates'],expected_execution=records.execution_context(self.root,app.CONFIG)['sha256'])['passed'])
 
     def test_rename_checks_old_and_new_paths(self):
         name=self.plan();app.git('mv','calc.py','other.py')
@@ -136,6 +136,8 @@ class RecordSafety(ProjectFixture):
         path=self.root/name
         path.write_text('{"schema":1,"schema":1,"project":'+json.dumps(str(self.root))+'}')
         with self.assertRaisesRegex(ValueError,'Duplicate'):records.load(self.root,name,'memory')
+        path.write_text('['*1100+'0'+']'*1100)
+        with self.assertRaisesRegex(ValueError,'deeply nested'):records.load(self.root,name,'memory')
 
     def test_repair_lock_prevents_concurrent_updates(self):
         import fcntl
@@ -148,7 +150,7 @@ class RecordSafety(ProjectFixture):
     def test_scenario_evidence_cannot_replace_gates(self):
         name=self.plan()
         ev=app.save('evidence',{'kind':'skill-evaluation','passed':True,'workspace_unchanged':True,'workspace_sha256':records.workspace(self.root,app.git)})
-        self.assertFalse(change.check(self.root,name,app.git,app.CONFIG['limits'],[ev],app.CONFIG['gates'])['passed'])
+        self.assertFalse(change.check(self.root,name,app.git,app.CONFIG['limits'],[ev],app.CONFIG['gates'],expected_execution=records.execution_context(self.root,app.CONFIG)['sha256'])['passed'])
 
     def test_worktree_container_itself_refused(self):
         with self.assertRaises(ValueError):self.invoke('isolate','--name','wrong','--worktree','.omega/worktrees')

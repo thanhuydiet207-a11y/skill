@@ -13,6 +13,7 @@ def normalized(counts):
 
 
 def outcomes(result,adapter='omega'):
+    if not isinstance(result,dict):return None
     if type(result.get('exit_code')) is not int or result['exit_code']!=0:return None
     text=result.get('output','')
     if not isinstance(text,str) or len(text.encode())>1048576:return None
@@ -20,6 +21,7 @@ def outcomes(result,adapter='omega'):
         counts=dict.fromkeys(KEYS,0)
         if adapter=='omega':
             text=result.get('output_tail') or text
+            if not isinstance(text,str):return None
             lines=[line[18:] for line in text.splitlines() if line.startswith('OMEGA_TEST_RESULT ')]
             return normalized(json.loads(lines[0])) if len(lines)==1 else None
         if result.get('truncated'):return None
@@ -62,4 +64,4 @@ def outcomes(result,adapter='omega'):
                 if 'tests' in suite.attrib and int(suite.attrib['tests'])!=actual:return None
         else:return None
         return normalized(counts)
-    except (ValueError,TypeError,KeyError,ET.ParseError):return None
+    except (ValueError,TypeError,KeyError,RecursionError,ET.ParseError):return None

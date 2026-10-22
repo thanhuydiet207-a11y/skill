@@ -11,6 +11,12 @@ COMMANDS={
     'project-memory':['memory'],
     'skill-benchmark':['candidate','compare','benchmark'],
 }
+import json
+_EXTENSIONS=Path(__file__).resolve().parent/'extensions.json'
+if _EXTENSIONS.is_file():
+    extra=json.loads(_EXTENSIONS.read_text())
+    if not isinstance(extra,dict) or any(not isinstance(k,str) or not isinstance(v,list) or any(not isinstance(x,str) for x in v) for k,v in extra.items()):raise ValueError('Invalid skill registry')
+    COMMANDS.update(extra)
 HEADINGS=('Inputs','Workflow','Evidence','Failure handling','Stop conditions')
 
 
@@ -23,7 +29,7 @@ def assess(root,skill,candidate=None):
     fields=document['fields'];valid=document['supported'] and not document['unknown_fields']
     checks=[{'id':'frontmatter','passed':valid,'required':True},
             {'id':'identity','passed':fields.get('name')==skill,'required':True},
-            {'id':'description','passed':bool(fields.get('description')),'required':True},
+            {'id':'description','passed':isinstance(fields.get('description'),str) and bool(fields.get('description','').strip()),'required':True},
             {'id':'explicit-invocation','passed':fields.get('disable-model-invocation') is True,'required':True},
             {'id':'no-permission-bypass','passed':not any(x in text for x in ('--dangerously-skip-permissions','bypassPermissions','curl -k ')),'required':True}]
     for command in COMMANDS[skill]:
@@ -38,8 +44,9 @@ def assess(root,skill,candidate=None):
     for name in sorted(set(re.findall(r'(?:docs|references|scripts|assets)/[A-Za-z0-9_./-]+\.(?:md|py|json|sh|txt)',body))):
         location=Path(root)/name if name.startswith('docs/') else Path(root)/'.claude/skills'/skill/name
         try:
-            safe=source_path(root,str(location));data=safe.read_bytes()
-            if len(data)>1048576:raise ValueError('Oversized resource')
+            safe=source_path(root,str(location))
+            if not safe.is_file() or safe.stat().st_size>1048576:raise ValueError('Missing or oversized resource')
+            data=safe.read_bytes()
             resources.append({'path':str(safe.relative_to(root)),'sha256':hashlib.sha256(data).hexdigest(),'available':True})
         except (ValueError,OSError):resources.append({'path':name,'available':False})
     checks.append({'id':'resources-resolve','passed':all(x['available'] for x in resources),'required':True})

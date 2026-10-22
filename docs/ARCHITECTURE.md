@@ -21,9 +21,9 @@ flowchart TD
 
 CLI stdlib hỗ trợ kế hoạch và bằng chứng; Claude Code mới là runtime suy luận và giao việc. Không có lời gọi LLM/MCP ngầm. CLI Claude Code 2.1.308 đã chạy version/help; native task execution chưa được kiểm chứng do chưa xác thực. Không tuyên bố agent tự chạy hoặc hooks đã bảo vệ phiên làm việc.
 
-## 36 skill, 6 nhóm
+## 36 capability gốc, 8 extension, 6 nhóm
 
-Catalog máy đọc: `omega/catalog.json`. Mỗi nhóm có 6 capability. **Chỉ 5 mục in đậm được triển khai** bằng SKILL.md và lệnh CLI có test. Các tên còn lại là roadmap, không có file giả.
+Catalog máy đọc: `omega/catalog.json`. Mỗi nhóm gốc có 6 capability, giữ nguyên origin=foundation. Bảng dưới mô tả 36 mục gốc, trong đó 5 mục in đậm đã triển khai. Bản 0.3 bổ sung 8 extension có SKILL.md/công cụ/tests thật, nâng tổng catalog lên 44 và số skill hoạt động lên 13; 31 mục gốc còn lại vẫn planned.
 
 | Nhóm | Skill |
 |---|---|
@@ -35,6 +35,17 @@ Catalog máy đọc: `omega/catalog.json`. Mỗi nhóm có 6 capability. **Chỉ
 | Evolution | **skill-benchmark**, skill-evaluation, skill-candidate, skill-promotion, cost-review, workflow-retrospective |
 
 Capabilities phụ như doctor/isolate/rollback-check có CLI helper nhưng chưa thành skill độc lập. Một skill được coi là triển khai khi có quy trình, công cụ chạy được, kiểm thử hợp đồng và giới hạn rõ ràng; hiệu quả của skill với LLM là nghiệm thu riêng chưa đạt.
+
+| Nhóm | Extension đã triển khai |
+|---|---|
+| Intelligence | omega-skill-compatibility-audit, omega-context-sufficiency-check |
+| Engineering | omega-workflow-handoff-contract |
+| Quality | omega-skill-interference-benchmark, omega-evidence-reconciler |
+| Knowledge | omega-memory-reconciliation |
+| Operations | omega-effective-policy-explainer, omega-project-workflow-adapter |
+| Evolution | dùng analyzer interference qua intent evolve; chưa thêm extension vào nhóm này |
+
+Tên 5 skill cũ giữ tương thích. Tiền tố omega- của extension giúp giảm trùng tên, chưa phải namespace plugin native. Quy tắc phối hợp và schema: [INTEROPERABILITY_GUIDE.md](INTEROPERABILITY_GUIDE.md).
 
 ## 10 vai trò chuyên môn
 
@@ -61,8 +72,9 @@ Mẫu giao việc: `{task_id, objective, allowed_paths, prohibited_actions, bran
 - Medium: engineer rồi verifier, trao patch/evidence thay vì toàn transcript.
 - High: investigator → engineer → verifier; conflict dùng worktree. Tối đa 2 agent đồng thời khi read task độc lập, không writer chồng phạm vi.
 - Complexity do người điều phối chọn dựa trên số component, mức không chắc chắn, rủi ro dữ liệu/API và khả năng rollback; CLI không tự đo chính xác complexity.
+- Plan nhận intent change/investigate/verify/knowledge/evolve/interoperability và workflow DAG tường minh. Handoff validator tìm cycle, owner trùng, writer không có quan hệ phụ thuộc, vượt agent budget. Lịch batch là đề xuất, không phải scheduler.
 - Skill `disable-model-invocation: true` chủ ý chỉ gọi tường minh. Không tải catalog đầy đủ vào mỗi agent; chỉ gửi acceptance, file liên quan, vài evidence tốt nhất.
-- Metadata inventory giới hạn 24 KB; output mỗi command giữ tối đa 16 KB. Truncation không được hiểu là toàn bộ log. Dữ liệu có thể vẫn nhạy cảm: review trước khi chia sẻ.
+- Toàn JSON inventory giới hạn 24 KB, báo omitted_count và status_truncated; evidence output mỗi command giữ prefix 16 KB và tail khi bị cắt. Git control data có budget riêng tối đa 1 MB, bị cắt thì từ chối dùng. Truncation không được hiểu là toàn bộ log. Dữ liệu có thể vẫn nhạy cảm: review trước khi chia sẻ.
 - Ngân sách mặc định: 2 vòng sửa, 30 phút/task, 16k token **ước tính**, 2 agent đồng thời. Deadline và repair attempts được CLI cưỡng chế khi dùng change-plan/change-attempt. Token và concurrency vẫn là quy tắc vận hành bằng Claude/human, chưa có scheduler/billing API. Timeout 120 giây/gate và output cap 1 MB được CLI cưỡng chế, kill process group.
 
 ## Bộ nhớ và quyết định
@@ -80,7 +92,7 @@ Audit hiện **không** là SAST, scanner dependency, pentest hoặc secret scan
 ## Tiêu chí nghiệm thu
 
 - [x] Không dependency Python bên thứ ba; doctor phát hiện và chạy version probe tool Claude cục bộ khi có.
-- [x] 36 capability được phân nhóm; 5 skill và 3 agent có nội dung vận hành.
+- [x] 36 capability gốc + 8 extension được phân nhóm; 13 skill và 3 agent spec có nội dung vận hành.
 - [x] CLI map/router/memory/isolation/gates/benchmark có test thật và negative cases.
 - [x] Không kích hoạt hook trước kiểm tra compatibility; MCP tắt mặc định.
 - [ ] Chạy slash skill và giao agent thực tế bằng một phiên Claude được xác thực.

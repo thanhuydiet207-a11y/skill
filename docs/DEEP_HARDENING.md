@@ -1,5 +1,7 @@
 # OMEGA 0.2 — nâng cấp sâu và giới hạn kiểm chứng
 
+> Tài liệu lịch sử bản 0.2. Hành vi/schema hiện tại: [INTEROPERABILITY_GUIDE.md](INTEROPERABILITY_GUIDE.md); kết quả mới: [VALIDATION.md](VALIDATION.md).
+
 Đợt này nâng cấp 5 skill hiện có; không tạo thêm skill/agent giả, không thêm dependency ứng dụng hoặc bật integration chưa kiểm chứng. Tool Claude tùy chọn được cài riêng trong .omega, xem [CLAUDE_COMPATIBILITY.md](CLAUDE_COMPATIBILITY.md). 36 capability/10 vai trò vẫn là bản thiết kế; 5 skill/3 agent spec là phần triển khai hiện tại.
 
 ## Quy trình kiểm tra từng đợt

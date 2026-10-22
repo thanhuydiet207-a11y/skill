@@ -61,7 +61,8 @@ def explain(payload,root=ENGINE):
             raise ValueError('Invalid branch name')
         if args.worktree:artifact_path(root,args.worktree,'worktrees',False)
         for value in args.allow:source_path(root,value)
-        for value,kind in ((args.record,'memory' if args.command in ('memory-read','memory-reconciliation') else 'changes'),
+        record_kind='memory' if args.command in ('memory-read','memory-reconciliation') else 'evidence' if args.command=='evidence-reconciler' else 'changes'
+        for value,kind in ((args.record,record_kind),
                            (args.baseline,'baselines'),(args.candidate,'candidates')):
             if value:artifact_path(root,value,kind)
         for value in args.evidence:artifact_path(root,value,'evidence')

@@ -11,6 +11,7 @@ from omega.records import load,digest,workspace,valid_gates,memory_status,execut
 def context_check(root,document):
     if not isinstance(document,dict) or not isinstance(document.get('requirements'),dict) or not isinstance(document.get('packet'),dict):raise ValueError('Expected requirements and packet')
     req= document['requirements'];packet=document['packet'];issues=[]
+    if not isinstance(packet.get('task'),dict):raise ValueError('Expected packet task invariants')
     for key in ('acceptance','constraints'):
         if not isinstance(req.get(key),list) or any(not isinstance(x,str) or not x.strip() for x in req[key]):raise ValueError('Invalid context task invariants')
         if key=='acceptance' and not req[key]:raise ValueError('Acceptance cannot be empty')
@@ -20,7 +21,11 @@ def context_check(root,document):
     actual=[]
     for source in sources:
         if not isinstance(source,dict) or not isinstance(source.get('path'),str):raise ValueError('Malformed context source')
-        path=source_path(root,source['path']);lines=path.read_bytes().decode('utf-8').splitlines(keepends=True)
+        path=source_path(root,source['path'])
+        if not path.is_file() or path.stat().st_size>1_000_000:raise ValueError('Missing or oversized context source')
+        raw=path.read_bytes()
+        if b'\x00' in raw:raise ValueError('Binary context source excluded')
+        lines=raw.decode('utf-8').splitlines(keepends=True)
         start,end=source.get('start'),source.get('end')
         if type(start) is not int or type(end) is not int or not 1<=start<=end<=len(lines):raise ValueError('Invalid source range')
         if source.get('source_sha256')!=digest(path) or source.get('content')!=''.join(lines[start-1:end]):issues.append('Stale/altered source: '+source['path'])
@@ -66,7 +71,7 @@ def reconcile_memory(root,names,head):
 
 def interference(document):
     if not isinstance(document,dict) or not isinstance(document.get('runs'),list) or not 3<=len(document['runs'])<=600:raise ValueError('Expected 3..600 imported evaluation runs')
-    records={};settings=set();criteria=None;provenances=set()
+    records={};settings=set();criteria={};task_prompts={};provenances=set();bundles={}
     for run in document['runs']:
         if not isinstance(run,dict):raise ValueError('Malformed run')
         if not isinstance(run.get('task_id'),str) or not run['task_id'] or type(run.get('trial')) is not int or run['trial']<0:raise ValueError('Invalid task/trial')
@@ -74,19 +79,28 @@ def interference(document):
         if arm not in ('A','B','A+B'):raise ValueError('Arm must be A, B or A+B')
         key=(run['task_id'],run['trial'],arm)
         if key in records:raise ValueError('Duplicate evaluation run')
-        for name in ('model','model_version','prompt_sha256'):
+        for name in ('model','model_version','grader_version','prompt_sha256'):
             if not isinstance(run.get(name),str) or not run[name]:raise ValueError('Missing evaluation identity')
         if not re.fullmatch('[0-9a-f]{64}',run['prompt_sha256']):raise ValueError('Invalid prompt digest')
+        expected={'A','B'} if arm=='A+B' else {arm};declared=run.get('skill_bundles')
+        if not isinstance(declared,dict) or set(declared)!=expected:raise ValueError('Declare exact skill bundle digests for each arm')
+        for label,value in declared.items():
+            if not isinstance(value,str) or not re.fullmatch('[0-9a-f]{64}',value):raise ValueError('Invalid skill bundle digest')
+            if label in bundles and bundles[label]!=value:raise ValueError('Skill bundle changed across arms/trials')
+            bundles[label]=value
         acceptance=run.get('acceptance')
         if not isinstance(acceptance,dict) or not acceptance or any(not isinstance(k,str) or type(v) is not bool for k,v in acceptance.items()):raise ValueError('Expected explicit boolean acceptance outcomes')
-        if criteria is None:criteria=set(acceptance)
-        if set(acceptance)!=criteria:raise ValueError('Acceptance criteria must be held fixed')
+        task=run['task_id']
+        if task not in criteria:criteria[task]=set(acceptance)
+        if set(acceptance)!=criteria[task]:raise ValueError('Acceptance criteria must be held fixed per task')
+        if task in task_prompts and task_prompts[task]!=run['prompt_sha256']:raise ValueError('Prompt changed across repeated task trials')
+        task_prompts[task]=run['prompt_sha256']
         for name in ('tokens','duration_ms'):
-            if run.get(name) is not None and (type(run[name]) is not int or run[name]<0):raise ValueError('Invalid usage measurement')
+            if run.get(name) is not None and (type(run[name]) is not int or not 0<=run[name]<=10**12):raise ValueError('Invalid usage measurement')
         if run.get('provenance') not in ('fixture','native','manual'):raise ValueError('Evaluation provenance required')
-        provenances.add(run['provenance']);settings.add((run['model'],run['model_version']))
+        provenances.add(run['provenance']);settings.add((run['model'],run['model_version'],run['grader_version']))
         records[key]=run
-    if len(settings)!=1 or len(provenances)!=1:raise ValueError('Hold model/version and provenance fixed')
+    if len(settings)!=1 or len(provenances)!=1:raise ValueError('Hold model/version, grader and provenance fixed')
     pairs=sorted({(task,trial) for task,trial,_ in records});regressions=[];summaries={}
     for task,trial in pairs:
         if any((task,trial,arm) not in records for arm in ('A','B','A+B')):raise ValueError('Unmatched evaluation arms')
@@ -100,6 +114,7 @@ def interference(document):
         for field in ('tokens','duration_ms'):
             values=[r[field] for r in rows if r.get(field) is not None]
             summaries[arm][field+'_mean']=statistics.mean(values) if len(values)==len(rows) else None
-    return {'passed':not regressions,'non_regression':not regressions,'regressions':regressions,'arms':summaries,
-            'provenance':next(iter(provenances)),'native_measurements_present':provenances=={'native'},
+    all_accepted=summaries['A+B']['accepted']==summaries['A+B']['runs']
+    return {'analysis_valid':True,'passed':not regressions and all_accepted,'all_combined_acceptance_passed':all_accepted,'non_regression':not regressions,'regressions':regressions,'arms':summaries,
+            'provenance':next(iter(provenances)),'skill_bundles':bundles,'grader_version':next(iter(settings))[2],'native_measurements_present':provenances=={'native'},
             'native_release_eligible':False,'scope':'imported outcomes, authenticity and semantic grading require independent review; no model requests sent'}

@@ -3,7 +3,7 @@
 Đọc `docs/ARCHITECTURE.md` theo nhu cầu, không tải toàn bộ catalog.
 Chạy `python3 -m omega doctor` và `python3 -m omega map` trước thay đổi.
 Router: `python3 -m omega plan --complexity low|medium|high [--conflict]`.
-Chỉ có 5 skill và 3 agent đã triển khai; các mục planned không được coi là khả dụng.
+Có 13 skill (5 nền tảng + 8 extension) và 3 agent spec; các mục planned không được coi là khả dụng. Native skill/agent runtime vẫn chưa nghiệm thu.
 Mỗi agent nhận task, phạm vi file, acceptance, giới hạn, evidence cần trả và branch.
 Tối đa 2 agent cùng lúc, không giao 2 writer trên cùng file; high chạy investigator rồi engineer rồi verifier, chỉ parallel các việc độc lập.
 Không tự cấp quyền, bypass permissions, push/deploy/xóa dữ liệu hoặc sửa ngoài repository khi chưa được duyệt.
@@ -14,4 +14,6 @@ Chạy `python3 -m omega gates` trước báo hoàn tất; tách pass, fail, ski
 Giữ stable skill cho đến benchmark, gates và review theo user authorization hoàn tất. Compare cần eligible_for_review=true; không tự merge/promote.
 Ưu tiên `--compact`; gates dùng `--summary --compact`, mở evidence khi cần. Dùng `context --select PATH:START:END` để giữ nguồn cần thiết, không bỏ acceptance hoặc kiểm thử; đọc `docs/TOKEN_EFFICIENCY.md` khi tối ưu context.
 
-Playbook sâu chỉ đọc phần cần thiết: docs/SKILL_PLAYBOOKS.md. Evidence cần khớp HEAD/source state; memory stale phải xác minh lại. Tests exit 0 thiếu số test thực sự pass chưa đủ ready.
+Hướng dẫn hiện tại chỉ đọc phần cần: docs/INTEROPERABILITY_GUIDE.md. Intent interoperability trong plan chọn audit/policy/handoff; không dispatch tự động. Mỗi workflow/Git/gates/memory có tối đa một owner; skill khác không tự thay owner hoặc nới quyền.
+Trong project khác dùng runner omega_cli.py tuyệt đối với --project-root, không import module omega từ target. .omega/ phải được review ignore và không có state tracked trước khi ghi. External gates cần --gate-config đã review.
+Evidence cần khớp HEAD, nội dung/mode/index và known execution fingerprint; memory stale phải xác minh lại. Tests exit 0 thiếu số test thực sự pass chưa đủ ready. Trước final gates, hoàn thành stage các thay đổi dự kiến.

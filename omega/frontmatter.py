@@ -19,6 +19,7 @@ def scalar(value):
     if value.startswith('[') or value.startswith('{'):
         try:return json.loads(value)
         except ValueError:raise ValueError('Flow YAML must use JSON quoting in this validator')
+    if re.search(r'\s#',value):raise ValueError('Inline YAML comments require manual review')
     if value[0] in '&*!' or '<<:' in value:raise ValueError('YAML tags, anchors and merges require manual review')
     return value
 

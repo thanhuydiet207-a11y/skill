@@ -8,27 +8,25 @@ disable-model-invocation: true
 
 ## Inputs
 
-Change objective, acceptance, diff/risk map, gate config đã review và source state hiện tại. Phân biệt required checks với optional trước khi chạy; không hạ required thành optional sau khi fail.
+Acceptance, diff/risk map, project root và đủ argv build/tests/security/regression đã review. Với project khác, gate config phải tường minh; không dùng command của engine để tuyên bố project đích đạt.
 
 ## Workflow
 
-1. Review argv trong omega/config.json: build/tests/security/regression đều bắt buộc. Không dùng shell expansion, credential trong command hoặc mode bỏ bảo vệ.
-2. Chạy `python3 -m omega gates --summary --compact`. Đọc từng exit code, timeout/output-limit/truncation và workspace_unchanged. Mở success log qua evidence reference khi cần, không chạy lại chỉ để xem output.
-3. Kiểm tra runner đã chạy test thật: pass/fail/error/skipped/expected failure/unexpected success tách riêng. Empty/all-skipped không sẵn sàng. Test phải phủ trigger, negative path và regression có liên quan, không chỉ đếm số lượng.
-4. Với subprocess/filesystem/untrusted input/auth/API/schema, bổ sung review và negative tests tương ứng. Security audit mặc định chỉ scan policy hẹp; không gọi đó là security assurance toàn hệ thống.
-5. Chạy `python3 -m omega rollback-check --compact`; đối chiếu base commit và chiến lược revert. Production/migration rollback cần bài kiểm riêng, không tự reset/clean/revert.
-6. Xem phần quality-gates trong `docs/SKILL_PLAYBOOKS.md` khi điều tra fail; giữ nguyên tiêu chí acceptance và đầu ra người dùng.
+1. Review commands, adapter và prerequisites trước thực thi. Dùng project-workflow-adapter chỉ để lấy proposal; security/regression còn thiếu phải được cấu hình thật, không thay bằng lệnh luôn trả 0.
+2. Chạy `python3 -m omega gates --summary --compact` trong engine; target ngoài dùng runner tuyệt đối, --project-root và --gate-config. Mở output qua evidence refs khi cần, không chạy lại chỉ để xem log.
+3. Đối chiếu outcomes với adapter omega/Jest/Go/JUnit. Zero tests, all-skipped, inconsistent counts hoặc truncated structured output không đủ ready; Go package-pass không phải test. Fixture parser pass không chứng minh mọi framework đã chạy native.
+4. Kiểm tra workspace_unchanged và execution_unchanged. Format/codegen/index thay đổi trong hoặc sau gate làm proof cũ; chạy sau bước ghi file có chủ đích và nêu phần môi trường chưa quan sát.
+5. Với auth/untrusted input/subprocess/filesystem/API/schema, bổ sung review/negative tests đúng rủi ro. Audit mặc định chỉ scan policy hẹp, không phải SAST/secret/dependency assurance.
+6. Chạy `python3 -m omega rollback-check --compact`; review base commit và chiến lược revert. Chi tiết adapter, evidence và giới hạn ở docs/INTEROPERABILITY_GUIDE.md.
 
 ## Evidence
 
-Trả từng gate: argv, outcome, duration, test counts, source fingerprint và artifact path. Liệt kê failed/skipped/unrun cùng lý do; nêu rõ scope của security scan, phần output đã cắt và rollback nào chưa được thực thi.
+Trả argv, adapter, outcome counts, source/runtime fingerprint, duration, timeout/output-limit/truncation và artifact path. Phân biệt failed/skipped/unrun, rollback strategy và rollback thật đã thực thi.
 
 ## Failure handling
 
-Exit 124: timeout; 125: output flood; 127: không khởi chạy. Đọc prefix được giữ, thu hẹp target và kiểm chứng diagnosis. File nguồn đổi trong lúc chạy làm evidence không đáng dùng. Nếu sửa lỗi, dùng repair ledger; tối đa 2 lượt trong deadline, không vô hiệu assertion hoặc bypass verification.
+Exit 124 timeout, 125 output flood, 127 launch failure: đọc prefix/tail, kiểm chứng diagnosis rồi thu hẹp target hoặc sửa prerequisite hợp lệ. Giữ verification và assertions; nếu sửa code thì dùng repair ledger, không lặp vô hạn.
 
 ## Stop conditions
 
-Chỉ báo đạt trong phạm vi checks đã chạy và source còn khớp evidence. Bất kỳ required gate fail/unexplained/unrun thì không tuyên bố ready. Khi hết budget hoặc cần credential/quyền bên ngoài, báo blocker chính xác và phần đã xác minh.
-
-Chạy CLI từ gốc checkout hiện tại, không cần pip install. Quy tắc tổng quát: CLAUDE.md.
+Required check fail/unexplained/unrun hoặc evidence stale thì không báo ready. Chỉ kết luận trong phạm vi runner và môi trường đã quan sát; hooks/MCP unknown và CLI allowed không cấp quyền platform.

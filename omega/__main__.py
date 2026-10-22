@@ -39,15 +39,27 @@ def git(*args, raw=False):
     return result['output'] if raw else result['output'].strip()
 
 
+def runtime_ready():
+    # Do not create project evidence where it could silently enter source control.
+    try:git('check-ignore','--quiet','--','.omega/OMEGA_RUNTIME_CHECK')
+    except ValueError as exc:raise ValueError('Runtime state requires reviewed .omega/ ignore; no ignore file was changed') from exc
+    if git('ls-files','--','.omega'):
+        raise ValueError('Tracked .omega state refused; review existing tracked data before writing runtime state')
+
+
 def save(kind, data):
     from omega.safety import artifact_path
+    runtime_ready()
     directory = artifact_path(ROOT,'.omega/' + kind + '/placeholder',kind,False).parent
-    directory.mkdir(parents=True, exist_ok=True)
     dest = confined(str(directory.relative_to(ROOT) / (str(time.time_ns())+'-'+uuid.uuid4().hex[:8]+'.json')))
     payload = {'schema': 1, 'project': str(ROOT), 'head': git('rev-parse','HEAD'),
                'created_utc': __import__('datetime').datetime.now(__import__('datetime').timezone.utc).isoformat(), **data}
+    encoded=json.dumps(payload,indent=2,ensure_ascii=False)+'\n'
+    from omega.io import bounded_json
+    bounded_json(encoded)  # Refuse a record that the bounded reader could not load.
+    directory.mkdir(parents=True, exist_ok=True)
     with os.fdopen(os.open(dest,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,0o600),'w',encoding='utf-8') as out:
-        out.write(json.dumps(payload, indent=2, ensure_ascii=False)+'\n')
+        out.write(encoded)
         out.flush();os.fsync(out.fileno())
     return str(dest.relative_to(ROOT))
 
@@ -66,7 +78,7 @@ def plan(complexity, conflict=False, intent="change", workflow=None):
     contract=None
     if workflow is not None:
         from omega.interop import handoff
-        contract=handoff(ROOT,workflow)
+        contract=handoff(ROOT,workflow,CONFIG['limits']['max_agents'])
     return {'complexity': complexity,'intent':intent,'workflow_contract':contract, 'agents': roles[complexity],
             'schedule': 'sequential; parallel only independent read tasks',
             'max_concurrent_agents': min(2,CONFIG['limits']['max_agents']), 'isolation': 'worktree' if conflict else 'branch',
@@ -92,8 +104,22 @@ def inventory():
             used += len(json.dumps(entry))
         except ValueError:
             skipped.append(name)
-    return {'files': safe, 'omitted': skipped[:20], 'omitted_count':len(skipped),'omitted_list_truncated':len(skipped)>20, 'status': git('status','--short')[:4000],
+    status=git('status','--short')
+    result={'files': safe, 'omitted': skipped[:20], 'omitted_count':len(skipped),'omitted_list_truncated':len(skipped)>20,
+            'status':status[:4000], 'status_truncated':len(status)>4000,
             'note': 'Metadata only; no file contents or credential discovery'}
+    # Bound the full JSON envelope, including long escaped paths and status.
+    def fits():return len(json.dumps(result,ensure_ascii=False,indent=2).encode())<=CONFIG['limits']['max_context_bytes']
+    while result['files'] and not fits():
+        removed=result['files'].pop()['path'];result['omitted_count']+=1
+        if len(result['omitted'])<20:result['omitted'].append(removed)
+        result['omitted_list_truncated']=result['omitted_count']>len(result['omitted'])
+    while result['omitted'] and not fits():
+        result['omitted'].pop();result['omitted_list_truncated']=True
+    while result['status'] and not fits():
+        result['status']=result['status'][:len(result['status'])//2];result['status_truncated']=True
+    if not fits():raise ValueError('Inventory byte budget too small for metadata envelope')
+    return result
 
 
 def doctor():
@@ -105,6 +131,7 @@ def doctor():
         binary=str(local);source='project-local'
     native={'available':False}
     if binary:
+        runtime_ready()
         state=artifact_path(ROOT,'.omega/claude-state/runtime.marker','claude-state',False).parent
         state.mkdir(parents=True,exist_ok=True)
         environment=dict(os.environ);environment['CLAUDE_CONFIG_DIR']=str(state)
@@ -200,7 +227,7 @@ def _dispatch():
         from omega.safety import artifact_path
         artifact_path(ROOT,args.gate_config,'configs')
         policy=read_json(ROOT,args.gate_config)
-        if not isinstance(policy,dict) or policy.get('schema')!=1 or set(policy)-{'schema','gates','test_adapter'}:raise ValueError('Invalid gate policy schema')
+        if not isinstance(policy,dict) or type(policy.get('schema')) is not int or policy.get('schema')!=1 or set(policy)-{'schema','gates','test_adapter'}:raise ValueError('Invalid gate policy schema')
         if policy.get('test_adapter','omega') not in ('omega','go','jest','junit'):raise ValueError('Unknown test adapter')
         CONFIG={**CONFIG,'gates':policy.get('gates'),'test_adapter':policy.get('test_adapter','omega')}
     if ROOT!=ENGINE_ROOT and args.project_root:
@@ -215,11 +242,11 @@ def _dispatch():
         from omega.interop import compatibility,handoff,project_adapter
         from omega.analysis_tools import context_check,reconcile_evidence,reconcile_memory,interference
         document=read_json(ROOT,args.input) if args.input else None
-        if args.command=='skill-compatibility-audit':result=compatibility(ROOT,args.skill_root,args.hook_config,document)
+        if args.command=='skill-compatibility-audit':result=compatibility(ROOT,args.skill_root,args.hook_config,document,CONFIG['limits']['max_agents'])
         elif args.command=='effective-policy-explainer':
             from omega.policy import explain
             result=explain(document,ROOT)
-        elif args.command=='workflow-handoff-contract':result=handoff(ROOT,document)
+        elif args.command=='workflow-handoff-contract':result=handoff(ROOT,document,CONFIG['limits']['max_agents'])
         elif args.command=='skill-interference-benchmark':result=interference(document)
         elif args.command=='project-workflow-adapter':result=project_adapter(ROOT)
         elif args.command=='evidence-reconciler':result=reconcile_evidence(ROOT,args.evidence or ([args.record] if args.record else []),git,CONFIG)
@@ -254,7 +281,8 @@ def _dispatch():
             from omega.records import workspace, test_outcomes, execution_context
             assessment=assess(ROOT,args.skill,args.candidate)
             before=workspace(ROOT,git);execution=execution_context(ROOT,CONFIG)
-            scenarios=run(['python3','-m','omega.test_runner','--start','tests','--pattern','test_workflows.py'],CONFIG['limits']['max_gate_seconds'])
+            pattern='test_new_skill_workflows.py' if args.skill.startswith('omega-') else 'test_workflows.py'
+            scenarios=run(['python3','-m','omega.test_runner','--start','tests','--pattern',pattern],CONFIG['limits']['max_gate_seconds'])
             result={'kind':'skill-evaluation','skill':args.skill,'assessment':assessment,
                     'candidate_sha256':assessment['sha256'],'candidate_bundle_sha256':assessment['bundle_sha256'],'suite_sha256':suite_digest(ROOT),
                     'workspace_sha256':before,'workspace_unchanged':before==workspace(ROOT,git),
@@ -282,7 +310,8 @@ def _dispatch():
     elif args.command=='change-check':
         from omega.change import check
         if not args.record:raise ValueError('--record required')
-        result=check(ROOT,args.record,git,CONFIG['limits'],args.evidence,CONFIG['gates'],CONFIG.get('test_adapter','omega'))
+        from omega.records import execution_context
+        result=check(ROOT,args.record,git,CONFIG['limits'],args.evidence,CONFIG['gates'],CONFIG.get('test_adapter','omega'),execution_context(ROOT,CONFIG)['sha256'])
         code=0 if result['passed'] else 1
     elif args.command=='change-attempt':
         from omega.change import attempt
@@ -306,6 +335,7 @@ def _dispatch():
         branch='omega/'+args.name
         if args.worktree:
             from omega.safety import artifact_path
+            runtime_ready()
             p=artifact_path(ROOT,args.worktree,'worktrees',False)
             if p.exists():raise ValueError('Destination exists')
             result={'output':git('worktree','add','-b',branch,str(p),'HEAD')}
@@ -317,6 +347,7 @@ def _dispatch():
         code=0 if result['diff_check']['exit_code']==0 else 1
     elif args.command=='candidate':
         from omega.skills import assess
+        runtime_ready()
         result={'skill':args.skill,'sha256':fingerprint(args.skill),'skill_contract':assess(ROOT,args.skill),'benchmark':benchmark(),
                 'promotion':'manual only; gates plus review required'}
         from omega.safety import artifact_path

@@ -8,27 +8,25 @@ disable-model-invocation: true
 
 ## Inputs
 
-Objective, acceptance kiểm chứng được, danh sách file chính xác, quyền được cấp và rollback strategy. Bảo toàn thay đổi sẵn có; không stash/reset/clean tự động.
+Objective, acceptance kiểm chứng được, exact paths, quyền người dùng, root đích và rollback strategy. Xác định một owner cho Git để tránh hai framework cùng đổi branch hoặc tạo worktree.
 
 ## Workflow
 
-1. Chạy doctor/map/plan. Từ checkout sạch, dùng `python3 -m omega isolate --name TEN`; chỉ dùng `--worktree .omega/worktrees/TEN` cho việc xung đột đã được ủy quyền. Không sửa trực tiếp main/master.
-2. Trước sửa, chạy `python3 -m omega change-plan --allow PATH --acceptance "input → expected" --compact`. Lặp --allow/--acceptance theo nhu cầu; lưu record được trả. Mỗi task có deadline và tối đa 2 lượt sửa sau lỗi.
-3. Tái hiện trigger, viết hoặc dùng regression có thể fail đúng nguyên nhân. Thay đổi nhỏ trong scope; không trộn refactor không liên quan hoặc tự thêm dependency.
-4. Khi có lỗi, ghi hypothesis và phép kiểm chứng; trước lượt sửa tiếp chạy `python3 -m omega change-attempt --record RECORD --reason "chẩn đoán mới" --compact`. Không lặp lại lệnh không có thông tin mới.
-5. Chạy `python3 -m omega gates --summary --compact`; dùng `python3 -m omega change-check --record RECORD --evidence EVIDENCE --compact`. Review diff và acceptance thủ công; scope pass chưa chứng minh chức năng.
-6. Chạy rollback-check, ghi evidence/memory và bàn giao cho verifier độc lập khi rủi ro đủ lớn. Xem phần controlled-change trong `docs/SKILL_PLAYBOOKS.md` khi cần chi tiết.
+1. Chạy doctor/map/plan; dùng `python3 -m omega isolate --name TEN` khi cần branch sạch. Worktree chỉ cho xung đột đã được ủy quyền; không tạo lồng isolation có sẵn hoặc sửa trực tiếp main/master.
+2. Chạy `python3 -m omega change-plan --allow PATH --acceptance "input → expected" --compact`. Nếu có thay đổi người dùng đã được review, thêm --include-existing để chụp baseline; không stash/reset/clean. Merge conflict phải giải quyết trước.
+3. Tái hiện trigger bằng regression có thể fail, sửa tối thiểu trong scope. Trước lượt sửa sau lỗi chạy `python3 -m omega change-attempt --record RECORD --reason "chẩn đoán mới" --compact`; không né ledger/deadline bằng task giả mới.
+4. Hoàn thành format/codegen và stage các thay đổi dự kiến trước final validation. Chạy `python3 -m omega gates --summary --compact`, rồi `python3 -m omega change-check --record RECORD --evidence EVIDENCE --compact` với config adapter đã review nếu là project khác.
+5. Cần scope_passed và ready_for_review; passed về scope riêng không chứng minh acceptance. Gate proof phải khớp source/mode/index, HEAD và known execution context; dùng evidence-reconciler khi chưa rõ vì sao stale.
+6. Review diff/acceptance/rollback và handoff độc lập theo rủi ro. Đọc docs/INTEROPERABILITY_GUIDE.md cho runner tuyệt đối, target root và ownership contract.
 
 ## Evidence
 
-Trả base HEAD, branch, change-plan, changed paths, trigger trước/sau, gate record, acceptance đã/chưa xác minh, rollback strategy và rủi ro. Phân biệt code đã sửa với hành vi đã chạy thành công.
+Trả baseline, scope, existing changes được giữ, trigger trước/sau, gate record và acceptance đã/chưa xác minh. Chỉ ra global policy/dependencies/dịch vụ chưa được fingerprint đầy đủ.
 
 ## Failure handling
 
-Ngoài scope/branch/HEAD thay đổi: dừng sửa, review kế hoạch mới; không tự mở rộng scope. Evidence stale: kiểm tra source thay đổi gì rồi chạy lại checks liên quan. Nếu lỗi setup, sửa setup được phép; lỗi application cần regression. Không che fail bằng đổi assertion.
+Ngoài scope, branch/HEAD đổi, source/index/runtime drift: dừng sửa và review nguyên nhân trước replan/rerun. Không tự nới paths, hạ required gate, đổi assertion hoặc ghi lại hash để làm evidence hợp lệ.
 
 ## Stop conditions
 
-Dừng khi acceptance và mọi required gate đạt trên source hiện tại, hoặc hết deadline/2 lượt sửa/thiếu quyền thật sự. Không tạo task mới để né budget. Không push, deploy, xóa dữ liệu hay sửa ngoài repository nếu chưa có user authorization cho hành động đó.
-
-Chạy CLI từ gốc checkout hiện tại, không cần pip install. Quy tắc tổng quát: CLAUDE.md.
+Dừng khi acceptance và required gates đạt trong phạm vi đã kiểm chứng, hoặc hết checkpoint 30 phút/2 lượt sửa/thiếu quyền thật. Không push/deploy/xóa dữ liệu hoặc sửa ngoài repository nếu chưa có user authorization tương ứng.

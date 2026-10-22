@@ -1,4 +1,4 @@
-name: OMEGA local contracts
+name: OMEGA offline contracts
 on:
   push:
   pull_request:
@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           persist-credentials: false
-      - name: Build, tests, narrow policy audit, router and skill regression
+      - name: Build, CLI workflows, adapters, narrow policy audit and 13 skill contracts
         run: python3 -m omega gates
       - name: Broken-to-fixed workflow fixture
         run: python3 benchmarks/demo.py

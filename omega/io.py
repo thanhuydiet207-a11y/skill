@@ -13,6 +13,11 @@ def read_json(root,name):
         path=artifact_path(root,name,rel.parts[1])
     else:path=source_path(root,name)
     if not path.is_file() or path.stat().st_size>1048576:raise ValueError('Missing or oversized JSON input')
+    return bounded_json(path.read_text(encoding='utf-8'))
+
+
+def bounded_json(text):
+    if not isinstance(text,str) or len(text.encode())>1048576:raise ValueError('Oversized JSON input')
     def unique(pairs):
         data={}
         for key,value in pairs:
@@ -20,7 +25,7 @@ def read_json(root,name):
             data[key]=value
         return data
     def constant(value):raise ValueError('Non-finite JSON number')
-    try:data=json.loads(path.read_text(encoding='utf-8'),object_pairs_hook=unique,parse_constant=constant)
+    try:data=json.loads(text,object_pairs_hook=unique,parse_constant=constant)
     except RecursionError:raise ValueError('JSON input too deeply nested')
     def bound(value,depth=0):
         if depth>24:raise ValueError('JSON input too deeply nested')

@@ -2,7 +2,7 @@
 
 ## Yêu cầu
 
-Python >=3.10, Git, POSIX (kill process group và flock), checkout này. Không cần pip/npm install. Chạy mọi lệnh ở gốc repository. Không ghi bên ngoài repository; branch/worktree do người dùng ủy quyền và cleanup cần review riêng.
+Python >=3.10, Git, POSIX (kill process group và flock), checkout này. Không cần pip/npm install. Trong engine dùng module; project khác dùng omega_cli.py tuyệt đối và --project-root theo [hướng dẫn 0.3](INTEROPERABILITY_GUIDE.md). Không ghi bên ngoài repository đích; branch/worktree do người dùng ủy quyền và cleanup cần review riêng. Trước khi tạo state, CLI kiểm tra .omega/ đã ignore và chưa có file tracked, không tự sửa ignore.
 
 ```bash
 python3 -m omega doctor
@@ -24,6 +24,21 @@ Kết quả JSON ra stdout; lỗi CLI exit 2, gate fail exit 1. `gates` lưu rec
 | project-memory | `python3 -m omega memory --title "ADR: stdlib" --body "Dùng stdlib để tránh dependency; evidence: ..."` | JSON commit-stamped |
 | skill-benchmark | `python3 -m omega benchmark` | từng router case pass/fail |
 
+8 skill extension dùng prefix `omega-` trong tên SKILL.md và command tương ứng bỏ prefix:
+
+| Skill | Command | Kết quả |
+|---|---|---|
+| omega-skill-compatibility-audit | `skill-compatibility-audit --skill-root .claude/skills` | static collisions, selected scopes |
+| omega-effective-policy-explainer | `effective-policy-explainer --input INPUT` | quyết định OMEGA, platform unknown |
+| omega-workflow-handoff-contract | `workflow-handoff-contract --input INPUT` | DAG/owners/writers, lịch đề xuất |
+| omega-skill-interference-benchmark | `skill-interference-benchmark --input INPUT` | A/B/A+B acceptance, provenance, regression |
+| omega-project-workflow-adapter | `project-workflow-adapter` | proposal cần review, exit 1 |
+| omega-evidence-reconciler | `evidence-reconciler --record RECORD` | current/stale gate evidence |
+| omega-memory-reconciliation | `memory-reconciliation --input INPUT` | conflicting/stale memory; giữ nguyên records |
+| omega-context-sufficiency-check | `context-sufficiency-check --input INPUT` | invariants/ranges/hash/content |
+
+Chạy bằng `python3 -m omega COMMAND --compact`. Schema và giới hạn từng command: [INTEROPERABILITY_GUIDE.md](INTEROPERABILITY_GUIDE.md). Không nạp toàn bộ 13 skill vào mọi task.
+
 Trong Claude đã tương thích, gọi tường minh `/repo-map`, `/controlled-change`, `/quality-gates`, `/project-memory`, `/skill-benchmark`. Đây là cú pháp dự kiến cần xác minh bằng help/version của bản cài; chưa chạy ở môi trường này. CLI thực hiện được độc lập với Claude.
 
 ## Branch, worktree, rollback
@@ -44,7 +59,7 @@ Worktree phải nằm trong `.omega/worktrees/`, không symlink thoát repositor
 
 ## Hook adapter (chưa kích hoạt)
 
-`omega/hook.py` nhận JSON stdin và chỉ xử lý PreToolUse cho Write/Edit/Bash. Bash allowlist exact-string không chấp nhận shell ghép lệnh. Edit/Write bị chặn ngoài checkout và các vùng policy. Tool không biết/malformed bị chặn. Không có `.claude/settings.json`, nên adapter không được tự chạy.
+`omega/hook.py` nhận JSON stdin và chỉ xử lý PreToolUse cho Write/Edit/Bash. Bash dùng grammar argv chung với CLI, hỗ trợ --compact/--summary và path đã review, từ chối shell ghép lệnh/substitution. Edit/Write bị chặn ngoài checkout và các vùng policy. Tool không biết/malformed bị chặn. Không có `.claude/settings.json`, nên adapter không được tự chạy. Policy explainer không phân giải managed/user/plugin policy của Claude.
 
 Test trực tiếp (expected exit 2):
 
@@ -63,8 +78,9 @@ MCP không cần cho workflow local này và đang tắt. Khi có nhu cầu: ch�
 ```bash
 python3 -m omega candidate --skill repo-map
 # Ghi đường dẫn baseline và candidate được in ra; chỉ sửa file candidate .omega/candidates/*.md.
-python3 -m omega compare --baseline .omega/baselines/DUONG_DAN_THUC_TE.json
-python3 -m omega gates
+python3 -m omega gates --summary --compact
+python3 -m omega benchmark --skill repo-map --candidate .omega/candidates/DUONG_DAN_THUC_TE.md --compact
+python3 -m omega compare --baseline .omega/baselines/DUONG_DAN_THUC_TE.json --evidence .omega/evidence/GATE_THUC_TE.json --evidence .omega/evidence/SCENARIO_THUC_TE.json --compact
 ```
 
 CLI ràng buộc SHA-256 của toàn fixture và implementation benchmark, so suite/case IDs và yêu cầu baseline/candidate đều pass. Candidate là bản sao riêng trong `.omega/candidates/`; stable phải giữ nguyên SHA-256 baseline, nếu đổi thì compare thất bại. SHA candidate trước/sau được ghi để review. Không tự copy, promote, merge hoặc đổi stable. Baseline local không có chữ ký chống giả; reviewer phải tin cậy artifact và đối chiếu Git. Contract suite 3 case không chứng minh chất lượng lời khuyên hoặc hiệu quả skill. Native benchmark giai đoạn kế dùng cùng repo/task, ít nhất 5 lần/variant, model/version cố định, chấm acceptance, patch scope, regression, evidence, latency, tokens và chi phí. Chưa có dữ liệu thì không ghi số tưởng tượng. Thay fixture/suite cần baseline mới và review riêng.
@@ -83,8 +99,8 @@ CLI ràng buộc SHA-256 của toàn fixture và implementation benchmark, so su
 
 ## Context tiết kiệm
 
-Dùng `--compact` để giữ nguyên JSON với ít khoảng trắng hơn; `gates --summary --compact` vẫn chạy mọi gate và giữ log bằng evidence reference. `context --select PATH:START:END --compact` đọc nguồn tường minh. Xem [TOKEN_EFFICIENCY.md](TOKEN_EFFICIENCY.md) để biết budget, kiểm tra dữ liệu tương đương và giới hạn số đo. Hook adapter bảo thủ chưa allowlist mọi biến thể lệnh mới; nếu sau này kích hoạt hook, cần review allowlist đúng lệnh, không tự nới quyền.
+Dùng `--compact` để giữ nguyên JSON với ít khoảng trắng hơn; `gates --summary --compact` vẫn chạy mọi gate và giữ log bằng evidence reference. `context --select PATH:START:END --compact` đọc nguồn tường minh. Xem [TOKEN_EFFICIENCY.md](TOKEN_EFFICIENCY.md) để biết budget, kiểm tra dữ liệu tương đương và giới hạn số đo. Hook và CLI nay dùng grammar chung; trước khi kích hoạt native vẫn cần thử allow/deny trong sandbox đúng phiên bản, không tự nới quyền.
 
-## Phiên bản 0.2
+## Lịch sử phiên bản 0.2
 
-5 skill đã có workflow sâu và playbook đọc theo nhu cầu: [SKILL_PLAYBOOKS.md](SKILL_PLAYBOOKS.md). Các lệnh change-plan/change-check/change-attempt, memory-read và benchmark --skill cùng giới hạn mới: [DEEP_HARDENING.md](DEEP_HARDENING.md). Tests dùng `omega.test_runner`; gate tests cần marker kết quả có ít nhất một test thực sự pass, command exit 0 đơn thuần không đủ. Gate config khác runner cần adapter cung cấp hợp đồng outcomes tương ứng trước khi dùng.
+5 skill đã có workflow sâu trong 0.2; playbook [SKILL_PLAYBOOKS.md](SKILL_PLAYBOOKS.md) và [DEEP_HARDENING.md](DEEP_HARDENING.md) là lịch sử. Bản 0.3 dùng [INTEROPERABILITY_GUIDE.md](INTEROPERABILITY_GUIDE.md). Tests mặc định dùng omega.test_runner; external test_adapter hỗ trợ omega/Jest/Go/JUnit với outcome thật, không nhận exit 0 đơn thuần là đủ.

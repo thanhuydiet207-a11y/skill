@@ -1,45 +1,39 @@
 # Kết quả thực thi
 
-Bản 0.2 hiện tại: **82 tests pass**, required gates, demo và benchmark context đạt. Mỗi skill có offline contract và workflow scenario evaluation; xem [deep-hardening.json](evidence/deep-hardening.json) và [giới hạn kiểm chứng](DEEP_HARDENING.md). Các báo cáo bootstrap/token bên dưới là bằng chứng lịch sử, không phải hash nguồn hiện tại.
+Bản 0.3: **144 tests riêng biệt pass**, build/tests/security/regression đạt, 13 skill có offline contract và scenario CLI. Báo cáo máy đọc: [interop-upgrade.json](evidence/interop-upgrade.json); đánh giá từng skill và các điểm chưa hoàn thiện: [UPGRADE_0_3.md](UPGRADE_0_3.md).
 
-Demo mới đã sửa trường hợp timestamp/size cache Python khiến test đọc bytecode cũ khi fixture sửa nhanh: compile bắt buộc với `checked-hash`; không xóa cache hoặc trì hoãn bằng sleep.
+## Phạm vi kiểm chứng hiện tại
 
-Bằng chứng máy đọc: [local-validation.json](evidence/local-validation.json), gồm argv, exit code, duration, output, hash nguồn và kết quả demo. Log local đầy đủ theo mức giữ output nằm trong `.omega/` (không commit). Record được review thủ công, không phải chứng thực ký số.
+- 82 tests baseline 0.2; sau nâng cấp có 144 tests riêng biệt, không cộng các lần chạy lặp thành test mới.
+- 5 skill nền tảng dùng chung nhóm 20 workflow tests; 8 extension dùng chung nhóm 8 scenario CLI. Chạy theo từng skill kiểm tra kết nối công cụ/contract, không phải 13 phép đánh giá chất lượng độc lập.
+- Build compile Python; security chỉ là audit pattern bypass trong cấu hình Claude; regression gồm 3 router cases và 13 offline contracts. Không thay SAST, dependency audit hoặc native LLM evaluation.
+- Demo tạo Git fixture có bug cộng thành trừ, thấy tests đỏ trước sửa và xanh sau sửa; xác nhận branch/worktree, memory và Git baseline còn truy cập được. Không deploy hoặc rollback production.
+- Benchmark efficiency kiểm tra JSON pretty/compact tương đương dữ liệu và khôi phục gate summary từ evidence. Đo UTF-8 bytes, không đo token provider hay output LLM giống hệt.
+- External Python target có integration test thực thi riêng. Jest/Go/JUnit outcome adapters kiểm tra bằng parser fixtures, chưa chạy native đủ ba framework.
+- Candidate/compare kiểm tra bundle/source/index/runtime freshness và yêu cầu gate + scenario evidence cho eligible_for_review. Native release luôn chưa được tự duyệt.
 
-## Đã chạy
+Source manifest trong báo cáo ràng buộc các file code/tests/benchmarks/skills/docs đã kiểm tra, loại trừ chính report để tránh self-reference. Record gates đầy đủ chứa HEAD và workspace fingerprint tại thời điểm chạy. Commit report hoặc đổi HEAD làm proof đó thành lịch sử; không tự coi proof local cũ là current sau publication. Báo cáo không có chữ ký chứng thực.
 
-- Python 3.12.14; Git 2.52.0; không cài package mới.
-- Build `compileall`: exit 0.
-- 21 unittest: pass, gồm router, catalog, candidate/stable lifecycle, thay suite, command failure, timeout, shell literal, path traversal, symlink escape, dirty tree, memory filtering và hook deny.
-- Regression: 3 router contract cases pass. Đây không phải số liệu hiệu quả LLM.
-- Security gate: narrow bypass-pattern audit pass; không phải SAST/dependency/security assurance toàn diện.
-- Demo: test cộng số fail trước sửa và pass sau sửa; branch `omega/demo-fix`, worktree riêng, memory/evidence, baseline Git truy xuất được, candidate pass và stable giữ nguyên.
-- `rollback-check`: HEAD hợp lệ và diff check exit 0; không rollback production.
-- Candidate baseline/candidate compare: pass; không promote hoặc sửa stable.
+## Các giới hạn thực tế
 
-## Lỗi thực tế đã xử lý
+Claude Code 2.1.308 có version/help chạy được; phiên xác thực/native task chưa được nghiệm thu. Không tự đăng ký hook hoặc MCP. Doctor trả trạng thái hiệu lực external là unknown. Không kết luận skill tương thích native từ static audit, contract score hoặc fixture kết quả A/B.
 
-| Vấn đề | Xử lý |
-|---|---|
-| Candidate ban đầu so với file stable trực tiếp | Tạo candidate riêng, reject nếu stable đổi |
-| Benchmark chỉ so tên suite và ID | Hash full fixture và implementation vào baseline |
-| Output Git có thể cắt im lặng | Flag truncation và từ chối dùng Git control data thiếu |
-| Hook có thể sửa `.env` | Chặn `.env` và `.env.*`; adapter vẫn tắt |
+GitHub Actions workflow được cấu hình để chạy cùng checks. API Actions từ môi trường từng trả Forbidden; chỉ trạng thái CI quan sát được mới được báo là pass. Bằng chứng local và trạng thái CI là hai thông tin riêng.
 
-## Lịch sử kiểm tra ban đầu và các giới hạn
+Runtime fingerprint chỉ bao phủ config, source/index, metadata tool và project policy đã liệt kê; không bao phủ toàn bộ ignored dependencies, services, managed/global policy hoặc model API. Memory/benchmark local có thể bị sửa bởi người có quyền filesystem: reviewer phải đối chiếu provenance.
 
-- Ban đầu không tìm thấy Claude. Đợt 0.2 đã cài tool cục bộ 2.1.308 và chạy version/help; chưa có phiên xác thực nên slash skills/native agents/hooks vẫn chưa được nghiệm thu.
-- Tải docs chính thức `https://code.claude.com/docs/en/{hooks,sub-agents,skills}` trả HTTP 403. Không đoán schema rồi bật hook.
-- Kiểm tra Git đầu tiên báo thiếu xác thực; thao tác sau đó đã thành công qua cấu hình sẵn có, không thêm token. Đã push commit triển khai `0f4033c4ce46940dd6ecd192d7a25e59b9bad36d` lên `omega/bootstrap` và đối chiếu SHA remote bằng `git ls-remote`.
-- CI workflow đã được push. `gh run list` qua `api.github.com` trả `Forbidden`; trạng thái thực thi CI chưa xác minh được từ môi trường này. Không tạo PR hoặc merge vào main.
-- Bộ đếm token/cost, điều phối Claude tự động, native multi-run evaluation, SAST và 31 skill/7 agent roadmap chưa triển khai.
-
-## Chạy lại khi có thay đổi liên quan
+## Chạy lại
 
 ```bash
-python3 -m omega gates
+python3 -m omega doctor --compact
+python3 -m omega gates --summary --compact
 python3 benchmarks/demo.py
-python3 -m omega rollback-check
+python3 benchmarks/token_efficiency.py
+python3 -m omega rollback-check --compact
 ```
 
-Không chạy lặp vô hạn để tăng số lượng kết quả. Thay đổi benchmark cần baseline mới và review; không sửa kỳ vọng chỉ để làm xanh.
+Hoàn thành stage dự kiến trước final gates. Không chạy lặp vô hạn để tăng số liệu; chạy lại khi code, evidence hoặc điều kiện liên quan đổi. Thay benchmark suite cần baseline mới, không sửa kỳ vọng chỉ để làm xanh.
+
+## Báo cáo lịch sử
+
+[local-validation.json](evidence/local-validation.json) là bootstrap (21 tests); [token-efficiency.json](evidence/token-efficiency.json) là tối ưu context ban đầu; [deep-hardening.json](evidence/deep-hardening.json) là 0.2 (82 tests). Hash và trạng thái phát hành trong chúng thuộc các snapshot tương ứng, không phải trạng thái hiện tại.

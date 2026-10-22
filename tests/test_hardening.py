@@ -159,7 +159,7 @@ class CompatibilitySafety(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d);binary=root/'.omega/tools/claude/node_modules/.bin/claude';binary.parent.mkdir(parents=True)
             binary.write_text('#!/bin/sh\nprintf "fixture version\\n"\n');binary.chmod(0o755)
-            with patch.object(app,'ROOT',root),patch.object(app.shutil,'which',return_value=None),patch.object(app,'git',return_value='fixture git'):
+            with patch.object(app,'ROOT',root),patch.object(app.shutil,'which',return_value=None),patch.object(app,'git',side_effect=lambda *a: '' if a[0] in ('ls-files','check-ignore') else 'fixture git'):
                 result=app.doctor()
                 self.assertTrue(result['claude']['available']);self.assertEqual(result['claude']['source'],'project-local')
                 self.assertEqual(result['claude']['exit_code'],0);self.assertTrue((root/'.omega/claude-state').is_dir())

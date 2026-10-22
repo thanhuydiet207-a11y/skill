@@ -11,17 +11,17 @@ from omega.safety import source_path
 
 def bounded_text(path,limit=8192):
     path=Path(path)
-    if path.is_symlink() or not path.is_file() or path.stat().st_size>limit:raise ValueError('Missing, symlink or oversized inspection source')
+    if any(p.is_symlink() for p in (path,*path.parents)) or not path.is_file() or path.stat().st_size>limit:raise ValueError('Missing, symlink or oversized inspection source')
     return path.read_text(encoding='utf-8')
 
 
-def compatibility(root,skill_roots=(),hook_configs=(),contracts=None):
+def compatibility(root,skill_roots=(),hook_configs=(),contracts=None,maximum_agents=2):
     root=Path(root).resolve();roots=list(skill_roots) or [str(root/'.claude/skills')]
     if len(roots)>8 or len(hook_configs)>16:raise ValueError('Inspection root budget exceeded')
     skills=[];findings=[];complete=True;seen=set();hook_events=defaultdict(int)
     for value in roots:
         location=Path(value) if Path(value).is_absolute() else root/value
-        if location.is_symlink() or not location.is_dir():
+        if any(p.is_symlink() for p in (location,*location.parents)) or not location.is_dir():
             findings.append({'kind':'unreadable-root','source':str(location)});complete=False;continue
         location=location.resolve();directories=0
         for directory,dirs,files in os.walk(location,followlinks=False):
@@ -57,34 +57,38 @@ def compatibility(root,skill_roots=(),hook_configs=(),contracts=None):
     for value in hook_configs:
         path=Path(value) if Path(value).is_absolute() else root/value
         try:
-            raw=bounded_text(path,1048576);doc=json.loads(raw)
+            from omega.io import bounded_json
+            raw=bounded_text(path,1048576);doc=bounded_json(raw)
             event_map=doc.get('hooks') if isinstance(doc,dict) else None
-            if not isinstance(event_map,dict):raise ValueError('Invalid hooks object')
+            if not isinstance(event_map,dict) or len(event_map)>32:raise ValueError('Invalid or oversized hooks object')
             for event,entries in event_map.items():
-                if not isinstance(entries,list):raise ValueError('Invalid hook entries')
+                if not re.fullmatch('[A-Z][A-Za-z]{0,63}',event) or not isinstance(entries,list) or len(entries)>64:raise ValueError('Invalid hook entries')
                 for entry in entries:
                     if not isinstance(entry,dict) or not isinstance(entry.get('hooks'),list):raise ValueError('Invalid hook entry')
                     for hook in entry['hooks']:
+                        if len(hooks)>=128:raise ValueError('Hook inspection budget exceeded')
                         if not isinstance(hook,dict):raise ValueError('Invalid hook')
+                        if hook.get('type') not in ('command','prompt','agent'):raise ValueError('Unknown hook type needs review')
                         hook_events[event]+=1
-                        hooks.append({'event':event,'matcher':entry.get('matcher'),'type':hook.get('type'),
-                                      'source':str(path),'command_sha256':hashlib.sha256(str(hook.get('command','')).encode()).hexdigest()})
+                        hooks.append({'event':event,'matcher_sha256':hashlib.sha256(str(entry.get('matcher','')).encode()).hexdigest(),'type':hook.get('type'),
+                                      'source':str(path),'hook_sha256':hashlib.sha256(json.dumps(hook,sort_keys=True).encode()).hexdigest()})
         except (ValueError,OSError):complete=False;findings.append({'kind':'hook-config-needs-review','source':str(path)})
     for event,count in hook_events.items():
         if count>1:findings.append({'kind':'overlapping-hook-event-review','event':event,'count':count})
     if contracts is not None:
         if not isinstance(contracts,dict) or not isinstance(contracts.get('nodes'),list):raise ValueError('Expected a workflow contract object')
-        contract=handoff(root,contracts)
+        contract=handoff(root,contracts,maximum_agents)
         findings.extend({'kind':'workflow-conflict','detail':x} for x in contract['issues'])
     return {'passed':complete and not findings,'complete_for_selected_roots':complete,'skills':skills,'hooks':hooks,
-            'findings':findings,'runtime_resolver_precedence':'unverified','global_scopes_scanned':False,
+            'findings':findings,'native_compatibility_verified':False,'runtime_resolver_precedence':'unverified','global_scopes_scanned':False,
             'scope':'selected explicit files only; static signals do not certify native compatibility'}
 
 
-def handoff(root,document):
+def handoff(root,document,maximum_agents=2):
     if not isinstance(document,dict) or not isinstance(document.get('nodes'),list) or not 1<=len(document['nodes'])<=24:raise ValueError('Expected 1..24 workflow nodes')
-    budget=document.get('max_agents',2)
-    if type(budget) is not int or not 1<=budget<=2:raise ValueError('Workflow agent budget must be 1 or 2')
+    if type(maximum_agents) is not int or not 1<=maximum_agents<=2:raise ValueError('Configured agent budget must be 1 or 2')
+    budget=document.get('max_agents',maximum_agents)
+    if type(budget) is not int or not 1<=budget<=maximum_agents:raise ValueError('Workflow exceeds configured agent budget')
     nodes={};issues=[]
     for node in document['nodes']:
         if not isinstance(node,dict) or not isinstance(node.get('id'),str) or not re.fullmatch('[a-z][a-z0-9-]{0,63}',node['id']) or node['id'] in nodes:raise ValueError('Invalid/duplicate node id')
@@ -92,6 +96,8 @@ def handoff(root,document):
         if type(node.get('agents',1)) is not int or not 0<=node.get('agents',1)<=budget:raise ValueError('Node exceeds agent budget')
         for key in ('after','writes','owns'):
             if not isinstance(node.get(key,[]),list) or any(not isinstance(x,str) for x in node.get(key,[])):raise ValueError('Invalid workflow list')
+        if node['role']!='orchestrator' and node.get('agents',1)==0:raise ValueError('Only the orchestrator can declare zero dispatched agents')
+        if any(len(set(node.get(k,[])))!=len(node.get(k,[])) for k in ('after','writes','owns')):raise ValueError('Duplicate workflow declaration')
         copy=dict(node);copy['writes']=[str(source_path(root,x).relative_to(root)) for x in node.get('writes',[])]
         nodes[node['id']]=copy
     if sum(n['role']=='orchestrator' for n in nodes.values())!=1:issues.append('Exactly one orchestrator is required')
@@ -122,14 +128,16 @@ def handoff(root,document):
                 shared=set(nodes[left]['writes'])&set(nodes[right]['writes'])
                 if shared and left not in ancestors[right] and right not in ancestors[left]:
                     issues.append('Unordered writers '+left+' / '+right+': '+', '.join(sorted(shared)))
-    return {'passed':not issues,'issues':issues,'schedule':batches,'max_agents':budget,
+    return {'passed':not issues,'issues':issues,'schedule':batches,'owners':dict(owners),'max_agents':budget,
             'execution':'validated plan only; this command does not dispatch agents or mutate Git'}
 
 
 def project_adapter(root):
     root=Path(root).resolve();options=[];missing=[]
     if (root/'package.json').is_file():
-        data=json.loads(bounded_text(source_path(root,'package.json'),1048576))
+        from omega.io import bounded_json
+        data=bounded_json(bounded_text(source_path(root,'package.json'),1048576))
+        if not isinstance(data,dict):raise ValueError('Invalid package manifest object')
         scripts=data.get('scripts',{})
         if not isinstance(scripts,dict):raise ValueError('Invalid package scripts')
         options.append({'stack':'node','build':['npm','run','build'] if 'build' in scripts else None,

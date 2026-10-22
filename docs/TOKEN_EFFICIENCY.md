@@ -40,3 +40,7 @@ Chặn path thoát repository, mọi symlink kể cả nằm trong project, bina
 `benchmarks/token_efficiency.py` đo UTF-8 bytes và assert dữ liệu JSON bằng nhau; gate summary được khôi phục từ artifact rồi so với bản đầy đủ. Xem `docs/evidence/token-efficiency.json`. Đây là bằng chứng giảm dung lượng và không mất dữ liệu trong các phép biến đổi đã kiểm tra, **không phải** số token thực tế hoặc chứng minh câu trả lời LLM giống hệt.
 
 Muốn xác minh chất lượng native: chạy cùng task corpus/model/version trước và sau, giữ acceptance và gates, chấm đầy đủ các tiêu chí, đo input/output/cache tokens từ runtime. Không hứa câu chữ LLM luôn giống nhau hoặc một tỷ lệ tiết kiệm token cố định khi chưa đo. Phiên bản tối ưu context ban đầu giữ nguyên stable skill; đợt 0.2 đã nâng cấp 5 skill qua candidate/benchmark/review như báo cáo riêng. Thay đổi benchmark implementation làm baseline suite cũ không tương thích, phải tạo baseline mới, không tự promote skill.
+
+## Bổ sung bản 0.3
+
+Dùng context --input TASK_JSON để giữ acceptance/constraints trong packet và context-sufficiency-check để đối chiếu manifest/ranges/hash/content. Tool chỉ xác minh nguồn đã khai, không tự bảo đảm manifest đủ dependencies. Chọn intent trong plan để nạp nhóm skill cần dùng; không preload 13 skill. Benchmark bytes/equivalence được chạy lại trong báo cáo interop-upgrade, không suy ra token provider từ số byte.

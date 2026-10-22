@@ -8,26 +8,24 @@ disable-model-invocation: true
 
 ## Inputs
 
-Task, acceptance, repository hiện tại và phạm vi đã được giao. Nếu chưa rõ mục tiêu, lập inventory trước; không suy đoán quyền sửa hoặc chạy dịch vụ.
+Objective, acceptance và root Git đích tường minh. Xác định engine ở đâu trước khi đọc/sửa; không coi thư mục làm việc tình cờ là project cần thao tác.
 
 ## Workflow
 
-1. Chạy `python3 -m omega doctor --compact` và `python3 -m omega map --compact`. Đọc Git status, toolchain, manifests, lockfiles, CI, tests và mục omitted. Không dump environment hoặc credential.
-2. Tìm entry point, callers, cấu hình và regression liên quan bằng truy vấn hẹp. Nạp nguồn bằng `python3 -m omega context --select PATH:START:END --compact`; mở rộng khi còn dependency chưa biết.
-3. Tách observed facts, hypotheses và unknowns. Mỗi hypothesis có cách bác bỏ bằng test hoặc functional request; không coi tên file hay port mở là bằng chứng hành vi.
-4. Chọn `python3 -m omega plan --complexity medium --compact`; thêm `--conflict` khi writer có thể xung đột. Low không spawn agent, tối đa 2 agent độc lập đồng thời.
-5. Đọc đúng phần repo-map trong `docs/SKILL_PLAYBOOKS.md` khi cần; trả kế hoạch thay đổi tối thiểu và checks bắt buộc/optional.
+1. Trong engine dùng `python3 -m omega doctor --compact` và `python3 -m omega map --compact`. Project khác phải dùng runner tuyệt đối với --project-root; không copy riêng SKILL.md rồi chạy module không rõ nguồn.
+2. Đọc metadata manifest/CI/test/source và omitted_count; truy vấn entry point, callers, lockfile, toolchain và regression liên quan. Inventory không phải dependency graph đã hoàn chỉnh.
+3. Chỉ nạp nguồn cần thiết bằng context --select. Khi có task manifest, giữ acceptance/constraints và dùng context-sufficiency-check để kiểm tra packet; không gọi byte saving là token saving đã đo.
+4. Chạy `python3 -m omega plan --complexity medium --compact` hoặc cung cấp --input với intent/complexity/conflict/workflow rõ ràng. Với nhiều bộ skill, chạy skill-compatibility-audit và chọn đúng một orchestrator trước giao việc.
+5. Tách observed facts, hypotheses và unknowns; mỗi giả thuyết có test có thể bác bỏ. Đọc đúng phần cần trong docs/INTEROPERABILITY_GUIDE.md, không preload toàn bộ skill/catalog.
 
 ## Evidence
 
-Trả branch/HEAD, current changes, source path:line/hash, dependency/test map liên quan, commands đã chạy, điều chưa biết và acceptance đề xuất. Không gửi toàn repository hoặc toàn log vào handoff.
+Trả project/branch/HEAD, current changes, source path:line/hash, phần inventory bị giới hạn, dependencies cần xem tiếp và checks bắt buộc/optional. Doctor unknown về hook/MCP không có nghĩa chúng bị tắt.
 
 ## Failure handling
 
-Nếu Git output bị cắt hoặc encoding sai: dừng dùng inventory đó và báo cần thu hẹp/tăng giới hạn có review. Nếu thiếu runtime/credentials: hoàn thành phần đọc độc lập, báo operation cụ thể bị chặn. Không tự cài gói hay sửa source để “khảo sát”.
+Git control vượt giới hạn/encoding sai hoặc thiếu root engine: dừng dùng kết quả thiếu, báo operation cụ thể và phần vẫn xác minh được. Không tự cài gói hoặc chạy script của bộ skill đang kiểm tra để “khảo sát”.
 
 ## Stop conditions
 
-Dừng khi đủ dữ kiện giao tác vụ có scope/acceptance/checks, hoặc một prerequisite thật sự ngăn phần việc còn lại. Chưa tái hiện thì không kết luận nguyên nhân; inventory chưa đầy đủ thì không tuyên bố đã đọc hết.
-
-Chạy CLI từ gốc checkout hiện tại, không cần pip install. Quy tắc tổng quát: CLAUDE.md.
+Dừng khi có đủ source, scope, acceptance và workflow owner để giao việc, hoặc một prerequisite thật sự chặn tiến triển. Không kết luận nguyên nhân khi chưa tái hiện; không nói đã đọc toàn repo khi còn omitted.

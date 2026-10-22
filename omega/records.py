@@ -8,13 +8,8 @@ from omega.safety import artifact_path, source_path
 
 def load(root, name, kind):
     path=artifact_path(root,name,kind)
-    def unique(pairs):
-        result={}
-        for key,value in pairs:
-            if key in result:raise ValueError('Duplicate artifact key')
-            result[key]=value
-        return result
-    record=json.loads(path.read_text(encoding='utf-8'),object_pairs_hook=unique)
+    from omega.io import bounded_json
+    record=bounded_json(path.read_text(encoding='utf-8'))
     if not isinstance(record,dict) or type(record.get('schema')) is not int or record.get('schema')!=1 or record.get('project')!=str(Path(root).resolve()):
         raise ValueError('Artifact schema/project mismatch')
     return path,record
@@ -105,13 +100,14 @@ def test_outcomes(result):
 
 
 def valid_gates(record,commands,test_adapter="omega"):
+    if record.get('workspace_unchanged') is not True or record.get('execution_unchanged') is not True:return False
     if record.get('test_adapter','omega')!=test_adapter:return False
     rows=record.get('results')
     if record.get('kind')!='gates' or record.get('passed') is not True or not isinstance(rows,list) or len(rows)!=len(commands):return False
     if not all(isinstance(r,dict) and isinstance(r.get('gate'),str) and r.get('gate') in commands and r.get('command')==commands[r['gate']] and type(r.get('exit_code')) is int and r['exit_code']==0 for r in rows):return False
     if len({r['gate'] for r in rows})!=len(commands):return False
     tests=next((r for r in rows if r['gate']=='tests'),None)
-    return tests is not None and test_outcomes(tests) is not None
+    return tests is not None and tests.get('adapter','omega')==test_adapter and test_outcomes(tests) is not None
 
 
 def execution_context(root,config):

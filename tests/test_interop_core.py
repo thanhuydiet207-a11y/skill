@@ -24,6 +24,14 @@ class PolicyContracts(unittest.TestCase):
         self.assertEqual(result['platform_decision'],'unknown');self.assertTrue(result['allowed'])
     def test_hook_and_cli_grammar_agree_on_invalid_summary(self):
         self.assertFalse(explain(self.event('python3 -m omega map --summary'))['allowed'])
+    def test_evidence_reconciler_record_uses_evidence_namespace(self):
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d);path=root/'.omega/evidence/current.json';path.parent.mkdir(parents=True);path.write_text('{}')
+            event={'hook_event_name':'PreToolUse','cwd':str(root),'tool_name':'Bash',
+                   'tool_input':{'command':'python3 '+str(app.ENGINE_ROOT/'omega_cli.py')+' --project-root '+str(root)+' evidence-reconciler --record .omega/evidence/current.json --compact'}}
+            self.assertTrue(explain(event,root)['allowed'])
+            event['tool_input']['command']=event['tool_input']['command'].replace('evidence/current','memory/current')
+            self.assertFalse(explain(event,root)['allowed'])
 
 
 class OutcomeAdapters(unittest.TestCase):
@@ -94,6 +102,28 @@ class PortableEngine(unittest.TestCase):
     def test_mode_change_invalidates_workspace(self):
         path=self.root/'app.py';path.chmod(0o644);before=workspace(self.root,self.git);path.chmod(0o755)
         self.assertNotEqual(before,workspace(self.root,self.git))
+    def test_unignored_runtime_state_refused_without_modifying_ignore(self):
+        ignore=self.root/'.gitignore';ignore.write_text('__pycache__/\n');before=ignore.read_bytes()
+        result=self.cli('memory','--title','ADR','--body','Use reviewed API')
+        self.assertEqual(result.returncode,2);self.assertIn('requires reviewed .omega/',result.stderr)
+        self.assertFalse((self.root/'.omega/memory').exists());self.assertEqual(ignore.read_bytes(),before)
+    def test_tracked_runtime_state_refused_before_write(self):
+        file=self.root/'.omega/memory/old.json';file.parent.mkdir(parents=True);file.write_text('{}')
+        self.git('add','-f','.omega/memory/old.json')
+        result=self.cli('memory','--title','ADR','--body','Use reviewed API')
+        self.assertEqual(result.returncode,2);self.assertIn('Tracked .omega',result.stderr)
+        self.assertEqual(list(file.parent.iterdir()),[file])
+    def test_map_envelope_bounded_with_visible_omissions_and_status_truncation(self):
+        for i in range(90):(self.root/(str(i)+'x'*100+'.py')).write_text('pass')
+        with patch.object(app,'ROOT',self.root),patch.object(app,'CONFIG',{**app.CONFIG,'limits':{**app.CONFIG['limits'],'max_context_bytes':3000}}):
+            data=app.inventory()
+        self.assertLessEqual(len(json.dumps(data,ensure_ascii=False,indent=2).encode()),3000)
+        self.assertGreater(data['omitted_count'],0);self.assertTrue(data['status_truncated'])
     def test_doctor_reports_unknown_external_state(self):
         with patch.object(app.shutil,'which',return_value=None):
             data=app.doctor();self.assertEqual(data['hooks_enabled'],'unknown');self.assertEqual(data['mcp_enabled'],'unknown')
+
+class AdapterMalformedInput(unittest.TestCase):
+    def test_malformed_result_shape_does_not_crash(self):
+        for result in (None,[],{}, {'exit_code':0,'output':'','output_tail':[]}, {'exit_code':0,'output':'','output_tail':{'bad':'shape'}}):
+            self.assertIsNone(outcomes(result,'omega'))

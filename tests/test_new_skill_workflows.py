@@ -64,9 +64,12 @@ class NewSkillWorkflows(unittest.TestCase):
         p,r=self.cli('project-workflow-adapter');self.assertEqual(p.returncode,1)
         self.assertEqual(r['proposals'][0]['tests'],['npm','test','--','--json']);self.assertFalse(r['dependencies_installed'])
         self.assertFalse((self.root/'.omega/configs').exists())
+        for invalid in ('[]','['*1100+'0'+']'*1100):
+            (self.root/'package.json').write_text(invalid)
+            p,r=self.cli('project-workflow-adapter');self.assertEqual(p.returncode,2);self.assertNotIn('Traceback',p.stderr)
     def test_evidence_reconciler_cli_rejects_source_drift(self):
         marker='OMEGA_TEST_RESULT '+json.dumps({'run':1,'passed':1,'failed':0,'errors':0,'skipped':0,'expected_failures':0,'unexpected_successes':0})
-        ev=app.save('evidence',{'kind':'gates','passed':True,'workspace_unchanged':True,'execution_fingerprint':execution_context(self.root,app.CONFIG)['sha256'],
+        ev=app.save('evidence',{'kind':'gates','passed':True,'execution_unchanged':True,'workspace_unchanged':True,'execution_fingerprint':execution_context(self.root,app.CONFIG)['sha256'],
             'workspace_sha256':workspace(self.root,self.git),'results':[{'gate':k,'command':v,'exit_code':0,'output':marker if k=='tests' else ''} for k,v in app.CONFIG['gates'].items()]})
         p,r=self.cli('evidence-reconciler','--record',ev);self.assertEqual(p.returncode,0,p.stderr)
         (self.root/'app.py').write_text('changed')
@@ -85,5 +88,5 @@ class NewSkillWorkflows(unittest.TestCase):
         p['sources'][0]['content']='faked';name=self.document('context.json',{'requirements':requirements,'packet':p})
         process,result=self.cli('context-sufficiency-check','--input',name);self.assertEqual(process.returncode,1)
     def runs(self):
-        return {'runs':[{'task_id':'task','trial':0,'arm':arm,'model':'fixture','model_version':'1','prompt_sha256':'a'*64,
+        return {'runs':[{'task_id':'task','trial':0,'arm':arm,'model':'fixture','model_version':'1','grader_version':'fixture-v1','skill_bundles':{label:('a' if label=='A' else 'b')*64 for label in (('A','B') if arm=='A+B' else (arm,))},'prompt_sha256':'a'*64,
                          'acceptance':{'correct':True},'tokens':100+i*10,'duration_ms':10,'provenance':'fixture'} for i,arm in enumerate(('A','B','A+B'))]}

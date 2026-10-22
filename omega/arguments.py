@@ -24,7 +24,6 @@ def parser(policy=False):
     for flag in ('select','allow','acceptance','evidence','skill-root','hook-config'):
         p.add_argument('--'+flag,action='append',default=[])
     p.add_argument('--max-bytes',type=int,default=24000)
-    p.add_argument('--adapter',choices=['omega','go','jest','junit'],default='omega')
     return p
 
 

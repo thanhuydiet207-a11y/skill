@@ -14,7 +14,7 @@ class InteropSafety(unittest.TestCase):
         self.assertTrue(doc['supported']);self.assertEqual(doc['fields']['metadata'],{'version':'1'})
         self.assertEqual(doc['fields']['description'],'First line second line')
     def test_yaml_tags_and_duplicate_keys_require_review(self):
-        for fields in ('name: !execute payload','name: sample\nname: other','metadata:\n  key: one\n  key: two'):
+        for fields in ('name: !execute payload','name: sample\nname: other','metadata:\n  key: one\n  key: two','disable-model-invocation: true # native YAML comment'):
             self.assertFalse(parse('---\n'+fields+'\n---\nBody')['supported'])
     def test_empty_contract_sections_no_longer_score_full(self):
         with tempfile.TemporaryDirectory() as d:
@@ -73,7 +73,7 @@ class InteropSafety(unittest.TestCase):
             result=compatibility(root,[str(root/'skills')],[str(path)])
             self.assertNotIn('private-value-not-for-output',json.dumps(result))
     def runs(self):
-        return {'runs':[{'task_id':'t','trial':0,'arm':arm,'model':'m','model_version':'v','prompt_sha256':'a'*64,'acceptance':{'correct':True},'provenance':'fixture'} for arm in ('A','B','A+B')]}
+        return {'runs':[{'task_id':'t','trial':0,'arm':arm,'model':'m','model_version':'v','grader_version':'fixture-v1','skill_bundles':{label:('a' if label=='A' else 'b')*64 for label in (('A','B') if arm=='A+B' else (arm,))},'prompt_sha256':'a'*64,'acceptance':{'correct':True},'provenance':'fixture'} for arm in ('A','B','A+B')]}
     def test_interference_rejects_missing_arm_changed_prompt_and_model(self):
         for kind in ('missing','prompt','model','criteria','duplicate'):
             d=self.runs()
@@ -87,3 +87,73 @@ class InteropSafety(unittest.TestCase):
         report=interference(self.runs());self.assertTrue(report['passed']);self.assertFalse(report['native_measurements_present']);self.assertFalse(report['native_release_eligible'])
     def test_usage_unknown_is_not_reported_as_zero(self):
         report=interference(self.runs());self.assertIsNone(report['arms']['A']['tokens_mean'])
+
+class ReviewRegressions(unittest.TestCase):
+    def test_interference_bundle_identity_fixed_across_arms(self):
+        d=self.runs();d['runs'][2]['skill_bundles']['A']='c'*64
+        with self.assertRaisesRegex(ValueError,'bundle changed'):interference(d)
+    def test_interference_grader_and_bundle_provenance_required(self):
+        for change in ('grader','missing-bundle','extra-bundle'):
+            d=self.runs()
+            if change=='grader':d['runs'][0]['grader_version']='other'
+            elif change=='missing-bundle':d['runs'][0].pop('skill_bundles')
+            else:d['runs'][0]['skill_bundles']['B']='b'*64
+            with self.assertRaises(ValueError):interference(d)
+    def test_inspection_refuses_symlink_in_root_ancestry(self):
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d);(root/'real/skills').mkdir(parents=True);(root/'alias').symlink_to(root/'real',target_is_directory=True)
+            self.assertFalse(compatibility(root,['alias/skills'])['complete_for_selected_roots'])
+    def test_hook_inspection_handles_depth_and_size_budgets_without_execution(self):
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d);(root/'skills').mkdir();p=root/'hooks.json'
+            for text in ('['*1100+'0'+']'*1100,json.dumps({'hooks':{'Stop':[{'hooks':[{'type':'command','command':'never'}]*129}]}})):
+                p.write_text(text);result=compatibility(root,['skills'],['hooks.json'])
+                self.assertFalse(result['passed']);self.assertFalse(result['complete_for_selected_roots'])
+    def test_configured_concurrency_cap_is_respected(self):
+        with tempfile.TemporaryDirectory() as d:
+            doc={'nodes':[{'id':'main','role':'orchestrator','agents':0}]+[{'id':x,'role':'worker','after':['main']} for x in ('a','b')]}
+            self.assertEqual(handoff(d,doc,1)['schedule'],[['main'],['a'],['b']])
+            with self.assertRaises(ValueError):handoff(d,{**doc,'max_agents':2},1)
+    def test_context_task_requires_object_instead_of_crashing(self):
+        for malformed in (None,[],True,'bad'):
+            with self.assertRaises(ValueError):context_check(Path('/tmp'),{'requirements':{},'packet':{'task':malformed}})
+    def test_context_source_read_is_bounded(self):
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d);(root/'large.py').write_bytes(b'x'*1_000_001)
+            doc={'requirements':{'acceptance':['works'],'constraints':[],'sources':[{'path':'large.py','start':1,'end':1}]},
+                 'packet':{'task':{'acceptance':['works'],'constraints':[]},'sources':[{'path':'large.py','start':1,'end':1}]}}
+            with self.assertRaisesRegex(ValueError,'oversized'):context_check(root,doc)
+    def test_non_orchestrator_cannot_declare_zero_agent_cost(self):
+        with tempfile.TemporaryDirectory() as d:
+            doc={'nodes':[{'id':'main','role':'orchestrator','agents':0},{'id':'worker','role':'worker','agents':0}]}
+            with self.assertRaises(ValueError):handoff(d,doc)
+    def test_duplicate_ownership_declarations_refused(self):
+        with tempfile.TemporaryDirectory() as d:
+            with self.assertRaises(ValueError):handoff(d,{'nodes':[{'id':'main','role':'orchestrator','owns':['git','git']}]})
+    def runs(self):
+        return {'runs':[{'task_id':'task','trial':0,'arm':a,'model':'fixture','model_version':'1','grader_version':'fixture-v1','skill_bundles':{label:('a' if label=='A' else 'b')*64 for label in (('A','B') if a=='A+B' else (a,))},'prompt_sha256':'a'*64,'acceptance':{'works':True},'provenance':'fixture'} for a in ('A','B','A+B')]}
+    def test_different_tasks_can_have_different_fixed_acceptance(self):
+        d=self.runs();other=json.loads(json.dumps(d['runs']))
+        for run in other:run.update(task_id='other',acceptance={'different-contract':True},prompt_sha256='b'*64)
+        d['runs']+=other;self.assertTrue(interference(d)['passed'])
+    def test_prompt_is_fixed_across_repeated_trials(self):
+        d=self.runs();other=json.loads(json.dumps(d['runs']))
+        for run in other:run.update(trial=1,prompt_sha256='b'*64)
+        d['runs']+=other
+        with self.assertRaises(ValueError):interference(d)
+    def test_no_regression_is_not_enough_when_combined_acceptance_fails(self):
+        d=self.runs()
+        for run in d['runs']:run['acceptance']['works']=False
+        result=interference(d);self.assertTrue(result['non_regression']);self.assertFalse(result['passed']);self.assertFalse(result['all_combined_acceptance_passed'])
+    def test_huge_or_boolean_measurements_refused(self):
+        for value in (True,10**100):
+            d=self.runs();d['runs'][0]['tokens']=value
+            with self.assertRaises(ValueError):interference(d)
+    def test_duplicate_hook_json_is_not_silently_accepted(self):
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d);(root/'skills').mkdir();(root/'hooks.json').write_text('{"hooks":{},"hooks":{}}')
+            r=compatibility(root,[str(root/'skills')],[str(root/'hooks.json')]);self.assertFalse(r['passed']);self.assertFalse(r['complete_for_selected_roots'])
+    def test_unknown_hook_type_needs_review_without_echoing_value(self):
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d);(root/'skills').mkdir();(root/'hooks.json').write_text(json.dumps({'hooks':{'Stop':[{'hooks':[{'type':'sensitive-unknown-value'}]}]}}))
+            r=compatibility(root,[str(root/'skills')],[str(root/'hooks.json')]);self.assertFalse(r['passed']);self.assertNotIn('sensitive-unknown-value',json.dumps(r))

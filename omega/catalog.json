@@ -2,181 +2,265 @@
   {
     "group": "Intelligence",
     "name": "repo-map",
-    "state": "implemented"
+    "state": "implemented",
+    "origin": "foundation"
   },
   {
     "group": "Intelligence",
     "name": "task-triage",
-    "state": "planned"
+    "state": "planned",
+    "origin": "foundation"
   },
   {
     "group": "Intelligence",
     "name": "dependency-map",
-    "state": "planned"
+    "state": "planned",
+    "origin": "foundation"
   },
   {
     "group": "Intelligence",
     "name": "impact-analysis",
-    "state": "planned"
+    "state": "planned",
+    "origin": "foundation"
   },
   {
     "group": "Intelligence",
     "name": "root-cause",
-    "state": "planned"
+    "state": "planned",
+    "origin": "foundation"
   },
   {
     "group": "Intelligence",
     "name": "architecture-review",
-    "state": "planned"
+    "state": "planned",
+    "origin": "foundation"
   },
   {
     "group": "Engineering",
     "name": "controlled-change",
-    "state": "implemented"
+    "state": "implemented",
+    "origin": "foundation"
   },
   {
     "group": "Engineering",
     "name": "bug-fix",
-    "state": "planned"
+    "state": "planned",
+    "origin": "foundation"
   },
   {
     "group": "Engineering",
     "name": "refactor",
-    "state": "planned"
+    "state": "planned",
+    "origin": "foundation"
   },
   {
     "group": "Engineering",
     "name": "api-change",
-    "state": "planned"
+    "state": "planned",
+    "origin": "foundation"
   },
   {
     "group": "Engineering",
     "name": "migration",
-    "state": "planned"
+    "state": "planned",
+    "origin": "foundation"
   },
   {
     "group": "Engineering",
     "name": "integration",
-    "state": "planned"
+    "state": "planned",
+    "origin": "foundation"
   },
   {
     "group": "Quality",
     "name": "quality-gates",
-    "state": "implemented"
+    "state": "implemented",
+    "origin": "foundation"
   },
   {
     "group": "Quality",
     "name": "test-design",
-    "state": "planned"
+    "state": "planned",
+    "origin": "foundation"
   },
   {
     "group": "Quality",
     "name": "regression-analysis",
-    "state": "planned"
+    "state": "planned",
+    "origin": "foundation"
   },
   {
     "group": "Quality",
     "name": "security-review",
-    "state": "planned"
+    "state": "planned",
+    "origin": "foundation"
   },
   {
     "group": "Quality",
     "name": "performance-check",
-    "state": "planned"
+    "state": "planned",
+    "origin": "foundation"
   },
   {
     "group": "Quality",
     "name": "rollback-check",
-    "state": "planned"
+    "state": "planned",
+    "origin": "foundation"
   },
   {
     "group": "Knowledge",
     "name": "project-memory",
-    "state": "implemented"
+    "state": "implemented",
+    "origin": "foundation"
   },
   {
     "group": "Knowledge",
     "name": "evidence-index",
-    "state": "planned"
+    "state": "planned",
+    "origin": "foundation"
   },
   {
     "group": "Knowledge",
     "name": "decision-record",
-    "state": "planned"
+    "state": "planned",
+    "origin": "foundation"
   },
   {
     "group": "Knowledge",
     "name": "context-pack",
-    "state": "planned"
+    "state": "planned",
+    "origin": "foundation"
   },
   {
     "group": "Knowledge",
     "name": "knowledge-refresh",
-    "state": "planned"
+    "state": "planned",
+    "origin": "foundation"
   },
   {
     "group": "Knowledge",
     "name": "handoff",
-    "state": "planned"
+    "state": "planned",
+    "origin": "foundation"
   },
   {
     "group": "Operations",
     "name": "environment-doctor",
-    "state": "planned"
+    "state": "planned",
+    "origin": "foundation"
   },
   {
     "group": "Operations",
     "name": "workspace-isolation",
-    "state": "planned"
+    "state": "planned",
+    "origin": "foundation"
   },
   {
     "group": "Operations",
     "name": "release-plan",
-    "state": "planned"
+    "state": "planned",
+    "origin": "foundation"
   },
   {
     "group": "Operations",
     "name": "incident-response",
-    "state": "planned"
+    "state": "planned",
+    "origin": "foundation"
   },
   {
     "group": "Operations",
     "name": "dependency-health",
-    "state": "planned"
+    "state": "planned",
+    "origin": "foundation"
   },
   {
     "group": "Operations",
     "name": "observability",
-    "state": "planned"
+    "state": "planned",
+    "origin": "foundation"
   },
   {
     "group": "Evolution",
     "name": "skill-benchmark",
-    "state": "implemented"
+    "state": "implemented",
+    "origin": "foundation"
   },
   {
     "group": "Evolution",
     "name": "skill-evaluation",
-    "state": "planned"
+    "state": "planned",
+    "origin": "foundation"
   },
   {
     "group": "Evolution",
     "name": "skill-candidate",
-    "state": "planned"
+    "state": "planned",
+    "origin": "foundation"
   },
   {
     "group": "Evolution",
     "name": "skill-promotion",
-    "state": "planned"
+    "state": "planned",
+    "origin": "foundation"
   },
   {
     "group": "Evolution",
     "name": "cost-review",
-    "state": "planned"
+    "state": "planned",
+    "origin": "foundation"
   },
   {
     "group": "Evolution",
     "name": "workflow-retrospective",
-    "state": "planned"
+    "state": "planned",
+    "origin": "foundation"
+  },
+  {
+    "group": "Intelligence",
+    "name": "omega-skill-compatibility-audit",
+    "state": "implemented",
+    "origin": "extension"
+  },
+  {
+    "group": "Operations",
+    "name": "omega-effective-policy-explainer",
+    "state": "implemented",
+    "origin": "extension"
+  },
+  {
+    "group": "Engineering",
+    "name": "omega-workflow-handoff-contract",
+    "state": "implemented",
+    "origin": "extension"
+  },
+  {
+    "group": "Quality",
+    "name": "omega-skill-interference-benchmark",
+    "state": "implemented",
+    "origin": "extension"
+  },
+  {
+    "group": "Operations",
+    "name": "omega-project-workflow-adapter",
+    "state": "implemented",
+    "origin": "extension"
+  },
+  {
+    "group": "Quality",
+    "name": "omega-evidence-reconciler",
+    "state": "implemented",
+    "origin": "extension"
+  },
+  {
+    "group": "Knowledge",
+    "name": "omega-memory-reconciliation",
+    "state": "implemented",
+    "origin": "extension"
+  },
+  {
+    "group": "Intelligence",
+    "name": "omega-context-sufficiency-check",
+    "state": "implemented",
+    "origin": "extension"
   }
 ]

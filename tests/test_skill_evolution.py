@@ -59,19 +59,19 @@ class SkillEvolution(unittest.TestCase):
         self.assertNotEqual(h,suite_digest(self.root))
 
     def test_missing_sections_cannot_pass_comparison(self):
-        with patch.object(app,'ROOT',self.root),patch.object(app,'git',return_value='abc'),patch.object(app,'benchmark',return_value=self.report()):
+        with patch.object(app,'ROOT',self.root),patch.object(app,'git',side_effect=lambda *a: '' if a[0] in ('ls-files','check-ignore') else 'abc'),patch.object(app,'benchmark',return_value=self.report()):
             b=self.baseline()
             code,result=self.invoke('compare','--baseline',b['baseline'])
             self.assertEqual(code,1);self.assertFalse(result['eligible_for_review'])
 
     def test_no_evidence_is_not_eligible_for_review(self):
-        with patch.object(app,'ROOT',self.root),patch.object(app,'git',return_value='abc'),patch.object(app,'benchmark',return_value=self.report()):
+        with patch.object(app,'ROOT',self.root),patch.object(app,'git',side_effect=lambda *a: '' if a[0] in ('ls-files','check-ignore') else 'abc'),patch.object(app,'benchmark',return_value=self.report()):
             b=self.baseline();(self.root/b['candidate']).write_text(self.advanced())
             code,result=self.invoke('compare','--baseline',b['baseline'])
             self.assertEqual(code,0);self.assertFalse(result['eligible_for_review'])
 
     def test_current_gate_and_scenario_evidence_required(self):
-        with patch.object(app,'ROOT',self.root),patch.object(app,'git',return_value='abc'),patch.object(app,'benchmark',return_value=self.report()),patch('omega.records.workspace',return_value='current-workspace'):
+        with patch.object(app,'ROOT',self.root),patch.object(app,'git',side_effect=lambda *a: '' if a[0] in ('ls-files','check-ignore') else 'abc'),patch.object(app,'benchmark',return_value=self.report()),patch('omega.records.workspace',return_value='current-workspace'):
             b=self.baseline();(self.root/b['candidate']).write_text(self.advanced())
             assessment=assess(self.root,'repo-map',b['candidate'])
             from omega.records import execution_context
@@ -85,7 +85,7 @@ class SkillEvolution(unittest.TestCase):
             self.assertEqual(code,1);self.assertFalse(result['eligible_for_review'])
 
     def test_stale_gate_evidence_refused(self):
-        with patch.object(app,'ROOT',self.root),patch.object(app,'git',return_value='abc'),patch.object(app,'benchmark',return_value=self.report()),patch('omega.records.workspace',return_value='new-workspace'):
+        with patch.object(app,'ROOT',self.root),patch.object(app,'git',side_effect=lambda *a: '' if a[0] in ('ls-files','check-ignore') else 'abc'),patch.object(app,'benchmark',return_value=self.report()),patch('omega.records.workspace',return_value='new-workspace'):
             b=self.baseline();(self.root/b['candidate']).write_text(self.advanced())
             ev=app.save('evidence',{'passed':True,'workspace_sha256':'old-workspace','workspace_unchanged':True,'results':[{'gate':name,'command':app.CONFIG['gates'][name],'exit_code':0,'output':'OMEGA_TEST_RESULT {"run": 1, "passed": 1, "failed": 0, "errors": 0, "skipped": 0, "expected_failures": 0, "unexpected_successes": 0}' if name=='tests' else ''} for name in app.CONFIG['gates']]})
             code,result=self.invoke('compare','--baseline',b['baseline'],'--evidence',ev)

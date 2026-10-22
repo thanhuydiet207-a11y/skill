@@ -8,27 +8,25 @@ disable-model-invocation: true
 
 ## Inputs
 
-Tên trong 5 skill đã triển khai, mục tiêu thay đổi, baseline/candidate riêng, fixture version và acceptance không đổi. Các skill planned chưa được coi là khả dụng.
+Skill trong registry hiện tại, mục tiêu thay đổi, baseline/candidate riêng, acceptance cố định và dependencies/resources liên quan. Skill planned chưa được coi là có thể chạy.
 
 ## Workflow
 
-1. Chạy `python3 -m omega candidate --skill TEN --compact` trước sửa. Giữ nguyên stable; chỉ sửa bản sao .omega/candidates được trả. Baseline cũ không dùng được sau khi engine/fixture/config thay đổi.
-2. Candidate phải có Inputs/Workflow/Evidence/Failure handling/Stop conditions, command thực thi được và permission tối thiểu. Đọc phần skill-benchmark trong `docs/SKILL_PLAYBOOKS.md`; không preload toàn catalog.
-3. Chạy `python3 -m omega benchmark --skill TEN --candidate PATH --compact`. Đọc từng contract check và scenario outcome; lưu evidence đúng candidate hash. Score là độ đầy đủ tài liệu, không phải điểm reasoning của model.
-4. Chạy `python3 -m omega gates --summary --compact`; sau đó `python3 -m omega compare --baseline BASELINE --evidence SCENARIO --evidence GATES --compact`. Cần eligible_for_review=true, không chỉ passed=true.
-5. Review diff và user authorization trước áp dụng. CLI không tự promote/merge. Sau áp dụng, chạy lại gates, demo và benchmark context có liên quan; lưu hash trước/sau và giới hạn native evaluation.
-6. Khi có Claude tương thích và được xác thực, thêm nhiều lượt baseline/candidate trên cùng task corpus/model/version; đo acceptance, false claims, regression, input/output/cache tokens, latency/cost. Không hạ model/effort hoặc sửa kỳ vọng chỉ để làm số đẹp.
+1. Chạy `python3 -m omega candidate --skill TEN --compact` trước sửa. Chỉ sửa candidate, giữ stable và tài nguyên baseline; bundle hash ràng buộc SKILL.md cùng references nhận diện được.
+2. Viết section có nội dung thực và commands có thể chạy. Metadata/license trong safe YAML subset được chấp nhận; syntax chưa hỗ trợ cần review. Contract completeness không phải quality score, không chứng minh instruction adherence.
+3. Chạy `python3 -m omega benchmark --skill TEN --candidate PATH --compact`. Đọc contract, suite/bundle hashes và đúng workflow pattern cho foundation hoặc extensions; tooling scenarios không đánh giá model đọc prompt.
+4. Chạy `python3 -m omega gates --summary --compact`; sau đó `python3 -m omega compare --baseline BASELINE --evidence SCENARIO --evidence GATES --compact`. Cần eligible_for_review=true với source/index/runtime hiện tại, nhưng native_release_eligible vẫn false.
+5. Với phối hợp nhiều skill, dùng skill-interference-benchmark trên các run A/B/A+B cùng task/model/prompt/criteria. Dữ liệu fixture/manual không được trình bày như native result; không bịa token/time bị thiếu.
+6. Review diff, tool permissions, bundle resources, user authorization rồi mới áp dụng. Sau áp dụng chạy checks liên quan. Đọc docs/INTEROPERABILITY_GUIDE.md; CLI không tự promote hoặc gọi model.
 
 ## Evidence
 
-Trả baseline/candidate hashes, suite hash, source state, HEAD, contract checks, scenario record, gate record và quyết định review. Native quality luôn UNVERIFIED nếu chưa chạy model; byte saving không được gọi là token saving đã đo.
+Trả raw/bundle hashes trước/sau, contract checks, scenario/gate records, runtime scope và phần native chưa chạy. Score là completeness; quality_evaluated=false/quality_score=null cho offline check.
 
 ## Failure handling
 
-Stable đổi trước review: dừng promotion và kiểm tra diff, không reset người dùng. Candidate đổi sau test hoặc evidence stale: chạy lại phần bị ảnh hưởng. Suite hash đổi: tạo baseline mới và review lý do, không vá report. Thiếu evidence không được tự điền pass.
+Stable/resource/suite thay đổi, candidate đổi sau test hoặc stale proof: dừng apply, review diff và tạo baseline/retest đúng nguyên nhân. Không sửa hash/report/acceptance để làm xanh. YAML ngoài subset không đồng nghĩa native-invalid.
 
 ## Stop conditions
 
-Không thay stable trước khi benchmark/gates đạt và có quyền review/apply từ người dùng. Hết budget thì báo blocker, không loop self-improvement vô hạn. Local contract pass không chứng minh model tuân thủ skill hoặc ứng dụng không có lỗi; ghi rõ phạm vi đã kiểm chứng.
-
-Chạy CLI từ gốc checkout hiện tại, không cần pip install. Quy tắc tổng quát: CLAUDE.md.
+Không áp dụng stable trước benchmark/gates/review theo quyền đã có. Native A/B chỉ chạy khi có authentication, corpus/grader và ngân sách phù hợp; không hứa chất lượng hay token saving từ log bytes hoặc fixture. Hết budget thì báo blocker, không tự loop evolution vô hạn.
