@@ -142,14 +142,22 @@ def fingerprint(skill):
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('command',choices=['doctor','map','plan','audit','benchmark','gates','memory','isolate','rollback-check','candidate','compare'])
+    parser.add_argument('command',choices=['doctor','map','plan','audit','benchmark','gates','memory','isolate','rollback-check','candidate','compare','context'])
     parser.add_argument('--complexity',choices=['low','medium','high'],default='low')
     parser.add_argument('--conflict',action='store_true')
     parser.add_argument('--title');parser.add_argument('--body');parser.add_argument('--name')
     parser.add_argument('--worktree');parser.add_argument('--skill');parser.add_argument('--baseline');parser.add_argument('--candidate')
+    parser.add_argument('--compact',action='store_true',help='Lossless compact JSON')
+    parser.add_argument('--summary',action='store_true',help='Gates only: logs by evidence reference; failures inline')
+    parser.add_argument('--select',action='append',default=[],help='Explicit source PATH or PATH:START:END')
+    parser.add_argument('--max-bytes',type=int,default=24000)
     args=parser.parse_args()
+    if args.summary and args.command != 'gates': parser.error('--summary requires gates')
     code=0
-    if args.command=='doctor': result=doctor()
+    if args.command=='context':
+        from omega.context import packet
+        result=packet(ROOT,args.select,args.max_bytes)
+    elif args.command=='doctor': result=doctor()
     elif args.command=='map': result=inventory()
     elif args.command=='plan':result=plan(args.complexity,args.conflict)
     elif args.command=='audit':
@@ -159,6 +167,9 @@ def main():
     elif args.command=='gates':
         result=gates();code=0 if result['passed'] else 1
         result['evidence']=save('evidence',result)
+        if args.summary:
+            from omega.context import gate_summary
+            result=gate_summary(result)
     elif args.command=='memory':
         if not args.title or not args.body: raise ValueError('--title and --body required')
         text=args.title+' '+args.body
@@ -204,7 +215,8 @@ def main():
                 'after':hashlib.sha256(candidate.read_bytes()).hexdigest(),'benchmark':current,'stable_modified':stable_modified,
                 'promotion':'not performed; native evaluation and human review still required'}
         code=0 if passed else 1
-    print(json.dumps(result,indent=2,ensure_ascii=False))
+    from omega.context import encode
+    print(encode(result,args.compact))
     return code
 
 

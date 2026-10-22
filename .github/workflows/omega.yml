@@ -16,5 +16,7 @@ jobs:
         run: python3 -m omega gates
       - name: Broken-to-fixed workflow fixture
         run: python3 benchmarks/demo.py
+      - name: Lossless context efficiency benchmark
+        run: python3 benchmarks/token_efficiency.py
       - name: Whitespace validation
         run: git diff --check

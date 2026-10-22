@@ -80,3 +80,7 @@ CLI ràng buộc SHA-256 của toàn fixture và implementation benchmark, so su
 ## Tác vụ mẫu có lỗi thực
 
 `python3 benchmarks/demo.py` tạo một repository fixture riêng dưới `.omega/demo/`, có hàm cộng sai thành trừ và regression test. Script xác nhận gates đỏ, tạo branch, sửa lỗi, xác nhận xanh, ghi memory, kiểm tra Git baseline, tạo worktree và so candidate mà không đổi stable. Không dùng mạng hoặc LLM. Fixture giữ lại để xem bằng chứng; không tự xóa dữ liệu. Mỗi lần chạy tạo fixture mới, chỉ chạy lại khi có thay đổi liên quan.
+
+## Context tiết kiệm
+
+Dùng `--compact` để giữ nguyên JSON với ít khoảng trắng hơn; `gates --summary --compact` vẫn chạy mọi gate và giữ log bằng evidence reference. `context --select PATH:START:END --compact` đọc nguồn tường minh. Xem [TOKEN_EFFICIENCY.md](TOKEN_EFFICIENCY.md) để biết budget, kiểm tra dữ liệu tương đương và giới hạn số đo. Hook adapter bảo thủ chưa allowlist mọi biến thể lệnh mới; nếu sau này kích hoạt hook, cần review allowlist đúng lệnh, không tự nới quyền.

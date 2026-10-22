@@ -1,5 +1,9 @@
 # Kết quả thực thi
 
+Bản nâng cấp context mới: **30 tests pass**, 5 phép đo efficiency pass; gates và demo chạy lại thành công. Xem [token-efficiency.json](evidence/token-efficiency.json) và [hướng dẫn](TOKEN_EFFICIENCY.md). Báo cáo `local-validation.json` bên dưới là bằng chứng lịch sử của bản bootstrap, không phải hash nguồn hiện tại.
+
+Demo mới đã sửa trường hợp timestamp/size cache Python khiến test đọc bytecode cũ khi fixture sửa nhanh: compile bắt buộc với `checked-hash`; không xóa cache hoặc trì hoãn bằng sleep.
+
 Bằng chứng máy đọc: [local-validation.json](evidence/local-validation.json), gồm argv, exit code, duration, output, hash nguồn và kết quả demo. Log local đầy đủ theo mức giữ output nằm trong `.omega/` (không commit). Record được review thủ công, không phải chứng thực ký số.
 
 ## Đã chạy

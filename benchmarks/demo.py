@@ -24,7 +24,7 @@ def main():
     (fixture/'checks').mkdir()
     (fixture/'checks/test_calc.py').write_text('import unittest\nfrom calc import add\nclass Calc(unittest.TestCase):\n    def test_add(self): self.assertEqual(add(2,3),5)\n')
     config=json.loads((fixture/'omega/config.json').read_text())
-    config['gates']['build']=[sys.executable,'-m','compileall','-q','calc.py']
+    config['gates']['build']=[sys.executable,'-m','compileall','-q','-f','--invalidation-mode','checked-hash','calc.py']
     config['gates']['tests']=[sys.executable,'-m','unittest','discover','-s','checks','-v']
     (fixture/'omega/config.json').write_text(json.dumps(config))
 

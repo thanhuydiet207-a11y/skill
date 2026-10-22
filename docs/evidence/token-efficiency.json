@@ -1,0 +1,129 @@
+{
+  "suite": "token-efficiency-v1",
+  "metric": "UTF-8 bytes; actual tokens and native LLM quality unmeasured",
+  "passed": true,
+  "cases": [
+    {
+      "case": "plan-low",
+      "before_utf8_bytes": 552,
+      "after_utf8_bytes": 451,
+      "reduction_percent": 18.3,
+      "data_equivalent": true
+    },
+    {
+      "case": "plan-medium",
+      "before_utf8_bytes": 601,
+      "after_utf8_bytes": 487,
+      "reduction_percent": 18.97,
+      "data_equivalent": true
+    },
+    {
+      "case": "plan-high",
+      "before_utf8_bytes": 627,
+      "after_utf8_bytes": 508,
+      "reduction_percent": 18.98,
+      "data_equivalent": true
+    },
+    {
+      "case": "explicit-source-packet",
+      "before_utf8_bytes": 1117,
+      "after_utf8_bytes": 1043,
+      "reduction_percent": 6.62,
+      "data_equivalent": true
+    },
+    {
+      "case": "gate-logs-by-reference",
+      "before_utf8_bytes": 4695,
+      "after_utf8_bytes": 908,
+      "reduction_percent": 80.66,
+      "data_equivalent": true
+    }
+  ],
+  "gates": {
+    "passed": true,
+    "results": [
+      {
+        "gate": "build",
+        "command": [
+          "python3",
+          "-m",
+          "compileall",
+          "-q",
+          "omega",
+          "tests"
+        ],
+        "exit_code": 0,
+        "seconds": 0.066,
+        "output": "",
+        "truncated": false
+      },
+      {
+        "gate": "tests",
+        "command": [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-v"
+        ],
+        "exit_code": 0,
+        "seconds": 0.465,
+        "output": "test_budget_fails_without_silent_truncation (test_context.ContextTests.test_budget_fails_without_silent_truncation) ... ok\ntest_changed_source_changes_fingerprint (test_context.ContextTests.test_changed_source_changes_fingerprint) ... ok\ntest_cli_compact_preserves_default_plan (test_context.ContextTests.test_cli_compact_preserves_default_plan) ... ok\ntest_cli_packet_budget_fails (test_context.ContextTests.test_cli_packet_budget_fails) ... ok\ntest_lossless_unicode_and_whitespace (test_context.ContextTests.test_lossless_unicode_and_whitespace) ... ok\ntest_missing_empty_and_ranges_fail (test_context.ContextTests.test_missing_empty_and_ranges_fail) ... ok\ntest_packet_preserves_source_and_deduplicates (test_context.ContextTests.test_packet_preserves_source_and_deduplicates) ... ok\ntest_private_binary_and_escape_rejected (test_context.ContextTests.test_private_binary_and_escape_rejected) ... ok\ntest_summary_keeps_failure_and_links_success (test_context.ContextTests.test_summary_keeps_failure_and_links_success) ... ok\ntest_benchmark_detects_regression (test_omega.OmegaTests.test_benchmark_detects_regression) ... ok\ntest_candidate_compare_missing_baseline (test_omega.OmegaTests.test_candidate_compare_missing_baseline) ... ok\ntest_candidate_lifecycle_preserves_stable (test_omega.OmegaTests.test_candidate_lifecycle_preserves_stable) ... ok\ntest_catalog_36_unique_and_five_active (test_omega.OmegaTests.test_catalog_36_unique_and_five_active) ... ok\ntest_dirty_checkout_refused (test_omega.OmegaTests.test_dirty_checkout_refused) ... ok\ntest_gate_failure_propagates (test_omega.OmegaTests.test_gate_failure_propagates) ... ok\ntest_git_truncation_refused (test_omega.OmegaTests.test_git_truncation_refused) ... ok\ntest_hook_denies_escape_and_policy_edit (test_omega.OmegaTests.test_hook_denies_escape_and_policy_edit) ... ok\ntest_hook_denies_shell_bypass (test_omega.OmegaTests.test_hook_denies_shell_bypass) ... ok\ntest_hook_rejects_malformed (test_omega.OmegaTests.test_hook_rejects_malformed) ... ok\ntest_hook_scoped_edit (test_omega.OmegaTests.test_hook_scoped_edit) ... ok\ntest_memory_scoped_and_commit_stamped (test_omega.OmegaTests.test_memory_scoped_and_commit_stamped) ... ok\ntest_memory_secret_rejection (test_omega.OmegaTests.test_memory_secret_rejection) ... ok\ntest_no_shell_expansion (test_omega.OmegaTests.test_no_shell_expansion) ... ok\ntest_path_escape (test_omega.OmegaTests.test_path_escape) ... ok\ntest_router_complexity (test_omega.OmegaTests.test_router_complexity) ... ok\ntest_router_contract (test_omega.OmegaTests.test_router_contract) ... ok\ntest_subprocess_failure (test_omega.OmegaTests.test_subprocess_failure) ... ok\ntest_symlink_escape (test_omega.OmegaTests.test_symlink_escape) ... ok\ntest_three_agent_specs (test_omega.OmegaTests.test_three_agent_specs) ... ok\ntest_timeout (test_omega.OmegaTests.test_timeout) ... ok\n\n----------------------------------------------------------------------\nRan 30 tests in 0.290s\n\nOK\n",
+        "truncated": false
+      },
+      {
+        "gate": "security",
+        "command": [
+          "python3",
+          "-m",
+          "omega",
+          "audit"
+        ],
+        "exit_code": 0,
+        "seconds": 0.064,
+        "output": "{\n  \"passed\": true,\n  \"findings\": [],\n  \"scope\": \"Claude config bypass patterns only; no dependency/SAST/secret coverage\"\n}\n",
+        "truncated": false
+      },
+      {
+        "gate": "regression",
+        "command": [
+          "python3",
+          "-m",
+          "omega",
+          "benchmark"
+        ],
+        "exit_code": 0,
+        "seconds": 0.064,
+        "output": "{\n  \"suite\": \"router-contract-v1\",\n  \"suite_sha256\": \"01c397dc31373716e9676f163cec4e2091b287a91b953d49ae58c46bf8c4db3e\",\n  \"cases\": [\n    {\n      \"id\": \"low\",\n      \"passed\": true\n    },\n    {\n      \"id\": \"medium\",\n      \"passed\": true\n    },\n    {\n      \"id\": \"high-conflict\",\n      \"passed\": true\n    }\n  ],\n  \"passed\": true,\n  \"scope\": \"deterministic router contract only; native LLM skill efficacy not evaluated\"\n}\n",
+        "truncated": false
+      }
+    ],
+    "evidence": ".omega/evidence/1792691691497712441-112b6f12.json"
+  },
+  "sources_sha256": {
+    "omega/context.py": "d7d4d17eff076c98de7d8cb7ffb4baa6d90b57daa373a65210a781a5563ecf12",
+    "omega/__main__.py": "26db6b4811ea8949cbf110823211c5ee7f4053fe52165a8b78fac0578307e76d",
+    "tests/test_context.py": "324992baa7c5185803fa1adce6955e1b865787452e0413ac5fb838e831414fae",
+    "benchmarks/token_efficiency.py": "dbe10fb1b6b2c41891e3691d93c4a824109cdcf02daff324f2fe6896b6d2c9d4",
+    "benchmarks/demo.py": "15a710d29f058a1095d3814cc4e6699d4c46a0027d2861693e29655f1aca82c0"
+  },
+  "claude_native_evaluated": false,
+  "demo": {
+    "fixture": ".omega/demo/d217972509bf4f1fb32b42f8558c62cd",
+    "baseline_commit": "5f680160cf50d6e593755788b4fd31f74b2cbd7c",
+    "before_passed": false,
+    "after_passed": true,
+    "regression_tests": 1,
+    "isolated_branch": "omega/demo-fix",
+    "worktree_created": true,
+    "baseline_recoverable": true,
+    "memory": ".omega/memory/1792691692428374944-e4728198.json",
+    "candidate_passed": true,
+    "stable_modified": false,
+    "rollback_diff_exit": 0,
+    "native_claude_executed": false,
+    "network_used": false
+  }
+}

@@ -12,3 +12,4 @@ Tối đa 2 vòng sửa, 30 phút và 16k token ước tính cho một tác vụ
 CLI chỉ lập kế hoạch, không điều khiển hoặc đo token Claude. Không tuyên bố giới hạn token được cưỡng chế tự động.
 Chạy `python3 -m omega gates` trước báo hoàn tất; tách pass, fail, skipped, unrun.
 Giữ stable skill cho đến benchmark, gates và review hoàn tất. Không tự merge/promote.
+Ưu tiên `--compact`; gates dùng `--summary --compact`, mở evidence khi cần. Dùng `context --select PATH:START:END` để giữ nguồn cần thiết, không bỏ acceptance hoặc kiểm thử; đọc `docs/TOKEN_EFFICIENCY.md` khi tối ưu context.
