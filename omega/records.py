@@ -27,8 +27,15 @@ def digest(path):
     return h.hexdigest()
 
 
-def workspace(root, git):
+def workspace_entries(root, git):
     names=[x for x in git('ls-files','-z','--cached','--others','--exclude-standard',raw=True).split('\0') if x]
+    index={}
+    for entry in git('ls-files','--stage','-z',raw=True).split('\0'):
+        if not entry:continue
+        meta,sep,name=entry.partition('\t')
+        fields=meta.split()
+        if not sep or len(fields)!=3:raise ValueError('Malformed Git index entry')
+        index.setdefault(name,[]).append(fields)
     entries=[]
     root=Path(root).resolve()
     for name in sorted(set(names)):
@@ -43,7 +50,13 @@ def workspace(root, git):
         elif lexical.is_file():state={'sha256':digest(lexical),'mode':lexical.stat().st_mode & 0o7777}
         elif not lexical.exists():state={'deleted':True}
         else:raise ValueError('Unsupported Git entry; inspect submodule or special file')
+        state['index']=index.get(name,[])
         entries.append([name,state])
+    return entries
+
+
+def workspace(root,git):
+    entries=workspace_entries(root,git)
     return hashlib.sha256(json.dumps(entries,ensure_ascii=False,separators=(',',':')).encode()).hexdigest()
 
 
@@ -82,7 +95,8 @@ def memory_status(root,name,head):
         except (OSError,ValueError):reasons.append('Evidence unavailable: '+ref['path'])
     return {'record':record,'stale':bool(reasons),'reasons':reasons,
             'verification':'references only; factual content and decisions require review',
-            'legacy':record.get('kind')!='memory'}
+            'legacy':record.get('kind')!='memory',
+            'staleness':'hard' if any(x!='HEAD changed' for x in reasons) else 'soft' if reasons else 'none'}
 
 
 def test_outcomes(result):
@@ -98,3 +112,27 @@ def valid_gates(record,commands,test_adapter="omega"):
     if len({r['gate'] for r in rows})!=len(commands):return False
     tests=next((r for r in rows if r['gate']=='tests'),None)
     return tests is not None and test_outcomes(tests) is not None
+
+
+def execution_context(root,config):
+    """Fingerprint known inputs without printing environment or credential values."""
+    import platform
+    import shutil
+    import sys
+    tools={}
+    for name,path in [('python',sys.executable)]+[(name,shutil.which(name)) for name in ('node','npm','go')]:
+        if path:
+            p=Path(path).resolve()
+            try:
+                stat=p.stat();tools[name]={'path':str(p),'bytes':stat.st_size,'mtime_ns':stat.st_mtime_ns,'mode':stat.st_mode & 0o7777}
+            except OSError:tools[name]={'unavailable':True}
+        else:tools[name]={'unavailable':True}
+    policies={}
+    for name in ('.claude/settings.json','.claude/settings.local.json','.mcp.json','.claude-plugin/plugin.json'):
+        try:
+            path=source_path(root,name);policies[name]=digest(path) if path.is_file() else None
+        except (ValueError,OSError):policies[name]='unreadable-or-symlink'
+    details={'python_version':platform.python_version(),'system':platform.system(),'machine':platform.machine(),
+             'tools':tools,'project_policy_sha256':policies,'config_sha256':hashlib.sha256(json.dumps(config,sort_keys=True).encode()).hexdigest(),
+             'external_policy':'unobserved; global, managed, API and plugin runtime may differ'}
+    return {'sha256':hashlib.sha256(json.dumps(details,sort_keys=True).encode()).hexdigest(),'details':details}

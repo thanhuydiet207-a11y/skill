@@ -5,12 +5,14 @@ import os
 from pathlib import Path
 import re
 import time
-from omega.records import load, workspace
+from omega.records import load, workspace,workspace_entries
 from omega.safety import source_path
 
 
-def create(root,git,allowed,acceptance,limits):
-    if git('status','--porcelain'):raise ValueError('Change plan requires a clean checkout')
+def create(root,git,allowed,acceptance,limits,include_existing=False):
+    dirty=bool(git('status','--porcelain'))
+    if dirty and not include_existing:raise ValueError('Change plan requires a clean checkout or explicit --include-existing')
+    if dirty and git('diff','--name-only','--diff-filter=U'):raise ValueError('Resolve merge conflicts before planning')
     if git('branch','--show-current') in ('','main','master'):raise ValueError('Create an isolated branch first')
     if not allowed or not acceptance:raise ValueError('Explicit --allow paths and --acceptance required')
     if any(not isinstance(x,str) or not x.strip() or len(x)>2000 for x in acceptance):raise ValueError('Invalid acceptance')
@@ -22,6 +24,8 @@ def create(root,git,allowed,acceptance,limits):
     return {'kind':'change-plan','base_head':git('rev-parse','HEAD'),'branch':git('branch','--show-current'),
             'allowed_paths':paths,'acceptance':acceptance,'attempts':[],
             'max_attempts':maximum,'opened_at':now,'deadline':now+seconds,
+            'baseline_entries':workspace_entries(root,git) if include_existing else None,
+            'includes_existing':bool(include_existing),
             'rollback':'Review explicit revert against base_head; no automatic destructive rollback'}
 
 
@@ -42,6 +46,10 @@ def check(root,name,git,limits,evidence=(),gate_commands=None,test_adapter="omeg
     names=git('diff','--no-renames','--name-only','-z','HEAD',raw=True).split('\0')
     names+=git('ls-files','--others','--exclude-standard','-z',raw=True).split('\0')
     changed=sorted(set(x for x in names if x))
+    if record.get('includes_existing'):
+        if not isinstance(record.get('baseline_entries'),list):raise ValueError('Missing existing-change snapshot')
+        initial=dict(record['baseline_entries']);current=dict(workspace_entries(root,git))
+        changed=sorted(name for name in set(initial)|set(current) if initial.get(name)!=current.get(name))
     outside=[]
     for path in changed:
         try:resolved=str(source_path(root,path).relative_to(root))
@@ -59,7 +67,9 @@ def check(root,name,git,limits,evidence=(),gate_commands=None,test_adapter="omeg
     return {'passed':not outside and active and same_head and same_branch and all(x['passed'] for x in checks),
             'changed_paths':changed,'outside_scope':outside,'active':active,
             'base_head_matches':same_head,'branch_matches':same_branch,'acceptance':record['acceptance'],
-            'gate_evidence':checks,'acceptance_verified':'human review required; strings are not assertions'}
+            'gate_evidence':checks,'scope_passed':not outside and active and same_head and same_branch,
+            'ready_for_review':bool(checks) and not outside and active and same_head and same_branch and all(x['passed'] for x in checks),
+            'acceptance_verified':'human review required; strings are not assertions'}
 
 
 def attempt(root,name,reason,limits):

@@ -152,3 +152,18 @@ class RecordSafety(ProjectFixture):
 
     def test_worktree_container_itself_refused(self):
         with self.assertRaises(ValueError):self.invoke('isolate','--name','wrong','--worktree','.omega/worktrees')
+
+
+class ExistingChangeWorkflow(ProjectFixture):
+    def test_explicit_existing_changes_preserved_outside_scope(self):
+        (self.root/'notes.txt').write_text('User notes')
+        plan=change.create(self.root,app.git,['calc.py'],['sum correct'],app.CONFIG['limits'],True)
+        record=app.save('changes',plan);(self.root/'calc.py').write_text('updated')
+        result=change.check(self.root,record,app.git,app.CONFIG['limits'])
+        self.assertTrue(result['scope_passed']);self.assertFalse(result['ready_for_review'])
+        (self.root/'notes.txt').write_text('Unexpected edit')
+        result=change.check(self.root,record,app.git,app.CONFIG['limits']);self.assertIn('notes.txt',result['outside_scope'])
+    def test_index_only_changes_alter_snapshot(self):
+        before=records.workspace(self.root,app.git);(self.root/'calc.py').write_text('staged change')
+        unstaged=records.workspace(self.root,app.git);app.git('add','calc.py');staged=records.workspace(self.root,app.git)
+        self.assertNotEqual(before,unstaged);self.assertNotEqual(unstaged,staged)

@@ -18,31 +18,37 @@ def assess(root,skill,candidate=None):
     if skill not in COMMANDS:raise ValueError('Unknown implemented skill')
     path=artifact_path(root,candidate,'candidates') if candidate else source_path(root,f'.claude/skills/{skill}/SKILL.md')
     if not path.is_file() or path.stat().st_size>8192:raise ValueError('Missing or oversized skill')
-    raw=path.read_bytes();text=raw.decode('utf-8')
-    fields={};valid=True
-    if not text.startswith('---\n'):valid=False
-    else:
-        parts=text.split('---\n',2)
-        if len(parts)!=3:valid=False
-        else:
-            for line in parts[1].splitlines():
-                key,sep,value=line.partition(':')
-                if not sep or key in fields or key not in ('name','description','disable-model-invocation'):
-                    valid=False;continue
-                fields[key]=value.strip()
+    from omega.frontmatter import parse
+    raw=path.read_bytes();text=raw.decode('utf-8');document=parse(text)
+    fields=document['fields'];valid=document['supported'] and not document['unknown_fields']
     checks=[{'id':'frontmatter','passed':valid,'required':True},
             {'id':'identity','passed':fields.get('name')==skill,'required':True},
             {'id':'description','passed':bool(fields.get('description')),'required':True},
-            {'id':'explicit-invocation','passed':fields.get('disable-model-invocation')=='true','required':True},
+            {'id':'explicit-invocation','passed':fields.get('disable-model-invocation') is True,'required':True},
             {'id':'no-permission-bypass','passed':not any(x in text for x in ('--dangerously-skip-permissions','bypassPermissions','curl -k ')),'required':True}]
     for command in COMMANDS[skill]:
         checks.append({'id':'command:'+command,'passed':bool(re.search(r'python3 -m omega '+re.escape(command)+r'(?=[\s`]|$)',text)),'required':True})
+    body=document['body']
     for heading in HEADINGS:
-        checks.append({'id':'section:'+heading,'passed':bool(re.search(r'^## '+re.escape(heading)+r'\s*$',text,re.M)),'required':False})
-    return {'skill':skill,'sha256':hashlib.sha256(raw).hexdigest(),'checks':checks,
+        match=re.search(r'^## '+re.escape(heading)+r'\s*\n(.*?)(?=^## |\Z)',body,re.M|re.S)
+        section=match[1].strip() if match else ''
+        nonempty=len(section)>=24 and len(section.split())>=4
+        checks.append({'id':'section:'+heading,'passed':nonempty,'required':False})
+    resources=[]
+    for name in sorted(set(re.findall(r'(?:docs|references|scripts|assets)/[A-Za-z0-9_./-]+\.(?:md|py|json|sh|txt)',body))):
+        location=Path(root)/name if name.startswith('docs/') else Path(root)/'.claude/skills'/skill/name
+        try:
+            safe=source_path(root,str(location));data=safe.read_bytes()
+            if len(data)>1048576:raise ValueError('Oversized resource')
+            resources.append({'path':str(safe.relative_to(root)),'sha256':hashlib.sha256(data).hexdigest(),'available':True})
+        except (ValueError,OSError):resources.append({'path':name,'available':False})
+    checks.append({'id':'resources-resolve','passed':all(x['available'] for x in resources),'required':True})
+    bundle=hashlib.sha256(raw+__import__('json').dumps(resources,sort_keys=True).encode()).hexdigest()
+    return {'skill':skill,'sha256':hashlib.sha256(raw).hexdigest(),'bundle_sha256':bundle,'resources':resources,'checks':checks,
             'passed':all(x['passed'] for x in checks if x['required']),
             'advanced_passed':all(x['passed'] for x in checks),
             'score':round(100*sum(x['passed'] for x in checks)/len(checks),2),
+            'quality_score':None,'quality_evaluated':False,'score_metric':'contract completeness only',
             'scope':'offline document contract, not LLM instruction adherence or reasoning quality'}
 
 

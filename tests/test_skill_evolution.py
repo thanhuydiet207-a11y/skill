@@ -74,9 +74,10 @@ class SkillEvolution(unittest.TestCase):
         with patch.object(app,'ROOT',self.root),patch.object(app,'git',return_value='abc'),patch.object(app,'benchmark',return_value=self.report()),patch('omega.records.workspace',return_value='current-workspace'):
             b=self.baseline();(self.root/b['candidate']).write_text(self.advanced())
             assessment=assess(self.root,'repo-map',b['candidate'])
-            common={'kind':'gates','passed':True,'workspace_sha256':'current-workspace','workspace_unchanged':True}
+            from omega.records import execution_context
+            common={'execution_fingerprint':execution_context(self.root,app.CONFIG)['sha256'],'execution_unchanged':True,'kind':'gates','passed':True,'workspace_sha256':'current-workspace','workspace_unchanged':True}
             gate=app.save('evidence',{**common,'results':[{'gate':name,'command':app.CONFIG['gates'][name],'exit_code':0,'output':'OMEGA_TEST_RESULT {"run": 1, "passed": 1, "failed": 0, "errors": 0, "skipped": 0, "expected_failures": 0, "unexpected_successes": 0}' if name=='tests' else ''} for name in app.CONFIG['gates']]})
-            scenario=app.save('evidence',{**common,'kind':'skill-evaluation','skill':'repo-map','candidate_sha256':assessment['sha256'],'suite_sha256':'stable-suite','scenarios':{'exit_code':0,'output':'OMEGA_TEST_RESULT {"run": 1, "passed": 1, "failed": 0, "errors": 0, "skipped": 0, "expected_failures": 0, "unexpected_successes": 0}'}})
+            scenario=app.save('evidence',{**common,'kind':'skill-evaluation','skill':'repo-map','candidate_sha256':assessment['sha256'],'candidate_bundle_sha256':assessment['bundle_sha256'],'suite_sha256':'stable-suite','scenarios':{'exit_code':0,'output':'OMEGA_TEST_RESULT {"run": 1, "passed": 1, "failed": 0, "errors": 0, "skipped": 0, "expected_failures": 0, "unexpected_successes": 0}'}})
             code,result=self.invoke('compare','--baseline',b['baseline'],'--evidence',gate,'--evidence',scenario)
             self.assertEqual(code,0);self.assertTrue(result['eligible_for_review'])
             (self.root/b['candidate']).write_text(self.advanced()+'\nchanged after scenario')

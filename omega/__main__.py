@@ -52,13 +52,25 @@ def save(kind, data):
     return str(dest.relative_to(ROOT))
 
 
-def plan(complexity, conflict=False):
+def plan(complexity, conflict=False, intent="change", workflow=None):
     roles = {'low': [], 'medium': ['omega-engineer','omega-verifier'],
              'high': ['omega-investigator','omega-engineer','omega-verifier']}
-    return {'complexity': complexity, 'agents': roles[complexity],
+    selections={
+        'change':['repo-map','controlled-change','quality-gates','project-memory'],
+        'investigate':['repo-map','omega-context-sufficiency-check'],
+        'verify':['quality-gates','omega-evidence-reconciler'],
+        'knowledge':['project-memory','omega-memory-reconciliation'],
+        'evolve':['skill-benchmark','omega-skill-interference-benchmark'],
+        'interoperability':['omega-skill-compatibility-audit','omega-effective-policy-explainer','omega-workflow-handoff-contract']}
+    if intent not in selections or complexity not in roles or type(conflict) is not bool:raise ValueError('Invalid plan intent/complexity/conflict')
+    contract=None
+    if workflow is not None:
+        from omega.interop import handoff
+        contract=handoff(ROOT,workflow)
+    return {'complexity': complexity,'intent':intent,'workflow_contract':contract, 'agents': roles[complexity],
             'schedule': 'sequential; parallel only independent read tasks',
             'max_concurrent_agents': min(2,CONFIG['limits']['max_agents']), 'isolation': 'worktree' if conflict else 'branch',
-            'skills': ['repo-map','controlled-change','quality-gates','project-memory'],
+            'skills':selections[intent], 'selection':'explicit intent; no automatic skill discovery or agent dispatch',
             'limits': CONFIG['limits'], 'execution': 'manual Claude orchestration; no API calls'}
 
 
@@ -71,7 +83,8 @@ def inventory():
             p = confined(name)
             if not p.is_file():
                 continue
-            entry = {'path': name, 'bytes': p.stat().st_size}
+            kind='manifest' if p.name in ('package.json','pyproject.toml','requirements.txt','go.mod','Cargo.toml','pom.xml') or 'lock' in p.name else 'ci' if name.startswith('.github/workflows/') else 'test' if 'tests' in p.parts or p.name.startswith('test_') else 'documentation' if p.suffix=='.md' else 'source' if p.suffix in ('.py','.js','.ts','.go','.rs','.java','.tsx','.jsx') else 'other'
+            entry = {'path': name, 'bytes': p.stat().st_size,'kind':kind}
             if used + len(json.dumps(entry)) > CONFIG['limits']['max_context_bytes']:
                 skipped.append(name)
                 continue
@@ -150,7 +163,8 @@ def validate_gates():
 def gates():
     validate_gates()  # Validate ALL policy before executing the first command.
     from omega.records import workspace, test_outcomes
-    before=workspace(ROOT,git)
+    from omega.records import execution_context
+    before=workspace(ROOT,git);execution=execution_context(ROOT,CONFIG)
     results=[]
     for name,argv in CONFIG['gates'].items():
         result=run(argv, CONFIG['limits']['max_gate_seconds'])
@@ -159,7 +173,9 @@ def gates():
     test_row=next(r for r in results if r['gate']=='tests')
     test_row['adapter']=CONFIG.get('test_adapter','omega')
     counts=test_outcomes(test_row)
-    return {'kind':'gates','test_adapter':CONFIG.get('test_adapter','omega'),'test_outcomes':counts,'passed':bool(results) and counts is not None and before==after and all(r['exit_code']==0 for r in results),
+    return {'kind':'gates','test_adapter':CONFIG.get('test_adapter','omega'),'test_outcomes':counts,'execution_fingerprint':execution['sha256'],'execution_context':execution['details'],
+            'execution_unchanged':execution['sha256']==execution_context(ROOT,CONFIG)['sha256'],
+            'passed':bool(results) and counts is not None and before==after and execution['sha256']==execution_context(ROOT,CONFIG)['sha256'] and all(r['exit_code']==0 for r in results),
             'workspace_sha256':before,'workspace_unchanged':before==after,'results':results}
 
 
@@ -191,26 +207,60 @@ def _dispatch():
         if args.command=='gates' and not args.gate_config:raise ValueError('External project gates require an explicit reviewed --gate-config')
         if args.command in ('candidate','compare','benchmark'):raise ValueError('Skill release management must target the engine repository')
     code=0
-    if args.command=='context':
+    new_commands={'skill-compatibility-audit','effective-policy-explainer','workflow-handoff-contract',
+                  'skill-interference-benchmark','project-workflow-adapter','evidence-reconciler',
+                  'memory-reconciliation','context-sufficiency-check'}
+    if args.command in new_commands:
+        from omega.io import read_json
+        from omega.interop import compatibility,handoff,project_adapter
+        from omega.analysis_tools import context_check,reconcile_evidence,reconcile_memory,interference
+        document=read_json(ROOT,args.input) if args.input else None
+        if args.command=='skill-compatibility-audit':result=compatibility(ROOT,args.skill_root,args.hook_config,document)
+        elif args.command=='effective-policy-explainer':
+            from omega.policy import explain
+            result=explain(document,ROOT)
+        elif args.command=='workflow-handoff-contract':result=handoff(ROOT,document)
+        elif args.command=='skill-interference-benchmark':result=interference(document)
+        elif args.command=='project-workflow-adapter':result=project_adapter(ROOT)
+        elif args.command=='evidence-reconciler':result=reconcile_evidence(ROOT,args.evidence or ([args.record] if args.record else []),git,CONFIG)
+        elif args.command=='memory-reconciliation':
+            names=[args.record] if args.record else document.get('records',[]) if isinstance(document,dict) else []
+            result=reconcile_memory(ROOT,names,git('rev-parse','HEAD'))
+        else:result=context_check(ROOT,document)
+        code=0 if result.get('passed',result.get('allowed',False)) else 1
+    elif args.command=='context':
         from omega.context import packet
         result=packet(ROOT,args.select,args.max_bytes)
+        if args.input:
+            from omega.io import read_json
+            task=read_json(ROOT,args.input)
+            if not isinstance(task,dict):raise ValueError('Expected a task manifest')
+            result['task']={k:task[k] for k in ('acceptance','constraints')}
+            from omega.context import encode
+            if len(encode(result).encode())>args.max_bytes:raise ValueError('Task packet exceeds byte budget')
     elif args.command=='doctor': result=doctor()
     elif args.command=='map': result=inventory()
-    elif args.command=='plan':result=plan(args.complexity,args.conflict)
+    elif args.command=='plan':
+        from omega.io import read_json
+        doc=read_json(ROOT,args.input) if args.input else {}
+        if not isinstance(doc,dict):raise ValueError('Expected a plan input object')
+        result=plan(doc.get('complexity',args.complexity),doc.get('conflict',args.conflict),doc.get('intent','change'),doc.get('workflow'))
+        code=1 if result['workflow_contract'] is not None and not result['workflow_contract']['passed'] else 0
     elif args.command=='audit':
         result=audit();code=0 if result['passed'] else 1
     elif args.command=='benchmark':
         if args.skill:
             from omega.skills import assess, suite_digest
-            from omega.records import workspace, test_outcomes
+            from omega.records import workspace, test_outcomes, execution_context
             assessment=assess(ROOT,args.skill,args.candidate)
-            before=workspace(ROOT,git)
+            before=workspace(ROOT,git);execution=execution_context(ROOT,CONFIG)
             scenarios=run(['python3','-m','omega.test_runner','--start','tests','--pattern','test_workflows.py'],CONFIG['limits']['max_gate_seconds'])
             result={'kind':'skill-evaluation','skill':args.skill,'assessment':assessment,
-                    'candidate_sha256':assessment['sha256'],'suite_sha256':suite_digest(ROOT),
+                    'candidate_sha256':assessment['sha256'],'candidate_bundle_sha256':assessment['bundle_sha256'],'suite_sha256':suite_digest(ROOT),
                     'workspace_sha256':before,'workspace_unchanged':before==workspace(ROOT,git),
+                    'execution_fingerprint':execution['sha256'],'execution_unchanged':execution['sha256']==execution_context(ROOT,CONFIG)['sha256'],
                     'scenarios':scenarios,'test_outcomes':test_outcomes(scenarios),'native_quality':'UNVERIFIED'}
-            result['passed']=assessment['passed'] and result['test_outcomes'] is not None and result['workspace_unchanged']
+            result['passed']=assessment['passed'] and result['test_outcomes'] is not None and result['workspace_unchanged'] and result['execution_unchanged']
             result['evidence']=save('evidence',result)
         else:result=benchmark()
         code=0 if result['passed'] else 1
@@ -227,7 +277,7 @@ def _dispatch():
         code=1 if result['stale'] else 0
     elif args.command=='change-plan':
         from omega.change import create
-        result=create(ROOT,git,args.allow,args.acceptance,CONFIG['limits'])
+        result=create(ROOT,git,args.allow,args.acceptance,CONFIG['limits'],args.include_existing)
         result={'record':save('changes',result),**result}
     elif args.command=='change-check':
         from omega.change import check
@@ -245,7 +295,11 @@ def _dispatch():
         if re.search(r'(?i)(sk-[a-z0-9_-]{12,}|gh[pousr]_[a-z0-9]{12,}|-----BEGIN .*PRIVATE KEY|(?:password|token|secret|api_key)\s*[:=]\s*\S+)',text):
             raise ValueError('Possible secret; redact before storing')
         from omega.records import memory_payload
-        result={'memory':save('memory',memory_payload(ROOT,args.title,args.body,args.select,args.evidence))}
+        payload=memory_payload(ROOT,args.title,args.body,args.select,args.evidence)
+        if args.key:
+            if not re.fullmatch('[a-z0-9][a-z0-9_.-]{0,63}',args.key):raise ValueError('Invalid decision key')
+            payload['decision_key']=args.key
+        result={'memory':save('memory',payload)}
     elif args.command=='isolate':
         if not args.name or not re.fullmatch(r'[a-zA-Z0-9][a-zA-Z0-9_-]{0,60}',args.name): raise ValueError('Invalid branch name')
         if git('status','--porcelain'): raise ValueError('Dirty checkout: preserve changes before isolation')
@@ -274,7 +328,7 @@ def _dispatch():
         code=0 if result['benchmark']['passed'] else 1
     else:
         if not args.baseline:raise ValueError('--baseline required')
-        from omega.records import load, workspace, valid_gates, test_outcomes
+        from omega.records import load, workspace, valid_gates, test_outcomes, execution_context
         from omega.skills import assess
         from omega.safety import artifact_path
         _,baseline=load(ROOT,args.baseline,'baselines')
@@ -283,13 +337,14 @@ def _dispatch():
         candidate = artifact_path(ROOT,args.candidate or baseline['candidate'],'candidates')
         contract=assess(ROOT,baseline['skill'],str(candidate))
         stable_modified = baseline['sha256'] != fingerprint(baseline['skill'])
-        passed=same_suite and not stable_modified and baseline['benchmark']['passed'] and current['passed'] and contract['advanced_passed'] and contract['score']>=baseline['skill_contract']['score']
+        stable_bundle_modified=baseline['skill_contract'].get('bundle_sha256')!=assess(ROOT,baseline['skill'])['bundle_sha256']
+        passed=same_suite and not stable_modified and not stable_bundle_modified and baseline['benchmark']['passed'] and current['passed'] and contract['advanced_passed'] and contract['score']>=baseline['skill_contract']['score']
         gate_ok=False;scenario_ok=False;checks=[]
         for name in args.evidence:
             _,ev=load(ROOT,name,'evidence')
-            fresh=ev.get('workspace_sha256')==workspace(ROOT,git) and ev.get('workspace_unchanged') is True and ev.get('head')==git('rev-parse','HEAD') and ev.get('passed') is True
+            fresh=ev.get('workspace_sha256')==workspace(ROOT,git) and ev.get('workspace_unchanged') is True and ev.get('head')==git('rev-parse','HEAD') and ev.get('passed') is True and ev.get('execution_fingerprint')==execution_context(ROOT,CONFIG)['sha256'] and ev.get('execution_unchanged') is True
             if ev.get('kind')=='skill-evaluation':
-                valid=fresh and ev.get('skill')==baseline['skill'] and ev.get('candidate_sha256')==contract['sha256'] and ev.get('suite_sha256')==current['suite_sha256'] and isinstance(ev.get('scenarios'),dict) and test_outcomes(ev['scenarios']) is not None
+                valid=fresh and ev.get('skill')==baseline['skill'] and ev.get('candidate_sha256')==contract['sha256'] and ev.get('candidate_bundle_sha256')==contract['bundle_sha256'] and ev.get('suite_sha256')==current['suite_sha256'] and isinstance(ev.get('scenarios'),dict) and test_outcomes(ev['scenarios']) is not None
                 scenario_ok=scenario_ok or valid
             else:
                 valid=fresh and valid_gates(ev,CONFIG['gates'],CONFIG.get('test_adapter','omega'))
@@ -299,7 +354,8 @@ def _dispatch():
         result={'passed':passed,'skill':baseline['skill'],'before':baseline['sha256'],
                 'after':hashlib.sha256(candidate.read_bytes()).hexdigest(),'benchmark':current,'stable_modified':stable_modified,
                 'candidate_contract':contract,'baseline_contract':baseline['skill_contract'],'evidence_checks':checks,
-                'eligible_for_review':passed and gate_ok and scenario_ok,
+                'eligible_for_review':passed and gate_ok and scenario_ok,'native_release_eligible':False,
+                'review_scope':'offline contract and tooling only; native skill behavior unverified',
                 'promotion':'not performed; human review required; native quality remains UNVERIFIED'}
         code=0 if passed else 1
     from omega.context import encode
