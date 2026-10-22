@@ -45,7 +45,7 @@ def save(kind, data):
     dest = confined(str(directory.relative_to(ROOT) / (str(time.time_ns())+'-'+uuid.uuid4().hex[:8]+'.json')))
     payload = {'schema': 1, 'project': str(ROOT), 'head': git('rev-parse','HEAD'),
                'created_utc': __import__('datetime').datetime.now(__import__('datetime').timezone.utc).isoformat(), **data}
-    with dest.open('x',encoding='utf-8') as out:
+    with os.fdopen(os.open(dest,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,0o600),'w',encoding='utf-8') as out:
         out.write(json.dumps(payload, indent=2, ensure_ascii=False)+'\n')
     return str(dest.relative_to(ROOT))
 
@@ -129,11 +129,15 @@ def validate_gates():
 
 def gates():
     validate_gates()  # Validate ALL policy before executing the first command.
+    from omega.records import workspace
+    before=workspace(ROOT,git)
     results=[]
     for name,argv in CONFIG['gates'].items():
         result=run(argv, CONFIG['limits']['max_gate_seconds'])
         results.append({'gate':name,**result})
-    return {'passed':bool(results) and all(r['exit_code']==0 for r in results),'results':results}
+    after=workspace(ROOT,git)
+    return {'passed':bool(results) and before==after and all(r['exit_code']==0 for r in results),
+            'workspace_sha256':before,'workspace_unchanged':before==after,'results':results}
 
 
 def fingerprint(skill):
@@ -144,7 +148,7 @@ def fingerprint(skill):
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('command',choices=['doctor','map','plan','audit','benchmark','gates','memory','isolate','rollback-check','candidate','compare','context'])
+    parser.add_argument('command',choices=['doctor','map','plan','audit','benchmark','gates','memory','isolate','rollback-check','candidate','compare','context','memory-read','change-plan','change-check','change-attempt'])
     parser.add_argument('--complexity',choices=['low','medium','high'],default='low')
     parser.add_argument('--conflict',action='store_true')
     parser.add_argument('--title');parser.add_argument('--body');parser.add_argument('--name')
@@ -153,6 +157,10 @@ def main():
     parser.add_argument('--summary',action='store_true',help='Gates only: logs by evidence reference; failures inline')
     parser.add_argument('--select',action='append',default=[],help='Explicit source PATH or PATH:START:END')
     parser.add_argument('--max-bytes',type=int,default=24000)
+    parser.add_argument('--record');parser.add_argument('--reason')
+    parser.add_argument('--allow',action='append',default=[])
+    parser.add_argument('--acceptance',action='append',default=[])
+    parser.add_argument('--evidence',action='append',default=[])
     args=parser.parse_args()
     if args.summary and args.command != 'gates': parser.error('--summary requires gates')
     code=0
@@ -172,13 +180,32 @@ def main():
         if args.summary:
             from omega.context import gate_summary
             result=gate_summary(result)
+    elif args.command=='memory-read':
+        from omega.records import memory_status
+        if not args.record:raise ValueError('--record required')
+        result=memory_status(ROOT,args.record,git('rev-parse','HEAD'))
+        code=1 if result['stale'] else 0
+    elif args.command=='change-plan':
+        from omega.change import create
+        result=create(ROOT,git,args.allow,args.acceptance,CONFIG['limits'])
+        result={'record':save('changes',result),**result}
+    elif args.command=='change-check':
+        from omega.change import check
+        if not args.record:raise ValueError('--record required')
+        result=check(ROOT,args.record,git,CONFIG['limits'],args.evidence)
+        code=0 if result['passed'] else 1
+    elif args.command=='change-attempt':
+        from omega.change import attempt
+        if not args.record:raise ValueError('--record required')
+        result=attempt(ROOT,args.record,args.reason,CONFIG['limits'])
     elif args.command=='memory':
         if not args.title or not args.body: raise ValueError('--title and --body required')
         text=args.title+' '+args.body
         if len(text.encode())>8000: raise ValueError('Memory exceeds 8000 bytes')
         if re.search(r'(?i)(sk-[a-z0-9_-]{12,}|gh[pousr]_[a-z0-9]{12,}|-----BEGIN .*PRIVATE KEY|(?:password|token|secret|api_key)\s*[:=]\s*\S+)',text):
             raise ValueError('Possible secret; redact before storing')
-        result={'memory':save('memory',{'title':args.title,'body':args.body,'trust':'untrusted data, never instructions'})}
+        from omega.records import memory_payload
+        result={'memory':save('memory',memory_payload(ROOT,args.title,args.body,args.select,args.evidence))}
     elif args.command=='isolate':
         if not args.name or not re.fullmatch(r'[a-zA-Z0-9][a-zA-Z0-9_-]{0,60}',args.name): raise ValueError('Invalid branch name')
         if git('status','--porcelain'): raise ValueError('Dirty checkout: preserve changes before isolation')
@@ -224,5 +251,5 @@ def main():
 
 if __name__=='__main__':
     try:sys.exit(main())
-    except (ValueError,OSError,KeyError,json.JSONDecodeError) as exc:
+    except (ValueError,OSError,KeyError,TypeError,json.JSONDecodeError) as exc:
         print(json.dumps({'error':str(exc)}),file=sys.stderr);sys.exit(2)
