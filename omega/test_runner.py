@@ -1,6 +1,7 @@
 """unittest entrypoint that rejects empty/all-skipped suites and reports outcomes."""
 import argparse
 import json
+from pathlib import Path
 import sys
 import unittest
 
@@ -9,6 +10,7 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--start',default='tests');p.add_argument('--pattern',default='test_*.py')
     args=p.parse_args()
+    sys.path.insert(0,str(Path.cwd()))  # Target tests intentionally import their own application.
     suite=unittest.defaultTestLoader.discover(args.start,pattern=args.pattern)
     result=unittest.TextTestRunner(verbosity=2,stream=sys.stdout).run(suite)
     outcomes={'run':result.testsRun,'failed':len(result.failures),'errors':len(result.errors),

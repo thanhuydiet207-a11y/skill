@@ -10,7 +10,8 @@ import sys
 import time
 import uuid
 
-ROOT = Path(__file__).resolve().parent.parent
+ENGINE_ROOT = Path(__file__).resolve().parent.parent
+ROOT = ENGINE_ROOT
 CONFIG = json.loads((ROOT / 'omega/config.json').read_text())
 
 
@@ -21,14 +22,14 @@ def confined(path):
     return p
 
 
-def run(argv, timeout=120):
+def run(argv, timeout=120, capture_bytes=None):
     from omega.process import execute
-    return execute(argv,ROOT,timeout,CONFIG['limits']['max_evidence_bytes'],
+    return execute(argv,ROOT,timeout,capture_bytes or CONFIG['limits']['max_evidence_bytes'],
                    CONFIG['limits'].get('max_output_bytes',1048576))
 
 
 def git(*args, raw=False):
-    result = run(['git', *args])
+    result = run(['git', *args],capture_bytes=min(1048576,CONFIG['limits'].get('max_output_bytes',1048576)))
     if result['truncated']:
         raise ValueError('Git control output truncated; operation refused, narrow scope or increase reviewed limit')
     if result.get('invalid_utf8'):
@@ -78,7 +79,7 @@ def inventory():
             used += len(json.dumps(entry))
         except ValueError:
             skipped.append(name)
-    return {'files': safe, 'omitted': skipped, 'status': git('status','--short'),
+    return {'files': safe, 'omitted': skipped[:20], 'omitted_count':len(skipped),'omitted_list_truncated':len(skipped)>20, 'status': git('status','--short')[:4000],
             'note': 'Metadata only; no file contents or credential discovery'}
 
 
@@ -97,7 +98,9 @@ def doctor():
         native={'available':True,'source':source,**execute([binary,'--version'],ROOT,timeout=15,env=environment)}
     return {'python':sys.version.split()[0],'git':git('--version'),'claude':native,
             'native_integration':'Version probe only; skills, agents and hook behavior remain UNVERIFIED',
-            'hooks_enabled':False,'mcp_enabled':False}
+            'hooks_enabled':'unknown','mcp_enabled':'unknown',
+            'project_settings_present':(ROOT/'.claude/settings.json').exists(),
+            'effective_policy':'Not resolved: user, managed and plugin settings were not inspected'}
 
 
 def audit():
@@ -153,8 +156,10 @@ def gates():
         result=run(argv, CONFIG['limits']['max_gate_seconds'])
         results.append({'gate':name,**result})
     after=workspace(ROOT,git)
-    counts=test_outcomes(next(r for r in results if r['gate']=='tests'))
-    return {'kind':'gates','test_outcomes':counts,'passed':bool(results) and counts is not None and before==after and all(r['exit_code']==0 for r in results),
+    test_row=next(r for r in results if r['gate']=='tests')
+    test_row['adapter']=CONFIG.get('test_adapter','omega')
+    counts=test_outcomes(test_row)
+    return {'kind':'gates','test_adapter':CONFIG.get('test_adapter','omega'),'test_outcomes':counts,'passed':bool(results) and counts is not None and before==after and all(r['exit_code']==0 for r in results),
             'workspace_sha256':before,'workspace_unchanged':before==after,'results':results}
 
 
@@ -165,24 +170,26 @@ def fingerprint(skill):
     return hashlib.sha256(source_path(ROOT,f'.claude/skills/{skill}/SKILL.md').read_bytes()).hexdigest()
 
 
-def main():
-    parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('command',choices=['doctor','map','plan','audit','benchmark','gates','memory','isolate','rollback-check','candidate','compare','context','memory-read','change-plan','change-check','change-attempt'])
-    parser.add_argument('--complexity',choices=['low','medium','high'],default='low')
-    parser.add_argument('--conflict',action='store_true')
-    parser.add_argument('--title');parser.add_argument('--body');parser.add_argument('--name')
-    parser.add_argument('--worktree');parser.add_argument('--skill');parser.add_argument('--baseline');parser.add_argument('--candidate')
-    parser.add_argument('--compact',action='store_true',help='Lossless compact JSON')
-    parser.add_argument('--summary',action='store_true',help='Gates only: logs by evidence reference; failures inline')
-    parser.add_argument('--select',action='append',default=[],help='Explicit source PATH or PATH:START:END')
-    parser.add_argument('--max-bytes',type=int,default=24000)
-    parser.add_argument('--record');parser.add_argument('--reason')
-    parser.add_argument('--allow',action='append',default=[])
-    parser.add_argument('--acceptance',action='append',default=[])
-    parser.add_argument('--evidence',action='append',default=[])
-    args=parser.parse_args()
-    if args.summary and args.command != 'gates': parser.error('--summary requires gates')
-    if args.candidate and not (args.command=='compare' or args.command=='benchmark' and args.skill):parser.error('--candidate requires compare or benchmark --skill')
+def _dispatch():
+    global ROOT, CONFIG
+    from omega.arguments import parser as make_parser,validate
+    parser=make_parser();args=parser.parse_args();validate(args)
+    if args.project_root:
+        target=Path(args.project_root)
+        if not target.is_absolute() or not target.is_dir():raise ValueError('Project root must be an existing absolute directory')
+        ROOT=target.resolve()
+        if Path(git('rev-parse','--show-toplevel')).resolve()!=ROOT:raise ValueError('Project root must equal its Git checkout root')
+    if args.gate_config:
+        from omega.io import read_json
+        from omega.safety import artifact_path
+        artifact_path(ROOT,args.gate_config,'configs')
+        policy=read_json(ROOT,args.gate_config)
+        if not isinstance(policy,dict) or policy.get('schema')!=1 or set(policy)-{'schema','gates','test_adapter'}:raise ValueError('Invalid gate policy schema')
+        if policy.get('test_adapter','omega') not in ('omega','go','jest','junit'):raise ValueError('Unknown test adapter')
+        CONFIG={**CONFIG,'gates':policy.get('gates'),'test_adapter':policy.get('test_adapter','omega')}
+    if ROOT!=ENGINE_ROOT and args.project_root:
+        if args.command=='gates' and not args.gate_config:raise ValueError('External project gates require an explicit reviewed --gate-config')
+        if args.command in ('candidate','compare','benchmark'):raise ValueError('Skill release management must target the engine repository')
     code=0
     if args.command=='context':
         from omega.context import packet
@@ -225,7 +232,7 @@ def main():
     elif args.command=='change-check':
         from omega.change import check
         if not args.record:raise ValueError('--record required')
-        result=check(ROOT,args.record,git,CONFIG['limits'],args.evidence,CONFIG['gates'])
+        result=check(ROOT,args.record,git,CONFIG['limits'],args.evidence,CONFIG['gates'],CONFIG.get('test_adapter','omega'))
         code=0 if result['passed'] else 1
     elif args.command=='change-attempt':
         from omega.change import attempt
@@ -285,7 +292,7 @@ def main():
                 valid=fresh and ev.get('skill')==baseline['skill'] and ev.get('candidate_sha256')==contract['sha256'] and ev.get('suite_sha256')==current['suite_sha256'] and isinstance(ev.get('scenarios'),dict) and test_outcomes(ev['scenarios']) is not None
                 scenario_ok=scenario_ok or valid
             else:
-                valid=fresh and valid_gates(ev,CONFIG['gates'])
+                valid=fresh and valid_gates(ev,CONFIG['gates'],CONFIG.get('test_adapter','omega'))
                 gate_ok=gate_ok or valid
             checks.append({'path':name,'valid':valid})
         passed=passed and all(x['valid'] for x in checks)
@@ -298,6 +305,13 @@ def main():
     from omega.context import encode
     print(encode(result,args.compact))
     return code
+
+
+def main():
+    global ROOT, CONFIG
+    previous_root,previous_config=ROOT,CONFIG
+    try:return _dispatch()
+    finally:ROOT,CONFIG=previous_root,previous_config
 
 
 if __name__=='__main__':

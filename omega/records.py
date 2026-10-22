@@ -40,7 +40,7 @@ def workspace(root, git):
             current=current/part
             if current.is_symlink():symlink=True;break
         if symlink:state={'symlink':str(current.readlink())}
-        elif lexical.is_file():state={'sha256':digest(lexical)}
+        elif lexical.is_file():state={'sha256':digest(lexical),'mode':lexical.stat().st_mode & 0o7777}
         elif not lexical.exists():state={'deleted':True}
         else:raise ValueError('Unsupported Git entry; inspect submodule or special file')
         entries.append([name,state])
@@ -86,21 +86,12 @@ def memory_status(root,name,head):
 
 
 def test_outcomes(result):
-    """Use the runner's explicit counts, including when prefix capture was truncated."""
-    if type(result.get('exit_code')) is not int or result['exit_code']!=0:return None
-    text=result.get('output_tail') or result.get('output','')
-    lines=[x[len('OMEGA_TEST_RESULT '):] for x in text.splitlines() if x.startswith('OMEGA_TEST_RESULT ')]
-    if len(lines)!=1:return None
-    try:counts=json.loads(lines[0])
-    except (ValueError,TypeError):return None
-    keys=('run','passed','failed','errors','skipped','expected_failures','unexpected_successes')
-    if not isinstance(counts,dict) or any(type(counts.get(x)) is not int or counts[x]<0 for x in keys):return None
-    if counts['run']!=sum(counts[x] for x in keys if x!='run') or counts['passed']<=0:return None
-    if any(counts[x] for x in ('failed','errors','unexpected_successes')):return None
-    return counts
+    from omega.adapters import outcomes
+    return outcomes(result,result.get('adapter','omega'))
 
 
-def valid_gates(record,commands):
+def valid_gates(record,commands,test_adapter="omega"):
+    if record.get('test_adapter','omega')!=test_adapter:return False
     rows=record.get('results')
     if record.get('kind')!='gates' or record.get('passed') is not True or not isinstance(rows,list) or len(rows)!=len(commands):return False
     if not all(isinstance(r,dict) and isinstance(r.get('gate'),str) and r.get('gate') in commands and r.get('command')==commands[r['gate']] and type(r.get('exit_code')) is int and r['exit_code']==0 for r in rows):return False
