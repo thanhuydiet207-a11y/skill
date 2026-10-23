@@ -8,7 +8,7 @@ Bản nâng cấp 0.2 và bằng chứng hiện tại: [DEEP_HARDENING.md](DEEP_
 flowchart TD
     U[Task + acceptance + permissions] --> D[Doctor và repository map]
     D --> R[Router theo complexity và conflict]
-    R --> S[Chỉ tải skill cần dùng]
+    R --> S[Một skill omega: chỉ tải reference cần dùng]
     S --> I[Investigator: evidence và giả thuyết]
     I --> E[Engineer: branch hoặc worktree riêng]
     E --> V[Verifier: build tests audit regression]
@@ -23,7 +23,7 @@ CLI stdlib hỗ trợ kế hoạch và bằng chứng; Claude Code mới là run
 
 ## 36 capability gốc, 8 extension, 6 nhóm
 
-Catalog máy đọc: `omega/catalog.json`. Mỗi nhóm gốc có 6 capability, giữ nguyên origin=foundation. Bảng dưới mô tả 36 mục gốc, trong đó 5 mục in đậm đã triển khai. Bản 0.3 bổ sung 8 extension có SKILL.md/công cụ/tests thật, nâng tổng catalog lên 44 và số skill hoạt động lên 13; 31 mục gốc còn lại vẫn planned.
+Catalog máy đọc: `omega/catalog.json`. Mỗi nhóm gốc có 6 capability, giữ nguyên origin=foundation. Bảng dưới mô tả 36 mục gốc, trong đó 5 mục in đậm đã triển khai; 8 extension bổ sung đưa catalog lên 44. Từ 0.6, **chỉ một SKILL.md tên omega**: 13 capability đã triển khai là chế độ/reference trong skill đó, còn 31 mục planned. Registry `omega/modes.json` ánh xạ từng chế độ tới commands và reference; origin trong catalog là nguồn gốc capability, không phải số entry skill.
 
 | Nhóm | Skill |
 |---|---|
@@ -45,7 +45,7 @@ Capabilities phụ như doctor/isolate/rollback-check có CLI helper nhưng chư
 | Operations | omega-effective-policy-explainer, omega-project-workflow-adapter |
 | Evolution | dùng analyzer interference qua intent evolve; chưa thêm extension vào nhóm này |
 
-Tên 5 skill cũ giữ tương thích. Tiền tố omega- của extension giúp giảm trùng tên, chưa phải namespace plugin native. Quy tắc phối hợp và schema: [INTEROPERABILITY_GUIDE.md](INTEROPERABILITY_GUIDE.md).
+Tên cũ giữ làm mode ID/reference, không còn slash skill độc lập hoặc đích --skill riêng. CLI map/gates/memory và các command chức năng giữ nguyên; candidate/benchmark dùng --skill omega. Plan trả skills=[omega], modes và reference paths theo intent, không preload nội dung hoặc tự dispatch. Cách chuyển: [UNIFIED_SKILL.md](UNIFIED_SKILL.md). Quy tắc phối hợp và schema: [INTEROPERABILITY_GUIDE.md](INTEROPERABILITY_GUIDE.md).
 
 ## 10 vai trò chuyên môn
 
@@ -92,7 +92,7 @@ Audit là bộ quy tắc tĩnh giới hạn, **không** là phân tích taint, s
 ## Tiêu chí nghiệm thu
 
 - [x] Không dependency Python bên thứ ba; doctor phát hiện và chạy version probe tool Claude cục bộ khi có.
-- [x] 36 capability gốc + 8 extension được phân nhóm; 13 skill và 3 agent spec có nội dung vận hành.
+- [x] 36 capability gốc + 8 extension được phân nhóm; một skill omega có 13 chế độ và 3 agent spec có nội dung vận hành.
 - [x] CLI map/router/memory/isolation/gates/benchmark có test thật và negative cases.
 - [x] Không kích hoạt hook trước kiểm tra compatibility; MCP tắt mặc định.
 - [ ] Chạy slash skill và giao agent thực tế bằng một phiên Claude được xác thực.

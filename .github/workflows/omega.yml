@@ -18,7 +18,7 @@ jobs:
           check-latest: false
       - name: Install pinned compiler development tools without lifecycle scripts
         run: npm ci --prefix integration/typescript --ignore-scripts --no-audit --no-fund --cache "$PWD/.omega/npm-cache"
-      - name: Python compilation, strict TypeScript build, workflows, security rules and 13 skill contracts
+      - name: Python compilation, strict TypeScript build, workflows, security rules and unified skill with 13 mode contracts
         run: python3 -m omega gates
       - name: TypeScript read-only bridge against real Python engine
         run: node --test integration/typescript/omega-bridge.test.mjs

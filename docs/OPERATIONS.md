@@ -14,9 +14,11 @@ python3 -m omega rollback-check
 
 Kết quả JSON ra stdout; lỗi CLI exit 2, gate fail exit 1. `gates` lưu record vào `.omega/evidence/`. Không coi doctor exit 0 là Claude đã dùng được: đọc trường `claude` và `native_integration`.
 
-## Skills
+## Một skill omega, 13 chế độ
 
-| Skill | Lệnh chính | Đầu ra |
+Chỉ entry `.claude/skills/omega/SKILL.md` được đăng ký. Các tên trong hai bảng dưới là mode ID; hướng dẫn nằm ở `.claude/skills/omega/references/MODE.md`. Cách dùng: [UNIFIED_SKILL.md](UNIFIED_SKILL.md).
+
+| Chế độ | Lệnh chính | Đầu ra |
 |---|---|---|
 | repo-map | `python3 -m omega map` | metadata inventory, Git status, omitted paths |
 | controlled-change | `python3 -m omega isolate --name issue-123` | branch mới khi checkout sạch |
@@ -24,9 +26,9 @@ Kết quả JSON ra stdout; lỗi CLI exit 2, gate fail exit 1. `gates` lưu rec
 | project-memory | `python3 -m omega memory --title "ADR: stdlib" --body "Dùng stdlib để tránh dependency; evidence: ..."` | JSON commit-stamped |
 | skill-benchmark | `python3 -m omega benchmark` | từng router case pass/fail |
 
-8 skill extension dùng prefix `omega-` trong tên SKILL.md và command tương ứng bỏ prefix:
+8 chế độ bổ sung giữ prefix omega- trong mode ID; command tương ứng bỏ prefix:
 
-| Skill | Command | Kết quả |
+| Chế độ | Command | Kết quả |
 |---|---|---|
 | omega-skill-compatibility-audit | `skill-compatibility-audit --skill-root .claude/skills` | static collisions, selected scopes |
 | omega-effective-policy-explainer | `effective-policy-explainer --input INPUT` | quyết định OMEGA, platform unknown |
@@ -37,9 +39,9 @@ Kết quả JSON ra stdout; lỗi CLI exit 2, gate fail exit 1. `gates` lưu rec
 | omega-memory-reconciliation | `memory-reconciliation --input INPUT` | conflicting/stale memory; giữ nguyên records |
 | omega-context-sufficiency-check | `context-sufficiency-check --input INPUT` | invariants/ranges/hash/content |
 
-Chạy bằng `python3 -m omega COMMAND --compact`. Schema và giới hạn từng command: [INTEROPERABILITY_GUIDE.md](INTEROPERABILITY_GUIDE.md). Không nạp toàn bộ 13 skill vào mọi task.
+Chạy bằng `python3 -m omega COMMAND --compact`. Schema và giới hạn từng command: [INTEROPERABILITY_GUIDE.md](INTEROPERABILITY_GUIDE.md). Chỉ đọc reference của bước đang làm.
 
-Trong Claude đã tương thích, gọi tường minh `/repo-map`, `/controlled-change`, `/quality-gates`, `/project-memory`, `/skill-benchmark`. Đây là cú pháp dự kiến cần xác minh bằng help/version của bản cài; chưa chạy ở môi trường này. CLI thực hiện được độc lập với Claude.
+Trong Claude Code gọi tường minh `/omega TÁC_VỤ`, ví dụ `/omega quality-gates kiểm tra thay đổi hiện tại`. Frontmatter yêu cầu explicit invocation; native activation vẫn cần phiên xác thực và trace thật. CLI thực hiện được độc lập với Claude. Các slash skill cũ chuyển thành reference, không để alias entry gây discovery trùng lặp.
 
 ## Branch, worktree, rollback
 
@@ -76,10 +78,10 @@ MCP không cần cho workflow local này và đang tắt. Khi có nhu cầu: ch�
 ## Evolution và benchmark
 
 ```bash
-python3 -m omega candidate --skill repo-map
+python3 -m omega candidate --skill omega
 # Ghi đường dẫn baseline và candidate được in ra; chỉ sửa file candidate .omega/candidates/*.md.
 python3 -m omega gates --summary --compact
-python3 -m omega benchmark --skill repo-map --candidate .omega/candidates/DUONG_DAN_THUC_TE.md --compact
+python3 -m omega benchmark --skill omega --candidate .omega/candidates/DUONG_DAN_THUC_TE.md --compact
 python3 -m omega compare --baseline .omega/baselines/DUONG_DAN_THUC_TE.json --evidence .omega/evidence/GATE_THUC_TE.json --evidence .omega/evidence/SCENARIO_THUC_TE.json --compact
 ```
 

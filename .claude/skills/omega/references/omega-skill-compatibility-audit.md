@@ -1,9 +1,3 @@
----
-name: omega-skill-compatibility-audit
-description: Kiểm tra xung đột tên, hook và workflow khi kết hợp các bộ skill.
-disable-model-invocation: true
----
-
 # OMEGA skill-compatibility-audit
 
 ## Inputs

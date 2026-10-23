@@ -1,9 +1,3 @@
----
-name: omega-effective-policy-explainer
-description: Giải thích quyết định OMEGA cho một tool request khi có nhiều nguồn policy.
-disable-model-invocation: true
----
-
 # OMEGA effective-policy-explainer
 
 ## Inputs

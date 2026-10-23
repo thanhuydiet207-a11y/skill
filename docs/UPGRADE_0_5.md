@@ -1,5 +1,7 @@
 # OMEGA 0.5: report riêng, kiểm tra kiểu và deadline xuyên suốt
 
+> Snapshot lịch sử 0.5. Bản 0.6 gộp thành một skill omega; xem [UNIFIED_SKILL.md](UNIFIED_SKILL.md). Các số liệu dưới đây thuộc snapshot 0.5.
+
 ## Kết quả thực tế
 
 194 Python tests và 15 Node tests của bridge pass; build gate giờ gồm compile Python và strict TypeScript type-check không emit. Có 13 skill hoạt động; đợt này cập nhật nội dung 4 skill qua candidate/benchmark/gates/compare, không thêm agent hoặc placeholder. Bằng chứng: [report-integrity.json](evidence/report-integrity.json).

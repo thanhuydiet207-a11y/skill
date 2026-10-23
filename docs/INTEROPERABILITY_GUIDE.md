@@ -1,8 +1,8 @@
-# OMEGA 0.5 — kết hợp skill và chạy trên project khác
+# OMEGA 0.6 — kết hợp skill và chạy trên project khác
 
 ## Những gì đã thực thi được
 
-8 command phân tích mới chạy local bằng Python chuẩn. Chúng không cài skill ngoài, không gọi model/MCP, không tự dispatch agent, không sửa policy hoặc chọn người thắng cho quyết định kỹ thuật. Một proposal hoặc static check không phải chứng nhận tương thích native.
+OMEGA có một skill omega với 13 mode references; xem [UNIFIED_SKILL.md](UNIFIED_SKILL.md). Tám command phân tích interoperability chạy local bằng Python chuẩn. Chúng không cài skill ngoài, không gọi model/MCP, không tự dispatch agent, không sửa policy hoặc chọn người thắng cho quyết định kỹ thuật. Một proposal hoặc static check không phải chứng nhận tương thích native.
 
 5 skill cũ giữ tên để không phá lời gọi đã có. 8 skill mới dùng tiền tố `omega-` để giảm trùng tên. Đây là tên file/frontmatter, không phải khẳng định plugin namespace đã được Claude đăng ký. OMEGA không tự có quyền ưu tiên cao hơn skill khác.
 
@@ -100,3 +100,7 @@ Security gate quét .claude và omega bằng targeted static rules; source bị 
 ## Cập nhật 0.5
 
 Test_report optional cho Jest/JUnit dùng .omega/reports/{run_id}/FILENAME và {report_path} trong đúng args tests; nội dung report được lưu/hash, summary có reference, không tái sử dụng report cũ. Full engine build thêm strict TypeScript compiler từ dev tools đã pin; bridge có tổng request budget, deadline stdin và cancellation. Schema, setup, kiểm chứng/giới hạn: docs/UPGRADE_0_5.md.
+
+## Consolidation 0.6
+
+Plan trả skills=[omega], modes và references theo intent. Các tên capability cũ còn là mode IDs trong catalog, không là entry SKILL.md. Evolution dùng --skill omega, router-contract-v2 và baseline mới. Benchmark skill chạy toàn Python suite; bundle hash theo cả reference và docs bắc cầu nhận diện được. Chỉ đọc reference đang cần khi điều phối; validator hash trên filesystem không là model preload. CLI chức năng/argv policy giữ nguyên.

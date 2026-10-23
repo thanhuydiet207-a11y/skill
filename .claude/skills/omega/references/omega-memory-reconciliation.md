@@ -1,9 +1,3 @@
----
-name: omega-memory-reconciliation
-description: Phát hiện knowledge/decision khác nhau giữa các memory record cùng project.
-disable-model-invocation: true
----
-
 # OMEGA memory-reconciliation
 
 ## Inputs

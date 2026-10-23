@@ -1,27 +1,49 @@
 """Versioned offline skill contracts; no claim to evaluate LLM reasoning."""
 import hashlib
+import json
 import re
 from pathlib import Path
 from omega.safety import source_path, artifact_path, source_files
 
-COMMANDS={
-    'repo-map':['map','plan'],
-    'controlled-change':['isolate'],
-    'quality-gates':['gates','rollback-check'],
-    'project-memory':['memory'],
-    'skill-benchmark':['candidate','compare','benchmark'],
-}
-import json
-_EXTENSIONS=Path(__file__).resolve().parent/'extensions.json'
-if _EXTENSIONS.is_file():
-    extra=json.loads(_EXTENSIONS.read_text())
-    if not isinstance(extra,dict) or any(not isinstance(k,str) or not isinstance(v,list) or any(not isinstance(x,str) for x in v) for k,v in extra.items()):raise ValueError('Invalid skill registry')
-    COMMANDS.update(extra)
+COMMANDS={'omega':['doctor','map','plan']}
+MODES=json.loads((Path(__file__).resolve().parent/'modes.json').read_text())
+if not isinstance(MODES,dict) or len(MODES)!=13:raise ValueError('Invalid OMEGA mode registry')
+for name,mode in MODES.items():
+    if not re.fullmatch('[a-z0-9][a-z0-9-]{0,63}',name) or not isinstance(mode,dict) or set(mode)!={'commands','reference'}:
+        raise ValueError('Invalid OMEGA mode')
+    if mode['reference']!=f'references/{name}.md' or not isinstance(mode['commands'],list) or not mode['commands'] or any(not isinstance(x,str) or not re.fullmatch('[a-z][a-z-]*',x) for x in mode['commands']):
+        raise ValueError('Invalid OMEGA mode commands/reference')
 HEADINGS=('Inputs','Workflow','Evidence','Failure handling','Stop conditions')
+RESOURCE_PATTERN=r'(?:docs|references|scripts|assets)/[A-Za-z0-9_./-]+\.(?:md|py|json|sh|txt)'
+
+
+def resources_for(root,skill,body):
+    """Bound transitive local references for freshness, without executing their contents."""
+    pending=set(re.findall(RESOURCE_PATTERN,body));seen=set();resources=[];texts={};total=0
+    while pending:
+        name=min(pending);pending.remove(name)
+        if name in seen:continue
+        seen.add(name)
+        if len(seen)>64:raise ValueError('Skill resource count budget exceeded')
+        location=Path(root)/name if name.startswith('docs/') else Path(root)/'.claude/skills'/skill/name
+        try:
+            safe=source_path(root,str(location))
+            if not safe.is_file() or safe.stat().st_size>1048576:raise ValueError('Missing or oversized resource')
+            with safe.open('rb') as stream:data=stream.read(1048577)
+            if len(data)>1048576:raise ValueError('Oversized resource')
+            total+=len(data)
+            if total>1048576:raise OverflowError('Skill resource byte budget exceeded')
+            if safe.suffix=='.md':
+                text=data.decode('utf-8');texts[name]=text
+                pending.update(set(re.findall(RESOURCE_PATTERN,text))-seen)
+            resources.append({'path':str(safe.relative_to(root)),'sha256':hashlib.sha256(data).hexdigest(),'available':True})
+        except OverflowError as exc:raise ValueError(str(exc)) from exc
+        except (ValueError,OSError):resources.append({'path':name,'available':False})
+    return sorted(resources,key=lambda x:x['path']),texts
 
 
 def assess(root,skill,candidate=None):
-    if skill not in COMMANDS:raise ValueError('Unknown implemented skill')
+    if skill not in COMMANDS:raise ValueError('Only unified skill omega is registered; use --skill omega')
     path=artifact_path(root,candidate,'candidates') if candidate else source_path(root,f'.claude/skills/{skill}/SKILL.md')
     if not path.is_file() or path.stat().st_size>8192:raise ValueError('Missing or oversized skill')
     from omega.frontmatter import parse
@@ -40,18 +62,19 @@ def assess(root,skill,candidate=None):
         section=match[1].strip() if match else ''
         nonempty=len(section)>=24 and len(section.split())>=4
         checks.append({'id':'section:'+heading,'passed':nonempty,'required':False})
-    resources=[]
-    for name in sorted(set(re.findall(r'(?:docs|references|scripts|assets)/[A-Za-z0-9_./-]+\.(?:md|py|json|sh|txt)',body))):
-        location=Path(root)/name if name.startswith('docs/') else Path(root)/'.claude/skills'/skill/name
-        try:
-            safe=source_path(root,str(location))
-            if not safe.is_file() or safe.stat().st_size>1048576:raise ValueError('Missing or oversized resource')
-            data=safe.read_bytes()
-            resources.append({'path':str(safe.relative_to(root)),'sha256':hashlib.sha256(data).hexdigest(),'available':True})
-        except (ValueError,OSError):resources.append({'path':name,'available':False})
+    resources,texts=resources_for(root,skill,body)
+    modes=[]
+    direct=set(re.findall(RESOURCE_PATTERN,body))
+    for name,mode in MODES.items():
+        text=texts.get(mode['reference'],'')
+        commands=all(re.search(r'python3 -m omega '+re.escape(command)+r'(?=[\s`]|$)',text) for command in mode['commands'])
+        safe=not any(x in text for x in ('--dangerously-skip-permissions','bypassPermissions','curl -k '))
+        passed=mode['reference'] in direct and bool(text) and commands and safe
+        modes.append({'id':name,'reference':mode['reference'],'passed':passed})
+        checks.append({'id':'mode:'+name,'passed':passed,'required':True})
     checks.append({'id':'resources-resolve','passed':all(x['available'] for x in resources),'required':True})
     bundle=hashlib.sha256(raw+__import__('json').dumps(resources,sort_keys=True).encode()).hexdigest()
-    return {'skill':skill,'sha256':hashlib.sha256(raw).hexdigest(),'bundle_sha256':bundle,'resources':resources,'checks':checks,
+    return {'skill':skill,'sha256':hashlib.sha256(raw).hexdigest(),'bundle_sha256':bundle,'resources':resources,'modes':modes,'checks':checks,
             'passed':all(x['passed'] for x in checks if x['required']),
             'advanced_passed':all(x['passed'] for x in checks),
             'score':round(100*sum(x['passed'] for x in checks)/len(checks),2),

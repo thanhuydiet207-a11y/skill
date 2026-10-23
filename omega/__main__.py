@@ -79,10 +79,14 @@ def plan(complexity, conflict=False, intent="change", workflow=None):
     if workflow is not None:
         from omega.interop import handoff
         contract=handoff(ROOT,workflow,CONFIG['limits']['max_agents'])
+    from omega.skills import MODES
+    modes=selections[intent]
     return {'complexity': complexity,'intent':intent,'workflow_contract':contract, 'agents': roles[complexity],
             'schedule': 'sequential; parallel only independent read tasks',
             'max_concurrent_agents': min(2,CONFIG['limits']['max_agents']), 'isolation': 'worktree' if conflict else 'branch',
-            'skills':selections[intent], 'selection':'explicit intent; no automatic skill discovery or agent dispatch',
+            'skills':['omega'],'modes':modes,
+            'references':[f'.claude/skills/omega/{MODES[name]["reference"]}' for name in modes],
+            'selection':'one omega entry; explicit intent selects reference metadata only; no automatic agent dispatch',
             'limits': CONFIG['limits'], 'execution': 'manual Claude orchestration; no API calls'}
 
 
@@ -154,10 +158,10 @@ def benchmark():
     for case in cases:
         actual = plan(case['complexity'],case['conflict'])
         results.append({'id':case['id'], 'passed':all(actual[k] == case[k] for k in ('agents','isolation'))})
-    from omega.skills import assess, suite_digest, COMMANDS
+    from omega.skills import assess, suite_digest, COMMANDS, MODES
     skills=[assess(ROOT,name) for name in COMMANDS]
     suite_hash = suite_digest(ROOT)
-    return {'suite':'router-contract-v1','suite_sha256':suite_hash,'cases':results,'skills':skills,'passed':bool(results) and all(x['passed'] for x in results) and all(x['passed'] for x in skills),
+    return {'suite':'router-contract-v2','suite_sha256':suite_hash,'cases':results,'skills':skills,'mode_count':len(MODES),'passed':bool(results) and all(x['passed'] for x in results) and all(x['passed'] for x in skills),
             'scope':'router and offline skill contracts; native LLM skill efficacy not evaluated'}
 
 
@@ -204,8 +208,9 @@ def gates():
 
 
 def fingerprint(skill):
-    if skill not in {p.name for p in (ROOT/'.claude/skills').iterdir() if p.is_dir()}:
-        raise ValueError('Unknown implemented skill')
+    from omega.skills import COMMANDS
+    if skill not in COMMANDS:
+        raise ValueError('Only unified skill omega is registered; use --skill omega')
     from omega.safety import source_path
     return hashlib.sha256(source_path(ROOT,f'.claude/skills/{skill}/SKILL.md').read_bytes()).hexdigest()
 
@@ -279,7 +284,7 @@ def _dispatch():
             from omega.records import workspace, test_outcomes, execution_context
             assessment=assess(ROOT,args.skill,args.candidate)
             before=workspace(ROOT,git);execution=execution_context(ROOT,CONFIG)
-            pattern='test_new_skill_workflows.py' if args.skill.startswith('omega-') else 'test_workflows.py'
+            pattern='test_*.py'  # The unified skill must cover foundation and interoperability together.
             scenarios=run(['python3','-m','omega.test_runner','--start','tests','--pattern',pattern],CONFIG['limits']['max_gate_seconds'])
             result={'kind':'skill-evaluation','skill':args.skill,'assessment':assessment,
                     'candidate_sha256':assessment['sha256'],'candidate_bundle_sha256':assessment['bundle_sha256'],'suite_sha256':suite_digest(ROOT),

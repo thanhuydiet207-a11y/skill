@@ -1,9 +1,3 @@
----
-name: omega-skill-interference-benchmark
-description: Phân tích kết quả A/B/A+B để phát hiện skill phối hợp làm giảm chất lượng.
-disable-model-invocation: true
----
-
 # OMEGA skill-interference-benchmark
 
 ## Inputs

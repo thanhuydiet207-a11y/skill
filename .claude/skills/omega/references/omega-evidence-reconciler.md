@@ -1,9 +1,3 @@
----
-name: omega-evidence-reconciler
-description: Kiểm tra evidence còn dùng được sau thay đổi source, commit hoặc môi trường.
-disable-model-invocation: true
----
-
 # OMEGA evidence-reconciler
 
 ## Inputs

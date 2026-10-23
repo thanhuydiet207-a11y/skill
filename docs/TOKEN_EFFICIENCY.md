@@ -43,4 +43,4 @@ Muốn xác minh chất lượng native: chạy cùng task corpus/model/version 
 
 ## Bổ sung bản 0.3
 
-Dùng context --input TASK_JSON để giữ acceptance/constraints trong packet và context-sufficiency-check để đối chiếu manifest/ranges/hash/content. Tool chỉ xác minh nguồn đã khai, không tự bảo đảm manifest đủ dependencies. Chọn intent trong plan để nạp nhóm skill cần dùng; không preload 13 skill. Benchmark bytes/equivalence được chạy lại trong báo cáo interop-upgrade, không suy ra token provider từ số byte.
+Dùng context --input TASK_JSON để giữ acceptance/constraints trong packet và context-sufficiency-check để đối chiếu manifest/ranges/hash/content. Tool chỉ xác minh nguồn đã khai, không tự bảo đảm manifest đủ dependencies. Từ 0.6 chọn intent trong plan để nhận reference paths cho một skill omega; không preload 13 reference. Benchmark bytes/equivalence được chạy lại trong báo cáo interop-upgrade, không suy ra token provider từ số byte.

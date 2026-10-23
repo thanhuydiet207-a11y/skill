@@ -19,8 +19,9 @@ class OmegaTests(unittest.TestCase):
         self.assertEqual(len({x['name'] for x in catalog}),44)
         self.assertEqual(sum(x['state']=='implemented' for x in catalog),13)
         self.assertEqual(len({x['group'] for x in catalog}),6)
-        for item in catalog:
-            self.assertEqual((app.ROOT/'.claude/skills'/item['name']/'SKILL.md').exists(),item['state']=='implemented')
+        from omega.skills import MODES
+        self.assertEqual(set(MODES),{x['name'] for x in catalog if x['state']=='implemented'})
+        self.assertEqual([p.parent.name for p in (app.ROOT/'.claude/skills').glob('*/SKILL.md')],['omega'])
 
     def test_router_contract(self):self.assertTrue(app.benchmark()['passed'])
     def test_router_complexity(self):
@@ -105,14 +106,13 @@ class OmegaTests(unittest.TestCase):
     def test_candidate_lifecycle_preserves_stable(self):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d)
-            (root/'.claude/skills/repo-map').mkdir(parents=True)
-            stable=root/'.claude/skills/repo-map/SKILL.md'
-            stable_text='---\nname: repo-map\ndescription: Fixture\ndisable-model-invocation: true\n---\npython3 -m omega map\npython3 -m omega plan\n'
-            stable.write_text(stable_text)
+            from tests.skill_fixture import write_skill
+            stable_text=write_skill(root)
+            stable=root/'.claude/skills/omega/SKILL.md'
             report={'suite':'test','suite_sha256':'identity','cases':[{'id':'one','passed':True}],'passed':True}
             with patch.object(app,'ROOT',root),patch.object(app,'git',side_effect=lambda *a: '' if a[0] in ('ls-files','check-ignore') else 'abc'),patch.object(app,'benchmark',return_value=report):
                 captured=io.StringIO()
-                with patch.object(sys,'argv',['omega','candidate','--skill','repo-map']),contextlib.redirect_stdout(captured):
+                with patch.object(sys,'argv',['omega','candidate','--skill','omega']),contextlib.redirect_stdout(captured):
                     self.assertEqual(app.main(),0)
                 result=json.loads(captured.getvalue())
                 from omega.skills import HEADINGS

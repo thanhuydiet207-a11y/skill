@@ -1,9 +1,3 @@
----
-name: skill-benchmark
-description: Đánh giá hồi quy skill bằng fixture trước khi đề xuất nâng phiên bản.
-disable-model-invocation: true
----
-
 # OMEGA skill-benchmark
 
 ## Inputs

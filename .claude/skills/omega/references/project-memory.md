@@ -1,9 +1,3 @@
----
-name: project-memory
-description: Ghi quyết định kỹ thuật và bằng chứng riêng cho dự án.
-disable-model-invocation: true
----
-
 # OMEGA project-memory
 
 ## Inputs

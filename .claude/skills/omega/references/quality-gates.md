@@ -1,9 +1,3 @@
----
-name: quality-gates
-description: Chạy build, tests, security, regression với bằng chứng exit code.
-disable-model-invocation: true
----
-
 # OMEGA quality-gates
 
 ## Inputs

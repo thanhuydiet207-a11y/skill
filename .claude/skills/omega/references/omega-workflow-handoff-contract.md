@@ -1,9 +1,3 @@
----
-name: omega-workflow-handoff-contract
-description: Kiểm tra phân công và lịch phối hợp khi nhiều skill hoặc agent cùng làm việc.
-disable-model-invocation: true
----
-
 # OMEGA workflow-handoff-contract
 
 ## Inputs

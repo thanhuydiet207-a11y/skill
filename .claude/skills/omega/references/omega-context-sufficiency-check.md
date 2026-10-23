@@ -1,9 +1,3 @@
----
-name: omega-context-sufficiency-check
-description: Kiểm tra packet context có giữ nguồn và yêu cầu bắt buộc trước khi tối ưu token.
-disable-model-invocation: true
----
-
 # OMEGA context-sufficiency-check
 
 ## Inputs

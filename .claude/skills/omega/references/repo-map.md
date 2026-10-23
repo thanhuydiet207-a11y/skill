@@ -1,9 +1,3 @@
----
-name: repo-map
-description: Phân tích repository với bằng chứng trước khi lập kế hoạch.
-disable-model-invocation: true
----
-
 # OMEGA repo-map
 
 ## Inputs

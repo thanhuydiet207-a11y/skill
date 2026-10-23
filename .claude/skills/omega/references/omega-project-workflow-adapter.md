@@ -1,9 +1,3 @@
----
-name: omega-project-workflow-adapter
-description: Đề xuất build/test adapter phù hợp repository đích mà không tự cài dependency.
-disable-model-invocation: true
----
-
 # OMEGA project-workflow-adapter
 
 ## Inputs

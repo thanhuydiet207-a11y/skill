@@ -1,5 +1,7 @@
 # Playbook chuyên sâu — đọc từng phần theo tác vụ
 
+Từ 0.6, các tên bên dưới là chế độ của một skill omega; xem [UNIFIED_SKILL.md](UNIFIED_SKILL.md). Evolution dùng --skill omega, không gọi các slash skill cũ.
+
 > Tài liệu lịch sử bản 0.2. Hành vi/schema hiện tại: [INTEROPERABILITY_GUIDE.md](INTEROPERABILITY_GUIDE.md); kết quả mới: [VALIDATION.md](VALIDATION.md).
 
 Không nạp cả file vào mỗi agent. Dùng `rg -n '^## ' docs/SKILL_PLAYBOOKS.md`, rồi chọn vùng cần đọc bằng `context`. CLI không thay quyền Claude/OS sandbox. Các hợp đồng dưới đây là workflow local đã có test; native reasoning chưa được nghiệm thu.

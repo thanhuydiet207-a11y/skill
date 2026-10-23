@@ -1,9 +1,3 @@
----
-name: controlled-change
-description: Thực hiện thay đổi có kiểm soát trong branch hoặc worktree riêng.
-disable-model-invocation: true
----
-
 # OMEGA controlled-change
 
 ## Inputs

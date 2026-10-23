@@ -1,12 +1,12 @@
 # Kết quả thực thi
 
-Bản 0.5: **194 Python tests riêng biệt pass**, **15 TypeScript bridge tests pass**, build/tests/security/regression đạt, 13 skill có offline contract và scenario CLI. Báo cáo máy đọc: [report-integrity.json](evidence/report-integrity.json); đánh giá từng skill và các điểm chưa hoàn thiện: [UPGRADE_0_5.md](UPGRADE_0_5.md).
+Bản 0.6: **204 Python tests riêng biệt pass**, **15 TypeScript bridge tests pass**, một skill omega gồm 13 chế độ. Báo cáo máy đọc: [unified-skill.json](evidence/unified-skill.json); cách dùng và giới hạn: [UNIFIED_SKILL.md](UNIFIED_SKILL.md).
 
 ## Phạm vi kiểm chứng hiện tại
 
-- 176 tests baseline 0.4; sau nâng cấp có 194 Python tests riêng biệt và 15 Node test cho bridge TypeScript, không cộng các lần chạy lặp thành test mới.
-- 5 skill nền tảng dùng chung nhóm 20 workflow tests; 8 extension dùng chung nhóm 8 scenario CLI. Chạy theo từng skill kiểm tra kết nối công cụ/contract, không phải 13 phép đánh giá chất lượng độc lập.
-- Build compile Python và strict TypeScript noEmit; security là targeted Python AST/JSON/bypass/possible-secret rules trên scope .claude và omega; regression gồm 3 router cases và 13 offline contracts. Không thay SAST, dependency audit hoặc native LLM evaluation.
+- Baseline 0.5 có 194 tests; consolidation có 204 Python tests riêng biệt và 15 Node test cho bridge TypeScript, không cộng các lần chạy lặp thành test mới.
+- Một benchmark --skill omega chạy toàn bộ Python suite, gồm 20 workflow tests, 8 interoperability CLI scenarios và 10 consolidation regressions mới. Các chế độ dùng chung engine; không có 13 phép đánh giá chất lượng LLM độc lập.
+- Build compile Python và strict TypeScript noEmit; security là targeted Python AST/JSON/bypass/possible-secret rules trên scope .claude và omega; regression gồm 3 router cases và một offline contract ràng buộc 13 mode references. Không thay SAST, dependency audit hoặc native LLM evaluation.
 - Demo tạo Git fixture có bug cộng thành trừ, thấy tests đỏ trước sửa và xanh sau sửa; xác nhận branch/worktree, memory và Git baseline còn truy cập được. Không deploy hoặc rollback production.
 - Benchmark efficiency kiểm tra JSON pretty/compact tương đương dữ liệu và khôi phục gate summary từ evidence. Đo UTF-8 bytes, không đo token provider hay output LLM giống hệt.
 - External Python target có integration test thực thi riêng. Node built-in JUnit đã chạy thật với 1 pass/1 skip trong fixture sau sửa; Jest/Go vẫn là parser fixtures. Lệnh go version không xác nhận được Go toolchain. Không cộng test lặp hoặc skipped thành thành tích.
@@ -44,3 +44,5 @@ Hoàn thành stage dự kiến trước final gates. Không chạy lặp vô h�
 [interop-upgrade.json](evidence/interop-upgrade.json) và [UPGRADE_0_3.md](UPGRADE_0_3.md) là snapshot 0.3 (144 Python tests), không phải nguồn hiện tại. TypeScript runtime chạy qua Node type stripping; 0.5 đã chạy strict tsc/noEmit và đưa vào build gate. MCP server/UI chưa triển khai.
 
 [verification-hardening.json](evidence/verification-hardening.json) là snapshot 0.4 (176 Python, 9 Node tests), không phải nguồn hiện tại. Report-file Node/JUnit đã chạy thật với stdout người đọc riêng; Jest JSON dùng synthetic fixtures. Npm compiler dev dependencies và integrity nằm trong package-lock, không có install scripts/global install.
+
+[report-integrity.json](evidence/report-integrity.json) và [UPGRADE_0_5.md](UPGRADE_0_5.md) là snapshot 0.5 (194 Python, 15 Node tests, 13 skill riêng). Từ 0.6 chỉ có một entry omega. Lỗi đếm subtest thất bại đang được theo dõi riêng; số tests pass trong suite không chứng minh đường báo cáo đó đã sửa.

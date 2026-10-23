@@ -55,7 +55,7 @@ def main():
     execute(['git','add','calc.py'])
     execute(['git','-c','user.name=OMEGA fixture','-c','user.email=omega@example.invalid','commit','-qm','fix addition fixture'])
     cli('isolate','--name','parallel','--worktree','.omega/worktrees/parallel')
-    candidate=cli('candidate','--skill','repo-map')
+    candidate=cli('candidate','--skill','omega')
     candidate_path=fixture/candidate['candidate']
     candidate_path.write_text(candidate_path.read_text()+'\nCandidate note: evidence before conclusions.\n')
     comparison=cli('compare','--baseline',candidate['baseline'])

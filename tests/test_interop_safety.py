@@ -19,15 +19,15 @@ class InteropSafety(unittest.TestCase):
     def test_empty_contract_sections_no_longer_score_full(self):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d);path=root/'.omega/candidates/empty.md';path.parent.mkdir(parents=True)
-            path.write_text('---\nname: repo-map\ndescription: Fixture\ndisable-model-invocation: true\n---\npython3 -m omega map\npython3 -m omega plan\n'+'\n'.join('## '+h for h in HEADINGS))
-            result=assess(root,'repo-map',str(path));self.assertFalse(result['advanced_passed']);self.assertLess(result['score'],100)
+            path.write_text('---\nname: omega\ndescription: Fixture\ndisable-model-invocation: true\n---\npython3 -m omega map\npython3 -m omega plan\n'+'\n'.join('## '+h for h in HEADINGS))
+            result=assess(root,'omega',str(path));self.assertFalse(result['advanced_passed']);self.assertLess(result['score'],100)
             self.assertIsNone(result['quality_score']);self.assertFalse(result['quality_evaluated'])
     def test_skill_bundle_tracks_reference_changes(self):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d);path=root/'.omega/candidates/skill.md';path.parent.mkdir(parents=True);(root/'docs').mkdir()
             (root/'docs/guide.md').write_text('Guide A')
-            path.write_text('---\nname: repo-map\ndescription: Fixture\ndisable-model-invocation: true\n---\npython3 -m omega map\npython3 -m omega plan\nRead docs/guide.md\n')
-            before=assess(root,'repo-map',str(path));(root/'docs/guide.md').write_text('Guide B');after=assess(root,'repo-map',str(path))
+            path.write_text('---\nname: omega\ndescription: Fixture\ndisable-model-invocation: true\n---\npython3 -m omega map\npython3 -m omega plan\nRead docs/guide.md\n')
+            before=assess(root,'omega',str(path));(root/'docs/guide.md').write_text('Guide B');after=assess(root,'omega',str(path))
             self.assertEqual(before['sha256'],after['sha256']);self.assertNotEqual(before['bundle_sha256'],after['bundle_sha256'])
     def test_json_inputs_reject_duplicates_nan_traversal_and_aliases(self):
         with tempfile.TemporaryDirectory() as d:
