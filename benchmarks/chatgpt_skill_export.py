@@ -2,6 +2,7 @@
 import importlib.util
 import json
 from pathlib import Path
+import re
 import tempfile
 import zipfile
 
@@ -29,9 +30,9 @@ def main():
                 raise ValueError("Skill metadata contract failed")
             if any(name.startswith("/") or ".." in Path(name).parts for name in names):
                 raise ValueError("Unsafe archive path found")
-            missing = [line for line in text.splitlines() if "`references/" in line and not line.startswith("- ")]
-            if missing:
-                raise ValueError("Unexpected unresolved reference path format")
+            for relative in re.findall(r"`(references/[A-Za-z0-9_.-]+\.md)`", text):
+                if relative not in names:
+                    raise ValueError(f"Unresolved reference in portable SKILL.md: {relative}")
         if len(report["files"]) < 2:
             raise ValueError("Expected reference files were not packaged")
         print(json.dumps({"passed": True, "file_count": report["file_count"],
