@@ -1,0 +1,2237 @@
+{
+  "schema": 1,
+  "release": "0.7.0",
+  "created_utc": "2026-10-23T05:51:56.794237+00:00",
+  "baseline_commit": "7f55e62233b170cce005c509d0c4ee7fd325a76e",
+  "source_commit": "7a2304e5898cb0fa4f5a3f6e44e0b0e1c3b22125",
+  "branch": "omega/claude-plugin",
+  "scope": "Installable self-hosted Claude Code plugin; one skill, 13 mode references, three agents; existing Python engine from cache to explicit target",
+  "provenance": {
+    "signed": false,
+    "source_manifest_excludes": "docs/evidence/* to avoid self-reference; ignored state, installed dependencies and uploaded documents are not published",
+    "freshness": "Gate/scenario/comparison/native package bind the clean source commit. This report is committed later and changes workspace/HEAD. Publication checks and a package export run again after the report commit; records here remain historical snapshots.",
+    "gate_artifact": {
+      "path": ".omega/evidence/1792734520882913438-2b56fc76.json",
+      "bytes": 44016,
+      "sha256": "8422180ad51c92dd11045c7f81bc945f25a82aba99262c540746a3dfbef629f4"
+    },
+    "scenario_artifact": {
+      "path": ".omega/evidence/1792734574894641420-c65d130d.json",
+      "bytes": 30645,
+      "sha256": "a7b718551b77988cc54a852528b1712d453a4d39e00c0bee0287801c148adf8f"
+    },
+    "native_lifecycle_report": {
+      "path": ".omega/plugin-packaging/runs/2531970c83df459f8dd1bbb7092f047d/result.json",
+      "bytes": 45172,
+      "sha256": "68de3dba26032ee7d622548277f0373d52fdb120291714ada7cde6ba37f85cb1"
+    }
+  },
+  "counts": {
+    "baseline_python_tests": 204,
+    "python_tests": 212,
+    "new_plugin_tests": 8,
+    "bridge_tests": 15,
+    "entry_skills": 1,
+    "mode_references": 13,
+    "registered_agent_inventory": 3,
+    "registered_hooks": 0,
+    "registered_mcp_servers": 0,
+    "catalog_capabilities": 44,
+    "planned_capabilities": 31,
+    "counting_rule": "Repeated core/skill tests are the same 212 tests, not extra distinct tests. The native fixture has 1 test repeated for regression. Plugin discovery does not score model reasoning."
+  },
+  "plugin_manifest": {
+    "name": "omega",
+    "version": "0.7.0",
+    "description": "Evidence-based engineering: one skill, 13 on-demand workflows and three specialist agents backed by a local Python engine.",
+    "author": {
+      "name": "thanhuydiet207-a11y",
+      "url": "https://github.com/thanhuydiet207-a11y"
+    },
+    "homepage": "https://github.com/thanhuydiet207-a11y/skill/blob/main/docs/CLAUDE_PLUGIN.md",
+    "repository": "https://github.com/thanhuydiet207-a11y/skill",
+    "keywords": [
+      "engineering",
+      "testing",
+      "evidence",
+      "python"
+    ],
+    "skills": "./.claude/skills/"
+  },
+  "marketplace_manifest": {
+    "name": "omega-marketplace",
+    "description": "OMEGA engineering plugin maintained in thanhuydiet207-a11y/skill.",
+    "owner": {
+      "name": "thanhuydiet207-a11y"
+    },
+    "plugins": [
+      {
+        "name": "omega",
+        "source": "./",
+        "description": "OMEGA engineering skill, specialist agents and local Python evidence workflows.",
+        "version": "0.7.0"
+      }
+    ]
+  },
+  "gates": {
+    "schema": 1,
+    "project": "/workspace/skill",
+    "head": "7a2304e5898cb0fa4f5a3f6e44e0b0e1c3b22125",
+    "created_utc": "2026-10-23T05:48:40.885462+00:00",
+    "kind": "gates",
+    "test_adapter": "omega",
+    "test_report": null,
+    "test_outcomes": {
+      "run": 212,
+      "passed": 212,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "expected_failures": 0,
+      "unexpected_successes": 0
+    },
+    "execution_fingerprint": "cc5ee595e0a8d1e5aff68ec0f38841455d26560b03ea0ec8663cf6b3a1f1a518",
+    "execution_context": {
+      "python_version": "3.12.14",
+      "system": "Linux",
+      "machine": "x86_64",
+      "engine_sha256": "da1ebf04b4b36dac7a533de92e74230c1e61443237bf05066238e4b948c744dc",
+      "environment_sha256": {
+        "PATH": "89f45694eeac679d66982fb225aab97d2049249d842ac30dd09e31f18cdd97c7",
+        "PYTHONPATH": null,
+        "PYTHONHASHSEED": null,
+        "PYTHONOPTIMIZE": null,
+        "NODE_OPTIONS": null,
+        "NODE_PATH": "dbc7bc884f72c70bb3d320e868da710a56a621286fba48b3c6b610776b41b4fd",
+        "GOWORK": null,
+        "GOTOOLCHAIN": null,
+        "GOPROXY": null,
+        "GOSUMDB": null,
+        "GOCACHE": null
+      },
+      "declared_runtime_inputs_sha256": {},
+      "tools": {
+        "python": {
+          "path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12",
+          "bytes": 30894944,
+          "mtime_ns": 1791948610000000000,
+          "mode": 493
+        },
+        "node": {
+          "path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+          "bytes": 125989464,
+          "mtime_ns": 1791948609000000000,
+          "mode": 493
+        },
+        "npm": {
+          "path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/lib/node_modules/npm/bin/npm-cli.js",
+          "bytes": 54,
+          "mtime_ns": 1767885352000000000,
+          "mode": 493
+        },
+        "go": {
+          "path": "/usr/bin/go",
+          "bytes": 2115840,
+          "mtime_ns": 0,
+          "mode": 493
+        }
+      },
+      "project_policy_sha256": {
+        ".claude/settings.json": null,
+        ".claude/settings.local.json": null,
+        ".mcp.json": null,
+        ".claude-plugin/plugin.json": "4934d1e1e1b57f761f0fce54aef40dc6137ab90ae164c261222aecb741a3bed0"
+      },
+      "config_sha256": "e19bfd92e9263ee894c805f6250e77394d1d465ceb9e2d62504249d7e5618b1d",
+      "external_policy": "unobserved; global, managed, API and plugin runtime may differ"
+    },
+    "execution_unchanged": true,
+    "passed": true,
+    "workspace_sha256": "00d8526707378ae9d73ab44c14507a2264b544cc37f24a111a154f907a34e1f9",
+    "workspace_unchanged": true,
+    "results": [
+      {
+        "gate": "build",
+        "command": [
+          "python3",
+          "-m",
+          "omega.build"
+        ],
+        "exit_code": 0,
+        "seconds": 2.962,
+        "output": "",
+        "truncated": false,
+        "output_tail": "",
+        "timed_out": false,
+        "output_limit_exceeded": false,
+        "total_output_bytes": 0,
+        "invalid_utf8": false
+      },
+      {
+        "gate": "tests",
+        "command": [
+          "python3",
+          "-m",
+          "omega.test_runner"
+        ],
+        "exit_code": 0,
+        "seconds": 8.951,
+        "output": "test_budget_fails_without_silent_truncation (test_context.ContextTests.test_budget_fails_without_silent_truncation) ... ok\ntest_changed_source_changes_fingerprint (test_context.ContextTests.test_changed_source_changes_fingerprint) ... ok\ntest_cli_compact_preserves_default_plan (test_context.ContextTests.test_cli_compact_preserves_default_plan) ... ok\ntest_cli_packet_budget_fails (test_context.ContextTests.test_cli_packet_budget_fails) ... ok\ntest_lossless_unicode_and_whitespace (test_context.ContextTests.test_lossless_unicode_and_whitespace) ... ok\ntest_missing_empty_and_ranges_fail (test_context.ContextTests.test_missing_empty_and_ranges_fail) ... ok\ntest_packet_preserves_source_and_deduplicates (test_context.ContextTests.test_packet_preserves_source_and_deduplicates) ... ok\ntest_private_binary_and_escape_rejected (test_context.ContextTests.test_private_binary_and_escape_rejected) ... ok\ntest_summary_keeps_failure_and_links_success (test_context.ContextTests.test_summary_keeps_failure_and_links_success) ... ok\ntest_audit_refuses_symlinked_policy_directory (test_hardening.AdapterSafety.test_audit_refuses_symlinked_policy_directory) ... ok\ntest_hook_does_not_import_executable_gate_config (test_hardening.AdapterSafety.test_hook_does_not_import_executable_gate_config) ... ok\ntest_local_cli_probe_uses_isolated_state (test_hardening.CompatibilitySafety.test_local_cli_probe_uses_isolated_state) ... ok\ntest_process_environment_override_does_not_mutate_parent (test_hardening.CompatibilitySafety.test_process_environment_override_does_not_mutate_parent) ... ok\ntest_empty_failed_or_inconsistent_test_marker_rejected (test_hardening.EvidenceSafety.test_empty_failed_or_inconsistent_test_marker_rejected) ... ok\ntest_exit_zero_without_test_execution_is_not_ready (test_hardening.EvidenceSafety.test_exit_zero_without_test_execution_is_not_ready) ... ok\ntest_hook_background_gate_requires_review (test_hardening.EvidenceSafety.test_hook_background_gate_requires_review) ... ok\ntest_hook_rejects_missing_cwd_and_policy_test_changes (test_hardening.EvidenceSafety.test_hook_rejects_missing_cwd_and_policy_test_changes) ... ok\ntest_private_parent_symlink_inside_repo_is_refused (test_hardening.EvidenceSafety.test_private_parent_symlink_inside_repo_is_refused) ... ok\ntest_scenario_record_is_not_gate_evidence (test_hardening.EvidenceSafety.test_scenario_record_is_not_gate_evidence) ... ok\ntest_test_marker_survives_truncated_prefix (test_hardening.EvidenceSafety.test_test_marker_survives_truncated_prefix) ... ok\ntest_artifact_namespace_and_traversal (test_hardening.PolicySafety.test_artifact_namespace_and_traversal) ... ok\ntest_artifact_symlink_inside_repo_refused (test_hardening.PolicySafety.test_artifact_symlink_inside_repo_refused) ... ok\ntest_empty_or_missing_gate_fails_before_execution (test_hardening.PolicySafety.test_empty_or_missing_gate_fails_before_execution) ... ok\ntest_invalid_later_gate_prevents_any_execution (test_hardening.PolicySafety.test_invalid_later_gate_prevents_any_execution) ... ok\ntest_map_uses_nul_and_preserves_odd_filename (test_hardening.PolicySafety.test_map_uses_nul_and_preserves_odd_filename) ... ok\ntest_private_alias_names_are_refused (test_hardening.PolicySafety.test_private_alias_names_are_refused) ... ok\ntest_capture_is_prefix_and_failure_exit_preserved (test_hardening.ProcessSafety.test_capture_is_prefix_and_failure_exit_preserved) ... ok\ntest_child_inheriting_stdout_is_bounded (test_hardening.ProcessSafety.test_child_inheriting_stdout_is_bounded) ... ok\ntest_flood_is_killed_without_unbounded_spool (test_hardening.ProcessSafety.test_flood_is_killed_without_unbounded_spool) ... ok\ntest_invalid_limits_refused (test_hardening.ProcessSafety.test_invalid_limits_refused) ... ok\ntest_missing_executable_is_reported (test_hardening.ProcessSafety.test_missing_executable_is_reported) ... ok\ntest_all_skipped_fails (test_hardening.TestRunnerSafety.test_all_skipped_fails) ... ok\ntest_expected_failure_alone_is_not_readiness (test_hardening.TestRunnerSafety.test_expected_failure_alone_is_not_readiness) ... ok\ntest_no_tests_fails (test_hardening.TestRunnerSafety.test_no_tests_fails) ... ok\ntest_malformed_result_shape_does_not_crash (test_interop_core.AdapterMalformedInput.test_malformed_result_shape_does_not_crash) ... ok\ntest_go_events_not_package_pass (test_interop_core.OutcomeAdapters.test_go_events_not_package_pass) ... ok\ntest_go_missing_terminal_duplicate_and_package_failure (test_interop_core.OutcomeAdapters.test_go_missing_terminal_duplicate_and_package_failure) ... ok\ntest_jest_counts (test_interop_core.OutcomeAdapters.test_jest_counts) ... ok\ntest_jest_zero_tests_and_boolean_counts_rejected (test_interop_core.OutcomeAdapters.test_jest_zero_tests_and_boolean_counts_rejected) ... ok\ntest_junit_actual_cases_and_invalid_totals (test_interop_core.OutcomeAdapters.test_junit_actual_cases_and_invalid_totals) ... ok\ntest_junit_entity_and_failed_case_rejected (test_interop_core.OutcomeAdapters.test_junit_entity_and_failed_case_rejected) ... ok\ntest_truncated_structured_formats_not_accepted (test_interop_core.OutcomeAdapters.test_truncated_structured_formats_not_accepted) ... ok\ntest_composition_substitution_and_unknown_arguments_refused (test_interop_core.PolicyContracts.test_composition_substitution_and_unknown_arguments_refused) ... ok\ntest_evidence_reconciler_record_uses_evidence_namespace (test_interop_core.PolicyContracts.test_evidence_reconciler_record_uses_evidence_namespace) ... ok\ntest_explanation_never_claims_platform_permission (test_interop_core.PolicyContracts.test_explanation_never_claims_platform_permission) ... ok\ntest_hook_and_cli_grammar_agree_on_invalid_summary (test_interop_core.PolicyContracts.test_hook_and_cli_grammar_agree_on_invalid_summary) ... ok\ntest_recommended_command_variants_allowed (test_interop_core.PolicyContracts.test_recommended_command_variants_allowed) ... ok\ntest_absolute_runner_does_not_import_host_omega_module (test_interop_core.PortableEngine.test_absolute_runner_does_not_import_host_omega_module) ... ok\ntest_doctor_reports_unknown_external_state (test_interop_core.PortableEngine.test_doctor_reports_unknown_external_state) ... ok\ntest_external_gates_require_explicit_policy (test_interop_core.PortableEngine.test_external_gates_require_explicit_policy) ... ok\ntest_map_envelope_bounded_with_visible_omissions_and_status_truncation (test_interop_core.PortableEngine.test_map_envelope_bounded_with_visible_omissions_and_status_truncation) ... ok\ntest_mode_change_invalidates_workspace (test_interop_core.PortableEngine.test_mode_change_invalidates_workspace) ... ok\ntest_portable_map_targets_host_not_engine (test_interop_core.PortableEngine.test_portable_map_targets_host_not_engine) ... ok\ntest_reviewed_external_gates_run_actual_target_tests (test_interop_core.PortableEngine.test_reviewed_external_gates_run_actual_target_tests) ... ok\ntest_tracked_runtime_state_refused_before_write (test_interop_core.PortableEngine.test_tracked_runtime_state_refused_before_write) ... ok\ntest_unignored_runtime_state_refused_without_modifying_ignore (test_interop_core.PortableEngine.test_unignored_runtime_state_refused_without_modifying_ignore) ... ok\ntest_empty_contract_sections_no_longer_score_full (test_interop_safety.InteropSafety.test_empty_contract_sections_no_longer_score_full) ... ok\ntest_fixture_results_cannot_authorize_native_release (test_interop_safety.InteropSafety.test_fixture_results_cannot_authorize_native_release) ... ok\ntest_handoff_refuses_path_escape_and_oversized_nodes (test_interop_safety.InteropSafety.test_handoff_refuses_path_escape_and_oversized_nodes) ... ok\ntest_handoff_rejects_competing_orchestrators (test_interop_safety.InteropSafety.test_handoff_rejects_competing_orchestrators) ... ok\ntest_handoff_rejects_cycles_and_unordered_writers (test_interop_safety.InteropSafety.test_handoff_rejects_cycles_and_unordered_writers) ... ok\ntest_handoff_respects_budget_without_claiming_to_spawn (test_interop_safety.InteropSafety.test_handoff_respects_budget_without_claiming_to_spawn) ... ok\ntest_hook_inventory_never_echoes_commands_or_secret_strings (test_interop_safety.InteropSafety.test_hook_inventory_never_echoes_commands_or_secret_strings) ... ok\ntest_inspection_does_not_execute_embedded_commands (test_interop_safety.InteropSafety.test_inspection_does_not_execute_embedded_commands) ... ok\ntest_inspection_reports_symlink_and_incomplete_root (test_interop_safety.InteropSafety.test_inspection_reports_symlink_and_incomplete_root) ... ok\ntest_interference_rejects_missing_arm_changed_prompt_and_model (test_interop_safety.InteropSafety.test_interference_rejects_missing_arm_changed_prompt_and_model) ... ok\ntest_json_inputs_reject_duplicates_nan_traversal_and_aliases (test_interop_safety.InteropSafety.test_json_inputs_reject_duplicates_nan_traversal_and_aliases) ... ok\ntest_metadata_and_multiline_description_safe_subset (test_interop_safety.InteropSafety.test_metadata_and_multiline_description_safe_subset) ... ok\ntest_skill_bundle_tracks_reference_changes (test_interop_safety.InteropSafety.test_skill_bundle_tracks_reference_changes) ... ok\ntest_usage_unknown_is_not_reported_as_zero (test_interop_safety.InteropSafety.test_usage_unknown_is_not_reported_as_zero) ... ok\ntest_yaml_tags_and_duplicate_keys_require_review (test_interop_safety.InteropSafety.test_yaml_tags_and_duplicate_keys_require_review) ... ok\ntest_configured_concurrency_cap_is_respected (test_interop_safety.ReviewRegressions.test_configured_concurrency_cap_is_respected) ... ok\ntest_context_source_read_is_bounded (test_interop_safety.ReviewRegressions.test_context_source_read_is_bounded) ... ok\ntest_context_task_requires_object_instead_of_crashing (test_interop_safety.ReviewRegressions.test_context_task_requires_object_instead_of_crashing) ... ok\ntest_different_tasks_can_have_different_fixed_acceptance (test_interop_safety.ReviewRegressions.test_different_tasks_can_have_different_fixed_acceptance) ... ok\ntest_duplicate_hook_json_is_not_silently_accepted (test_interop_safety.ReviewRegressions.test_duplicate_hook_json_is_not_silently_accepted) ... ok\ntest_duplicate_ownership_declarations_refused (test_interop_safety.ReviewRegressions.test_duplicate_ownership_declarations_refused) ... ok\ntest_hook_inspection_handles_depth_and_size_budgets_without_execution (test_interop_safety.ReviewRegressions.test_hook_inspection_handles_depth_and_size_budgets_without_execution) ... ok\ntest_huge_or_boolean_measurements_refused (test_interop_safety.ReviewRegressions.test_huge_or_boolean_measurements_refused) ... ok\ntest_inspection_refuses_symlink_in_root_ancestry (test_interop_safety.ReviewRegressions.test_inspection_refuses_symlink_in_root_ancestry) ... ok\ntest_interference_bundle_identity_fixed_across_arms (test_interop_safety.ReviewRegressions.test_interference_bundle_identity_fixed_across_arms) ... ok\ntest_interference_grader_and_bundle_provenance_required (test_interop_safety.ReviewRegressions.test_interference_grader_and_bundle_provenance_required) ... ok\ntest_no_regression_is_not_enough_when_combined_acceptance_fails (test_interop_safety.ReviewRegressions.test_no_regression_is_not_enough_when_combined_acceptance_fails) ... ok\ntest_non_orchestrator_cannot_declare_zero_agent_cost (test_interop_safety.ReviewRegressions.test_non_orchestrator_cannot_declare_zero_agent_cost) ... ok\ntest_prompt_is_fixed_across_repeated_trials (test_interop_safety.ReviewRegressions.test_prompt_is_fixed_across_repeated_trials) ... ok\ntest_unknown_hook_type_needs_review_without_echoing_value (test_interop_safety.ReviewRegressions.test_unknown_hook_type_needs_review_without_echoing_value) ... ok\ntest_compatibility_cli_detects_name_collision_without_running_skills (test_new_skill_workflows.NewSkillWorkflows.test_compatibility_cli_detects_name_collision_without_running_skills) ... ok\ntest_context_sufficiency_cli_verifies_content_ranges_and_task_invariants (test_new_skill_workflows.NewSkillWorkflows.test_context_sufficiency_cli_verifies_content_ranges_and_task_invariants) ... ok\ntest_evidence_reconciler_cli_rejects_source_drift (test_new_skill_workflows.NewSkillWorkflows.test_evidence_reconciler_cli_rejects_source_drift) ... ok\ntest_interference_cli_reports_fixture_regression_and_real_usage_fields (test_new_skill_workflows.NewSkillWorkflows.test_interference_cli_reports_fixture_regression_and_real_usage_fields) ... ok\ntest_memory_reconciliation_cli_preserves_both_conflicting_records (test_new_skill_workflows.NewSkillWorkflows.test_memory_reconciliation_cli_preserves_both_conflicting_records) ... ok\ntest_policy_explainer_cli_identifies_scope_without_granting_platform_access (test_new_skill_workflows.NewSkillWorkflows.test_policy_explainer_cli_identifies_scope_without_granting_platform_access) ... ok\ntest_project_adapter_cli_proposes_without_installing_or_writing_config (test_new_skill_workflows.NewSkillWorkflows.test_project_adapter_cli_proposes_without_installing_or_writing_config) ... ok\ntest_workflow_cli_checks_ownership_and_order (test_new_skill_workflows.NewSkillWorkflows.test_workflow_cli_checks_ownership_and_order) ... ok\ntest_benchmark_detects_regression (test_omega.OmegaTests.test_benchmark_detects_regression) ... ok\ntest_candidate_compare_missing_baseline (test_omega.OmegaTests.test_candidate_compare_missing_baseline) ... ok\ntest_candidate_lifecycle_preserves_stable (test_omega.OmegaTests.test_candidate_lifecycle_preserves_stable) ... ok\ntest_catalog_foundation_and_eight_extensions (test_omega.OmegaTests.test_catalog_foundation_and_eight_extensions) ... ok\ntest_dirty_checkout_refused (test_omega.OmegaTests.test_dirty_checkout_refused) ... ok\ntest_gate_failure_propagates (test_omega.OmegaTests.test_gate_failure_propagates) ... ok\ntest_git_truncation_refused (test_omega.OmegaTests.test_git_truncation_refused) ... ok\ntest_hook_denies_escape_and_policy_edit (test_omega.OmegaTests.test_hook_denies_escape_and_policy_edit) ... ok\ntest_hook_denies_shell_bypass (test_omega.OmegaTests.test_hook_denies_shell_bypass) ... ok\ntest_hook_rejects_malformed (test_omega.OmegaTests.test_hook_rejects_malformed) ... ok\ntest_hook_scoped_edit (test_omega.OmegaTests.test_hook_scoped_edit) ... ok\ntest_memory_scoped_and_commit_stamped (test_omega.OmegaTests.test_memory_scoped_and_commit_stamped) ... ok\ntest_memory_secret_rejection (test_omega.OmegaTests.test_memory_secret_rejection) ... ok\ntest_no_shell_expansion (test_omega.OmegaTests.test_no_shell_expansion) ... ok\ntest_path_escape (test_omega.OmegaTests.test_path_escape) ... ok\ntest_router_complexity (test_omega.OmegaTests.test_router_complexity) ... ok\ntest_router_contract (test_omega.OmegaTests.test_router_contract) ... ok\ntest_subprocess_failure (test_omega.OmegaTests.test_subprocess_failure) ... ok\ntest_symlink_escape (test_omega.OmegaTests.test_symlink_escape) ... ok\ntest_three_agent_specs (test_omega.OmegaTests.test_three_agent_specs) ... ok\ntest_timeout (test_omega.OmegaTests.test_timeout) ... ok\ntest_archive_excludes_untracked_runtime_and_dependencies (test_plugin_packaging.PluginPackaging.test_archive_excludes_untracked_runtime_and_dependencies) ... ok\ntest_archive_refuses_tracked_symlinks (test_plugin_packaging.PluginPackaging.test_archive_refuses_tracked_symlinks) ... ok\ntest_bytecode_flag_keeps_trusted_runner_boundary (test_plugin_packaging.PluginPackaging.test_bytecode_flag_keeps_trusted_runner_boundary) ... ok\ntest_manifest_preserves_one_skill_and_uses_standard_agent_directory (test_plugin_packaging.PluginPackaging.test_manifest_preserves_one_skill_and_uses_standard_agent_directory) ... ok\ntest_marketplace_installs_this_repository_root_and_matching_version (test_plugin_packaging.PluginPackaging.test_marketplace_installs_this_repository_root_and_matching_version) ... ok\ntest_policy_protects_plugin_metadata_and_agent_prompts (test_plugin_packaging.PluginPackaging.test_policy_protects_plugin_metadata_and_agent_prompts) ... ok\ntest_relocated_cli_does_not_import_target_omega_or_write_cache (test_plugin_packaging.PluginPac",
+        "truncated": true,
+        "output_tail": "fied_skill.UnifiedSkill.test_each_plan_keeps_one_entry_and_only_selected_reference_paths) ... ok\ntest_missing_reference_cannot_silently_remove_a_mode (test_unified_skill.UnifiedSkill.test_missing_reference_cannot_silently_remove_a_mode) ... ok\ntest_mode_document_change_invalidates_bundle_without_entry_change (test_unified_skill.UnifiedSkill.test_mode_document_change_invalidates_bundle_without_entry_change) ... ok\ntest_old_skill_release_names_are_rejected_with_migration_hint (test_unified_skill.UnifiedSkill.test_old_skill_release_names_are_rejected_with_migration_hint) ... ok\ntest_only_one_skill_is_discovered_and_all_modes_are_covered (test_unified_skill.UnifiedSkill.test_only_one_skill_is_discovered_and_all_modes_are_covered) ... ok\ntest_removed_command_or_bypass_in_mode_fails_the_entry_contract (test_unified_skill.UnifiedSkill.test_removed_command_or_bypass_in_mode_fails_the_entry_contract) ... ok\ntest_resource_count_and_aggregate_bytes_fail_closed (test_unified_skill.UnifiedSkill.test_resource_count_and_aggregate_bytes_fail_closed) ... ok\ntest_symlink_reference_is_not_certified (test_unified_skill.UnifiedSkill.test_symlink_reference_is_not_certified) ... ok\ntest_transitive_doc_change_and_reference_cycle_are_accounted_for (test_unified_skill.UnifiedSkill.test_transitive_doc_change_and_reference_cycle_are_accounted_for) ... ok\ntest_branch_or_head_change_is_detected (test_workflows.ChangeWorkflow.test_branch_or_head_change_is_detected) ... ok\ntest_expired_plan_refuses_repair_and_readiness (test_workflows.ChangeWorkflow.test_expired_plan_refuses_repair_and_readiness) ... ok\ntest_gate_failure_if_command_mutates_workspace (test_workflows.ChangeWorkflow.test_gate_failure_if_command_mutates_workspace) ... ok\ntest_gate_record_invalidated_by_source_change (test_workflows.ChangeWorkflow.test_gate_record_invalidated_by_source_change) ... ok\ntest_plan_requires_clean_isolated_checkout (test_workflows.ChangeWorkflow.test_plan_requires_clean_isolated_checkout) ... ok\ntest_rename_checks_old_and_new_paths (test_workflows.ChangeWorkflow.test_rename_checks_old_and_new_paths) ... ok\ntest_repair_budget_enforced (test_workflows.ChangeWorkflow.test_repair_budget_enforced) ... ok\ntest_scoped_change_and_outside_path_detection (test_workflows.ChangeWorkflow.test_scoped_change_and_outside_path_detection) ... ok\ntest_explicit_existing_changes_preserved_outside_scope (test_workflows.ExistingChangeWorkflow.test_explicit_existing_changes_preserved_outside_scope) ... ok\ntest_index_only_changes_alter_snapshot (test_workflows.ExistingChangeWorkflow.test_index_only_changes_alter_snapshot) ... ok\ntest_cli_read_returns_nonzero_for_stale_memory (test_workflows.MemoryWorkflow.test_cli_read_returns_nonzero_for_stale_memory) ... ok\ntest_evidence_tamper_and_project_binding (test_workflows.MemoryWorkflow.test_evidence_tamper_and_project_binding) ... ok\ntest_missing_evidence_does_not_create_memory (test_workflows.MemoryWorkflow.test_missing_evidence_does_not_create_memory) ... ok\ntest_source_and_head_staleness (test_workflows.MemoryWorkflow.test_source_and_head_staleness) ... ok\ntest_duplicate_keys_and_malformed_memory_rejected (test_workflows.RecordSafety.test_duplicate_keys_and_malformed_memory_rejected) ... ok\ntest_repair_lock_prevents_concurrent_updates (test_workflows.RecordSafety.test_repair_lock_prevents_concurrent_updates) ... ok\ntest_scenario_evidence_cannot_replace_gates (test_workflows.RecordSafety.test_scenario_evidence_cannot_replace_gates) ... ok\ntest_worktree_container_itself_refused (test_workflows.RecordSafety.test_worktree_container_itself_refused) ... ok\ntest_actual_git_odd_filename_roundtrip (test_workflows.RepositoryWorkflow.test_actual_git_odd_filename_roundtrip) ... ok\ntest_workspace_hash_tracks_untracked_and_deleted (test_workflows.RepositoryWorkflow.test_workspace_hash_tracks_untracked_and_deleted) ... ok\n\n----------------------------------------------------------------------\nRan 212 tests in 8.753s\n\nOK\nOMEGA_TEST_RESULT {\"errors\": 0, \"expected_failures\": 0, \"failed\": 0, \"passed\": 212, \"run\": 212, \"skipped\": 0, \"unexpected_successes\": 0}\n",
+        "timed_out": false,
+        "output_limit_exceeded": false,
+        "total_output_bytes": 29862,
+        "invalid_utf8": false,
+        "adapter": "omega"
+      },
+      {
+        "gate": "security",
+        "command": [
+          "python3",
+          "-m",
+          "omega",
+          "audit",
+          "--select",
+          ".claude",
+          "--select",
+          "agents",
+          "--select",
+          ".claude-plugin",
+          "--select",
+          "omega"
+        ],
+        "exit_code": 0,
+        "seconds": 0.117,
+        "output": "{\n  \"passed\": true,\n  \"complete_for_selected_paths\": true,\n  \"findings\": [],\n  \"coverage\": [\n    {\n      \"path\": \".claude/CLAUDE.md\",\n      \"sha256\": \"8b1b9ef50123047348dd27f58e66a5476523be8f20f365b658cb2b840681e6bb\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \".claude/skills/omega/SKILL.md\",\n      \"sha256\": \"d359bf7024552a7356190edd1de33a4b824d52c018fe52a458b9f2430bc03ca2\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \".claude/skills/omega/references/controlled-change.md\",\n      \"sha256\": \"08deccd491c0c08a7dbf1f85a96f87864757d1223126351671c246f374bf4b17\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \".claude/skills/omega/references/omega-context-sufficiency-check.md\",\n      \"sha256\": \"00807d652be4220c94716a1c218d8c6428c2abbca7cf35bf176118bec3a5c13d\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \".claude/skills/omega/references/omega-effective-policy-explainer.md\",\n      \"sha256\": \"996a07c3656c7b60fb6575726779c4a25d9a10e689707ac03597b3a85107940f\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \".claude/skills/omega/references/omega-evidence-reconciler.md\",\n      \"sha256\": \"c5b3ae54a62828196128c6a8f738e533bb2ab993a6d67ac019285e27ba775334\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \".claude/skills/omega/references/omega-memory-reconciliation.md\",\n      \"sha256\": \"8a18572175dfb98c0e275163e2b73379f97ffb13e34b9fe9a4729b0dce1d0f29\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \".claude/skills/omega/references/omega-project-workflow-adapter.md\",\n      \"sha256\": \"d76ec44bea673ff8ce338cc8b6dba55c09b2a9ba254601f1997987680b4bc523\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \".claude/skills/omega/references/omega-skill-compatibility-audit.md\",\n      \"sha256\": \"4e5f1643f7519a5257d43ad538560ce6f97016891227c7bec880df6a32cd47d5\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \".claude/skills/omega/references/omega-skill-interference-benchmark.md\",\n      \"sha256\": \"96dd42135260a54f563b33608d21ba875eef5545949f94c5b6218be5af19e8a4\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \".claude/skills/omega/references/omega-workflow-handoff-contract.md\",\n      \"sha256\": \"e6e3b1b75b3c46160553aa65516dd1bc6147f4e36e646f716b0c2432544523cd\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \".claude/skills/omega/references/project-memory.md\",\n      \"sha256\": \"13a09fdb7959e9ce76e392341ed70aaff0a0016ec2a6dd94addda2b575c71112\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \".claude/skills/omega/references/quality-gates.md\",\n      \"sha256\": \"01e9b5c626c830307c0e81bb611ac87d1911181c4743a618e36722d948e01e8a\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \".claude/skills/omega/references/repo-map.md\",\n      \"sha256\": \"70204ba1649b8998532b8dfec56d36a9c26fe4f8d03bfb5751356f575633eab0\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \".claude/skills/omega/references/skill-benchmark.md\",\n      \"sha256\": \"15be003485f8374722e56da5553d15e3f8ad870e28b26f767935b00febc33398\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \".claude-plugin/marketplace.json\",\n      \"sha256\": \"a748d2dd5360ab374c367efaf9e82c85d471b4297f9328039f5b338e7f230294\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \".claude-plugin/plugin.json\",\n      \"sha256\": \"4934d1e1e1b57f761f0fce54aef40dc6137ab90ae164c261222aecb741a3bed0\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \"agents/omega-engineer.md\",\n      \"sha256\": \"c840bb0ded852d09de07b1006c896da515a991c6b90a20a3d3b4d356a341fbc7\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \"agents/omega-investigator.md\",\n      \"sha256\": \"643eb3538fa2a04350d9676ba9ff832961078868200d2323c145f732c811d298\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \"agents/omega-verifier.md\",\n      \"sha256\": \"d2187473be253fea0a2ba54319d8bbf330a1df47b1a7e1392b9bfc3a4d354260\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \"omega/__init__.py\",\n      \"sha256\": \"45a00d19b46ee5efaf7a1c17235f907b68203cf7ecd5341a663d3bd8975b2e4e\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/__main__.py\",\n      \"sha256\": \"3dc5087cc310f1d79361f4cf8c56f99a49a47b521bfcc0dda3b5bd5a8d328120\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/adapters.py\",\n      \"sha256\": \"66d272cbdb262b016960228ecb201df12903b2cced8f060ba0c6bf87360542a7\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/analysis_tools.py\",\n      \"sha256\": \"c530481bb4332e0208484aa70877b4a4af1f1fa20931c88548de29cd14804754\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/arguments.py\",\n      \"sha256\": \"95f950ca36fd7083b5c0d5862fd4603528bb58a355ef9419a9a9be43cb6b8290\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/build.py\",\n      \"sha256\": \"f779edb72c107e78944d5c7e8b7fa2c507f1eebdfa8c771a5e2397c252cdfdc2\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/catalog.json\",\n      \"sha256\": \"a06e12ea99440e8c39b4d9c6507e4bc9d4e28fd0b99ffadcf42803b8643e1146\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \"omega/change.py\",\n      \"sha256\": \"00959855fd178d811a7515b42979b6ed25cbf0a07f2f05fb0411f60cf967a5b0\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/config.json\",\n      \"sha256\": \"b41820793c0da93a279833c366e313bfc0d177cd4b522980145668301b315e61\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \"omega/context.py\",\n      \"sha256\": \"53743a082ef9594b46c24eb3649e3d2693e962b7d1cf027c6a5ed8220458c33c\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/frontmatter.py\",\n      \"sha256\": \"049fed295175946740f844bd491e8f92f2da5ccf994a5e806404a7d6971f24a8\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/hook.py\",\n      \"sha256\": \"d32365aa47bcdcc66aa0a02658b8534c22f239f75181bd882361fe7c7fdf6953\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/interop.py\",\n      \"sha256\": \"74d31979dc44840a5b67ee89920c879a6cb98b2ccb3ed160abb9113a5fd48360\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/io.py\",\n      \"sha256\": \"81d4115b458edb797081ef378f2fa7c133fbef893206bf6d8a96171787f51b0a\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/modes.json\",\n      \"sha256\": \"8f094b0bbe944f30a6b9e0f2bafacf55bb692d2035f97599f2a54af894177654\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \"omega/policy.py\",\n      \"sha256\": \"0b3be892814dc111b2a85a49ac673c6a2df5b156dfab2541580a014dba41cead\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/process.py\",\n      \"sha256\": \"1d9b66a360929eb90e187030ac16cdd6efacef9f4de2c31b68aff5e55b934958\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/records.py\",\n      \"sha256\": \"628fa6f67a6a464c6ce0d72c4e926a673d7e5bdc0c5801d0c21a60f8144cf219\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/reports.py\",\n      \"sha256\": \"96c02d6b6b294b2e2432b099a5b6c741287dad9ad30c7f644f33392b1abcf1b7\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/safety.py\",\n      \"sha256\": \"f9ed223ce5f678808e957b2d970c451bea0853cf810f0749f7b68f09d7535e9c\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/security.py\",\n      \"sha256\": \"f59ff90edb6095c7fbcbaf79f235bc8817b2d79a394f3c6f7d677d01faf4ab1d\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/skills.py\",\n      \"sha256\": \"24cde95a2c36a2cb0ea70ea54925b66458799f11dcd9c8fed4d0bde4eff64b18\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/test_runner.py\",\n      \"sha256\": \"4bc34f71d041928fbf579381a3c24eadb5c09fdb67075b4d6f295544c1014890\",\n      \"python_ast\": true\n    }\n  ],\n  \"exclusions\": [\n    {\n      \"path\": \"omega/__pycache__\",\n      \"reason\": \"generated Python bytecode\"\n    }\n  ],\n  \"files_scanned\": 43,\n  \"files_written\": false,\n  \"commands_executed\": false,\n  \"scope\": \"targeted Python AST, explicit bypass and possible-secret rules only; no taint/dependency/full-language assurance\"\n}\n",
+        "truncated": false,
+        "output_tail": "",
+        "timed_out": false,
+        "output_limit_exceeded": false,
+        "total_output_bytes": 7781,
+        "invalid_utf8": false
+      },
+      {
+        "gate": "regression",
+        "command": [
+          "python3",
+          "-m",
+          "omega",
+          "benchmark"
+        ],
+        "exit_code": 0,
+        "seconds": 0.075,
+        "output": "{\n  \"suite\": \"router-contract-v2\",\n  \"suite_sha256\": \"833717d4a513fb27d8193fc8bf4c0730c668bd57be81d101568a397c238fe541\",\n  \"cases\": [\n    {\n      \"id\": \"low\",\n      \"passed\": true\n    },\n    {\n      \"id\": \"medium\",\n      \"passed\": true\n    },\n    {\n      \"id\": \"high-conflict\",\n      \"passed\": true\n    }\n  ],\n  \"skills\": [\n    {\n      \"skill\": \"omega\",\n      \"sha256\": \"d359bf7024552a7356190edd1de33a4b824d52c018fe52a458b9f2430bc03ca2\",\n      \"bundle_sha256\": \"06ecaa6b9ec02acb745752ce0b21fb52a1be3622a943a4018e135968b1d74068\",\n      \"resources\": [\n        {\n          \"path\": \".claude/skills/omega/references/controlled-change.md\",\n          \"sha256\": \"08deccd491c0c08a7dbf1f85a96f87864757d1223126351671c246f374bf4b17\",\n          \"available\": true\n        },\n        {\n          \"path\": \".claude/skills/omega/references/omega-context-sufficiency-check.md\",\n          \"sha256\": \"00807d652be4220c94716a1c218d8c6428c2abbca7cf35bf176118bec3a5c13d\",\n          \"available\": true\n        },\n        {\n          \"path\": \".claude/skills/omega/references/omega-effective-policy-explainer.md\",\n          \"sha256\": \"996a07c3656c7b60fb6575726779c4a25d9a10e689707ac03597b3a85107940f\",\n          \"available\": true\n        },\n        {\n          \"path\": \".claude/skills/omega/references/omega-evidence-reconciler.md\",\n          \"sha256\": \"c5b3ae54a62828196128c6a8f738e533bb2ab993a6d67ac019285e27ba775334\",\n          \"available\": true\n        },\n        {\n          \"path\": \".claude/skills/omega/references/omega-memory-reconciliation.md\",\n          \"sha256\": \"8a18572175dfb98c0e275163e2b73379f97ffb13e34b9fe9a4729b0dce1d0f29\",\n          \"available\": true\n        },\n        {\n          \"path\": \".claude/skills/omega/references/omega-project-workflow-adapter.md\",\n          \"sha256\": \"d76ec44bea673ff8ce338cc8b6dba55c09b2a9ba254601f1997987680b4bc523\",\n          \"available\": true\n        },\n        {\n          \"path\": \".claude/skills/omega/references/omega-skill-compatibility-audit.md\",\n          \"sha256\": \"4e5f1643f7519a5257d43ad538560ce6f97016891227c7bec880df6a32cd47d5\",\n          \"available\": true\n        },\n        {\n          \"path\": \".claude/skills/omega/references/omega-skill-interference-benchmark.md\",\n          \"sha256\": \"96dd42135260a54f563b33608d21ba875eef5545949f94c5b6218be5af19e8a4\",\n          \"available\": true\n        },\n        {\n          \"path\": \".claude/skills/omega/references/omega-workflow-handoff-contract.md\",\n          \"sha256\": \"e6e3b1b75b3c46160553aa65516dd1bc6147f4e36e646f716b0c2432544523cd\",\n          \"available\": true\n        },\n        {\n          \"path\": \".claude/skills/omega/references/project-memory.md\",\n          \"sha256\": \"13a09fdb7959e9ce76e392341ed70aaff0a0016ec2a6dd94addda2b575c71112\",\n          \"available\": true\n        },\n        {\n          \"path\": \".claude/skills/omega/references/quality-gates.md\",\n          \"sha256\": \"01e9b5c626c830307c0e81bb611ac87d1911181c4743a618e36722d948e01e8a\",\n          \"available\": true\n        },\n        {\n          \"path\": \".claude/skills/omega/references/repo-map.md\",\n          \"sha256\": \"70204ba1649b8998532b8dfec56d36a9c26fe4f8d03bfb5751356f575633eab0\",\n          \"available\": true\n        },\n        {\n          \"path\": \".claude/skills/omega/references/skill-benchmark.md\",\n          \"sha256\": \"15be003485f8374722e56da5553d15e3f8ad870e28b26f767935b00febc33398\",\n          \"available\": true\n        },\n        {\n          \"path\": \"docs/CLAUDE_PLUGIN.md\",\n          \"sha256\": \"1b48d66abf2463747e678ed202f9003bb3a8ad1ab23f494501e52c5615a90480\",\n          \"available\": true\n        },\n        {\n          \"path\": \"docs/INTEROPERABILITY_GUIDE.md\",\n          \"sha256\": \"0f796380c4aeb7d00bcaf390a530d18a1c4db65802c90276f40cceeed1868c22\",\n          \"available\": true\n        },\n        {\n          \"path\": \"docs/PYTHON_TYPESCRIPT_BOUNDARY.md\",\n          \"sha256\": \"b72aebb1a117db245558fe2917bcb28882e53aa4882aeca374bed15c554eb362\",\n          \"available\": true\n        },\n        {\n          \"path\": \"docs/UNIFIED_SKILL.md\",\n          \"sha256\": \"1fcf3ec8c86acd706a0f2daa35e5cc01f4a2a4a9cf75d3e8a5edb1c6cc2e10a6\",\n          \"available\": true\n        },\n        {\n          \"path\": \"docs/UPGRADE_0_4.md\",\n          \"sha256\": \"32b7b86f95393a61b3d3132ed293ff37707504252591c1250fc9e17cbfae71f6\",\n          \"available\": true\n        },\n        {\n          \"path\": \"docs/UPGRADE_0_5.md\",\n          \"sha256\": \"0f97c6e3ecac67b82b1397e5d6e9561f8f24efe6e2ef0af01880e1b6bd41d0ae\",\n          \"available\": true\n        }\n      ],\n      \"modes\": [\n        {\n          \"id\": \"repo-map\",\n          \"reference\": \"references/repo-map.md\",\n          \"passed\": true\n        },\n        {\n          \"id\": \"controlled-change\",\n          \"reference\": \"references/controlled-change.md\",\n          \"passed\": true\n        },\n        {\n          \"id\": \"quality-gates\",\n          \"reference\": \"references/quality-gates.md\",\n          \"passed\": true\n        },\n        {\n          \"id\": \"project-memory\",\n          \"reference\": \"references/project-memory.md\",\n          \"passed\": true\n        },\n        {\n          \"id\": \"skill-benchmark\",\n          \"reference\": \"references/skill-benchmark.md\",\n          \"passed\": true\n        },\n        {\n          \"id\": \"omega-skill-compatibility-audit\",\n          \"reference\": \"references/omega-skill-compatibility-audit.md\",\n          \"passed\": true\n        },\n        {\n          \"id\": \"omega-effective-policy-explainer\",\n          \"reference\": \"references/omega-effective-policy-explainer.md\",\n          \"passed\": true\n        },\n        {\n          \"id\": \"omega-workflow-handoff-contract\",\n          \"reference\": \"references/omega-workflow-handoff-contract.md\",\n          \"passed\": true\n        },\n        {\n          \"id\": \"omega-skill-interference-benchmark\",\n          \"reference\": \"references/omega-skill-interference-benchmark.md\",\n          \"passed\": true\n        },\n        {\n          \"id\": \"omega-project-workflow-adapter\",\n          \"reference\": \"references/omega-project-workflow-adapter.md\",\n          \"passed\": true\n        },\n        {\n          \"id\": \"omega-evidence-reconciler\",\n          \"reference\": \"references/omega-evidence-reconciler.md\",\n          \"passed\": true\n        },\n        {\n          \"id\": \"omega-memory-reconciliation\",\n          \"reference\": \"references/omega-memory-reconciliation.md\",\n          \"passed\": true\n        },\n        {\n          \"id\": \"omega-context-sufficiency-check\",\n          \"reference\": \"references/omega-context-sufficiency-check.md\",\n          \"passed\": true\n        }\n      ],\n      \"checks\": [\n        {\n          \"id\": \"frontmatter\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"identity\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"description\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"explicit-invocation\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"no-permission-bypass\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"command:doctor\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"command:map\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"command:plan\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"section:Inputs\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Workflow\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Evidence\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Failure handling\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Stop conditions\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"mode:repo-map\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"mode:controlled-change\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"mode:quality-gates\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"mode:project-memory\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"mode:skill-benchmark\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"mode:omega-skill-compatibility-audit\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"mode:omega-effective-policy-explainer\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"mode:omega-workflow-handoff-contract\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"mode:omega-skill-interference-benchmark\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"mode:omega-project-workflow-adapter\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"mode:omega-evidence-reconciler\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"mode:omega-memory-reconciliation\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"mode:omega-context-sufficiency-check\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"resources-resolve\",\n          \"passed\": true,\n          \"required\": true\n        }\n      ],\n      \"passed\": true,\n      \"advanced_passed\": true,\n      \"score\": 100.0,\n      \"quality_score\": null,\n      \"quality_evaluated\": false,\n      \"score_metric\": \"contract completeness only\",\n      \"scope\": \"offline document contract, not LLM instruction adherence or reasoning quality\"\n    }\n  ],\n  \"mode_count\": 13,\n  \"passed\": true,\n  \"scope\": \"router and offline skill contracts; native LLM skill efficacy not evaluated\"\n}\n",
+        "truncated": false,
+        "output_tail": "",
+        "timed_out": false,
+        "output_limit_exceeded": false,
+        "total_output_bytes": 10101,
+        "invalid_utf8": false
+      }
+    ]
+  },
+  "bridge": {
+    "report": {
+      "path": ".omega/plugin-packaging/bridge.xml",
+      "bytes": 2909,
+      "sha256": "310e82b6d58c8a549f139d892ab50028b3796b216030f133fcbf83c31335698c"
+    },
+    "passed": 15,
+    "failed": 0,
+    "skipped": 0,
+    "test_names": [
+      "real Python map returns bounded repository metadata",
+      "real Python plan retains workflow and agent limits",
+      "mutations, shell commands and unknown fields never reach engine",
+      "paths cannot escape configured root or smuggle an executable option",
+      "context content equals direct Python output, without JS rewriting",
+      "output and timeout bounds reject instead of returning partial success",
+      "unavailable Python executable fails explicitly",
+      "Python semantic failure is retained rather than converted to success",
+      "Python source protections reject a selected symlink",
+      "open stdin without EOF is timed out and closed",
+      "stdin rejects oversized and invalid UTF-8 data",
+      "aggregate request byte budget also applies to direct API calls",
+      "pre-aborted and active requests honour cancellation",
+      "CLI deadline includes a caller that never ends stdin",
+      "stdin deadline rejects invalid timeout values"
+    ]
+  },
+  "native_plugin_probe": {
+    "report": ".omega/plugin-packaging/runs/2531970c83df459f8dd1bbb7092f047d/result.json",
+    "passed": true,
+    "source_head": "7a2304e5898cb0fa4f5a3f6e44e0b0e1c3b22125",
+    "source_snapshot": "Working file bytes from tracked paths; see file hashes, HEAD alone does not assert a clean checkout",
+    "native": {
+      "passed": true,
+      "claude_version": "2.1.308 (Claude Code)",
+      "installed": {
+        "id": "omega@omega-marketplace",
+        "version": "0.7.0",
+        "scope": "user",
+        "enabled": true,
+        "installPath": "/workspace/skill/.omega/plugin-packaging/runs/2531970c83df459f8dd1bbb7092f047d/claude-config/plugins/cache/omega-marketplace/omega/0.7.0",
+        "readFromFolder": "/workspace/skill/.omega/plugin-packaging/runs/2531970c83df459f8dd1bbb7092f047d/marketplace",
+        "folderVersion": "0.7.0",
+        "installedAt": "2026-10-23T05:48:30.961Z",
+        "lastUpdated": "2026-10-23T05:48:30.961Z",
+        "projectEnabled": false
+      },
+      "inventory": "omega 0.7.0\n  Description: OMEGA engineering skill, specialist agents and local Python evidence workflows.\n  Source: omega@omega-marketplace\n\nComponent inventory\n  Skills (1)  omega\n  Agents (3)  omega-engineer, omega-verifier, omega-investigator\n  Hooks (0)\n  MCP servers (0)\n  LSP servers (0)\n\nProjected token cost\n  Always-on:   ~95 tok   added to every session\n\nPer-component (rounded)\n  component           always-on  on-invoke\n  omega                     ~40      ~1.4k\n  omega-engineer           < 20       ~190\n  omega-verifier           < 20       ~180\n  omega-investigator        ~20       ~190\n\n  On-invoke cost is paid each time a skill or agent fires.\n  Token counts are estimates and may differ from actual usage.\n",
+      "zip_inventory": "omega 0.7.0\n  Description: Evidence-based engineering: one skill, 13 on-demand workflows and three specialist agents backed by a local Python engine.\n  Source: omega@inline\n\nComponent inventory\n  Skills (1)  omega\n  Agents (3)  omega-verifier, omega-investigator, omega-engineer\n  Hooks (0)\n  MCP servers (0)\n  LSP servers (0)\n\nProjected token cost\n  Always-on:   ~95 tok   added to every session\n\nPer-component (rounded)\n  component           always-on  on-invoke\n  omega                     ~40      ~1.4k\n  omega-verifier           < 20       ~180\n  omega-investigator        ~20       ~190\n  omega-engineer           < 20       ~190\n\n  On-invoke cost is paid each time a skill or agent fires.\n  Token counts are estimates and may differ from actual usage.\n",
+      "records": [
+        {
+          "command": [
+            "/workspace/skill/.omega/tools/claude/node_modules/.bin/claude",
+            "--version"
+          ],
+          "exit_code": 0,
+          "seconds": 0.012,
+          "output": "2.1.308 (Claude Code)\n",
+          "truncated": false,
+          "output_tail": "",
+          "timed_out": false,
+          "output_limit_exceeded": false,
+          "total_output_bytes": 22,
+          "invalid_utf8": false
+        },
+        {
+          "command": [
+            "/workspace/skill/.omega/tools/claude/node_modules/.bin/claude",
+            "plugin",
+            "validate",
+            "--strict",
+            "--json",
+            "/workspace/skill/.omega/plugin-packaging/runs/2531970c83df459f8dd1bbb7092f047d/marketplace/.claude-plugin/plugin.json"
+          ],
+          "exit_code": 0,
+          "seconds": 0.447,
+          "output": "{\n  \"success\": true,\n  \"strict\": true,\n  \"target\": \"/workspace/skill/.omega/plugin-packaging/runs/2531970c83df459f8dd1bbb7092f047d/marketplace/.claude-plugin/plugin.json\",\n  \"manifest\": {\n    \"file\": \"/workspace/skill/.omega/plugin-packaging/runs/2531970c83df459f8dd1bbb7092f047d/marketplace/.claude-plugin/plugin.json\",\n    \"type\": \"plugin\",\n    \"errors\": [],\n    \"warnings\": [],\n    \"notes\": [],\n    \"gatingHooks\": []\n  },\n  \"contents\": [],\n  \"advice\": [],\n  \"directory\": {\n    \"profile\": null,\n    \"findings\": [\n      {\n        \"code\": \"LICENSE_MISSING\",\n        \"title\": \"License missing\",\n        \"severity\": \"error\",\n        \"blocking\": true,\n        \"hold\": false,\n        \"file\": \"LICENSE\",\n        \"field\": \"\",\n        \"message\": \"This plugin has no LICENSE file and plugin.json has no `license`. The directory requires one of them.\",\n        \"fix\": \"Add a LICENSE file to the plugin folder, or set `license` (an SPDX id) in plugin.json. A LICENSE at the repository root also counts for a plugin in a sub-folder.\"\n      },\n      {\n        \"code\": \"ICON_MISSING\",\n        \"title\": \"No icon\",\n        \"severity\": \"warning\",\n        \"blocking\": false,\n        \"hold\": false,\n        \"file\": \".claude-plugin/plugin.json\",\n        \"field\": \"icon\",\n        \"message\": \"No icon found in the plugin. The validator looked for `icon` in plugin.json and for a file at .claude-plugin/icon.png or .svg, assets/icon.png or .svg, or a similar path.\",\n        \"fix\": \"Add a square PNG to the plugin folder at .claude-plugin/icon.png, or set `icon` in plugin.json to the path of a square PNG or JPEG in the plugin: 512 to 2048 px on each side, under 2 MB. SVG and WebP are not accepted. That file may become the listing icon only once: the first time the plugin is saved or submitted in the developer portal. Adding or changing it later does not change the icon.\"\n      }\n    ],\n    \"undecided\": [],\n    \"incomplete\": false,\n    \"failure\": null,\n    \"notes\": [\n      \"This folder also holds a marketplace manifest. The plugin directory treats such a folder as a plugin, so these checks cover only the plugin in this folder. To check another plugin that the marketplace lists, run validate on that plugin's folder.\",\n      \"The repository root was taken to be /workspace/skill, the nearest parent folder with a .git folder or file. No license file that counts (a regular file with one of the file names the plugin directory accepts) was found there either. For a plugin submitted from a git repository, the repository root is the top folder of that repository, with only what is committed there, so check that the folder named above is that top folder.\"\n    ]\n  }\n}\n",
+          "truncated": false,
+          "output_tail": "",
+          "timed_out": false,
+          "output_limit_exceeded": false,
+          "total_output_bytes": 2657,
+          "invalid_utf8": false
+        },
+        {
+          "command": [
+            "/workspace/skill/.omega/tools/claude/node_modules/.bin/claude",
+            "plugin",
+            "validate",
+            "--strict",
+            "--json",
+            "/workspace/skill/.omega/plugin-packaging/runs/2531970c83df459f8dd1bbb7092f047d/marketplace/.claude-plugin/marketplace.json"
+          ],
+          "exit_code": 0,
+          "seconds": 0.383,
+          "output": "{\n  \"success\": true,\n  \"strict\": true,\n  \"target\": \"/workspace/skill/.omega/plugin-packaging/runs/2531970c83df459f8dd1bbb7092f047d/marketplace/.claude-plugin/marketplace.json\",\n  \"manifest\": {\n    \"file\": \"/workspace/skill/.omega/plugin-packaging/runs/2531970c83df459f8dd1bbb7092f047d/marketplace/.claude-plugin/marketplace.json\",\n    \"type\": \"marketplace\",\n    \"errors\": [],\n    \"warnings\": [],\n    \"notes\": [],\n    \"gatingHooks\": []\n  },\n  \"contents\": [],\n  \"advice\": [],\n  \"directory\": null\n}\n",
+          "truncated": false,
+          "output_tail": "",
+          "timed_out": false,
+          "output_limit_exceeded": false,
+          "total_output_bytes": 496,
+          "invalid_utf8": false
+        },
+        {
+          "command": [
+            "/workspace/skill/.omega/tools/claude/node_modules/.bin/claude",
+            "plugin",
+            "marketplace",
+            "add",
+            "/workspace/skill/.omega/plugin-packaging/runs/2531970c83df459f8dd1bbb7092f047d/marketplace",
+            "--json"
+          ],
+          "exit_code": 0,
+          "seconds": 0.547,
+          "output": "{\"command\":\"marketplace-add\",\"outcome\":\"ok\",\"marketplace\":\"omega-marketplace\",\"message\":\"Successfully added marketplace: omega-marketplace (declared in user settings)\"}\n",
+          "truncated": false,
+          "output_tail": "",
+          "timed_out": false,
+          "output_limit_exceeded": false,
+          "total_output_bytes": 169,
+          "invalid_utf8": false
+        },
+        {
+          "command": [
+            "/workspace/skill/.omega/tools/claude/node_modules/.bin/claude",
+            "plugin",
+            "install",
+            "omega@omega-marketplace",
+            "--scope",
+            "user",
+            "--json"
+          ],
+          "exit_code": 0,
+          "seconds": 0.796,
+          "output": "{\"command\":\"install\",\"outcome\":\"ok\",\"plugin\":\"omega@omega-marketplace\",\"pluginId\":\"omega@omega-marketplace\",\"scope\":\"user\",\"message\":\"Successfully installed plugin: omega@omega-marketplace (scope: user)\"}\n",
+          "truncated": false,
+          "output_tail": "",
+          "timed_out": false,
+          "output_limit_exceeded": false,
+          "total_output_bytes": 205,
+          "invalid_utf8": false
+        },
+        {
+          "command": [
+            "/workspace/skill/.omega/tools/claude/node_modules/.bin/claude",
+            "plugin",
+            "list",
+            "--json"
+          ],
+          "exit_code": 0,
+          "seconds": 0.675,
+          "output": "[\n  {\n    \"id\": \"omega@omega-marketplace\",\n    \"version\": \"0.7.0\",\n    \"scope\": \"user\",\n    \"enabled\": true,\n    \"installPath\": \"/workspace/skill/.omega/plugin-packaging/runs/2531970c83df459f8dd1bbb7092f047d/claude-config/plugins/cache/omega-marketplace/omega/0.7.0\",\n    \"readFromFolder\": \"/workspace/skill/.omega/plugin-packaging/runs/2531970c83df459f8dd1bbb7092f047d/marketplace\",\n    \"folderVersion\": \"0.7.0\",\n    \"installedAt\": \"2026-10-23T05:48:30.961Z\",\n    \"lastUpdated\": \"2026-10-23T05:48:30.961Z\",\n    \"projectEnabled\": false\n  }\n]\n",
+          "truncated": false,
+          "output_tail": "",
+          "timed_out": false,
+          "output_limit_exceeded": false,
+          "total_output_bytes": 542,
+          "invalid_utf8": false
+        },
+        {
+          "command": [
+            "/workspace/skill/.omega/tools/claude/node_modules/.bin/claude",
+            "plugin",
+            "details",
+            "omega@omega-marketplace"
+          ],
+          "exit_code": 0,
+          "seconds": 0.452,
+          "output": "omega 0.7.0\n  Description: OMEGA engineering skill, specialist agents and local Python evidence workflows.\n  Source: omega@omega-marketplace\n\nComponent inventory\n  Skills (1)  omega\n  Agents (3)  omega-engineer, omega-verifier, omega-investigator\n  Hooks (0)\n  MCP servers (0)\n  LSP servers (0)\n\nProjected token cost\n  Always-on:   ~95 tok   added to every session\n\nPer-component (rounded)\n  component           always-on  on-invoke\n  omega                     ~40      ~1.4k\n  omega-engineer           < 20       ~190\n  omega-verifier           < 20       ~180\n  omega-investigator        ~20       ~190\n\n  On-invoke cost is paid each time a skill or agent fires.\n  Token counts are estimates and may differ from actual usage.\n",
+          "truncated": false,
+          "output_tail": "",
+          "timed_out": false,
+          "output_limit_exceeded": false,
+          "total_output_bytes": 728,
+          "invalid_utf8": false
+        },
+        {
+          "command": [
+            "/workspace/skill/.omega/tools/claude/node_modules/.bin/claude",
+            "--plugin-dir",
+            "/workspace/skill/.omega/plugin-packaging/runs/2531970c83df459f8dd1bbb7092f047d/omega.zip",
+            "plugin",
+            "details",
+            "omega"
+          ],
+          "exit_code": 0,
+          "seconds": 0.449,
+          "output": "omega 0.7.0\n  Description: Evidence-based engineering: one skill, 13 on-demand workflows and three specialist agents backed by a local Python engine.\n  Source: omega@inline\n\nComponent inventory\n  Skills (1)  omega\n  Agents (3)  omega-verifier, omega-investigator, omega-engineer\n  Hooks (0)\n  MCP servers (0)\n  LSP servers (0)\n\nProjected token cost\n  Always-on:   ~95 tok   added to every session\n\nPer-component (rounded)\n  component           always-on  on-invoke\n  omega                     ~40      ~1.4k\n  omega-verifier           < 20       ~180\n  omega-investigator        ~20       ~190\n  omega-engineer           < 20       ~190\n\n  On-invoke cost is paid each time a skill or agent fires.\n  Token counts are estimates and may differ from actual usage.\n",
+          "truncated": false,
+          "output_tail": "",
+          "timed_out": false,
+          "output_limit_exceeded": false,
+          "total_output_bytes": 760,
+          "invalid_utf8": false
+        },
+        {
+          "command": [
+            "git",
+            "init",
+            "-q",
+            "-b",
+            "omega/plugin-fixture"
+          ],
+          "exit_code": 0,
+          "seconds": 0.01,
+          "output": "",
+          "truncated": false,
+          "output_tail": "",
+          "timed_out": false,
+          "output_limit_exceeded": false,
+          "total_output_bytes": 0,
+          "invalid_utf8": false
+        },
+        {
+          "command": [
+            "git",
+            "add",
+            "."
+          ],
+          "exit_code": 0,
+          "seconds": 0.007,
+          "output": "",
+          "truncated": false,
+          "output_tail": "",
+          "timed_out": false,
+          "output_limit_exceeded": false,
+          "total_output_bytes": 0,
+          "invalid_utf8": false
+        },
+        {
+          "command": [
+            "git",
+            "-c",
+            "user.name=OMEGA fixture",
+            "-c",
+            "user.email=omega@example.invalid",
+            "commit",
+            "-qm",
+            "plugin target fixture"
+          ],
+          "exit_code": 0,
+          "seconds": 0.009,
+          "output": "",
+          "truncated": false,
+          "output_tail": "",
+          "timed_out": false,
+          "output_limit_exceeded": false,
+          "total_output_bytes": 0,
+          "invalid_utf8": false
+        },
+        {
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+            "-B",
+            "/workspace/skill/.omega/plugin-packaging/runs/2531970c83df459f8dd1bbb7092f047d/claude-config/plugins/cache/omega-marketplace/omega/0.7.0/omega_cli.py",
+            "--project-root",
+            "/workspace/skill/.omega/plugin-packaging/runs/2531970c83df459f8dd1bbb7092f047d/target",
+            "map",
+            "--compact"
+          ],
+          "exit_code": 0,
+          "seconds": 0.078,
+          "output": "{\"files\":[{\"path\":\".gitignore\",\"bytes\":21,\"kind\":\"other\"},{\"path\":\"calc.py\",\"bytes\":24,\"kind\":\"source\"},{\"path\":\"checks/test_calc.py\",\"bytes\":120,\"kind\":\"test\"},{\"path\":\"omega.py\",\"bytes\":66,\"kind\":\"source\"}],\"omitted\":[],\"omitted_count\":0,\"omitted_list_truncated\":false,\"status\":\"\",\"status_truncated\":false,\"note\":\"Metadata only; no file contents or credential discovery\"}\n",
+          "truncated": false,
+          "output_tail": "",
+          "timed_out": false,
+          "output_limit_exceeded": false,
+          "total_output_bytes": 374,
+          "invalid_utf8": false
+        },
+        {
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+            "-B",
+            "/workspace/skill/.omega/plugin-packaging/runs/2531970c83df459f8dd1bbb7092f047d/claude-config/plugins/cache/omega-marketplace/omega/0.7.0/omega_cli.py",
+            "--project-root",
+            "/workspace/skill/.omega/plugin-packaging/runs/2531970c83df459f8dd1bbb7092f047d/target",
+            "plan",
+            "--compact"
+          ],
+          "exit_code": 0,
+          "seconds": 0.077,
+          "output": "{\"complexity\":\"low\",\"intent\":\"change\",\"workflow_contract\":null,\"agents\":[],\"schedule\":\"sequential; parallel only independent read tasks\",\"max_concurrent_agents\":2,\"isolation\":\"branch\",\"skills\":[\"omega\"],\"modes\":[\"repo-map\",\"controlled-change\",\"quality-gates\",\"project-memory\"],\"reference_root\":\"/workspace/skill/.omega/plugin-packaging/runs/2531970c83df459f8dd1bbb7092f047d/claude-config/plugins/cache/omega-marketplace/omega/0.7.0\",\"references\":[\".claude/skills/omega/references/repo-map.md\",\".claude/skills/omega/references/controlled-change.md\",\".claude/skills/omega/references/quality-gates.md\",\".claude/skills/omega/references/project-memory.md\"],\"selection\":\"one omega entry; explicit intent selects reference metadata only; no automatic agent dispatch\",\"limits\":{\"max_agents\":2,\"max_repair_attempts\":2,\"max_task_seconds\":1800,\"max_gate_seconds\":120,\"max_context_bytes\":24000,\"max_evidence_bytes\":16000,\"max_estimated_tokens\":16000,\"max_output_bytes\":1048576},\"execution\":\"manual Claude orchestration; no API calls\"}\n",
+          "truncated": false,
+          "output_tail": "",
+          "timed_out": false,
+          "output_limit_exceeded": false,
+          "total_output_bytes": 1023,
+          "invalid_utf8": false
+        },
+        {
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+            "-B",
+            "/workspace/skill/.omega/plugin-packaging/runs/2531970c83df459f8dd1bbb7092f047d/claude-config/plugins/cache/omega-marketplace/omega/0.7.0/omega_cli.py",
+            "--project-root",
+            "/workspace/skill/.omega/plugin-packaging/runs/2531970c83df459f8dd1bbb7092f047d/target",
+            "gates",
+            "--gate-config",
+            ".omega/configs/gates.json",
+            "--summary",
+            "--compact"
+          ],
+          "exit_code": 1,
+          "seconds": 0.457,
+          "output": "{\"kind\":\"gates\",\"test_adapter\":\"omega\",\"test_report\":null,\"test_outcomes\":null,\"execution_fingerprint\":\"dcb13069a426dc5d6f38ca63d44c5ca160eb0aa12b4834bb1b9419571c910b69\",\"execution_context\":{\"python_version\":\"3.12.14\",\"system\":\"Linux\",\"machine\":\"x86_64\",\"engine_sha256\":\"da1ebf04b4b36dac7a533de92e74230c1e61443237bf05066238e4b948c744dc\",\"environment_sha256\":{\"PATH\":\"89f45694eeac679d66982fb225aab97d2049249d842ac30dd09e31f18cdd97c7\",\"PYTHONPATH\":null,\"PYTHONHASHSEED\":null,\"PYTHONOPTIMIZE\":null,\"NODE_OPTIONS\":null,\"NODE_PATH\":\"dbc7bc884f72c70bb3d320e868da710a56a621286fba48b3c6b610776b41b4fd\",\"GOWORK\":null,\"GOTOOLCHAIN\":null,\"GOPROXY\":null,\"GOSUMDB\":null,\"GOCACHE\":null},\"declared_runtime_inputs_sha256\":{},\"tools\":{\"python\":{\"path\":\"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12\",\"bytes\":30894944,\"mtime_ns\":1791948610000000000,\"mode\":493},\"node\":{\"path\":\"/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node\",\"bytes\":125989464,\"mtime_ns\":1791948609000000000,\"mode\":493},\"npm\":{\"path\":\"/opt/codex/runtimes/codex-primary-runtime/dependencies/node/lib/node_modules/npm/bin/npm-cli.js\",\"bytes\":54,\"mtime_ns\":1767885352000000000,\"mode\":493},\"go\":{\"path\":\"/usr/bin/go\",\"bytes\":2115840,\"mtime_ns\":0,\"mode\":493}},\"project_policy_sha256\":{\".claude/settings.json\":null,\".claude/settings.local.json\":null,\".mcp.json\":null,\".claude-plugin/plugin.json\":null},\"config_sha256\":\"8fad1e721cd7be77dac9270ec0d142f288140820e15444e6f3ae351bf552e3ef\",\"external_policy\":\"unobserved; global, managed, API and plugin runtime may differ\"},\"execution_unchanged\":true,\"passed\":false,\"workspace_sha256\":\"127c0515f821aa007806833cc588396608cf3ce10520aff90420c11a722da1ec\",\"workspace_unchanged\":true,\"evidence\":\".omega/evidence/1792734513294230948-d5b69587.json\",\"results\":[{\"gate\":\"build\",\"command\":[\"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3\",\"-B\",\"-m\",\"compileall\",\"-q\",\"-f\",\"--invalidation-mode\",\"checked-hash\",\"calc.py\"],\"exit_code\":0,\"seconds\":0.051,\"truncated\":false,\"timed_out\":false,\"output_limit_exceeded\":false,\"total_output_bytes\":0,\"invalid_utf8\":false,\"output_ref\":\".omega/evidence/1792734513294230948-d5b69587.json#/results/0/output\",\"output_tail_ref\":\".omega/evidence/1792734513294230948-d5b69587.json#/results/0/output_tail\"},{\"gate\":\"tests\",\"command\":[\"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3\",\"-B\",\"/workspace/skill/.omega/plugin-packaging/runs/2531970c83df459f8dd1bbb7092f047d/claude-config/plugins/cache/omega-marketplace/omega/0.7.0/omega/test_runner.py\",\"--start\",\"checks\"],\"exit_code\":1,\"seconds\":0.099,\"output\":\"test_sum (test_calc.Calc.test_sum) ... FAIL\\n\\n======================================================================\\nFAIL: test_sum (test_calc.Calc.test_sum)\\n----------------------------------------------------------------------\\nTraceback (most recent call last):\\n  File \\\"/workspace/skill/.omega/plugin-packaging/runs/2531970c83df459f8dd1bbb7092f047d/target/checks/test_calc.py\\\", line 4, in test_sum\\n    def test_sum(self):self.assertEqual(add(2,3),5)\\n                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\nAssertionError: -1 != 5\\n\\n----------------------------------------------------------------------\\nRan 1 test in 0.001s\\n\\nFAILED (failures=1)\\nOMEGA_TEST_RESULT {\\\"errors\\\": 0, \\\"expected_failures\\\": 0, \\\"failed\\\": 1, \\\"passed\\\": 0, \\\"run\\\": 1, \\\"skipped\\\": 0, \\\"unexpected_successes\\\": 0}\\n\",\"truncated\":false,\"output_tail\":\"\",\"timed_out\":false,\"output_limit_exceeded\":false,\"total_output_bytes\":774,\"invalid_utf8\":false,\"adapter\":\"omega\"},{\"gate\":\"security\",\"command\":[\"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3\",\"-B\",\"/workspace/skill/.omega/plugin-packaging/runs/2531970c83df459f8dd1bbb7092f047d/claude-config/plugins/cache/omega-marketplace/omega/0.7.0/omega_cli.py\",\"--project-root\",\"/workspace/skill/.omega/plugin-packaging/runs/2531970c83df459f8dd1bbb7092f047d/target\",\"audit\",\"--select\",\"calc.py\",\"--select\",\"checks\",\"--compact\"],\"exit_code\":0,\"seconds\":0.073,\"truncated\":false,\"timed_out\":false,\"output_limit_exceeded\":false,\"total_output_bytes\":521,\"invalid_utf8\":false,\"output_ref\":\".omega/evidence/1792734513294230948-d5b69587.json#/results/2/output\",\"output_tail_ref\":\".omega/evidence/1792734513294230948-d5b69587.json#/results/2/output_tail\"},{\"gate\":\"regression\",\"command\":[\"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3\",\"-B\",\"/workspace/skill/.omega/plugin-packaging/runs/2531970c83df459f8dd1bbb7092f047d/claude-config/plugins/cache/omega-marketplace/omega/0.7.0/omega/test_runner.py\",\"--start\",\"checks\"],\"exit_code\":1,\"seconds\":0.084,\"output\":\"test_sum (test_calc.Calc.test_sum) ... FAIL\\n\\n======================================================================\\nFAIL: test_sum (test_calc.Calc.test_sum)\\n----------------------------------------------------------------------\\nTraceback (most recent call last):\\n  File \\\"/workspace/skill/.omega/plugin-packaging/runs/2531970c83df459f8dd1bbb7092f047d/target/checks/test_calc.py\\\", line 4, in test_sum\\n    def test_sum(self):self.assertEqual(add(2,3),5)\\n                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\nAssertionError: -1 != 5\\n\\n----------------------------------------------------------------------\\nRan 1 test in 0.000s\\n\\nFAILED (failures=1)\\nOMEGA_TEST_RESULT {\\\"errors\\\": 0, \\\"expected_failures\\\": 0, \\\"failed\\\": 1, \\\"passed\\\": 0, \\\"run\\\": 1, \\\"skipped\\\": 0, \\\"unexpected_successes\\\": 0}\\n\",\"truncated\":false,\"output_tail\":\"\",\"timed_out\":false,\"output_limit_exceeded\":false,\"total_output_bytes\":774,\"invalid_utf8\":false}]}\n",
+          "truncated": false,
+          "output_tail": "",
+          "timed_out": false,
+          "output_limit_exceeded": false,
+          "total_output_bytes": 5600,
+          "invalid_utf8": false
+        },
+        {
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+            "-B",
+            "/workspace/skill/.omega/plugin-packaging/runs/2531970c83df459f8dd1bbb7092f047d/claude-config/plugins/cache/omega-marketplace/omega/0.7.0/omega_cli.py",
+            "--project-root",
+            "/workspace/skill/.omega/plugin-packaging/runs/2531970c83df459f8dd1bbb7092f047d/target",
+            "gates",
+            "--gate-config",
+            ".omega/configs/gates.json",
+            "--summary",
+            "--compact"
+          ],
+          "exit_code": 0,
+          "seconds": 0.495,
+          "output": "{\"kind\":\"gates\",\"test_adapter\":\"omega\",\"test_report\":null,\"test_outcomes\":{\"run\":1,\"passed\":1,\"failed\":0,\"errors\":0,\"skipped\":0,\"expected_failures\":0,\"unexpected_successes\":0},\"execution_fingerprint\":\"dcb13069a426dc5d6f38ca63d44c5ca160eb0aa12b4834bb1b9419571c910b69\",\"execution_context\":{\"python_version\":\"3.12.14\",\"system\":\"Linux\",\"machine\":\"x86_64\",\"engine_sha256\":\"da1ebf04b4b36dac7a533de92e74230c1e61443237bf05066238e4b948c744dc\",\"environment_sha256\":{\"PATH\":\"89f45694eeac679d66982fb225aab97d2049249d842ac30dd09e31f18cdd97c7\",\"PYTHONPATH\":null,\"PYTHONHASHSEED\":null,\"PYTHONOPTIMIZE\":null,\"NODE_OPTIONS\":null,\"NODE_PATH\":\"dbc7bc884f72c70bb3d320e868da710a56a621286fba48b3c6b610776b41b4fd\",\"GOWORK\":null,\"GOTOOLCHAIN\":null,\"GOPROXY\":null,\"GOSUMDB\":null,\"GOCACHE\":null},\"declared_runtime_inputs_sha256\":{},\"tools\":{\"python\":{\"path\":\"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12\",\"bytes\":30894944,\"mtime_ns\":1791948610000000000,\"mode\":493},\"node\":{\"path\":\"/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node\",\"bytes\":125989464,\"mtime_ns\":1791948609000000000,\"mode\":493},\"npm\":{\"path\":\"/opt/codex/runtimes/codex-primary-runtime/dependencies/node/lib/node_modules/npm/bin/npm-cli.js\",\"bytes\":54,\"mtime_ns\":1767885352000000000,\"mode\":493},\"go\":{\"path\":\"/usr/bin/go\",\"bytes\":2115840,\"mtime_ns\":0,\"mode\":493}},\"project_policy_sha256\":{\".claude/settings.json\":null,\".claude/settings.local.json\":null,\".mcp.json\":null,\".claude-plugin/plugin.json\":null},\"config_sha256\":\"8fad1e721cd7be77dac9270ec0d142f288140820e15444e6f3ae351bf552e3ef\",\"external_policy\":\"unobserved; global, managed, API and plugin runtime may differ\"},\"execution_unchanged\":true,\"passed\":true,\"workspace_sha256\":\"743faf36f09e9c17fad0e1eda140fbeeb9932b8cc709b1884fe5d791aac83701\",\"workspace_unchanged\":true,\"evidence\":\".omega/evidence/1792734513790224725-8e3a8751.json\",\"results\":[{\"gate\":\"build\",\"command\":[\"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3\",\"-B\",\"-m\",\"compileall\",\"-q\",\"-f\",\"--invalidation-mode\",\"checked-hash\",\"calc.py\"],\"exit_code\":0,\"seconds\":0.06,\"truncated\":false,\"timed_out\":false,\"output_limit_exceeded\":false,\"total_output_bytes\":0,\"invalid_utf8\":false,\"output_ref\":\".omega/evidence/1792734513790224725-8e3a8751.json#/results/0/output\",\"output_tail_ref\":\".omega/evidence/1792734513790224725-8e3a8751.json#/results/0/output_tail\"},{\"gate\":\"tests\",\"command\":[\"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3\",\"-B\",\"/workspace/skill/.omega/plugin-packaging/runs/2531970c83df459f8dd1bbb7092f047d/claude-config/plugins/cache/omega-marketplace/omega/0.7.0/omega/test_runner.py\",\"--start\",\"checks\"],\"exit_code\":0,\"seconds\":0.098,\"truncated\":false,\"timed_out\":false,\"output_limit_exceeded\":false,\"total_output_bytes\":272,\"invalid_utf8\":false,\"adapter\":\"omega\",\"output_ref\":\".omega/evidence/1792734513790224725-8e3a8751.json#/results/1/output\",\"output_tail_ref\":\".omega/evidence/1792734513790224725-8e3a8751.json#/results/1/output_tail\"},{\"gate\":\"security\",\"command\":[\"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3\",\"-B\",\"/workspace/skill/.omega/plugin-packaging/runs/2531970c83df459f8dd1bbb7092f047d/claude-config/plugins/cache/omega-marketplace/omega/0.7.0/omega_cli.py\",\"--project-root\",\"/workspace/skill/.omega/plugin-packaging/runs/2531970c83df459f8dd1bbb7092f047d/target\",\"audit\",\"--select\",\"calc.py\",\"--select\",\"checks\",\"--compact\"],\"exit_code\":0,\"seconds\":0.069,\"truncated\":false,\"timed_out\":false,\"output_limit_exceeded\":false,\"total_output_bytes\":521,\"invalid_utf8\":false,\"output_ref\":\".omega/evidence/1792734513790224725-8e3a8751.json#/results/2/output\",\"output_tail_ref\":\".omega/evidence/1792734513790224725-8e3a8751.json#/results/2/output_tail\"},{\"gate\":\"regression\",\"command\":[\"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3\",\"-B\",\"/workspace/skill/.omega/plugin-packaging/runs/2531970c83df459f8dd1bbb7092f047d/claude-config/plugins/cache/omega-marketplace/omega/0.7.0/omega/test_runner.py\",\"--start\",\"checks\"],\"exit_code\":0,\"seconds\":0.105,\"truncated\":false,\"timed_out\":false,\"output_limit_exceeded\":false,\"total_output_bytes\":272,\"invalid_utf8\":false,\"output_ref\":\".omega/evidence/1792734513790224725-8e3a8751.json#/results/3/output\",\"output_tail_ref\":\".omega/evidence/1792734513790224725-8e3a8751.json#/results/3/output_tail\"}]}\n",
+          "truncated": false,
+          "output_tail": "",
+          "timed_out": false,
+          "output_limit_exceeded": false,
+          "total_output_bytes": 4377,
+          "invalid_utf8": false
+        }
+      ],
+      "zip_inventory_verified": true,
+      "target_map_verified": true,
+      "target_shadow_module_not_imported": true,
+      "cache_unchanged": true,
+      "before_passed": false,
+      "after_passed": true,
+      "test_outcomes": {
+        "run": 1,
+        "passed": 1,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "expected_failures": 0,
+        "unexpected_successes": 0
+      },
+      "configuration_scope": ".omega/plugin-packaging/runs/2531970c83df459f8dd1bbb7092f047d/claude-config",
+      "model_request_sent": false,
+      "activation_trace_verified": false,
+      "native_reasoning_quality_evaluated": false,
+      "provider_tokens_measured": false
+    },
+    "model_request_sent": false,
+    "archive": ".omega/plugin-packaging/runs/2531970c83df459f8dd1bbb7092f047d/omega.zip",
+    "archive_sha256": "6d45d89bc394e9773b8628b7cc13074ffd6852b0b2cb27b45ce8b6e9c1b7e30e",
+    "files": [
+      {
+        "path": ".claude-plugin/marketplace.json",
+        "sha256": "a748d2dd5360ab374c367efaf9e82c85d471b4297f9328039f5b338e7f230294",
+        "bytes": 378
+      },
+      {
+        "path": ".claude-plugin/plugin.json",
+        "sha256": "4934d1e1e1b57f761f0fce54aef40dc6137ab90ae164c261222aecb741a3bed0",
+        "bytes": 568
+      },
+      {
+        "path": ".claude/CLAUDE.md",
+        "sha256": "8b1b9ef50123047348dd27f58e66a5476523be8f20f365b658cb2b840681e6bb",
+        "bytes": 3850
+      },
+      {
+        "path": ".claude/skills/omega/SKILL.md",
+        "sha256": "d359bf7024552a7356190edd1de33a4b824d52c018fe52a458b9f2430bc03ca2",
+        "bytes": 6479
+      },
+      {
+        "path": ".claude/skills/omega/references/controlled-change.md",
+        "sha256": "08deccd491c0c08a7dbf1f85a96f87864757d1223126351671c246f374bf4b17",
+        "bytes": 2551
+      },
+      {
+        "path": ".claude/skills/omega/references/omega-context-sufficiency-check.md",
+        "sha256": "00807d652be4220c94716a1c218d8c6428c2abbca7cf35bf176118bec3a5c13d",
+        "bytes": 1186
+      },
+      {
+        "path": ".claude/skills/omega/references/omega-effective-policy-explainer.md",
+        "sha256": "996a07c3656c7b60fb6575726779c4a25d9a10e689707ac03597b3a85107940f",
+        "bytes": 1179
+      },
+      {
+        "path": ".claude/skills/omega/references/omega-evidence-reconciler.md",
+        "sha256": "c5b3ae54a62828196128c6a8f738e533bb2ab993a6d67ac019285e27ba775334",
+        "bytes": 2027
+      },
+      {
+        "path": ".claude/skills/omega/references/omega-memory-reconciliation.md",
+        "sha256": "8a18572175dfb98c0e275163e2b73379f97ffb13e34b9fe9a4729b0dce1d0f29",
+        "bytes": 1586
+      },
+      {
+        "path": ".claude/skills/omega/references/omega-project-workflow-adapter.md",
+        "sha256": "d76ec44bea673ff8ce338cc8b6dba55c09b2a9ba254601f1997987680b4bc523",
+        "bytes": 2010
+      },
+      {
+        "path": ".claude/skills/omega/references/omega-skill-compatibility-audit.md",
+        "sha256": "4e5f1643f7519a5257d43ad538560ce6f97016891227c7bec880df6a32cd47d5",
+        "bytes": 1266
+      },
+      {
+        "path": ".claude/skills/omega/references/omega-skill-interference-benchmark.md",
+        "sha256": "96dd42135260a54f563b33608d21ba875eef5545949f94c5b6218be5af19e8a4",
+        "bytes": 1165
+      },
+      {
+        "path": ".claude/skills/omega/references/omega-workflow-handoff-contract.md",
+        "sha256": "e6e3b1b75b3c46160553aa65516dd1bc6147f4e36e646f716b0c2432544523cd",
+        "bytes": 1598
+      },
+      {
+        "path": ".claude/skills/omega/references/project-memory.md",
+        "sha256": "13a09fdb7959e9ce76e392341ed70aaff0a0016ec2a6dd94addda2b575c71112",
+        "bytes": 2540
+      },
+      {
+        "path": ".claude/skills/omega/references/quality-gates.md",
+        "sha256": "01e9b5c626c830307c0e81bb611ac87d1911181c4743a618e36722d948e01e8a",
+        "bytes": 3282
+      },
+      {
+        "path": ".claude/skills/omega/references/repo-map.md",
+        "sha256": "70204ba1649b8998532b8dfec56d36a9c26fe4f8d03bfb5751356f575633eab0",
+        "bytes": 2183
+      },
+      {
+        "path": ".claude/skills/omega/references/skill-benchmark.md",
+        "sha256": "15be003485f8374722e56da5553d15e3f8ad870e28b26f767935b00febc33398",
+        "bytes": 2955
+      },
+      {
+        "path": ".github/workflows/omega.yml",
+        "sha256": "0a8b4d028763832fef7dd8f1ba00a205891af02d586ea4043486509f9338776b",
+        "bytes": 1648
+      },
+      {
+        "path": ".gitignore",
+        "sha256": "716b06a800fe9b49311fb9a659130e1195f934837a3197e3e2f1e9812a1e4179",
+        "bytes": 58
+      },
+      {
+        "path": "README.md",
+        "sha256": "876d39777b995119143a3326c2fa57092be39b2b649f921d82ee64e6b544b0ad",
+        "bytes": 2765
+      },
+      {
+        "path": "agents/omega-engineer.md",
+        "sha256": "c840bb0ded852d09de07b1006c896da515a991c6b90a20a3d3b4d356a341fbc7",
+        "bytes": 1033
+      },
+      {
+        "path": "agents/omega-investigator.md",
+        "sha256": "643eb3538fa2a04350d9676ba9ff832961078868200d2323c145f732c811d298",
+        "bytes": 1016
+      },
+      {
+        "path": "agents/omega-verifier.md",
+        "sha256": "d2187473be253fea0a2ba54319d8bbf330a1df47b1a7e1392b9bfc3a4d354260",
+        "bytes": 931
+      },
+      {
+        "path": "benchmarks/cases.json",
+        "sha256": "aa8b72d73b0be7ebcb53dd3049f83c6b181148b0248cf1cb1ed6c607a0fd87bc",
+        "bytes": 507
+      },
+      {
+        "path": "benchmarks/demo.py",
+        "sha256": "ff23469f7b1532cfd3633f511b700d14248383afa881ba3d6176a1893ce87974",
+        "bytes": 3964
+      },
+      {
+        "path": "benchmarks/native_runners.py",
+        "sha256": "e96f4ddb38784e4b2c23be3a4da04ca739df6104228392153942f259876a9119",
+        "bytes": 4213
+      },
+      {
+        "path": "benchmarks/plugin_packaging.py",
+        "sha256": "2840fe5553c614a9b80b137b11eb284739ea440a9a305df8b2b4b58ddcff23ef",
+        "bytes": 9258
+      },
+      {
+        "path": "benchmarks/token_efficiency.py",
+        "sha256": "a4871db783e0d71d6ce845924a1d046fab67b9c1d8621165b3ab4eb8fa00bbd6",
+        "bytes": 2570
+      },
+      {
+        "path": "docs/ARCHITECTURE.md",
+        "sha256": "aedadeb5f6c11edef3e692fe7aa4ce764fc1752e253af987b380a627283623ad",
+        "bytes": 11729
+      },
+      {
+        "path": "docs/CLAUDE_COMPATIBILITY.md",
+        "sha256": "966664b35b104f7467754ac46529140baf61ebcbeb8fff9b7248c76b81d14d77",
+        "bytes": 3964
+      },
+      {
+        "path": "docs/CLAUDE_PLUGIN.md",
+        "sha256": "1b48d66abf2463747e678ed202f9003bb3a8ad1ab23f494501e52c5615a90480",
+        "bytes": 7559
+      },
+      {
+        "path": "docs/DEEP_HARDENING.md",
+        "sha256": "a2dadb9e286c18ecad5e8283aeb2e63776a515af4a0c9c6e2130d3ba94289b1c",
+        "bytes": 7690
+      },
+      {
+        "path": "docs/INTEROPERABILITY_GUIDE.md",
+        "sha256": "0f796380c4aeb7d00bcaf390a530d18a1c4db65802c90276f40cceeed1868c22",
+        "bytes": 12612
+      },
+      {
+        "path": "docs/OPERATIONS.md",
+        "sha256": "a0e899f5f1a5d9bc4041faa16c60ab9d93b7fbe3fcc325ffde9659d2f37aefaf",
+        "bytes": 12056
+      },
+      {
+        "path": "docs/PYTHON_TYPESCRIPT_BOUNDARY.md",
+        "sha256": "b72aebb1a117db245558fe2917bcb28882e53aa4882aeca374bed15c554eb362",
+        "bytes": 4252
+      },
+      {
+        "path": "docs/SKILL_PLAYBOOKS.md",
+        "sha256": "d3162bccde6be516e7a6c48b9eb6297d98f1585df1bc8dc87644478ee76ea86c",
+        "bytes": 9651
+      },
+      {
+        "path": "docs/TOKEN_EFFICIENCY.md",
+        "sha256": "81b4cfe65b0f0b944f5b6f2cc5207048e556c6639cd8d623c4a89628dba6f385",
+        "bytes": 5513
+      },
+      {
+        "path": "docs/UNIFIED_SKILL.md",
+        "sha256": "1fcf3ec8c86acd706a0f2daa35e5cc01f4a2a4a9cf75d3e8a5edb1c6cc2e10a6",
+        "bytes": 6474
+      },
+      {
+        "path": "docs/UPGRADE_0_3.md",
+        "sha256": "61d013fddca4da2cb5ffc21d26a6f5cba805ce3583443250b05919ae277dda02",
+        "bytes": 11347
+      },
+      {
+        "path": "docs/UPGRADE_0_4.md",
+        "sha256": "32b7b86f95393a61b3d3132ed293ff37707504252591c1250fc9e17cbfae71f6",
+        "bytes": 7391
+      },
+      {
+        "path": "docs/UPGRADE_0_5.md",
+        "sha256": "0f97c6e3ecac67b82b1397e5d6e9561f8f24efe6e2ef0af01880e1b6bd41d0ae",
+        "bytes": 7018
+      },
+      {
+        "path": "docs/VALIDATION.md",
+        "sha256": "a79b5dca96ecc5ff9a4518ded0b3e28ee6e7ae1f86acd3cc1bedefe663a66d2b",
+        "bytes": 6038
+      },
+      {
+        "path": "docs/evidence/deep-hardening.json",
+        "sha256": "2e414b5e0624592ef33c36714c625a69ea078adb0a27e390b16ef0e7a3c9ebed",
+        "bytes": 70734
+      },
+      {
+        "path": "docs/evidence/interop-upgrade.json",
+        "sha256": "2b8332fac15a9177e367e0fede40e081bc3f9d8bfa2fb3071600a8b3c0709180",
+        "bytes": 95296
+      },
+      {
+        "path": "docs/evidence/local-validation.json",
+        "sha256": "810773cd59ce2c8ce60110ad17045e4270f20dd073974f2617ff42cd3e0f3692",
+        "bytes": 6489
+      },
+      {
+        "path": "docs/evidence/report-integrity.json",
+        "sha256": "54f08280e7847c68edf9db5ee55a0ee67b775ab3100011c53193311dbebf931d",
+        "bytes": 155274
+      },
+      {
+        "path": "docs/evidence/token-efficiency.json",
+        "sha256": "44eb762d2c8d32b7465f2632d3f82f01a2ae7c9bea168f01d821e4e2c3154934",
+        "bytes": 6937
+      },
+      {
+        "path": "docs/evidence/unified-skill.json",
+        "sha256": "0f15460e41dd8df7fb0d207642ef5e5dfcbe796b4c5c30a794d45c45ed2666d6",
+        "bytes": 120508
+      },
+      {
+        "path": "docs/evidence/verification-hardening.json",
+        "sha256": "7b39dc58dd8f49aff7b32acb2e334d5c0585d6e2789694187e6d33b9e4a6d8c2",
+        "bytes": 114080
+      },
+      {
+        "path": "integration/typescript/omega-bridge.test.mjs",
+        "sha256": "c137a7a2a5dd205346f13f577c8c3db2b9030dcb89cb84ddc7fd8d7b0ff21b1d",
+        "bytes": 6312
+      },
+      {
+        "path": "integration/typescript/omega-bridge.ts",
+        "sha256": "f7a5462310e9b32e927fe5106916b50abc706124fe8d5a2b8ff504ff504cb61e",
+        "bytes": 8918
+      },
+      {
+        "path": "integration/typescript/package-lock.json",
+        "sha256": "fe61b680ca36c045de10f385ecf27d52fe2d7b662a29e556c5693dff8b794b15",
+        "bytes": 1466
+      },
+      {
+        "path": "integration/typescript/package.json",
+        "sha256": "69b2aa67509a67ab50e1e9cce553dad8c7d293d232f691bbd5ae7aad4351dbd8",
+        "bytes": 322
+      },
+      {
+        "path": "integration/typescript/tsconfig.json",
+        "sha256": "a57a1257066831918292be81d8f522699a79605c16a59806723578bf75dda87d",
+        "bytes": 357
+      },
+      {
+        "path": "omega/__init__.py",
+        "sha256": "45a00d19b46ee5efaf7a1c17235f907b68203cf7ecd5341a663d3bd8975b2e4e",
+        "bytes": 22
+      },
+      {
+        "path": "omega/__main__.py",
+        "sha256": "3dc5087cc310f1d79361f4cf8c56f99a49a47b521bfcc0dda3b5bd5a8d328120",
+        "bytes": 25717
+      },
+      {
+        "path": "omega/adapters.py",
+        "sha256": "66d272cbdb262b016960228ecb201df12903b2cced8f060ba0c6bf87360542a7",
+        "bytes": 6550
+      },
+      {
+        "path": "omega/analysis_tools.py",
+        "sha256": "c530481bb4332e0208484aa70877b4a4af1f1fa20931c88548de29cd14804754",
+        "bytes": 9717
+      },
+      {
+        "path": "omega/arguments.py",
+        "sha256": "95f950ca36fd7083b5c0d5862fd4603528bb58a355ef9419a9a9be43cb6b8290",
+        "bytes": 1947
+      },
+      {
+        "path": "omega/build.py",
+        "sha256": "f779edb72c107e78944d5c7e8b7fa2c507f1eebdfa8c771a5e2397c252cdfdc2",
+        "bytes": 935
+      },
+      {
+        "path": "omega/catalog.json",
+        "sha256": "a06e12ea99440e8c39b4d9c6507e4bc9d4e28fd0b99ffadcf42803b8643e1146",
+        "bytes": 7141
+      },
+      {
+        "path": "omega/change.py",
+        "sha256": "00959855fd178d811a7515b42979b6ed25cbf0a07f2f05fb0411f60cf967a5b0",
+        "bytes": 6714
+      },
+      {
+        "path": "omega/config.json",
+        "sha256": "b41820793c0da93a279833c366e313bfc0d177cd4b522980145668301b315e61",
+        "bytes": 816
+      },
+      {
+        "path": "omega/context.py",
+        "sha256": "53743a082ef9594b46c24eb3649e3d2693e962b7d1cf027c6a5ed8220458c33c",
+        "bytes": 2746
+      },
+      {
+        "path": "omega/frontmatter.py",
+        "sha256": "049fed295175946740f844bd491e8f92f2da5ccf994a5e806404a7d6971f24a8",
+        "bytes": 2895
+      },
+      {
+        "path": "omega/hook.py",
+        "sha256": "d32365aa47bcdcc66aa0a02658b8534c22f239f75181bd882361fe7c7fdf6953",
+        "bytes": 928
+      },
+      {
+        "path": "omega/interop.py",
+        "sha256": "74d31979dc44840a5b67ee89920c879a6cb98b2ccb3ed160abb9113a5fd48360",
+        "bytes": 13518
+      },
+      {
+        "path": "omega/io.py",
+        "sha256": "81d4115b458edb797081ef378f2fa7c133fbef893206bf6d8a96171787f51b0a",
+        "bytes": 1702
+      },
+      {
+        "path": "omega/modes.json",
+        "sha256": "8f094b0bbe944f30a6b9e0f2bafacf55bb692d2035f97599f2a54af894177654",
+        "bytes": 2073
+      },
+      {
+        "path": "omega/policy.py",
+        "sha256": "0b3be892814dc111b2a85a49ac673c6a2df5b156dfab2541580a014dba41cead",
+        "bytes": 5675
+      },
+      {
+        "path": "omega/process.py",
+        "sha256": "1d9b66a360929eb90e187030ac16cdd6efacef9f4de2c31b68aff5e55b934958",
+        "bytes": 3690
+      },
+      {
+        "path": "omega/records.py",
+        "sha256": "628fa6f67a6a464c6ce0d72c4e926a673d7e5bdc0c5801d0c21a60f8144cf219",
+        "bytes": 10220
+      },
+      {
+        "path": "omega/reports.py",
+        "sha256": "96c02d6b6b294b2e2432b099a5b6c741287dad9ad30c7f644f33392b1abcf1b7",
+        "bytes": 4713
+      },
+      {
+        "path": "omega/safety.py",
+        "sha256": "f9ed223ce5f678808e957b2d970c451bea0853cf810f0749f7b68f09d7535e9c",
+        "bytes": 3182
+      },
+      {
+        "path": "omega/security.py",
+        "sha256": "f59ff90edb6095c7fbcbaf79f235bc8817b2d79a394f3c6f7d677d01faf4ab1d",
+        "bytes": 6772
+      },
+      {
+        "path": "omega/skills.py",
+        "sha256": "24cde95a2c36a2cb0ea70ea54925b66458799f11dcd9c8fed4d0bde4eff64b18",
+        "bytes": 6249
+      },
+      {
+        "path": "omega/test_runner.py",
+        "sha256": "4bc34f71d041928fbf579381a3c24eadb5c09fdb67075b4d6f295544c1014890",
+        "bytes": 1199
+      },
+      {
+        "path": "omega_cli.py",
+        "sha256": "49f247535bde23b5e3af9b55fb35c7cb10ffee21c7441dca49f428c1fe107b5d",
+        "bytes": 457
+      },
+      {
+        "path": "tests/__init__.py",
+        "sha256": "3497105a02341b2bd4c5bc844b5988ddca7202e8076d618929a083c2b64f34ad",
+        "bytes": 58
+      },
+      {
+        "path": "tests/skill_fixture.py",
+        "sha256": "5733bc68eacbb18316353de24fc7dd123ece12cb79950e83baff63ff3ccd9a94",
+        "bytes": 669
+      },
+      {
+        "path": "tests/test_context.py",
+        "sha256": "324992baa7c5185803fa1adce6955e1b865787452e0413ac5fb838e831414fae",
+        "bytes": 3904
+      },
+      {
+        "path": "tests/test_hardening.py",
+        "sha256": "e25621eba5da44ef683b25439f32137e32292299c5561c979930e15e63caad5b",
+        "bytes": 9952
+      },
+      {
+        "path": "tests/test_interop_core.py",
+        "sha256": "769c29b4f3f83548e420983ec8d587945297f1c7bd23e44e600dbc462f9f5f45",
+        "bytes": 9870
+      },
+      {
+        "path": "tests/test_interop_safety.py",
+        "sha256": "bf5e631c0b7ad0cde1427b310dfe2a8ba870699f343d8fac5c4ece0507242c60",
+        "bytes": 12711
+      },
+      {
+        "path": "tests/test_new_skill_workflows.py",
+        "sha256": "b26406dd0b44b1929f13211032bbf0960244dbc070aa0fb15cec80da2d48f1cf",
+        "bytes": 8143
+      },
+      {
+        "path": "tests/test_omega.py",
+        "sha256": "85f37791334c58fe2595761d90c05e62f8f7ebba8b1435d615e8ae8751594486",
+        "bytes": 7534
+      },
+      {
+        "path": "tests/test_plugin_packaging.py",
+        "sha256": "df1172a42657445ea6a226c660017fb48c6d42bf6fcf8026353ec69b010485d5",
+        "bytes": 6088
+      },
+      {
+        "path": "tests/test_quality_hardening.py",
+        "sha256": "8af629679f30774499883b44a869e161df4726aa556c0e554e82ee2ec82a31fe",
+        "bytes": 15128
+      },
+      {
+        "path": "tests/test_report_integrity.py",
+        "sha256": "8cc1aee936527c0fd484cb543eb37459e37ad9151f9f9a36d0474a91b1a1df5e",
+        "bytes": 10419
+      },
+      {
+        "path": "tests/test_skill_evolution.py",
+        "sha256": "2709f6cd27d08b25a3e9bb3ddd78686a4a8cbd9b93c7b980ac0ca9b6282b6f75",
+        "bytes": 7126
+      },
+      {
+        "path": "tests/test_unified_skill.py",
+        "sha256": "7064207427c386e04dc440c17269f077e543876d21a23f4fd9a6043f3c88810b",
+        "bytes": 5315
+      },
+      {
+        "path": "tests/test_workflows.py",
+        "sha256": "41b26d65d9a6eb648e68daf6ccdc4a62fd70437afea941e7d035ea447025358a",
+        "bytes": 10544
+      }
+    ]
+  },
+  "native_scope": {
+    "verified": [
+      "Version and supported CLI commands",
+      "Both manifests validate strict with explicit type",
+      "Local marketplace add, install, list and details in isolated CLAUDE_CONFIG_DIR",
+      "ZIP inventory through --plugin-dir in another isolated config",
+      "One skill and three agents are discovered",
+      "Installed cache engine maps/plans explicit target and passes red-to-green target gates",
+      "Untrusted target omega.py is not imported",
+      "Plugin cache file paths/content hashes unchanged"
+    ],
+    "not_verified": [
+      "Model reasoning/session activation trace",
+      "Agent delegation behavior during a model task",
+      "Provider usage/tokens/cost",
+      "Permissions behavior across managed/global settings",
+      "Official plugin directory listing approval",
+      "Incidental native CLI network traffic"
+    ],
+    "projected_token_values_are_estimates": true,
+    "cache_unchanged_scope": "File names and content SHA256, not OS metadata/atime attestation",
+    "github_marketplace_install_observed_in_this_snapshot": false
+  },
+  "skill_contract": {
+    "skill": "omega",
+    "sha256": "d359bf7024552a7356190edd1de33a4b824d52c018fe52a458b9f2430bc03ca2",
+    "bundle_sha256": "06ecaa6b9ec02acb745752ce0b21fb52a1be3622a943a4018e135968b1d74068",
+    "resources": [
+      {
+        "path": ".claude/skills/omega/references/controlled-change.md",
+        "sha256": "08deccd491c0c08a7dbf1f85a96f87864757d1223126351671c246f374bf4b17",
+        "available": true
+      },
+      {
+        "path": ".claude/skills/omega/references/omega-context-sufficiency-check.md",
+        "sha256": "00807d652be4220c94716a1c218d8c6428c2abbca7cf35bf176118bec3a5c13d",
+        "available": true
+      },
+      {
+        "path": ".claude/skills/omega/references/omega-effective-policy-explainer.md",
+        "sha256": "996a07c3656c7b60fb6575726779c4a25d9a10e689707ac03597b3a85107940f",
+        "available": true
+      },
+      {
+        "path": ".claude/skills/omega/references/omega-evidence-reconciler.md",
+        "sha256": "c5b3ae54a62828196128c6a8f738e533bb2ab993a6d67ac019285e27ba775334",
+        "available": true
+      },
+      {
+        "path": ".claude/skills/omega/references/omega-memory-reconciliation.md",
+        "sha256": "8a18572175dfb98c0e275163e2b73379f97ffb13e34b9fe9a4729b0dce1d0f29",
+        "available": true
+      },
+      {
+        "path": ".claude/skills/omega/references/omega-project-workflow-adapter.md",
+        "sha256": "d76ec44bea673ff8ce338cc8b6dba55c09b2a9ba254601f1997987680b4bc523",
+        "available": true
+      },
+      {
+        "path": ".claude/skills/omega/references/omega-skill-compatibility-audit.md",
+        "sha256": "4e5f1643f7519a5257d43ad538560ce6f97016891227c7bec880df6a32cd47d5",
+        "available": true
+      },
+      {
+        "path": ".claude/skills/omega/references/omega-skill-interference-benchmark.md",
+        "sha256": "96dd42135260a54f563b33608d21ba875eef5545949f94c5b6218be5af19e8a4",
+        "available": true
+      },
+      {
+        "path": ".claude/skills/omega/references/omega-workflow-handoff-contract.md",
+        "sha256": "e6e3b1b75b3c46160553aa65516dd1bc6147f4e36e646f716b0c2432544523cd",
+        "available": true
+      },
+      {
+        "path": ".claude/skills/omega/references/project-memory.md",
+        "sha256": "13a09fdb7959e9ce76e392341ed70aaff0a0016ec2a6dd94addda2b575c71112",
+        "available": true
+      },
+      {
+        "path": ".claude/skills/omega/references/quality-gates.md",
+        "sha256": "01e9b5c626c830307c0e81bb611ac87d1911181c4743a618e36722d948e01e8a",
+        "available": true
+      },
+      {
+        "path": ".claude/skills/omega/references/repo-map.md",
+        "sha256": "70204ba1649b8998532b8dfec56d36a9c26fe4f8d03bfb5751356f575633eab0",
+        "available": true
+      },
+      {
+        "path": ".claude/skills/omega/references/skill-benchmark.md",
+        "sha256": "15be003485f8374722e56da5553d15e3f8ad870e28b26f767935b00febc33398",
+        "available": true
+      },
+      {
+        "path": "docs/CLAUDE_PLUGIN.md",
+        "sha256": "1b48d66abf2463747e678ed202f9003bb3a8ad1ab23f494501e52c5615a90480",
+        "available": true
+      },
+      {
+        "path": "docs/INTEROPERABILITY_GUIDE.md",
+        "sha256": "0f796380c4aeb7d00bcaf390a530d18a1c4db65802c90276f40cceeed1868c22",
+        "available": true
+      },
+      {
+        "path": "docs/PYTHON_TYPESCRIPT_BOUNDARY.md",
+        "sha256": "b72aebb1a117db245558fe2917bcb28882e53aa4882aeca374bed15c554eb362",
+        "available": true
+      },
+      {
+        "path": "docs/UNIFIED_SKILL.md",
+        "sha256": "1fcf3ec8c86acd706a0f2daa35e5cc01f4a2a4a9cf75d3e8a5edb1c6cc2e10a6",
+        "available": true
+      },
+      {
+        "path": "docs/UPGRADE_0_4.md",
+        "sha256": "32b7b86f95393a61b3d3132ed293ff37707504252591c1250fc9e17cbfae71f6",
+        "available": true
+      },
+      {
+        "path": "docs/UPGRADE_0_5.md",
+        "sha256": "0f97c6e3ecac67b82b1397e5d6e9561f8f24efe6e2ef0af01880e1b6bd41d0ae",
+        "available": true
+      }
+    ],
+    "modes": [
+      {
+        "id": "repo-map",
+        "reference": "references/repo-map.md",
+        "passed": true
+      },
+      {
+        "id": "controlled-change",
+        "reference": "references/controlled-change.md",
+        "passed": true
+      },
+      {
+        "id": "quality-gates",
+        "reference": "references/quality-gates.md",
+        "passed": true
+      },
+      {
+        "id": "project-memory",
+        "reference": "references/project-memory.md",
+        "passed": true
+      },
+      {
+        "id": "skill-benchmark",
+        "reference": "references/skill-benchmark.md",
+        "passed": true
+      },
+      {
+        "id": "omega-skill-compatibility-audit",
+        "reference": "references/omega-skill-compatibility-audit.md",
+        "passed": true
+      },
+      {
+        "id": "omega-effective-policy-explainer",
+        "reference": "references/omega-effective-policy-explainer.md",
+        "passed": true
+      },
+      {
+        "id": "omega-workflow-handoff-contract",
+        "reference": "references/omega-workflow-handoff-contract.md",
+        "passed": true
+      },
+      {
+        "id": "omega-skill-interference-benchmark",
+        "reference": "references/omega-skill-interference-benchmark.md",
+        "passed": true
+      },
+      {
+        "id": "omega-project-workflow-adapter",
+        "reference": "references/omega-project-workflow-adapter.md",
+        "passed": true
+      },
+      {
+        "id": "omega-evidence-reconciler",
+        "reference": "references/omega-evidence-reconciler.md",
+        "passed": true
+      },
+      {
+        "id": "omega-memory-reconciliation",
+        "reference": "references/omega-memory-reconciliation.md",
+        "passed": true
+      },
+      {
+        "id": "omega-context-sufficiency-check",
+        "reference": "references/omega-context-sufficiency-check.md",
+        "passed": true
+      }
+    ],
+    "checks": [
+      {
+        "id": "frontmatter",
+        "passed": true,
+        "required": true
+      },
+      {
+        "id": "identity",
+        "passed": true,
+        "required": true
+      },
+      {
+        "id": "description",
+        "passed": true,
+        "required": true
+      },
+      {
+        "id": "explicit-invocation",
+        "passed": true,
+        "required": true
+      },
+      {
+        "id": "no-permission-bypass",
+        "passed": true,
+        "required": true
+      },
+      {
+        "id": "command:doctor",
+        "passed": true,
+        "required": true
+      },
+      {
+        "id": "command:map",
+        "passed": true,
+        "required": true
+      },
+      {
+        "id": "command:plan",
+        "passed": true,
+        "required": true
+      },
+      {
+        "id": "section:Inputs",
+        "passed": true,
+        "required": false
+      },
+      {
+        "id": "section:Workflow",
+        "passed": true,
+        "required": false
+      },
+      {
+        "id": "section:Evidence",
+        "passed": true,
+        "required": false
+      },
+      {
+        "id": "section:Failure handling",
+        "passed": true,
+        "required": false
+      },
+      {
+        "id": "section:Stop conditions",
+        "passed": true,
+        "required": false
+      },
+      {
+        "id": "mode:repo-map",
+        "passed": true,
+        "required": true
+      },
+      {
+        "id": "mode:controlled-change",
+        "passed": true,
+        "required": true
+      },
+      {
+        "id": "mode:quality-gates",
+        "passed": true,
+        "required": true
+      },
+      {
+        "id": "mode:project-memory",
+        "passed": true,
+        "required": true
+      },
+      {
+        "id": "mode:skill-benchmark",
+        "passed": true,
+        "required": true
+      },
+      {
+        "id": "mode:omega-skill-compatibility-audit",
+        "passed": true,
+        "required": true
+      },
+      {
+        "id": "mode:omega-effective-policy-explainer",
+        "passed": true,
+        "required": true
+      },
+      {
+        "id": "mode:omega-workflow-handoff-contract",
+        "passed": true,
+        "required": true
+      },
+      {
+        "id": "mode:omega-skill-interference-benchmark",
+        "passed": true,
+        "required": true
+      },
+      {
+        "id": "mode:omega-project-workflow-adapter",
+        "passed": true,
+        "required": true
+      },
+      {
+        "id": "mode:omega-evidence-reconciler",
+        "passed": true,
+        "required": true
+      },
+      {
+        "id": "mode:omega-memory-reconciliation",
+        "passed": true,
+        "required": true
+      },
+      {
+        "id": "mode:omega-context-sufficiency-check",
+        "passed": true,
+        "required": true
+      },
+      {
+        "id": "resources-resolve",
+        "passed": true,
+        "required": true
+      }
+    ],
+    "passed": true,
+    "advanced_passed": true,
+    "score": 100.0,
+    "quality_score": null,
+    "quality_evaluated": false,
+    "score_metric": "contract completeness only",
+    "scope": "offline document contract, not LLM instruction adherence or reasoning quality"
+  },
+  "skill_evaluation": {
+    "skill": "omega",
+    "passed": true,
+    "candidate_sha256": "d359bf7024552a7356190edd1de33a4b824d52c018fe52a458b9f2430bc03ca2",
+    "candidate_bundle_sha256": "06ecaa6b9ec02acb745752ce0b21fb52a1be3622a943a4018e135968b1d74068",
+    "suite_sha256": "833717d4a513fb27d8193fc8bf4c0730c668bd57be81d101568a397c238fe541",
+    "workspace_sha256": "00d8526707378ae9d73ab44c14507a2264b544cc37f24a111a154f907a34e1f9",
+    "execution_fingerprint": "cc5ee595e0a8d1e5aff68ec0f38841455d26560b03ea0ec8663cf6b3a1f1a518",
+    "workspace_unchanged": true,
+    "execution_unchanged": true,
+    "scenarios": {
+      "command": [
+        "python3",
+        "-m",
+        "omega.test_runner",
+        "--start",
+        "tests",
+        "--pattern",
+        "test_*.py"
+      ],
+      "exit_code": 0,
+      "seconds": 6.767,
+      "output": "test_budget_fails_without_silent_truncation (test_context.ContextTests.test_budget_fails_without_silent_truncation) ... ok\ntest_changed_source_changes_fingerprint (test_context.ContextTests.test_changed_source_changes_fingerprint) ... ok\ntest_cli_compact_preserves_default_plan (test_context.ContextTests.test_cli_compact_preserves_default_plan) ... ok\ntest_cli_packet_budget_fails (test_context.ContextTests.test_cli_packet_budget_fails) ... ok\ntest_lossless_unicode_and_whitespace (test_context.ContextTests.test_lossless_unicode_and_whitespace) ... ok\ntest_missing_empty_and_ranges_fail (test_context.ContextTests.test_missing_empty_and_ranges_fail) ... ok\ntest_packet_preserves_source_and_deduplicates (test_context.ContextTests.test_packet_preserves_source_and_deduplicates) ... ok\ntest_private_binary_and_escape_rejected (test_context.ContextTests.test_private_binary_and_escape_rejected) ... ok\ntest_summary_keeps_failure_and_links_success (test_context.ContextTests.test_summary_keeps_failure_and_links_success) ... ok\ntest_audit_refuses_symlinked_policy_directory (test_hardening.AdapterSafety.test_audit_refuses_symlinked_policy_directory) ... ok\ntest_hook_does_not_import_executable_gate_config (test_hardening.AdapterSafety.test_hook_does_not_import_executable_gate_config) ... ok\ntest_local_cli_probe_uses_isolated_state (test_hardening.CompatibilitySafety.test_local_cli_probe_uses_isolated_state) ... ok\ntest_process_environment_override_does_not_mutate_parent (test_hardening.CompatibilitySafety.test_process_environment_override_does_not_mutate_parent) ... ok\ntest_empty_failed_or_inconsistent_test_marker_rejected (test_hardening.EvidenceSafety.test_empty_failed_or_inconsistent_test_marker_rejected) ... ok\ntest_exit_zero_without_test_execution_is_not_ready (test_hardening.EvidenceSafety.test_exit_zero_without_test_execution_is_not_ready) ... ok\ntest_hook_background_gate_requires_review (test_hardening.EvidenceSafety.test_hook_background_gate_requires_review) ... ok\ntest_hook_rejects_missing_cwd_and_policy_test_changes (test_hardening.EvidenceSafety.test_hook_rejects_missing_cwd_and_policy_test_changes) ... ok\ntest_private_parent_symlink_inside_repo_is_refused (test_hardening.EvidenceSafety.test_private_parent_symlink_inside_repo_is_refused) ... ok\ntest_scenario_record_is_not_gate_evidence (test_hardening.EvidenceSafety.test_scenario_record_is_not_gate_evidence) ... ok\ntest_test_marker_survives_truncated_prefix (test_hardening.EvidenceSafety.test_test_marker_survives_truncated_prefix) ... ok\ntest_artifact_namespace_and_traversal (test_hardening.PolicySafety.test_artifact_namespace_and_traversal) ... ok\ntest_artifact_symlink_inside_repo_refused (test_hardening.PolicySafety.test_artifact_symlink_inside_repo_refused) ... ok\ntest_empty_or_missing_gate_fails_before_execution (test_hardening.PolicySafety.test_empty_or_missing_gate_fails_before_execution) ... ok\ntest_invalid_later_gate_prevents_any_execution (test_hardening.PolicySafety.test_invalid_later_gate_prevents_any_execution) ... ok\ntest_map_uses_nul_and_preserves_odd_filename (test_hardening.PolicySafety.test_map_uses_nul_and_preserves_odd_filename) ... ok\ntest_private_alias_names_are_refused (test_hardening.PolicySafety.test_private_alias_names_are_refused) ... ok\ntest_capture_is_prefix_and_failure_exit_preserved (test_hardening.ProcessSafety.test_capture_is_prefix_and_failure_exit_preserved) ... ok\ntest_child_inheriting_stdout_is_bounded (test_hardening.ProcessSafety.test_child_inheriting_stdout_is_bounded) ... ok\ntest_flood_is_killed_without_unbounded_spool (test_hardening.ProcessSafety.test_flood_is_killed_without_unbounded_spool) ... ok\ntest_invalid_limits_refused (test_hardening.ProcessSafety.test_invalid_limits_refused) ... ok\ntest_missing_executable_is_reported (test_hardening.ProcessSafety.test_missing_executable_is_reported) ... ok\ntest_all_skipped_fails (test_hardening.TestRunnerSafety.test_all_skipped_fails) ... ok\ntest_expected_failure_alone_is_not_readiness (test_hardening.TestRunnerSafety.test_expected_failure_alone_is_not_readiness) ... ok\ntest_no_tests_fails (test_hardening.TestRunnerSafety.test_no_tests_fails) ... ok\ntest_malformed_result_shape_does_not_crash (test_interop_core.AdapterMalformedInput.test_malformed_result_shape_does_not_crash) ... ok\ntest_go_events_not_package_pass (test_interop_core.OutcomeAdapters.test_go_events_not_package_pass) ... ok\ntest_go_missing_terminal_duplicate_and_package_failure (test_interop_core.OutcomeAdapters.test_go_missing_terminal_duplicate_and_package_failure) ... ok\ntest_jest_counts (test_interop_core.OutcomeAdapters.test_jest_counts) ... ok\ntest_jest_zero_tests_and_boolean_counts_rejected (test_interop_core.OutcomeAdapters.test_jest_zero_tests_and_boolean_counts_rejected) ... ok\ntest_junit_actual_cases_and_invalid_totals (test_interop_core.OutcomeAdapters.test_junit_actual_cases_and_invalid_totals) ... ok\ntest_junit_entity_and_failed_case_rejected (test_interop_core.OutcomeAdapters.test_junit_entity_and_failed_case_rejected) ... ok\ntest_truncated_structured_formats_not_accepted (test_interop_core.OutcomeAdapters.test_truncated_structured_formats_not_accepted) ... ok\ntest_composition_substitution_and_unknown_arguments_refused (test_interop_core.PolicyContracts.test_composition_substitution_and_unknown_arguments_refused) ... ok\ntest_evidence_reconciler_record_uses_evidence_namespace (test_interop_core.PolicyContracts.test_evidence_reconciler_record_uses_evidence_namespace) ... ok\ntest_explanation_never_claims_platform_permission (test_interop_core.PolicyContracts.test_explanation_never_claims_platform_permission) ... ok\ntest_hook_and_cli_grammar_agree_on_invalid_summary (test_interop_core.PolicyContracts.test_hook_and_cli_grammar_agree_on_invalid_summary) ... ok\ntest_recommended_command_variants_allowed (test_interop_core.PolicyContracts.test_recommended_command_variants_allowed) ... ok\ntest_absolute_runner_does_not_import_host_omega_module (test_interop_core.PortableEngine.test_absolute_runner_does_not_import_host_omega_module) ... ok\ntest_doctor_reports_unknown_external_state (test_interop_core.PortableEngine.test_doctor_reports_unknown_external_state) ... ok\ntest_external_gates_require_explicit_policy (test_interop_core.PortableEngine.test_external_gates_require_explicit_policy) ... ok\ntest_map_envelope_bounded_with_visible_omissions_and_status_truncation (test_interop_core.PortableEngine.test_map_envelope_bounded_with_visible_omissions_and_status_truncation) ... ok\ntest_mode_change_invalidates_workspace (test_interop_core.PortableEngine.test_mode_change_invalidates_workspace) ... ok\ntest_portable_map_targets_host_not_engine (test_interop_core.PortableEngine.test_portable_map_targets_host_not_engine) ... ok\ntest_reviewed_external_gates_run_actual_target_tests (test_interop_core.PortableEngine.test_reviewed_external_gates_run_actual_target_tests) ... ok\ntest_tracked_runtime_state_refused_before_write (test_interop_core.PortableEngine.test_tracked_runtime_state_refused_before_write) ... ok\ntest_unignored_runtime_state_refused_without_modifying_ignore (test_interop_core.PortableEngine.test_unignored_runtime_state_refused_without_modifying_ignore) ... ok\ntest_empty_contract_sections_no_longer_score_full (test_interop_safety.InteropSafety.test_empty_contract_sections_no_longer_score_full) ... ok\ntest_fixture_results_cannot_authorize_native_release (test_interop_safety.InteropSafety.test_fixture_results_cannot_authorize_native_release) ... ok\ntest_handoff_refuses_path_escape_and_oversized_nodes (test_interop_safety.InteropSafety.test_handoff_refuses_path_escape_and_oversized_nodes) ... ok\ntest_handoff_rejects_competing_orchestrators (test_interop_safety.InteropSafety.test_handoff_rejects_competing_orchestrators) ... ok\ntest_handoff_rejects_cycles_and_unordered_writers (test_interop_safety.InteropSafety.test_handoff_rejects_cycles_and_unordered_writers) ... ok\ntest_handoff_respects_budget_without_claiming_to_spawn (test_interop_safety.InteropSafety.test_handoff_respects_budget_without_claiming_to_spawn) ... ok\ntest_hook_inventory_never_echoes_commands_or_secret_strings (test_interop_safety.InteropSafety.test_hook_inventory_never_echoes_commands_or_secret_strings) ... ok\ntest_inspection_does_not_execute_embedded_commands (test_interop_safety.InteropSafety.test_inspection_does_not_execute_embedded_commands) ... ok\ntest_inspection_reports_symlink_and_incomplete_root (test_interop_safety.InteropSafety.test_inspection_reports_symlink_and_incomplete_root) ... ok\ntest_interference_rejects_missing_arm_changed_prompt_and_model (test_interop_safety.InteropSafety.test_interference_rejects_missing_arm_changed_prompt_and_model) ... ok\ntest_json_inputs_reject_duplicates_nan_traversal_and_aliases (test_interop_safety.InteropSafety.test_json_inputs_reject_duplicates_nan_traversal_and_aliases) ... ok\ntest_metadata_and_multiline_description_safe_subset (test_interop_safety.InteropSafety.test_metadata_and_multiline_description_safe_subset) ... ok\ntest_skill_bundle_tracks_reference_changes (test_interop_safety.InteropSafety.test_skill_bundle_tracks_reference_changes) ... ok\ntest_usage_unknown_is_not_reported_as_zero (test_interop_safety.InteropSafety.test_usage_unknown_is_not_reported_as_zero) ... ok\ntest_yaml_tags_and_duplicate_keys_require_review (test_interop_safety.InteropSafety.test_yaml_tags_and_duplicate_keys_require_review) ... ok\ntest_configured_concurrency_cap_is_respected (test_interop_safety.ReviewRegressions.test_configured_concurrency_cap_is_respected) ... ok\ntest_context_source_read_is_bounded (test_interop_safety.ReviewRegressions.test_context_source_read_is_bounded) ... ok\ntest_context_task_requires_object_instead_of_crashing (test_interop_safety.ReviewRegressions.test_context_task_requires_object_instead_of_crashing) ... ok\ntest_different_tasks_can_have_different_fixed_acceptance (test_interop_safety.ReviewRegressions.test_different_tasks_can_have_different_fixed_acceptance) ... ok\ntest_duplicate_hook_json_is_not_silently_accepted (test_interop_safety.ReviewRegressions.test_duplicate_hook_json_is_not_silently_accepted) ... ok\ntest_duplicate_ownership_declarations_refused (test_interop_safety.ReviewRegressions.test_duplicate_ownership_declarations_refused) ... ok\ntest_hook_inspection_handles_depth_and_size_budgets_without_execution (test_interop_safety.ReviewRegressions.test_hook_inspection_handles_depth_and_size_budgets_without_execution) ... ok\ntest_huge_or_boolean_measurements_refused (test_interop_safety.ReviewRegressions.test_huge_or_boolean_measurements_refused) ... ok\ntest_inspection_refuses_symlink_in_root_ancestry (test_interop_safety.ReviewRegressions.test_inspection_refuses_symlink_in_root_ancestry) ... ok\ntest_interference_bundle_identity_fixed_across_arms (test_interop_safety.ReviewRegressions.test_interference_bundle_identity_fixed_across_arms) ... ok\ntest_interference_grader_and_bundle_provenance_required (test_interop_safety.ReviewRegressions.test_interference_grader_and_bundle_provenance_required) ... ok\ntest_no_regression_is_not_enough_when_combined_acceptance_fails (test_interop_safety.ReviewRegressions.test_no_regression_is_not_enough_when_combined_acceptance_fails) ... ok\ntest_non_orchestrator_cannot_declare_zero_agent_cost (test_interop_safety.ReviewRegressions.test_non_orchestrator_cannot_declare_zero_agent_cost) ... ok\ntest_prompt_is_fixed_across_repeated_trials (test_interop_safety.ReviewRegressions.test_prompt_is_fixed_across_repeated_trials) ... ok\ntest_unknown_hook_type_needs_review_without_echoing_value (test_interop_safety.ReviewRegressions.test_unknown_hook_type_needs_review_without_echoing_value) ... ok\ntest_compatibility_cli_detects_name_collision_without_running_skills (test_new_skill_workflows.NewSkillWorkflows.test_compatibility_cli_detects_name_collision_without_running_skills) ... ok\ntest_context_sufficiency_cli_verifies_content_ranges_and_task_invariants (test_new_skill_workflows.NewSkillWorkflows.test_context_sufficiency_cli_verifies_content_ranges_and_task_invariants) ... ok\ntest_evidence_reconciler_cli_rejects_source_drift (test_new_skill_workflows.NewSkillWorkflows.test_evidence_reconciler_cli_rejects_source_drift) ... ok\ntest_interference_cli_reports_fixture_regression_and_real_usage_fields (test_new_skill_workflows.NewSkillWorkflows.test_interference_cli_reports_fixture_regression_and_real_usage_fields) ... ok\ntest_memory_reconciliation_cli_preserves_both_conflicting_records (test_new_skill_workflows.NewSkillWorkflows.test_memory_reconciliation_cli_preserves_both_conflicting_records) ... ok\ntest_policy_explainer_cli_identifies_scope_without_granting_platform_access (test_new_skill_workflows.NewSkillWorkflows.test_policy_explainer_cli_identifies_scope_without_granting_platform_access) ... ok\ntest_project_adapter_cli_proposes_without_installing_or_writing_config (test_new_skill_workflows.NewSkillWorkflows.test_project_adapter_cli_proposes_without_installing_or_writing_config) ... ok\ntest_workflow_cli_checks_ownership_and_order (test_new_skill_workflows.NewSkillWorkflows.test_workflow_cli_checks_ownership_and_order) ... ok\ntest_benchmark_detects_regression (test_omega.OmegaTests.test_benchmark_detects_regression) ... ok\ntest_candidate_compare_missing_baseline (test_omega.OmegaTests.test_candidate_compare_missing_baseline) ... ok\ntest_candidate_lifecycle_preserves_stable (test_omega.OmegaTests.test_candidate_lifecycle_preserves_stable) ... ok\ntest_catalog_foundation_and_eight_extensions (test_omega.OmegaTests.test_catalog_foundation_and_eight_extensions) ... ok\ntest_dirty_checkout_refused (test_omega.OmegaTests.test_dirty_checkout_refused) ... ok\ntest_gate_failure_propagates (test_omega.OmegaTests.test_gate_failure_propagates) ... ok\ntest_git_truncation_refused (test_omega.OmegaTests.test_git_truncation_refused) ... ok\ntest_hook_denies_escape_and_policy_edit (test_omega.OmegaTests.test_hook_denies_escape_and_policy_edit) ... ok\ntest_hook_denies_shell_bypass (test_omega.OmegaTests.test_hook_denies_shell_bypass) ... ok\ntest_hook_rejects_malformed (test_omega.OmegaTests.test_hook_rejects_malformed) ... ok\ntest_hook_scoped_edit (test_omega.OmegaTests.test_hook_scoped_edit) ... ok\ntest_memory_scoped_and_commit_stamped (test_omega.OmegaTests.test_memory_scoped_and_commit_stamped) ... ok\ntest_memory_secret_rejection (test_omega.OmegaTests.test_memory_secret_rejection) ... ok\ntest_no_shell_expansion (test_omega.OmegaTests.test_no_shell_expansion) ... ok\ntest_path_escape (test_omega.OmegaTests.test_path_escape) ... ok\ntest_router_complexity (test_omega.OmegaTests.test_router_complexity) ... ok\ntest_router_contract (test_omega.OmegaTests.test_router_contract) ... ok\ntest_subprocess_failure (test_omega.OmegaTests.test_subprocess_failure) ... ok\ntest_symlink_escape (test_omega.OmegaTests.test_symlink_escape) ... ok\ntest_three_agent_specs (test_omega.OmegaTests.test_three_agent_specs) ... ok\ntest_timeout (test_omega.OmegaTests.test_timeout) ... ok\ntest_archive_excludes_untracked_runtime_and_dependencies (test_plugin_packaging.PluginPackaging.test_archive_excludes_untracked_runtime_and_dependencies) ... ok\ntest_archive_refuses_tracked_symlinks (test_plugin_packaging.PluginPackaging.test_archive_refuses_tracked_symlinks) ... ok\ntest_bytecode_flag_keeps_trusted_runner_boundary (test_plugin_packaging.PluginPackaging.test_bytecode_flag_keeps_trusted_runner_boundary) ... ok\ntest_manifest_preserves_one_skill_and_uses_standard_agent_directory (test_plugin_packaging.PluginPackaging.test_manifest_preserves_one_skill_and_uses_standard_agent_directory) ... ok\ntest_marketplace_installs_this_repository_root_and_matching_version (test_plugin_packaging.PluginPackaging.test_marketplace_installs_this_repository_root_and_matching_version) ... ok\ntest_policy_protects_plugin_metadata_and_agent_prompts (test_plugin_packaging.PluginPackaging.test_policy_protects_plugin_metadata_and_agent_prompts) ... ok\ntest_relocated_cli_does_not_import_target_omega_or_write_cache (test_plugin_packaging.PluginPac",
+      "truncated": true,
+      "output_tail": "fied_skill.UnifiedSkill.test_each_plan_keeps_one_entry_and_only_selected_reference_paths) ... ok\ntest_missing_reference_cannot_silently_remove_a_mode (test_unified_skill.UnifiedSkill.test_missing_reference_cannot_silently_remove_a_mode) ... ok\ntest_mode_document_change_invalidates_bundle_without_entry_change (test_unified_skill.UnifiedSkill.test_mode_document_change_invalidates_bundle_without_entry_change) ... ok\ntest_old_skill_release_names_are_rejected_with_migration_hint (test_unified_skill.UnifiedSkill.test_old_skill_release_names_are_rejected_with_migration_hint) ... ok\ntest_only_one_skill_is_discovered_and_all_modes_are_covered (test_unified_skill.UnifiedSkill.test_only_one_skill_is_discovered_and_all_modes_are_covered) ... ok\ntest_removed_command_or_bypass_in_mode_fails_the_entry_contract (test_unified_skill.UnifiedSkill.test_removed_command_or_bypass_in_mode_fails_the_entry_contract) ... ok\ntest_resource_count_and_aggregate_bytes_fail_closed (test_unified_skill.UnifiedSkill.test_resource_count_and_aggregate_bytes_fail_closed) ... ok\ntest_symlink_reference_is_not_certified (test_unified_skill.UnifiedSkill.test_symlink_reference_is_not_certified) ... ok\ntest_transitive_doc_change_and_reference_cycle_are_accounted_for (test_unified_skill.UnifiedSkill.test_transitive_doc_change_and_reference_cycle_are_accounted_for) ... ok\ntest_branch_or_head_change_is_detected (test_workflows.ChangeWorkflow.test_branch_or_head_change_is_detected) ... ok\ntest_expired_plan_refuses_repair_and_readiness (test_workflows.ChangeWorkflow.test_expired_plan_refuses_repair_and_readiness) ... ok\ntest_gate_failure_if_command_mutates_workspace (test_workflows.ChangeWorkflow.test_gate_failure_if_command_mutates_workspace) ... ok\ntest_gate_record_invalidated_by_source_change (test_workflows.ChangeWorkflow.test_gate_record_invalidated_by_source_change) ... ok\ntest_plan_requires_clean_isolated_checkout (test_workflows.ChangeWorkflow.test_plan_requires_clean_isolated_checkout) ... ok\ntest_rename_checks_old_and_new_paths (test_workflows.ChangeWorkflow.test_rename_checks_old_and_new_paths) ... ok\ntest_repair_budget_enforced (test_workflows.ChangeWorkflow.test_repair_budget_enforced) ... ok\ntest_scoped_change_and_outside_path_detection (test_workflows.ChangeWorkflow.test_scoped_change_and_outside_path_detection) ... ok\ntest_explicit_existing_changes_preserved_outside_scope (test_workflows.ExistingChangeWorkflow.test_explicit_existing_changes_preserved_outside_scope) ... ok\ntest_index_only_changes_alter_snapshot (test_workflows.ExistingChangeWorkflow.test_index_only_changes_alter_snapshot) ... ok\ntest_cli_read_returns_nonzero_for_stale_memory (test_workflows.MemoryWorkflow.test_cli_read_returns_nonzero_for_stale_memory) ... ok\ntest_evidence_tamper_and_project_binding (test_workflows.MemoryWorkflow.test_evidence_tamper_and_project_binding) ... ok\ntest_missing_evidence_does_not_create_memory (test_workflows.MemoryWorkflow.test_missing_evidence_does_not_create_memory) ... ok\ntest_source_and_head_staleness (test_workflows.MemoryWorkflow.test_source_and_head_staleness) ... ok\ntest_duplicate_keys_and_malformed_memory_rejected (test_workflows.RecordSafety.test_duplicate_keys_and_malformed_memory_rejected) ... ok\ntest_repair_lock_prevents_concurrent_updates (test_workflows.RecordSafety.test_repair_lock_prevents_concurrent_updates) ... ok\ntest_scenario_evidence_cannot_replace_gates (test_workflows.RecordSafety.test_scenario_evidence_cannot_replace_gates) ... ok\ntest_worktree_container_itself_refused (test_workflows.RecordSafety.test_worktree_container_itself_refused) ... ok\ntest_actual_git_odd_filename_roundtrip (test_workflows.RepositoryWorkflow.test_actual_git_odd_filename_roundtrip) ... ok\ntest_workspace_hash_tracks_untracked_and_deleted (test_workflows.RepositoryWorkflow.test_workspace_hash_tracks_untracked_and_deleted) ... ok\n\n----------------------------------------------------------------------\nRan 212 tests in 6.604s\n\nOK\nOMEGA_TEST_RESULT {\"errors\": 0, \"expected_failures\": 0, \"failed\": 0, \"passed\": 212, \"run\": 212, \"skipped\": 0, \"unexpected_successes\": 0}\n",
+      "timed_out": false,
+      "output_limit_exceeded": false,
+      "total_output_bytes": 29862,
+      "invalid_utf8": false
+    },
+    "test_outcomes": {
+      "run": 212,
+      "passed": 212,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "expected_failures": 0,
+      "unexpected_successes": 0
+    },
+    "native_quality": "UNVERIFIED"
+  },
+  "comparison": {
+    "passed": true,
+    "skill": "omega",
+    "before": "d359bf7024552a7356190edd1de33a4b824d52c018fe52a458b9f2430bc03ca2",
+    "after": "d359bf7024552a7356190edd1de33a4b824d52c018fe52a458b9f2430bc03ca2",
+    "stable_modified": false,
+    "evidence_checks": [
+      {
+        "path": ".omega/evidence/1792734520882913438-2b56fc76.json",
+        "valid": true
+      },
+      {
+        "path": ".omega/evidence/1792734574894641420-c65d130d.json",
+        "valid": true
+      }
+    ],
+    "eligible_for_review": true,
+    "native_release_eligible": false,
+    "review_scope": "offline contract and tooling only; native skill behavior unverified"
+  },
+  "observed_failures_and_resolutions": [
+    {
+      "issue": "Initial strict manifest check warned that root CLAUDE.md is not loaded as plugin context",
+      "before": {
+        "success": false,
+        "strict": true,
+        "target": "/workspace/skill/.claude-plugin/plugin.json",
+        "manifest": {
+          "file": "/workspace/skill/.claude-plugin/plugin.json",
+          "type": "plugin",
+          "errors": [],
+          "warnings": [],
+          "notes": [],
+          "gatingHooks": []
+        },
+        "contents": [
+          {
+            "file": "/workspace/skill/CLAUDE.md",
+            "type": "plugin",
+            "errors": [],
+            "warnings": [
+              {
+                "path": "root",
+                "message": "CLAUDE.md at the plugin root is not loaded as project context. To ship context with your plugin, use a skill (skills/<name>/SKILL.md) instead.",
+                "code": null
+              }
+            ],
+            "notes": [],
+            "gatingHooks": []
+          }
+        ],
+        "advice": [
+          {
+            "file": "/workspace/skill/README.md",
+            "message": "This README has no line that installs \"omega\" from a marketplace. Add the install line, which works in one step on Claude Code 2.1.275 or later. Validate the folder that holds its marketplace.json to have <owner>/<repo> filled in, and the name its marketplace lists it under.",
+            "installLine": "/plugin install omega --marketplace <owner>/<repo>"
+          }
+        ],
+        "directory": {
+          "profile": null,
+          "findings": [
+            {
+              "code": "LICENSE_MISSING",
+              "title": "License missing",
+              "severity": "error",
+              "blocking": true,
+              "hold": false,
+              "file": "LICENSE",
+              "field": "",
+              "message": "This plugin has no LICENSE file and plugin.json has no `license`. The directory requires one of them.",
+              "fix": "Add a LICENSE file to the plugin folder, or set `license` (an SPDX id) in plugin.json. A LICENSE at the repository root also counts for a plugin in a sub-folder."
+            },
+            {
+              "code": "ICON_MISSING",
+              "title": "No icon",
+              "severity": "warning",
+              "blocking": false,
+              "hold": false,
+              "file": ".claude-plugin/plugin.json",
+              "field": "icon",
+              "message": "No icon found in the plugin. The validator looked for `icon` in plugin.json and for a file at .claude-plugin/icon.png or .svg, assets/icon.png or .svg, or a similar path.",
+              "fix": "Add a square PNG to the plugin folder at .claude-plugin/icon.png, or set `icon` in plugin.json to the path of a square PNG or JPEG in the plugin: 512 to 2048 px on each side, under 2 MB. SVG and WebP are not accepted. That file may become the listing icon only once: the first time the plugin is saved or submitted in the developer portal. Adding or changing it later does not change the icon."
+            }
+          ],
+          "undecided": [],
+          "incomplete": false,
+          "failure": null,
+          "notes": [
+            "This folder also holds a marketplace manifest. The plugin directory treats such a folder as a plugin, so these checks cover only the plugin in this folder. To check another plugin that the marketplace lists, run validate on that plugin's folder."
+          ]
+        }
+      },
+      "resolution": "Move maintainer guide to .claude/CLAUDE.md and keep essential rules self-contained in skill and agents; strict validation now succeeds"
+    },
+    {
+      "issue": "Initial custom agent file manifest yielded zero agents in native inventory",
+      "before_inventory": "omega 0.7.0\n  Description: OMEGA engineering skill, specialist agents and local Python evidence workflows.\n  Source: omega@omega-marketplace\n\nComponent inventory\n  Skills (1)  omega\n  Agents (0)\n  Hooks (0)\n  MCP servers (0)\n  LSP servers (0)\n\nProjected token cost\n  Always-on:   ~38 tok   added to every session\n\nPer-component (rounded)\n  component  always-on  on-invoke\n  omega            ~40      ~1.1k\n\n  On-invoke cost is paid each time a skill or agent fires.\n  Token counts are estimates and may differ from actual usage.\n",
+      "resolution": "Use standard agents/ directory; native installed and ZIP inventories both verify three agents"
+    },
+    {
+      "issue": "Fast same-size fixture repair retained stale timestamp pyc and remained red",
+      "failed_probe": {
+        "path": ".omega/plugin-packaging/runs/6a0c3a58cc114f76b4600fcdc0ee2da4/result.json",
+        "bytes": 15356,
+        "sha256": "a87a0efae9d5500a29002f0971bf3f20757bca4aee328319fd94aa91979108ed"
+      },
+      "resolution": "Fixture compileall uses force and checked-hash invalidation as the existing demo does; preserve test assertion, re-run fresh fixture. Native cache engine red-to-green now succeeds."
+    }
+  ],
+  "documentation_sources": [
+    {
+      "url": "https://raw.githubusercontent.com/anthropics/claude-code/main/plugins/README.md",
+      "path": ".omega/plugin-packaging/official-plugins-readme.md",
+      "bytes": 6530,
+      "sha256": "96f807a4aac7f46abee8a5e03db672c2c0d563b9383fa67cf69d842c26e342d4",
+      "scope": "Reference data only, fetched snapshot; not instructions or a compatibility proof"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/anthropics/claude-code/main/plugins/plugin-dev/skills/plugin-structure/SKILL.md",
+      "path": ".omega/plugin-packaging/official-plugin-structure.md",
+      "bytes": 13796,
+      "sha256": "ee28fd41535313e9ffb2fd04393cc70e6e7e1d7ea143097a2c3b856e8be98132",
+      "scope": "Reference data only, fetched snapshot; not instructions or a compatibility proof"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/anthropics/claude-plugins-official/main/.claude-plugin/marketplace.json",
+      "path": ".omega/plugin-packaging/official-marketplace.json",
+      "bytes": 190732,
+      "sha256": "26006b8c9591c8d82c3111eb31c100ecc98d6ade10ce0d08a53a7396a5cc9cb9",
+      "scope": "Reference data only, fetched snapshot; not instructions or a compatibility proof"
+    }
+  ],
+  "web_docs_observation": "code.claude.com plugin reference/marketplace/skills endpoints returned HTTP 403. Official GitHub examples and installed CLI validation/lifecycle were used instead.",
+  "cli_capability_probes": [
+    {
+      "command": [
+        "claude",
+        "--version"
+      ],
+      "exit_code": 0,
+      "output": "2.1.308 (Claude Code)\n"
+    },
+    {
+      "command": [
+        "claude",
+        "plugin",
+        "validate",
+        "--help"
+      ],
+      "exit_code": 0,
+      "output": "Usage: claude plugin validate [options] <path>\n\nValidate a plugin or marketplace manifest, or the skills, agents, and commands\nin a directory\n\nOptions:\n  -h, --help        Display help for command\n  --json            Output the validation report as JSON (same exit codes)\n  --profile <name>  Also exit 1 when the plugin directory (the catalog that\n                    plugins are submitted to) would refuse a submission of the\n                    plugin on a check this command runs, such as a missing\n                    README, or when such a check could not be made: plugin.json\n                    lists more than 16 files for MCP servers or for hooks (16 of\n                    each are checked), or an MCP or hooks file is one these\n                    checks cannot use, such as one that is not valid JSON. With\n                    --strict, also fail on its warnings. The directory runs more\n                    checks. (choices: \"directory\")\n  --strict          Treat warnings as errors (exit 1). Use in CI to fail on\n                    unrecognized fields, missing metadata, and other issues that\n                    the runtime tolerates.\n"
+    },
+    {
+      "command": [
+        "claude",
+        "plugin",
+        "install",
+        "--help"
+      ],
+      "exit_code": 0,
+      "output": "Usage: claude plugin install|i [options] <plugin>\n\nInstall a plugin from available marketplaces (use plugin@marketplace for\nspecific marketplace)\n\nOptions:\n  --accept-command <sha256>  Accept the marketplace-declared command (a\n                             command-source install, or the headersHelper that\n                             fetches the archive) whose sha256 a previous --json\n                             run reported as shownCommand.sha256; counts as -y\n                             for exactly that command, for that plugin and\n                             marketplace catalog, and nothing else. If either\n                             changed (a refresh that moved the catalog counts),\n                             the run refuses and reports the command again, to\n                             be shown to a person again\n  --config <key=value>       Set a userConfig option declared in the plugin's\n                             manifest, or a bundled .mcpb server's own\n                             user_config field as <server>.<key>=<value> (a bare\n                             key works when only one bundled server declares\n                             it). Repeatable. Values are validated against the\n                             schema and stored via the same path as the\n                             interactive /plugin configure flow.\n  -h, --help                 Display help for command\n  --json                     Print one machine-readable result line on stdout\n                             instead of the human message (same exit codes; a\n                             marketplace-declared command is still shown and\n                             must be confirmed — pass -y when not interactive)\n  --marketplace <source>     Install <plugin> (its bare name) from the\n                             marketplace at this source: owner/repo, a git or\n                             https URL, or a path. A marketplace not added yet\n                             is added first, in user settings, under the same\n                             checks as 'plugin marketplace add'\n  --registry <url>           For a <package>@npm install: resolve and download\n                             from this npm registry instead of the one your npm\n                             configuration selects\n  -s, --scope <scope>        Installation scope: user, project, or local\n                             (default: \"user\")\n  -y, --yes                  Accept the displayed marketplace-declared command\n                             without the confirmation prompt — a plugin\n                             installed by running a command, or one whose\n                             archive is fetched through a headersHelper command\n                             (required when stdin or stdout is not a TTY)\n"
+    },
+    {
+      "command": [
+        "claude",
+        "plugin",
+        "marketplace",
+        "add",
+        "--help"
+      ],
+      "exit_code": 0,
+      "output": "Usage: claude plugin marketplace add [options] <source>\n\nAdd a marketplace from a URL, path, or GitHub repo\n\nOptions:\n  --claudeai           Add the marketplace of this name that claude.ai hosts for\n                       you, by its listed name or its local name (see: claude\n                       plugin marketplace list)\n  -h, --help           Display help for command\n  --json               Print one machine-readable result line as the last line\n                       on stdout (same exit codes)\n  --scope <scope>      Where to declare the marketplace: user (default),\n                       project, or local\n  --sparse <paths...>  Limit checkout to specific directories via git\n                       sparse-checkout (for monorepos). Example: --sparse\n                       .claude-plugin plugins\n"
+    },
+    {
+      "command": [
+        "claude",
+        "plugin",
+        "details",
+        "--help"
+      ],
+      "exit_code": 0,
+      "output": "Usage: claude plugin details [options] <name>\n\nShow a plugin's component inventory and projected token cost\n\nOptions:\n  -h, --help  Display help for command\n"
+    }
+  ],
+  "doctor": {
+    "python": "3.12.14",
+    "git": "git version 2.52.0",
+    "claude": {
+      "available": true,
+      "source": "project-local",
+      "command": [
+        "/workspace/skill/.omega/tools/claude/node_modules/.bin/claude",
+        "--version"
+      ],
+      "exit_code": 0,
+      "seconds": 0.018,
+      "output": "2.1.308 (Claude Code)\n",
+      "truncated": false,
+      "output_tail": "",
+      "timed_out": false,
+      "output_limit_exceeded": false,
+      "total_output_bytes": 22,
+      "invalid_utf8": false
+    },
+    "native_integration": "Version probe only; skills, agents and hook behavior remain UNVERIFIED",
+    "hooks_enabled": "unknown",
+    "mcp_enabled": "unknown",
+    "project_settings_present": false,
+    "effective_policy": "Not resolved: user, managed and plugin settings were not inspected"
+  },
+  "demo": {
+    "fixture": ".omega/demo/49dac394e1934982a5f4f37e23b3581c",
+    "baseline_commit": "b69eeae33a3c79883a99a52bbcb8bfdf3e7880b9",
+    "before_passed": false,
+    "after_passed": true,
+    "regression_tests": 1,
+    "isolated_branch": "omega/demo-fix",
+    "worktree_created": true,
+    "baseline_recoverable": true,
+    "memory": ".omega/memory/1792734405966924068-cd01de48.json",
+    "candidate_passed": true,
+    "stable_modified": false,
+    "rollback_diff_exit": 0,
+    "native_claude_executed": false,
+    "network_used": false
+  },
+  "efficiency": {
+    "suite": "token-efficiency-v1",
+    "metric": "UTF-8 bytes; actual tokens and native LLM quality unmeasured",
+    "passed": true,
+    "cases": [
+      {
+        "case": "plan-low",
+        "before_utf8_bytes": 1064,
+        "after_utf8_bytes": 902,
+        "reduction_percent": 15.23,
+        "data_equivalent": true
+      },
+      {
+        "case": "plan-medium",
+        "before_utf8_bytes": 1113,
+        "after_utf8_bytes": 938,
+        "reduction_percent": 15.72,
+        "data_equivalent": true
+      },
+      {
+        "case": "plan-high",
+        "before_utf8_bytes": 1139,
+        "after_utf8_bytes": 959,
+        "reduction_percent": 15.8,
+        "data_equivalent": true
+      },
+      {
+        "case": "explicit-source-packet",
+        "before_utf8_bytes": 1117,
+        "after_utf8_bytes": 1043,
+        "reduction_percent": 6.62,
+        "data_equivalent": true
+      },
+      {
+        "case": "gate-logs-by-reference",
+        "before_utf8_bytes": 43927,
+        "after_utf8_bytes": 3590,
+        "reduction_percent": 91.83,
+        "data_equivalent": true
+      }
+    ],
+    "sources_sha256": {
+      "omega/context.py": "53743a082ef9594b46c24eb3649e3d2693e962b7d1cf027c6a5ed8220458c33c",
+      "omega/__main__.py": "3dc5087cc310f1d79361f4cf8c56f99a49a47b521bfcc0dda3b5bd5a8d328120",
+      "tests/test_context.py": "324992baa7c5185803fa1adce6955e1b865787452e0413ac5fb838e831414fae",
+      "benchmarks/token_efficiency.py": "a4871db783e0d71d6ce845924a1d046fab67b9c1d8621165b3ab4eb8fa00bbd6"
+    },
+    "claude_native_evaluated": false
+  },
+  "ci": {
+    "verified": false,
+    "note": "Workflow includes gates, bridge, native Node fixture, demo, efficiency and static plugin export. CI does not auto-install Claude; remote Actions result not observed."
+  },
+  "remaining_limitations": [
+    "Native installation/discovery is verified, while model task activation, reasoning quality, token/cost and controlled no-skill A/B remain unverified. No model request was sent.",
+    "Plugin targets Claude Code; Claude Web file upload does not execute the bundled Python engine.",
+    "Python >=3.10, Git and POSIX are prerequisites. Full engine development build needs previously pinned npm dev tools; plugin install does not install dependencies.",
+    "Hooks and MCP are not registered. Optional policy adapter and agent prompts do not replace host permissions or an OS sandbox.",
+    "Security is targeted rules, local evidence unsigned. Reviewed target gate commands can execute project code; a fresh artifact is not independent runner attestation.",
+    "Known failed-subtest event/method counter defect is outside packaging scope and remains open; green suite counts do not claim it was fixed.",
+    "No license was chosen for the owner or submission made to the official plugin directory. Self-hosted install validation is separate from directory listing requirements.",
+    "Plugin cache is not an evolution workspace; candidate/compare/benchmark for skill changes require a reviewed Git checkout.",
+    "No deployment or production rollback was performed; Git rollback checks and target fixture prove narrower behavior."
+  ],
+  "source_manifest": [
+    {
+      "path": ".claude-plugin/marketplace.json",
+      "bytes": 378,
+      "sha256": "a748d2dd5360ab374c367efaf9e82c85d471b4297f9328039f5b338e7f230294",
+      "git_mode": "100644"
+    },
+    {
+      "path": ".claude-plugin/plugin.json",
+      "bytes": 568,
+      "sha256": "4934d1e1e1b57f761f0fce54aef40dc6137ab90ae164c261222aecb741a3bed0",
+      "git_mode": "100644"
+    },
+    {
+      "path": ".claude/CLAUDE.md",
+      "bytes": 3850,
+      "sha256": "8b1b9ef50123047348dd27f58e66a5476523be8f20f365b658cb2b840681e6bb",
+      "git_mode": "100644"
+    },
+    {
+      "path": ".claude/skills/omega/SKILL.md",
+      "bytes": 6479,
+      "sha256": "d359bf7024552a7356190edd1de33a4b824d52c018fe52a458b9f2430bc03ca2",
+      "git_mode": "100644"
+    },
+    {
+      "path": ".claude/skills/omega/references/controlled-change.md",
+      "bytes": 2551,
+      "sha256": "08deccd491c0c08a7dbf1f85a96f87864757d1223126351671c246f374bf4b17",
+      "git_mode": "100644"
+    },
+    {
+      "path": ".claude/skills/omega/references/omega-context-sufficiency-check.md",
+      "bytes": 1186,
+      "sha256": "00807d652be4220c94716a1c218d8c6428c2abbca7cf35bf176118bec3a5c13d",
+      "git_mode": "100644"
+    },
+    {
+      "path": ".claude/skills/omega/references/omega-effective-policy-explainer.md",
+      "bytes": 1179,
+      "sha256": "996a07c3656c7b60fb6575726779c4a25d9a10e689707ac03597b3a85107940f",
+      "git_mode": "100644"
+    },
+    {
+      "path": ".claude/skills/omega/references/omega-evidence-reconciler.md",
+      "bytes": 2027,
+      "sha256": "c5b3ae54a62828196128c6a8f738e533bb2ab993a6d67ac019285e27ba775334",
+      "git_mode": "100644"
+    },
+    {
+      "path": ".claude/skills/omega/references/omega-memory-reconciliation.md",
+      "bytes": 1586,
+      "sha256": "8a18572175dfb98c0e275163e2b73379f97ffb13e34b9fe9a4729b0dce1d0f29",
+      "git_mode": "100644"
+    },
+    {
+      "path": ".claude/skills/omega/references/omega-project-workflow-adapter.md",
+      "bytes": 2010,
+      "sha256": "d76ec44bea673ff8ce338cc8b6dba55c09b2a9ba254601f1997987680b4bc523",
+      "git_mode": "100644"
+    },
+    {
+      "path": ".claude/skills/omega/references/omega-skill-compatibility-audit.md",
+      "bytes": 1266,
+      "sha256": "4e5f1643f7519a5257d43ad538560ce6f97016891227c7bec880df6a32cd47d5",
+      "git_mode": "100644"
+    },
+    {
+      "path": ".claude/skills/omega/references/omega-skill-interference-benchmark.md",
+      "bytes": 1165,
+      "sha256": "96dd42135260a54f563b33608d21ba875eef5545949f94c5b6218be5af19e8a4",
+      "git_mode": "100644"
+    },
+    {
+      "path": ".claude/skills/omega/references/omega-workflow-handoff-contract.md",
+      "bytes": 1598,
+      "sha256": "e6e3b1b75b3c46160553aa65516dd1bc6147f4e36e646f716b0c2432544523cd",
+      "git_mode": "100644"
+    },
+    {
+      "path": ".claude/skills/omega/references/project-memory.md",
+      "bytes": 2540,
+      "sha256": "13a09fdb7959e9ce76e392341ed70aaff0a0016ec2a6dd94addda2b575c71112",
+      "git_mode": "100644"
+    },
+    {
+      "path": ".claude/skills/omega/references/quality-gates.md",
+      "bytes": 3282,
+      "sha256": "01e9b5c626c830307c0e81bb611ac87d1911181c4743a618e36722d948e01e8a",
+      "git_mode": "100644"
+    },
+    {
+      "path": ".claude/skills/omega/references/repo-map.md",
+      "bytes": 2183,
+      "sha256": "70204ba1649b8998532b8dfec56d36a9c26fe4f8d03bfb5751356f575633eab0",
+      "git_mode": "100644"
+    },
+    {
+      "path": ".claude/skills/omega/references/skill-benchmark.md",
+      "bytes": 2955,
+      "sha256": "15be003485f8374722e56da5553d15e3f8ad870e28b26f767935b00febc33398",
+      "git_mode": "100644"
+    },
+    {
+      "path": ".github/workflows/omega.yml",
+      "bytes": 1648,
+      "sha256": "0a8b4d028763832fef7dd8f1ba00a205891af02d586ea4043486509f9338776b",
+      "git_mode": "100644"
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 58,
+      "sha256": "716b06a800fe9b49311fb9a659130e1195f934837a3197e3e2f1e9812a1e4179",
+      "git_mode": "100644"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2765,
+      "sha256": "876d39777b995119143a3326c2fa57092be39b2b649f921d82ee64e6b544b0ad",
+      "git_mode": "100644"
+    },
+    {
+      "path": "agents/omega-engineer.md",
+      "bytes": 1033,
+      "sha256": "c840bb0ded852d09de07b1006c896da515a991c6b90a20a3d3b4d356a341fbc7",
+      "git_mode": "100644"
+    },
+    {
+      "path": "agents/omega-investigator.md",
+      "bytes": 1016,
+      "sha256": "643eb3538fa2a04350d9676ba9ff832961078868200d2323c145f732c811d298",
+      "git_mode": "100644"
+    },
+    {
+      "path": "agents/omega-verifier.md",
+      "bytes": 931,
+      "sha256": "d2187473be253fea0a2ba54319d8bbf330a1df47b1a7e1392b9bfc3a4d354260",
+      "git_mode": "100644"
+    },
+    {
+      "path": "benchmarks/cases.json",
+      "bytes": 507,
+      "sha256": "aa8b72d73b0be7ebcb53dd3049f83c6b181148b0248cf1cb1ed6c607a0fd87bc",
+      "git_mode": "100644"
+    },
+    {
+      "path": "benchmarks/demo.py",
+      "bytes": 3964,
+      "sha256": "ff23469f7b1532cfd3633f511b700d14248383afa881ba3d6176a1893ce87974",
+      "git_mode": "100644"
+    },
+    {
+      "path": "benchmarks/native_runners.py",
+      "bytes": 4213,
+      "sha256": "e96f4ddb38784e4b2c23be3a4da04ca739df6104228392153942f259876a9119",
+      "git_mode": "100644"
+    },
+    {
+      "path": "benchmarks/plugin_packaging.py",
+      "bytes": 9258,
+      "sha256": "2840fe5553c614a9b80b137b11eb284739ea440a9a305df8b2b4b58ddcff23ef",
+      "git_mode": "100644"
+    },
+    {
+      "path": "benchmarks/token_efficiency.py",
+      "bytes": 2570,
+      "sha256": "a4871db783e0d71d6ce845924a1d046fab67b9c1d8621165b3ab4eb8fa00bbd6",
+      "git_mode": "100644"
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "bytes": 11729,
+      "sha256": "aedadeb5f6c11edef3e692fe7aa4ce764fc1752e253af987b380a627283623ad",
+      "git_mode": "100644"
+    },
+    {
+      "path": "docs/CLAUDE_COMPATIBILITY.md",
+      "bytes": 3964,
+      "sha256": "966664b35b104f7467754ac46529140baf61ebcbeb8fff9b7248c76b81d14d77",
+      "git_mode": "100644"
+    },
+    {
+      "path": "docs/CLAUDE_PLUGIN.md",
+      "bytes": 7559,
+      "sha256": "1b48d66abf2463747e678ed202f9003bb3a8ad1ab23f494501e52c5615a90480",
+      "git_mode": "100644"
+    },
+    {
+      "path": "docs/DEEP_HARDENING.md",
+      "bytes": 7690,
+      "sha256": "a2dadb9e286c18ecad5e8283aeb2e63776a515af4a0c9c6e2130d3ba94289b1c",
+      "git_mode": "100644"
+    },
+    {
+      "path": "docs/INTEROPERABILITY_GUIDE.md",
+      "bytes": 12612,
+      "sha256": "0f796380c4aeb7d00bcaf390a530d18a1c4db65802c90276f40cceeed1868c22",
+      "git_mode": "100644"
+    },
+    {
+      "path": "docs/OPERATIONS.md",
+      "bytes": 12056,
+      "sha256": "a0e899f5f1a5d9bc4041faa16c60ab9d93b7fbe3fcc325ffde9659d2f37aefaf",
+      "git_mode": "100644"
+    },
+    {
+      "path": "docs/PYTHON_TYPESCRIPT_BOUNDARY.md",
+      "bytes": 4252,
+      "sha256": "b72aebb1a117db245558fe2917bcb28882e53aa4882aeca374bed15c554eb362",
+      "git_mode": "100644"
+    },
+    {
+      "path": "docs/SKILL_PLAYBOOKS.md",
+      "bytes": 9651,
+      "sha256": "d3162bccde6be516e7a6c48b9eb6297d98f1585df1bc8dc87644478ee76ea86c",
+      "git_mode": "100644"
+    },
+    {
+      "path": "docs/TOKEN_EFFICIENCY.md",
+      "bytes": 5513,
+      "sha256": "81b4cfe65b0f0b944f5b6f2cc5207048e556c6639cd8d623c4a89628dba6f385",
+      "git_mode": "100644"
+    },
+    {
+      "path": "docs/UNIFIED_SKILL.md",
+      "bytes": 6474,
+      "sha256": "1fcf3ec8c86acd706a0f2daa35e5cc01f4a2a4a9cf75d3e8a5edb1c6cc2e10a6",
+      "git_mode": "100644"
+    },
+    {
+      "path": "docs/UPGRADE_0_3.md",
+      "bytes": 11347,
+      "sha256": "61d013fddca4da2cb5ffc21d26a6f5cba805ce3583443250b05919ae277dda02",
+      "git_mode": "100644"
+    },
+    {
+      "path": "docs/UPGRADE_0_4.md",
+      "bytes": 7391,
+      "sha256": "32b7b86f95393a61b3d3132ed293ff37707504252591c1250fc9e17cbfae71f6",
+      "git_mode": "100644"
+    },
+    {
+      "path": "docs/UPGRADE_0_5.md",
+      "bytes": 7018,
+      "sha256": "0f97c6e3ecac67b82b1397e5d6e9561f8f24efe6e2ef0af01880e1b6bd41d0ae",
+      "git_mode": "100644"
+    },
+    {
+      "path": "docs/VALIDATION.md",
+      "bytes": 6038,
+      "sha256": "a79b5dca96ecc5ff9a4518ded0b3e28ee6e7ae1f86acd3cc1bedefe663a66d2b",
+      "git_mode": "100644"
+    },
+    {
+      "path": "integration/typescript/omega-bridge.test.mjs",
+      "bytes": 6312,
+      "sha256": "c137a7a2a5dd205346f13f577c8c3db2b9030dcb89cb84ddc7fd8d7b0ff21b1d",
+      "git_mode": "100644"
+    },
+    {
+      "path": "integration/typescript/omega-bridge.ts",
+      "bytes": 8918,
+      "sha256": "f7a5462310e9b32e927fe5106916b50abc706124fe8d5a2b8ff504ff504cb61e",
+      "git_mode": "100644"
+    },
+    {
+      "path": "integration/typescript/package-lock.json",
+      "bytes": 1466,
+      "sha256": "fe61b680ca36c045de10f385ecf27d52fe2d7b662a29e556c5693dff8b794b15",
+      "git_mode": "100644"
+    },
+    {
+      "path": "integration/typescript/package.json",
+      "bytes": 322,
+      "sha256": "69b2aa67509a67ab50e1e9cce553dad8c7d293d232f691bbd5ae7aad4351dbd8",
+      "git_mode": "100644"
+    },
+    {
+      "path": "integration/typescript/tsconfig.json",
+      "bytes": 357,
+      "sha256": "a57a1257066831918292be81d8f522699a79605c16a59806723578bf75dda87d",
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/__init__.py",
+      "bytes": 22,
+      "sha256": "45a00d19b46ee5efaf7a1c17235f907b68203cf7ecd5341a663d3bd8975b2e4e",
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/__main__.py",
+      "bytes": 25717,
+      "sha256": "3dc5087cc310f1d79361f4cf8c56f99a49a47b521bfcc0dda3b5bd5a8d328120",
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/adapters.py",
+      "bytes": 6550,
+      "sha256": "66d272cbdb262b016960228ecb201df12903b2cced8f060ba0c6bf87360542a7",
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/analysis_tools.py",
+      "bytes": 9717,
+      "sha256": "c530481bb4332e0208484aa70877b4a4af1f1fa20931c88548de29cd14804754",
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/arguments.py",
+      "bytes": 1947,
+      "sha256": "95f950ca36fd7083b5c0d5862fd4603528bb58a355ef9419a9a9be43cb6b8290",
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/build.py",
+      "bytes": 935,
+      "sha256": "f779edb72c107e78944d5c7e8b7fa2c507f1eebdfa8c771a5e2397c252cdfdc2",
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/catalog.json",
+      "bytes": 7141,
+      "sha256": "a06e12ea99440e8c39b4d9c6507e4bc9d4e28fd0b99ffadcf42803b8643e1146",
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/change.py",
+      "bytes": 6714,
+      "sha256": "00959855fd178d811a7515b42979b6ed25cbf0a07f2f05fb0411f60cf967a5b0",
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/config.json",
+      "bytes": 816,
+      "sha256": "b41820793c0da93a279833c366e313bfc0d177cd4b522980145668301b315e61",
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/context.py",
+      "bytes": 2746,
+      "sha256": "53743a082ef9594b46c24eb3649e3d2693e962b7d1cf027c6a5ed8220458c33c",
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/frontmatter.py",
+      "bytes": 2895,
+      "sha256": "049fed295175946740f844bd491e8f92f2da5ccf994a5e806404a7d6971f24a8",
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/hook.py",
+      "bytes": 928,
+      "sha256": "d32365aa47bcdcc66aa0a02658b8534c22f239f75181bd882361fe7c7fdf6953",
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/interop.py",
+      "bytes": 13518,
+      "sha256": "74d31979dc44840a5b67ee89920c879a6cb98b2ccb3ed160abb9113a5fd48360",
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/io.py",
+      "bytes": 1702,
+      "sha256": "81d4115b458edb797081ef378f2fa7c133fbef893206bf6d8a96171787f51b0a",
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/modes.json",
+      "bytes": 2073,
+      "sha256": "8f094b0bbe944f30a6b9e0f2bafacf55bb692d2035f97599f2a54af894177654",
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/policy.py",
+      "bytes": 5675,
+      "sha256": "0b3be892814dc111b2a85a49ac673c6a2df5b156dfab2541580a014dba41cead",
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/process.py",
+      "bytes": 3690,
+      "sha256": "1d9b66a360929eb90e187030ac16cdd6efacef9f4de2c31b68aff5e55b934958",
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/records.py",
+      "bytes": 10220,
+      "sha256": "628fa6f67a6a464c6ce0d72c4e926a673d7e5bdc0c5801d0c21a60f8144cf219",
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/reports.py",
+      "bytes": 4713,
+      "sha256": "96c02d6b6b294b2e2432b099a5b6c741287dad9ad30c7f644f33392b1abcf1b7",
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/safety.py",
+      "bytes": 3182,
+      "sha256": "f9ed223ce5f678808e957b2d970c451bea0853cf810f0749f7b68f09d7535e9c",
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/security.py",
+      "bytes": 6772,
+      "sha256": "f59ff90edb6095c7fbcbaf79f235bc8817b2d79a394f3c6f7d677d01faf4ab1d",
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/skills.py",
+      "bytes": 6249,
+      "sha256": "24cde95a2c36a2cb0ea70ea54925b66458799f11dcd9c8fed4d0bde4eff64b18",
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/test_runner.py",
+      "bytes": 1199,
+      "sha256": "4bc34f71d041928fbf579381a3c24eadb5c09fdb67075b4d6f295544c1014890",
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega_cli.py",
+      "bytes": 457,
+      "sha256": "49f247535bde23b5e3af9b55fb35c7cb10ffee21c7441dca49f428c1fe107b5d",
+      "git_mode": "100644"
+    },
+    {
+      "path": "tests/__init__.py",
+      "bytes": 58,
+      "sha256": "3497105a02341b2bd4c5bc844b5988ddca7202e8076d618929a083c2b64f34ad",
+      "git_mode": "100644"
+    },
+    {
+      "path": "tests/skill_fixture.py",
+      "bytes": 669,
+      "sha256": "5733bc68eacbb18316353de24fc7dd123ece12cb79950e83baff63ff3ccd9a94",
+      "git_mode": "100644"
+    },
+    {
+      "path": "tests/test_context.py",
+      "bytes": 3904,
+      "sha256": "324992baa7c5185803fa1adce6955e1b865787452e0413ac5fb838e831414fae",
+      "git_mode": "100644"
+    },
+    {
+      "path": "tests/test_hardening.py",
+      "bytes": 9952,
+      "sha256": "e25621eba5da44ef683b25439f32137e32292299c5561c979930e15e63caad5b",
+      "git_mode": "100644"
+    },
+    {
+      "path": "tests/test_interop_core.py",
+      "bytes": 9870,
+      "sha256": "769c29b4f3f83548e420983ec8d587945297f1c7bd23e44e600dbc462f9f5f45",
+      "git_mode": "100644"
+    },
+    {
+      "path": "tests/test_interop_safety.py",
+      "bytes": 12711,
+      "sha256": "bf5e631c0b7ad0cde1427b310dfe2a8ba870699f343d8fac5c4ece0507242c60",
+      "git_mode": "100644"
+    },
+    {
+      "path": "tests/test_new_skill_workflows.py",
+      "bytes": 8143,
+      "sha256": "b26406dd0b44b1929f13211032bbf0960244dbc070aa0fb15cec80da2d48f1cf",
+      "git_mode": "100644"
+    },
+    {
+      "path": "tests/test_omega.py",
+      "bytes": 7534,
+      "sha256": "85f37791334c58fe2595761d90c05e62f8f7ebba8b1435d615e8ae8751594486",
+      "git_mode": "100644"
+    },
+    {
+      "path": "tests/test_plugin_packaging.py",
+      "bytes": 6088,
+      "sha256": "df1172a42657445ea6a226c660017fb48c6d42bf6fcf8026353ec69b010485d5",
+      "git_mode": "100644"
+    },
+    {
+      "path": "tests/test_quality_hardening.py",
+      "bytes": 15128,
+      "sha256": "8af629679f30774499883b44a869e161df4726aa556c0e554e82ee2ec82a31fe",
+      "git_mode": "100644"
+    },
+    {
+      "path": "tests/test_report_integrity.py",
+      "bytes": 10419,
+      "sha256": "8cc1aee936527c0fd484cb543eb37459e37ad9151f9f9a36d0474a91b1a1df5e",
+      "git_mode": "100644"
+    },
+    {
+      "path": "tests/test_skill_evolution.py",
+      "bytes": 7126,
+      "sha256": "2709f6cd27d08b25a3e9bb3ddd78686a4a8cbd9b93c7b980ac0ca9b6282b6f75",
+      "git_mode": "100644"
+    },
+    {
+      "path": "tests/test_unified_skill.py",
+      "bytes": 5315,
+      "sha256": "7064207427c386e04dc440c17269f077e543876d21a23f4fd9a6043f3c88810b",
+      "git_mode": "100644"
+    },
+    {
+      "path": "tests/test_workflows.py",
+      "bytes": 10544,
+      "sha256": "41b26d65d9a6eb648e68daf6ccdc4a62fd70437afea941e7d035ea447025358a",
+      "git_mode": "100644"
+    }
+  ]
+}
