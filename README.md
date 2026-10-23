@@ -34,3 +34,14 @@ python3 -m omega gates
 Tối ưu context không đổi quality gates: [Token efficiency](docs/TOKEN_EFFICIENCY.md).
 
 Báo cáo lịch sử 0.2: [Deep hardening](docs/DEEP_HARDENING.md). Kết quả hiện tại được phân biệt rõ trong [Validation](docs/VALIDATION.md).
+
+
+## Dùng OMEGA như skill trong ChatGPT
+
+Tạo ZIP có `SKILL.md` tương thích ChatGPT cùng các reference Markdown:
+
+```bash
+python3 tools/export_chatgpt_skill.py
+```
+
+File đầu ra: `.omega/chatgpt-export/omega-chatgpt.zip`. Sau đó mở ChatGPT desktop → Skills (hoặc Plugins → Skills) → Create → Upload from computer. Tính năng này phụ thuộc gói tài khoản và chính sách workspace. Bản export mang theo hướng dẫn/tài liệu, **không** cài Python engine, Claude hooks hay MCP. Xem [hướng dẫn đầy đủ](docs/CHATGPT_SKILLS.md).
