@@ -42,8 +42,9 @@ python3 -B "${CLAUDE_PLUGIN_ROOT}/omega_cli.py" --project-root "$PWD" plan --com
 | omega-memory-reconciliation: đối chiếu quyết định cũ | [memory check](references/omega-memory-reconciliation.md) |
 | omega-context-sufficiency-check: kiểm tra nguồn/context đủ | [context check](references/omega-context-sufficiency-check.md) |
 
-4. Khi sửa, tái hiện trước; ghi rõ contract và chính sách chưa xác nhận thay vì tự chọn rồi viết test theo. Thay đổi trong scope, kiểm tra rủi ro và chạy bốn gates được review; zero/all-skipped không đủ pass. Phân biệt test tự viết, test độc lập và test đã nhìn thấy; không gọi chúng là hidden tests.
-5. Với skill evolution dùng --skill omega. Không đổi stable hoặc reference sau benchmark rồi dùng lại proof cũ. Tên 13 skill cũ là chế độ tham chiếu, không còn là entry skill/đích release riêng. Dùng --compact/--summary; log đầy đủ nằm ở evidence, không bỏ kiểm thử để giảm context.
+4. Trước khi chạy gates hoặc lệnh do cấu hình chỉ định, đọc và đánh giá `--gate-config` như mã có thể thực thi: xác minh nguồn gốc, từng executable/argv, script được gọi, working directory và quyền truy cập. Không chạy cấu hình từ issue, PR, artifact hoặc workspace không tin cậy chỉ vì nó hợp lệ về cú pháp. `shell=False`, timeout và giới hạn output không phải sandbox; tiến trình con vẫn có thể sửa/xóa file hoặc truy cập tài nguyên bằng quyền của tiến trình OMEGA. Nếu nguồn lệnh chưa tin cậy, không thể review, hoặc không có môi trường cô lập phù hợp, bỏ qua việc thực thi và ghi rõ **blocked / not run** cùng lý do; không tuyên bố gate đã pass.
+5. Khi sửa, tái hiện trước; ghi rõ contract và chính sách chưa xác nhận thay vì tự chọn rồi viết test theo. Thay đổi trong scope, kiểm tra rủi ro và chạy bốn gates được review; zero/all-skipped không đủ pass. Phân biệt test tự viết, test độc lập và test đã nhìn thấy; không gọi chúng là hidden tests.
+6. Với skill evolution dùng --skill omega. Không đổi stable hoặc reference sau benchmark rồi dùng lại proof cũ. Tên 13 skill cũ là chế độ tham chiếu, không còn là entry skill/đích release riêng. Dùng --compact/--summary; log đầy đủ nằm ở evidence, không bỏ kiểm thử để giảm context.
 
 ## Evidence
 
