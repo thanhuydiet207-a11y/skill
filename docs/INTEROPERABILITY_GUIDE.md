@@ -1,4 +1,4 @@
-# OMEGA 0.4 — kết hợp skill và chạy trên project khác
+# OMEGA 0.5 — kết hợp skill và chạy trên project khác
 
 ## Những gì đã thực thi được
 
@@ -96,3 +96,7 @@ Ghi candidate trước sửa, benchmark đúng pattern workflow, gates cùng sou
 ## Cập nhật 0.4
 
 Security gate quét .claude và omega bằng targeted static rules; source bị thiếu/symlink/binary/quá budget làm fail, generated __pycache__ có exclusions tường minh. Memory CLI kiểm tra source/runtime của evidence đính kèm; blob không đổi chưa đủ current. Gate config thêm optional runtime_inputs. Chi tiết và bằng chứng: docs/UPGRADE_0_4.md. Python core và TypeScript facade: docs/PYTHON_TYPESCRIPT_BOUNDARY.md; MCP server/UI vẫn chưa triển khai.
+
+## Cập nhật 0.5
+
+Test_report optional cho Jest/JUnit dùng .omega/reports/{run_id}/FILENAME và {report_path} trong đúng args tests; nội dung report được lưu/hash, summary có reference, không tái sử dụng report cũ. Full engine build thêm strict TypeScript compiler từ dev tools đã pin; bridge có tổng request budget, deadline stdin và cancellation. Schema, setup, kiểm chứng/giới hạn: docs/UPGRADE_0_5.md.

@@ -46,6 +46,10 @@ def gate_summary(result):
     rows=[]
     for i,source in enumerate(result['results']):
         row=dict(source)
+        if isinstance(row.get('report'),dict) and 'content' in row['report']:
+            row['report']=dict(row['report'])
+            del row['report']['content']
+            row['report']['content_ref']=f"{result['evidence']}#/results/{i}/report/content"
         if row['exit_code']==0:
             for key in ('output','output_tail'):
                 if key in row:

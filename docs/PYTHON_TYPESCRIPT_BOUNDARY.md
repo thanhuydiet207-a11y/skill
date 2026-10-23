@@ -4,7 +4,7 @@
 
 Theo khuyến nghị của người dùng, Python là lõi OMEGA: repository analysis, policy, security rules, test outcome adapters, evidence, memory, candidate/benchmark và repair ledger. TypeScript dùng cho lớp điều phối/giao tiếp; MCP và UI sau này gọi cùng giao thức Python, không viết lại quy tắc ở ba nơi.
 
-Đã triển khai bridge TypeScript đọc dữ liệu thật từ Python tại `integration/typescript/omega-bridge.ts`. Có 9 test Node gọi engine thực tế, kiểm tra tương đương JSON, giới hạn output/timeout, chặn command ghi, path escape, symlink và giữ nguyên semantic failure exit 1. Đây là facade local, không phải agent scheduler, MCP server hoặc UI đã được triển khai.
+Đã triển khai bridge TypeScript đọc dữ liệu thật từ Python tại `integration/typescript/omega-bridge.ts`. Có 15 test Node gọi engine thực tế, kiểm tra tương đương JSON, giới hạn output/timeout, chặn command ghi, path escape, symlink và giữ nguyên semantic failure exit 1. Đây là facade local, không phải agent scheduler, MCP server hoặc UI đã được triển khai.
 
 ```mermaid
 flowchart LR
@@ -16,7 +16,7 @@ flowchart LR
 
 ## Dùng bridge
 
-Node >=24, Python >=3.10, Git, POSIX. Không cần npm install, package bên thứ ba, build service hoặc port. Node chạy TypeScript bằng type stripping; đã kiểm tra runtime/syntax và integration, chưa tuyên bố đã chạy type checker tsc. Node kiểm chứng local: 24.19.0. CI cấu hình đúng phiên bản, action setup-node pin SHA tag đã kiểm tra.
+Node >=24, Python >=3.10, Git, POSIX. Bridge runtime không cần package ứng dụng bên thứ ba, service hoặc port. Full engine build cần npm ci cho dev compiler/type definitions đã pin; xem UPGRADE_0_5.md. Node chạy TypeScript bằng type stripping; bản 0.5 đã chạy thêm strict tsc/noEmit trong build gate với TypeScript 5.9.3 và @types/node 24.19.0 đã pin. Node kiểm chứng local: 24.19.0. CI cấu hình đúng phiên bản, action setup-node pin SHA tag đã kiểm tra.
 
 ```bash
 node --test integration/typescript/omega-bridge.test.mjs
@@ -30,7 +30,7 @@ API: `runReadOnly(request, trustedProjectRoot, options?)` trả `{exitCode,resul
 
 Commands cho phép: map/plan/audit/context/memory-read, các command phân tích interoperability/evidence/memory/context. Không expose gates, isolate, memory write, candidate, compare, change-attempt, push hoặc deploy. Doctor cũng không expose vì có thể ghi state probe.
 
-Root phải do ứng dụng gọi bridge cấu hình tin cậy, không lấy tự do từ payload MCP/web. Python executable trong options là cấu hình của host; request không được đặt executable hoặc raw argv. stdin CLI tối đa 16 KB; timeout mặc định 15 giây, output tổng stdout/stderr 128 KB, kill process group khi vượt. Không trả JSON bị cắt như success. Các giới hạn này không thay OS sandbox hoặc authentication của server sau này.
+Root phải do ứng dụng gọi bridge cấu hình tin cậy, không lấy tự do từ payload MCP/web. Python executable trong options là cấu hình của host; request không được đặt executable hoặc raw argv. stdin/API tối đa 16 KiB; --timeout-ms mặc định 15 giây áp dụng cả stdin và Python, API hỗ trợ AbortSignal; output tổng stdout/stderr 128 KiB, kill process group/close pipes khi vượt và chờ child close. Không trả JSON bị cắt như success. Các giới hạn này không thay OS sandbox hoặc authentication của server sau này.
 
 ## Ranh giới MCP và UI giai đoạn sau
 

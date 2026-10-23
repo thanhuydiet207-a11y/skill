@@ -12,6 +12,8 @@ Acceptance, diff/risk map, project root và đủ argv build/tests/security/regr
 
 ## Workflow
 
+Với Jest/JUnit có log trộn, review test_report .omega/reports/{run_id}/FILENAME và đúng một {report_path} trong args tests. File report phải mới, bounded, không symlink/hardlink, không đổi sau tests; exit failure/timeout/output cap không được overridden. Dùng python3 benchmarks/native_runners.py --report-file để nghiệm thu Node thật. Full engine build gồm Python compile + strict TypeScript noEmit từ dev tools đã pin; đọc docs/UPGRADE_0_5.md trước setup.
+
 Kiểm tra cả aggregate JUnit root/nested và terminal Go package; timeout/output-limit/invalid UTF-8 luôn phủ quyết success marker. Runtime_inputs chỉ khai file dependency cần ràng buộc và không private. Node built-in JUnit có benchmark thật `python3 benchmarks/native_runners.py`; Jest/Go vẫn cần nghiệm thu native. Đọc docs/UPGRADE_0_4.md theo nhu cầu.
 
 1. Review commands, adapter và prerequisites trước thực thi. Dùng project-workflow-adapter chỉ để lấy proposal; security/regression còn thiếu phải được cấu hình thật, không thay bằng lệnh luôn trả 0.

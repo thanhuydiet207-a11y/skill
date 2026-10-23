@@ -16,12 +16,16 @@ jobs:
         with:
           node-version: '24.19.0'
           check-latest: false
-      - name: Python build, CLI workflows, targeted security rules and 13 skill contracts
+      - name: Install pinned compiler development tools without lifecycle scripts
+        run: npm ci --prefix integration/typescript --ignore-scripts --no-audit --no-fund --cache "$PWD/.omega/npm-cache"
+      - name: Python compilation, strict TypeScript build, workflows, security rules and 13 skill contracts
         run: python3 -m omega gates
       - name: TypeScript read-only bridge against real Python engine
         run: node --test integration/typescript/omega-bridge.test.mjs
       - name: Actual Node built-in test runner with JUnit red-to-green workflow
         run: python3 benchmarks/native_runners.py
+      - name: Per-run report file independent from mixed runner logs
+        run: python3 benchmarks/native_runners.py --report-file
       - name: Broken-to-fixed workflow fixture
         run: python3 benchmarks/demo.py
       - name: Lossless context efficiency benchmark

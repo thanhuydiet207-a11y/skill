@@ -12,6 +12,8 @@ Root Git tường minh, manifests/CI và quyền đọc project; xác định en
 
 ## Workflow
 
+Exact Jest script có thể nhận proposal --json --outputFile={report_path} cùng test_report nonce; stdout/stderr vẫn là log, không phải report. Proposal chưa ready và không tự install Jest hoặc chạy script. Cấu hình đủ bốn gates thật trước dùng; Node file reporter đã có benchmark, Jest native vẫn chưa kiểm chứng. Schema/budget/freshness: docs/UPGRADE_0_5.md.
+
 Chỉ khi test script đúng node --test mới đề xuất Node built-in JUnit sau khi kiểm tra runtime hỗ trợ. Không coi npm/Jest merged logs là clean JSON; runner khác phải review config/output channel trước, proposal chưa sẵn sàng vẫn exit 1. Python là lõi kiểm chứng; TypeScript giao tiếp qua bridge ở docs/PYTHON_TYPESCRIPT_BOUNDARY.md, không viết lại policy. Xem docs/UPGRADE_0_4.md.
 
 Chạy `python3 -m omega project-workflow-adapter --compact`. Đối chiếu proposals với scripts và runner thật; review đầy đủ argv build/tests/security/regression trước lưu config riêng. Dùng runner tuyệt đối và --project-root ở project ngoài OMEGA.

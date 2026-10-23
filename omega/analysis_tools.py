@@ -44,7 +44,7 @@ def reconcile_evidence(root,names,git,config):
     current=workspace(root,git);head=git('rev-parse','HEAD');runtime=execution_context(root,config)['sha256'];rows=[]
     for name in names:
         _,record=load(root,name,'evidence')
-        verified=valid_gates(record,config['gates'],config.get('test_adapter','omega'))
+        verified=valid_gates(record,config['gates'],config.get('test_adapter','omega'),config.get('test_report'))
         if not verified:state='not-successful-gate-evidence'
         elif record.get('workspace_sha256')!=current:state='stale-source'
         elif record.get('execution_fingerprint')!=runtime:state='stale-or-unbound-execution-context'

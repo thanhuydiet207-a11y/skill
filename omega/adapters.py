@@ -34,10 +34,19 @@ def outcomes(result,adapter='omega'):
             if not isinstance(data,dict) or any(type(data.get(k)) is not int or data[k]<0 for k in fields):return None
             counts.update(run=data['numTotalTests'],passed=data['numPassedTests'],failed=data['numFailedTests'],skipped=data['numPendingTests']+data['numTodoTests'])
             if data.get('success') is not True:return None
-            if 'numFailedTestSuites' in data and (type(data['numFailedTestSuites']) is not int or data['numFailedTestSuites']!=0):return None
+            for field in ('numFailedTestSuites','numRuntimeErrorTestSuites'):
+                if field in data and (type(data[field]) is not int or data[field]!=0):return None
+            if 'wasInterrupted' in data and data['wasInterrupted'] is not False:return None
             if 'testResults' in data:
                 suites=data['testResults']
-                if not isinstance(suites,list) or any(not isinstance(s,dict) or s.get('status')=='failed' for s in suites):return None
+                if not isinstance(suites,list) or not suites:return None
+                actual={'passed':0,'failed':0,'pending':0,'todo':0,'disabled':0}
+                for suite in suites:
+                    if not isinstance(suite,dict) or suite.get('status') not in ('passed','pending') or not isinstance(suite.get('assertionResults'),list):return None
+                    for case in suite['assertionResults']:
+                        if not isinstance(case,dict) or case.get('status') not in actual:return None
+                        actual[case['status']]+=1
+                if sum(actual.values())!=counts['run'] or actual['passed']!=counts['passed'] or actual['failed']!=counts['failed'] or actual['pending']+actual['todo']+actual['disabled']!=counts['skipped']:return None
         elif adapter=='go':
             terminal={};started=set();packages={};seen_packages=set()
             for line in text.splitlines():
@@ -52,11 +61,12 @@ def outcomes(result,adapter='omega'):
                 if test:
                     if not isinstance(test,str) or not isinstance(package,str):return None
                     key=(package,test)
+                    if package in packages:return None
                     if action=='run':
-                        if key in started:return None
+                        if key in started or key in terminal:return None
                         started.add(key)
                     if action in ('pass','fail','skip'):
-                        if key in terminal:return None
+                        if key in terminal or key not in started:return None
                         terminal[key]=action
             if not terminal or set(terminal)!=started or set(packages)!=seen_packages or any(packages.get(package)!='pass' for package,_ in terminal):return None
             counts.update(run=len(terminal),passed=sum(x=='pass' for x in terminal.values()),failed=sum(x=='fail' for x in terminal.values()),skipped=sum(x=='skip' for x in terminal.values()))
@@ -65,6 +75,8 @@ def outcomes(result,adapter='omega'):
             tree=ET.fromstring(text)
             if tree.tag not in ('testsuites','testsuite'):return None
             cases=list(tree.iter('testcase'))
+            parents={id(child):parent.tag for parent in tree.iter() for child in parent}
+            if any(parents.get(id(case)) not in ('testsuite','testsuites') for case in cases):return None
             case_results={id(child) for case in cases for child in case if child.tag in ('failure','error','skipped')}
             if any(id(node) not in case_results for node in tree.iter() if node.tag in ('failure','error','skipped')):return None
             for case in cases:

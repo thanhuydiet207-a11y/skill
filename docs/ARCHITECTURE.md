@@ -105,3 +105,7 @@ Giai đoạn kế: xác minh native → task corpus đa dạng → đo hiệu qu
 ## Ranh giới ngôn ngữ 0.4
 
 Python xử lý policy/analysis/security/memory/evidence, TypeScript bridge cung cấp giao tiếp có giới hạn, không nhân đôi engine. Bridge đã chạy 9 integration tests; chưa có scheduler/MCP server/UI. Thiết kế và cách dùng: [PYTHON_TYPESCRIPT_BOUNDARY.md](PYTHON_TYPESCRIPT_BOUNDARY.md).
+
+## Kiểm chứng 0.5
+
+Python tiếp tục là lõi. Engine build gọi Python compile và strict TypeScript noEmit; npm chỉ cung cấp dev compiler/type definitions đã pin, không SDK/runtime ứng dụng. Gate test_report hỗ trợ capture Jest/JUnit tách log và ràng buộc template/argv/content, không là chữ ký xác thực runner. Bridge deadline gồm stdin và hỗ trợ cancellation. Chi tiết: [UPGRADE_0_5.md](UPGRADE_0_5.md).

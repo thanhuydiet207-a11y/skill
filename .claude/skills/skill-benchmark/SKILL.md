@@ -12,6 +12,8 @@ Skill trong registry hiện tại, mục tiêu thay đổi, baseline/candidate r
 
 ## Workflow
 
+Full engine build phải qua strict TypeScript compiler/noEmit bên cạnh Python tests; bridge Node tests là nghiệm thu riêng, không dùng type stripping thay type-check. Suite hash gồm source/tsconfig/package-lock, prune node_modules và __pycache__, từ chối source symlink. Giữ native quality và token provider là unknown cho đến evaluation thật; xem docs/UPGRADE_0_5.md.
+
 1. Chạy `python3 -m omega candidate --skill TEN --compact` trước sửa. Chỉ sửa candidate, giữ stable và tài nguyên baseline; bundle hash ràng buộc SKILL.md cùng references nhận diện được.
 2. Viết section có nội dung thực và commands có thể chạy. Metadata/license trong safe YAML subset được chấp nhận; syntax chưa hỗ trợ cần review. Contract completeness không phải quality score, không chứng minh instruction adherence.
 3. Chạy `python3 -m omega benchmark --skill TEN --candidate PATH --compact`. Đọc contract, suite/bundle hashes và đúng workflow pattern cho foundation hoặc extensions; tooling scenarios không đánh giá model đọc prompt.

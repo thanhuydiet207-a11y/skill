@@ -2,6 +2,7 @@
 import { spawn } from 'node:child_process';
 import { isAbsolute, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import type { Readable } from 'node:stream';
 
 const engine = fileURLToPath(new URL('../../omega_cli.py', import.meta.url));
 const commands = new Set(['map', 'plan', 'audit', 'context', 'memory-read',
@@ -19,7 +20,7 @@ export type BridgeRequest = {
   complexity?: 'low' | 'medium' | 'high';
   conflict?: boolean;
 };
-export type BridgeOptions = { python?: string; timeoutMs?: number; maxOutputBytes?: number };
+export type BridgeOptions = { python?: string; timeoutMs?: number; maxOutputBytes?: number; signal?: AbortSignal };
 export type BridgeResult = { exitCode: number; result: unknown; scope: 'read-only Python facade' };
 
 export function buildArguments(value: unknown, projectRoot: string): string[] {
@@ -69,7 +70,24 @@ export function buildArguments(value: unknown, projectRoot: string): string[] {
     if (command !== 'plan' || typeof request.conflict !== 'boolean') throw new Error('Invalid conflict');
     if (request.conflict) argv.push('--conflict');
   }
+  if (Buffer.byteLength(JSON.stringify(request)) > 16384) throw new Error('Request exceeds byte budget');
   return argv;
+}
+
+export async function readRequest(stream: Readable, timeoutMs = 15000): Promise<unknown> {
+  if (!Number.isInteger(timeoutMs) || timeoutMs < 1 || timeoutMs > 60000) throw new Error('Invalid input timeout');
+  const timer = setTimeout(() => stream.destroy(new Error('Request input timeout')), timeoutMs);
+  const chunks: Buffer[] = []; let bytes = 0;
+  try {
+    for await (const value of stream) {
+      const chunk: Buffer = typeof value === 'string' ? Buffer.from(value) : value;
+      if (!Buffer.isBuffer(chunk)) throw new Error('Invalid input stream chunk');
+      bytes += chunk.length;
+      if (bytes > 16384) throw new Error('Request exceeds byte budget');
+      chunks.push(chunk);
+    }
+    return JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(Buffer.concat(chunks))) as unknown;
+  } finally { clearTimeout(timer); }
 }
 
 export async function runReadOnly(request: unknown, projectRoot: string, options: BridgeOptions = {}): Promise<BridgeResult> {
@@ -78,19 +96,23 @@ export async function runReadOnly(request: unknown, projectRoot: string, options
   const maxOutputBytes = options.maxOutputBytes ?? 131072;
   if (!Number.isInteger(timeoutMs) || timeoutMs < 1 || timeoutMs > 60000 ||
       !Number.isInteger(maxOutputBytes) || maxOutputBytes < 1 || maxOutputBytes > 1048576) throw new Error('Invalid bridge bounds');
+  if (options.signal?.aborted) throw new Error('Python request cancelled');
   return new Promise((accept, reject) => {
     const child = spawn(options.python ?? 'python3', argv, { shell: false, detached: true, stdio: ['ignore','pipe','pipe'] });
-    const stdout: Buffer[] = []; const stderr: Buffer[] = []; let bytes = 0; let settled = false;
+    const stdout: Buffer[] = []; const stderr: Buffer[] = []; let bytes = 0; let settled = false; let failure: Error | undefined;
     function fail(message: string) {
-      if (settled) return;
-      settled = true; clearTimeout(timer);
+      if (settled || failure) return;
+      failure = new Error(message); clearTimeout(timer);
       if (child.pid) { try { process.kill(-child.pid, 'SIGKILL'); } catch {} }
-      reject(new Error(message));
+      child.stdout.destroy(); child.stderr.destroy();
     }
+    function abort() { fail('Python request cancelled'); }
     const timer = setTimeout(() => fail('Python engine timeout; no success returned'), timeoutMs);
+    options.signal?.addEventListener('abort', abort, { once: true });
+    if (options.signal?.aborted) abort();
     for (const [stream, parts] of [[child.stdout, stdout], [child.stderr, stderr]] as const) {
       stream.on('data', (chunk: Buffer) => {
-        if (settled) return;
+        if (settled || failure) return;
         bytes += chunk.length;
         if (bytes > maxOutputBytes) { fail('Python output exceeds budget; no truncated success returned'); return; }
         parts.push(chunk);
@@ -99,7 +121,8 @@ export async function runReadOnly(request: unknown, projectRoot: string, options
     child.on('error', () => fail('Unable to launch trusted Python engine'));
     child.on('close', code => {
       if (settled) return;
-      clearTimeout(timer); settled = true;
+      clearTimeout(timer); options.signal?.removeEventListener('abort', abort); settled = true;
+      if (failure) { reject(failure); return; }
       try {
         if (code === null || ![0,1,2].includes(code)) throw new Error('Python process terminated without valid CLI result');
         const decoder = new TextDecoder('utf-8', { fatal: true });
@@ -114,14 +137,15 @@ export async function runReadOnly(request: unknown, projectRoot: string, options
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   try {
-    if (process.argv.length !== 4 || process.argv[2] !== '--project-root') throw new Error('Usage: node omega-bridge.ts --project-root ABS; request JSON on stdin');
-    const chunks: Buffer[] = []; let bytes = 0;
-    for await (const chunk of process.stdin) {
-      bytes += chunk.length;
-      if (bytes > 16384) throw new Error('Request exceeds byte budget');
-      chunks.push(chunk);
-    }
-    const result = await runReadOnly(JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(Buffer.concat(chunks))), process.argv[3]);
+    const projectRoot = process.argv[3];
+    if (![4,6].includes(process.argv.length) || process.argv[2] !== '--project-root' || !projectRoot ||
+        process.argv.length === 6 && process.argv[4] !== '--timeout-ms') throw new Error('Usage: node omega-bridge.ts --project-root ABS [--timeout-ms N]; request JSON on stdin');
+    const timeoutMs = process.argv.length === 6 ? Number(process.argv[5]) : 15000;
+    const deadline = Date.now() + timeoutMs;
+    const request = await readRequest(process.stdin, timeoutMs);
+    const remaining = deadline - Date.now();
+    if (remaining < 1) throw new Error('Request deadline exceeded before engine start');
+    const result = await runReadOnly(request, projectRoot, { timeoutMs: remaining });
     process.stdout.write(JSON.stringify(result) + '\n'); process.exitCode = result.exitCode;
   } catch (error) {
     process.stderr.write(JSON.stringify({ error: error instanceof Error ? error.message : 'Bridge error' }) + '\n'); process.exitCode = 2;

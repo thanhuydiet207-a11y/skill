@@ -42,7 +42,7 @@ def validate(record,limits):
     return opened<=time.time()<=deadline
 
 
-def check(root,name,git,limits,evidence=(),gate_commands=None,test_adapter="omega",expected_execution=None):
+def check(root,name,git,limits,evidence=(),gate_commands=None,test_adapter="omega",expected_execution=None,test_report=None):
     _,record=load(root,name,'changes')
     active=validate(record,limits)
     names=git('diff','--no-renames','--name-only','-z','HEAD',raw=True).split('\0')
@@ -64,7 +64,7 @@ def check(root,name,git,limits,evidence=(),gate_commands=None,test_adapter="omeg
     checks=[]
     for name in evidence:
         _,ev=load(root,name,'evidence')
-        checks.append({'path':name,'passed':expected_execution is not None and ev.get('execution_fingerprint')==expected_execution and ev.get('execution_unchanged') is True and valid_gates(ev,gate_commands,test_adapter) and ev.get('workspace_unchanged') is True and
+        checks.append({'path':name,'passed':expected_execution is not None and ev.get('execution_fingerprint')==expected_execution and ev.get('execution_unchanged') is True and valid_gates(ev,gate_commands,test_adapter,test_report) and ev.get('workspace_unchanged') is True and
                        ev.get('workspace_sha256')==workspace(root,git) and ev.get('head')==record['base_head']})
     return {'passed':not outside and active and same_head and same_branch and all(x['passed'] for x in checks),
             'changed_paths':changed,'outside_scope':outside,'active':active,

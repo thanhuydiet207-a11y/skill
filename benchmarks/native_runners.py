@@ -9,7 +9,7 @@ import uuid
 ROOT=Path(__file__).resolve().parent.parent
 
 
-def main():
+def main(report_file=False):
     node=shutil.which('node')
     if not node:raise ValueError('Node is required; no runtime will be installed automatically')
     base=ROOT/'.omega/native-runners'
@@ -30,6 +30,10 @@ def main():
         'build':[node,'--check','calc.cjs'],'tests':tests,
         'security':[*cli,'audit','--select','calc.cjs','--select','sum.test.cjs','--compact'],
         'regression':tests}}
+    if report_file:
+        config['test_report']='.omega/reports/{run_id}/junit.xml'
+        config['gates']['tests']=[node,'--test','--test-reporter=spec','--test-reporter-destination=stdout',
+                                  '--test-reporter=junit','--test-reporter-destination={report_path}','sum.test.cjs']
     directory=fixture/'.omega/configs';directory.mkdir(parents=True)
     (directory/'gates.json').write_text(json.dumps(config))
     command=[*cli,'gates','--gate-config','.omega/configs/gates.json','--summary','--compact']
@@ -37,16 +41,21 @@ def main():
     source.write_text('exports.add = (a, b) => a + b;\n')
     after=json.loads(run(command).stdout)
     if before['passed'] or not after['passed'] or after['test_outcomes']['passed']!=1 or after['test_outcomes']['skipped']!=1:raise ValueError('Unexpected native outcome counts')
+    if report_file and next(x for x in before['results'] if x['gate']=='tests')['report']['path']==next(x for x in after['results'] if x['gate']=='tests')['report']['path']:raise ValueError('Report namespace was reused')
     report={'fixture':str(fixture.relative_to(ROOT)),'node_version':run([node,'--version']).stdout.strip(),
             'adapter':'junit','before_passed':before['passed'],'after_passed':after['passed'],
             'test_outcomes':after['test_outcomes'],'source_sha256':__import__('hashlib').sha256(source.read_bytes()).hexdigest(),
             'gate_exit_codes':{r['gate']:r['exit_code'] for r in after['results']},'evidence':str((fixture/after['evidence']).relative_to(ROOT)),
             'limits':'Node built-in test runner only; Jest and Go native unverified; regression repeats fixture tests; JS security uses text rules only',
             'network_used':False,'dependencies_installed':False,'native_claude_executed':False}
+    report['structured_report_file']=report_file
+    if report_file:report['report_metadata']=next(x for x in after['results'] if x['gate']=='tests')['report']
     print(json.dumps(report,ensure_ascii=False,indent=2));return 0
 
 
 if __name__=='__main__':
-    try:sys.exit(main())
+    try:
+        if sys.argv[1:] not in ([],['--report-file']):raise ValueError('Supported option: --report-file')
+        sys.exit(main('--report-file' in sys.argv[1:]))
     except (OSError,ValueError,subprocess.TimeoutExpired) as exc:
         print(json.dumps({'error':str(exc)}),file=sys.stderr);sys.exit(2)

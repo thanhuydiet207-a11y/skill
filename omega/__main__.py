@@ -172,6 +172,8 @@ def validate_gates():
     seconds=CONFIG['limits']['max_gate_seconds']
     if isinstance(seconds,bool) or not isinstance(seconds,(int,float)) or not 0 < seconds <= 600:
         raise ValueError('Gate timeout must be between 0 and 600 seconds')
+    from omega.reports import validate_policy
+    validate_policy(CONFIG)
 
 
 def gates():
@@ -179,15 +181,23 @@ def gates():
     from omega.records import workspace, test_outcomes
     from omega.records import execution_context
     before=workspace(ROOT,git);execution=execution_context(ROOT,CONFIG)
+    from omega.reports import materialize,read_report,still_unchanged
+    if CONFIG.get('test_report') is not None:runtime_ready()
+    commands,report_spec=materialize(ROOT,CONFIG)
     results=[]
-    for name,argv in CONFIG['gates'].items():
+    for name,argv in commands.items():
         result=run(argv, CONFIG['limits']['max_gate_seconds'])
+        if name=='tests' and report_spec is not None:
+            result['configured_command']=CONFIG['gates'][name]
+            try:result['report']=read_report(ROOT,report_spec)
+            except (ValueError,OSError):result['report']={**report_spec,'fresh':False,'unchanged':False,'error':'Missing, unsafe, oversized or unstable report'}
         results.append({'gate':name,**result})
     after=workspace(ROOT,git)
     test_row=next(r for r in results if r['gate']=='tests')
     test_row['adapter']=CONFIG.get('test_adapter','omega')
+    if report_spec is not None and test_row['report'].get('fresh') is True:test_row['report']['unchanged']=still_unchanged(ROOT,test_row['report'])
     counts=test_outcomes(test_row)
-    return {'kind':'gates','test_adapter':CONFIG.get('test_adapter','omega'),'test_outcomes':counts,'execution_fingerprint':execution['sha256'],'execution_context':execution['details'],
+    return {'kind':'gates','test_adapter':CONFIG.get('test_adapter','omega'),'test_report':CONFIG.get('test_report'),'test_outcomes':counts,'execution_fingerprint':execution['sha256'],'execution_context':execution['details'],
             'execution_unchanged':execution['sha256']==execution_context(ROOT,CONFIG)['sha256'],
             'passed':bool(results) and counts is not None and before==after and execution['sha256']==execution_context(ROOT,CONFIG)['sha256'] and all(r['exit_code']==0 for r in results),
             'workspace_sha256':before,'workspace_unchanged':before==after,'results':results}
@@ -214,9 +224,9 @@ def _dispatch():
         from omega.safety import artifact_path
         artifact_path(ROOT,args.gate_config,'configs')
         policy=read_json(ROOT,args.gate_config)
-        if not isinstance(policy,dict) or type(policy.get('schema')) is not int or policy.get('schema')!=1 or set(policy)-{'schema','gates','test_adapter','runtime_inputs'}:raise ValueError('Invalid gate policy schema')
+        if not isinstance(policy,dict) or type(policy.get('schema')) is not int or policy.get('schema')!=1 or set(policy)-{'schema','gates','test_adapter','runtime_inputs','test_report'}:raise ValueError('Invalid gate policy schema')
         if policy.get('test_adapter','omega') not in ('omega','go','jest','junit'):raise ValueError('Unknown test adapter')
-        CONFIG={**CONFIG,'gates':policy.get('gates'),'test_adapter':policy.get('test_adapter','omega'),'runtime_inputs':policy.get('runtime_inputs',[])}
+        CONFIG={**CONFIG,'gates':policy.get('gates'),'test_adapter':policy.get('test_adapter','omega'),'runtime_inputs':policy.get('runtime_inputs',[]),'test_report':policy.get('test_report')}
     if ROOT!=ENGINE_ROOT and args.project_root:
         if args.command=='gates' and not args.gate_config:raise ValueError('External project gates require an explicit reviewed --gate-config')
         if args.command in ('candidate','compare','benchmark'):raise ValueError('Skill release management must target the engine repository')
@@ -299,7 +309,7 @@ def _dispatch():
         from omega.change import check
         if not args.record:raise ValueError('--record required')
         from omega.records import execution_context
-        result=check(ROOT,args.record,git,CONFIG['limits'],args.evidence,CONFIG['gates'],CONFIG.get('test_adapter','omega'),execution_context(ROOT,CONFIG)['sha256'])
+        result=check(ROOT,args.record,git,CONFIG['limits'],args.evidence,CONFIG['gates'],CONFIG.get('test_adapter','omega'),execution_context(ROOT,CONFIG)['sha256'],CONFIG.get('test_report'))
         code=0 if result['passed'] else 1
     elif args.command=='change-attempt':
         from omega.change import attempt
@@ -366,7 +376,7 @@ def _dispatch():
                 valid=fresh and ev.get('skill')==baseline['skill'] and ev.get('candidate_sha256')==contract['sha256'] and ev.get('candidate_bundle_sha256')==contract['bundle_sha256'] and ev.get('suite_sha256')==current['suite_sha256'] and isinstance(ev.get('scenarios'),dict) and test_outcomes(ev['scenarios']) is not None
                 scenario_ok=scenario_ok or valid
             else:
-                valid=fresh and valid_gates(ev,CONFIG['gates'],CONFIG.get('test_adapter','omega'))
+                valid=fresh and valid_gates(ev,CONFIG['gates'],CONFIG.get('test_adapter','omega'),CONFIG.get('test_report'))
                 gate_ok=gate_ok or valid
             checks.append({'path':name,'valid':valid})
         passed=passed and all(x['valid'] for x in checks)

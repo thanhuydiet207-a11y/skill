@@ -4,6 +4,7 @@ import selectors
 import signal
 import subprocess
 import time
+import codecs
 
 
 def execute(argv, cwd, timeout=120, capture_bytes=16000, max_output_bytes=1048576, env=None):
@@ -25,6 +26,7 @@ def execute(argv, cwd, timeout=120, capture_bytes=16000, max_output_bytes=104857
         return result
     captured=bytearray()
     tail=bytearray()
+    decoder=codecs.getincrementaldecoder('utf-8')()
     forced=None
     deadline=started+timeout
 
@@ -45,6 +47,9 @@ def execute(argv, cwd, timeout=120, capture_bytes=16000, max_output_bytes=104857
                         selector.unregister(key.fileobj)
                         continue
                     result['total_output_bytes']+=len(chunk)
+                    if not result['invalid_utf8']:
+                        try:decoder.decode(chunk,final=False)
+                        except UnicodeDecodeError:result['invalid_utf8']=True
                     tail.extend(chunk);del tail[:-min(capture_bytes,4096)]
                     captured.extend(chunk[:max(0,capture_bytes-len(captured))])
                     if result['total_output_bytes']>max_output_bytes:
@@ -58,9 +63,10 @@ def execute(argv, cwd, timeout=120, capture_bytes=16000, max_output_bytes=104857
     finally:
         if proc.poll() is None:kill_group();proc.wait()
         proc.stdout.close()
-    try:result['output']=captured.decode('utf-8')
-    except UnicodeDecodeError:
-        result['output']=captured.decode('utf-8',errors='replace');result['invalid_utf8']=True
+    if not result['invalid_utf8']:
+        try:decoder.decode(b'',final=True)
+        except UnicodeDecodeError:result['invalid_utf8']=True
+    result['output']=captured.decode('utf-8',errors='replace')
     if result['total_output_bytes']>capture_bytes:
         result['output_tail']=tail.decode('utf-8',errors='replace')
     result.update(exit_code=forced if forced is not None else proc.returncode,

@@ -2,7 +2,7 @@
 
 ## Yêu cầu
 
-Python >=3.10, Git, POSIX (kill process group và flock), checkout này. Không cần pip/npm install. Trong engine dùng module; project khác dùng omega_cli.py tuyệt đối và --project-root theo [hướng dẫn hiện tại](INTEROPERABILITY_GUIDE.md). Không ghi bên ngoài repository đích; branch/worktree do người dùng ủy quyền và cleanup cần review riêng. Trước khi tạo state, CLI kiểm tra .omega/ đã ignore và chưa có file tracked, không tự sửa ignore.
+Python >=3.10, Git, POSIX (kill process group và flock), checkout này. Python CLI không cần pip install. Full engine build 0.5 cần dev compiler đã pin: xem UPGRADE_0_5.md; bridge runtime không cần npm package ứng dụng. Trong engine dùng module; project khác dùng omega_cli.py tuyệt đối và --project-root theo [hướng dẫn hiện tại](INTEROPERABILITY_GUIDE.md). Không ghi bên ngoài repository đích; branch/worktree do người dùng ủy quyền và cleanup cần review riêng. Trước khi tạo state, CLI kiểm tra .omega/ đã ignore và chưa có file tracked, không tự sửa ignore.
 
 ```bash
 python3 -m omega doctor
@@ -108,3 +108,7 @@ Dùng `--compact` để giữ nguyên JSON với ít khoảng trắng hơn; `gat
 ## Bản 0.4
 
 Chạy `python3 benchmarks/native_runners.py` để kiểm chứng Node built-in JUnit đỏ → xanh; `node --test integration/typescript/omega-bridge.test.mjs` để kiểm tra TS facade. Không cần npm install. Schema runtime_inputs, workflow read/write directory scopes và memory evidence currentness: [UPGRADE_0_4.md](UPGRADE_0_4.md). Kiến trúc Python/TypeScript và giới hạn MCP/UI: [PYTHON_TYPESCRIPT_BOUNDARY.md](PYTHON_TYPESCRIPT_BOUNDARY.md).
+
+## Bản 0.5
+
+Setup dev tools và test_report cho stdout/stderr lẫn log: [UPGRADE_0_5.md](UPGRADE_0_5.md). Dùng `python3 benchmarks/native_runners.py --report-file` để chạy Node/JUnit thực tế. Không xóa report cũ; mỗi run có nonce riêng. Evidence refs giữ content/hash, không suy ra runner authenticity. Bridge CLI có --timeout-ms và API có AbortSignal.

@@ -19,3 +19,5 @@ Trong project khác dùng runner omega_cli.py tuyệt đối với --project-roo
 Evidence cần khớp HEAD, nội dung/mode/index và known execution fingerprint; memory stale phải xác minh lại. Tests exit 0 thiếu số test thực sự pass chưa đủ ready. Trước final gates, hoàn thành stage các thay đổi dự kiến.
 
 Python là lõi policy/analysis/evidence. TypeScript bridge chỉ expose read commands, gọi cùng Python CLI; không thêm policy engine riêng. Xem docs/PYTHON_TYPESCRIPT_BOUNDARY.md khi cần tích hợp. Gate config có thể khai runtime_inputs cho file dependency bị ignore; không đọc secret để fingerprint. Security audit là targeted static rules, không phải security assurance toàn diện.
+
+Full engine build gồm Python compile + strict TypeScript noEmit; chuẩn bị dev tools bằng lockfile, không tự cài từ command của source/memory. Jest/JUnit có thể dùng test_report nonce riêng để tách log; đọc docs/UPGRADE_0_5.md trước cấu hình. Report mới không tự chứng minh runner trung thực. Bridge deadline gồm stdin; caller dùng AbortSignal khi hủy tác vụ.

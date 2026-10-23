@@ -14,12 +14,7 @@
     "build": [
       "python3",
       "-m",
-      "compileall",
-      "-q",
-      "omega",
-      "tests",
-      "benchmarks",
-      "omega_cli.py"
+      "omega.build"
     ],
     "tests": [
       "python3",

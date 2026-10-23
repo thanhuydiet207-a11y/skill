@@ -158,10 +158,12 @@ def project_adapter(root):
         scripts=data.get('scripts',{})
         if not isinstance(scripts,dict) or any(not isinstance(value,str) for value in scripts.values()):raise ValueError('Invalid package scripts')
         builtin=scripts.get('test','').strip()=='node --test'
+        jest=scripts.get('test','').strip()=='jest'
         options.append({'stack':'node','build':['npm','run','build'] if 'build' in scripts else None,
-                        'tests':['node','--test','--test-reporter=junit'] if builtin else None,
-                        'test_adapter':'junit' if builtin else 'review-required',
-                        'assumption':'Node built-in JUnit proposal requires a verified supporting Node version. npm/Jest merged logs are not clean JSON; configure a reviewed structured report path/runner before using that adapter.'})
+                        'tests':['node','--test','--test-reporter=junit'] if builtin else ['npm','test','--','--json','--outputFile={report_path}'] if jest else None,
+                        'test_adapter':'junit' if builtin else 'jest' if jest else 'review-required',
+                        'test_report':'.omega/reports/{run_id}/jest.json' if jest else None,
+                        'assumption':'Review runtime and scripts before execution. Exact Jest script proposal requires per-run test_report policy so mixed logs are not parsed as JSON; unknown scripts still need manual configuration.'})
     if (root/'go.mod').is_file():options.append({'stack':'go','build':['go','build','./...'],'tests':['go','test','-json','./...'],'test_adapter':'go'})
     if any((root/x).is_file() for x in ('pyproject.toml','requirements.txt')) or (root/'tests').is_dir():
         options.append({'stack':'python','build':['python3','-m','compileall','-q','.'],

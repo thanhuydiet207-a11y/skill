@@ -2,7 +2,7 @@
 import hashlib
 import re
 from pathlib import Path
-from omega.safety import source_path, artifact_path
+from omega.safety import source_path, artifact_path, source_files
 
 COMMANDS={
     'repo-map':['map','plan'],
@@ -64,7 +64,7 @@ def suite_digest(root):
     root=Path(root).resolve();h=hashlib.sha256()
     for folder in ('omega','tests','benchmarks','integration/typescript'):
         h.update(folder.encode()+b'\0')
-        paths=sorted(p for p in (root/folder).rglob('*') if p.is_file() and p.suffix in ('.py','.json','.ts','.mjs') and '__pycache__' not in p.parts)
+        paths=source_files(root,folder,('.py','.json','.ts','.mjs'))
         for path in paths:
             name=str(path.relative_to(root));verified=source_path(root,name)
             h.update(name.encode()+b'\0'+verified.read_bytes()+b'\0')

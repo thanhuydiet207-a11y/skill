@@ -1,5 +1,7 @@
 # OMEGA 0.4: giảm báo xanh sai và làm rõ phạm vi vận hành
 
+> Báo cáo lịch sử 0.4. Bản mới: [UPGRADE_0_5.md](UPGRADE_0_5.md).
+
 ## Đã hoàn thành
 
 Lõi vẫn Python stdlib; bổ sung TypeScript bridge không dependency theo khuyến nghị của người dùng. Có 13 skill hoạt động, không thêm placeholder hoặc agent runtime. Bằng chứng mới: [verification-hardening.json](evidence/verification-hardening.json). Bản 0.3 là lịch sử, không suy ra hiệu quả native từ số test tăng.

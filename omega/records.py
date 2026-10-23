@@ -3,7 +3,7 @@ import hashlib
 import json
 import re
 from pathlib import Path
-from omega.safety import artifact_path, source_path
+from omega.safety import artifact_path, source_path, source_files
 
 
 def load(root, name, kind):
@@ -107,15 +107,21 @@ def memory_status(root,name,head,context=None):
 
 def test_outcomes(result):
     from omega.adapters import outcomes
+    if isinstance(result,dict) and 'report' in result:
+        from omega.reports import report_outcomes
+        return report_outcomes(result)
     return outcomes(result,result.get('adapter','omega')) if isinstance(result,dict) else None
 
 
-def valid_gates(record,commands,test_adapter="omega"):
+def valid_gates(record,commands,test_adapter="omega",test_report=None):
+    from omega.reports import command_matches
+    if not isinstance(record,dict) or not isinstance(commands,dict) or 'tests' not in commands:return False
     if record.get('workspace_unchanged') is not True or record.get('execution_unchanged') is not True:return False
     if record.get('test_adapter','omega')!=test_adapter:return False
+    if record.get('test_report')!=test_report:return False
     rows=record.get('results')
     if record.get('kind')!='gates' or record.get('passed') is not True or not isinstance(rows,list) or len(rows)!=len(commands):return False
-    if not all(isinstance(r,dict) and isinstance(r.get('gate'),str) and r.get('gate') in commands and r.get('command')==commands[r['gate']] and type(r.get('exit_code')) is int and r['exit_code']==0 and not any(r.get(flag) for flag in ('timed_out','output_limit_exceeded','invalid_utf8')) for r in rows):return False
+    if not all(isinstance(r,dict) and isinstance(r.get('gate'),str) and r.get('gate') in commands and command_matches(record,r,commands[r['gate']],test_report) and type(r.get('exit_code')) is int and r['exit_code']==0 and not any(r.get(flag) for flag in ('timed_out','output_limit_exceeded','invalid_utf8')) for r in rows):return False
     if len({r['gate'] for r in rows})!=len(commands):return False
     tests=next((r for r in rows if r['gate']=='tests'),None)
     return tests is not None and tests.get('adapter','omega')==test_adapter and test_outcomes(tests) is not None
@@ -166,7 +172,7 @@ def current_context(root,git,config):
 def engine_digest(engine_root):
     """Bind external-project evidence to the trusted Python implementation, not only config."""
     engine_root=Path(engine_root).resolve();result=hashlib.sha256()
-    files=[p for p in (engine_root/'omega').rglob('*') if p.is_file() and p.suffix in ('.py','.json') and '__pycache__' not in p.parts]
+    files=source_files(engine_root,'omega',('.py','.json'))
     if (engine_root/'omega_cli.py').exists():files.append(engine_root/'omega_cli.py')
     for path in sorted(files):
         name=str(path.relative_to(engine_root));safe=source_path(engine_root,name)
