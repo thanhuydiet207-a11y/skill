@@ -1,0 +1,3328 @@
+{
+  "schema": 1,
+  "release": "0.5.0",
+  "created_utc": "2026-10-23T04:30:07.349756+00:00",
+  "project": "thanhuydiet207-a11y/skill",
+  "branch": "omega/report-integrity",
+  "baseline_commit": "7cd994fe6069064b37371f2c7a23b1275546cbba",
+  "source_commit": "0ed66a5b31fa8c90ba66b0ceb4f44caceda2d58f",
+  "provenance": {
+    "scope": "Local offline contracts, process/parser safety and real fixture workflows",
+    "source_manifest_excludes": "All docs/evidence/* to avoid self-reference; runtime .omega and node_modules are ignored",
+    "gate_record": {
+      "path": ".omega/evidence/1792729637376652555-7fc524a6.json",
+      "sha256": "9a05d8dd8cfac350e0b78353c8e47b101406d5cecdcf4f667a02e81942182c8d",
+      "bytes": 54217
+    },
+    "freshness": "Gate record and 13 final comparisons bind the source commit and its clean source/index/runtime snapshot. This report is added later; that changes workspace/HEAD and makes those records historical. Final publication checks must be rerun on the report commit.",
+    "signed": false,
+    "native_skill_quality_evaluated": false,
+    "provider_token_count_measured": false
+  },
+  "counts": {
+    "baseline_python_tests": 176,
+    "python_tests": 194,
+    "python_failures": 0,
+    "python_skipped": 0,
+    "baseline_bridge_tests": 9,
+    "bridge_tests": 15,
+    "bridge_failures": 0,
+    "bridge_skipped": 0,
+    "implemented_skills": 13,
+    "skills_changed": 4,
+    "implemented_agent_specs": 3,
+    "catalog_capabilities": 44,
+    "planned_capabilities": 31,
+    "counting_rule": "Repeated gate/scenario runs are not additional distinct tests. Five foundation skills share 20 workflow tests; eight extensions share 8 CLI scenarios. Neither contracts nor shared scenarios evaluate native LLM reasoning."
+  },
+  "gates": {
+    "schema": 1,
+    "project": "/workspace/skill",
+    "head": "0ed66a5b31fa8c90ba66b0ceb4f44caceda2d58f",
+    "created_utc": "2026-10-23T04:27:17.379424+00:00",
+    "kind": "gates",
+    "test_adapter": "omega",
+    "test_report": null,
+    "test_outcomes": {
+      "run": 194,
+      "passed": 194,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "expected_failures": 0,
+      "unexpected_successes": 0
+    },
+    "execution_fingerprint": "3bccc0af8f3db441f587ad1708d2285e702ffb5abeaf2651059d0f7a62e9feca",
+    "execution_context": {
+      "python_version": "3.12.14",
+      "system": "Linux",
+      "machine": "x86_64",
+      "engine_sha256": "70e07e78c6c0790a9c28b6ae672d1d311a0c26c3985f6c5631165521603d084e",
+      "environment_sha256": {
+        "PATH": "89f45694eeac679d66982fb225aab97d2049249d842ac30dd09e31f18cdd97c7",
+        "PYTHONPATH": null,
+        "PYTHONHASHSEED": null,
+        "PYTHONOPTIMIZE": null,
+        "NODE_OPTIONS": null,
+        "NODE_PATH": "dbc7bc884f72c70bb3d320e868da710a56a621286fba48b3c6b610776b41b4fd",
+        "GOWORK": null,
+        "GOTOOLCHAIN": null,
+        "GOPROXY": null,
+        "GOSUMDB": null,
+        "GOCACHE": null
+      },
+      "declared_runtime_inputs_sha256": {},
+      "tools": {
+        "python": {
+          "path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12",
+          "bytes": 30894944,
+          "mtime_ns": 1791948610000000000,
+          "mode": 493
+        },
+        "node": {
+          "path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+          "bytes": 125989464,
+          "mtime_ns": 1791948609000000000,
+          "mode": 493
+        },
+        "npm": {
+          "path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/lib/node_modules/npm/bin/npm-cli.js",
+          "bytes": 54,
+          "mtime_ns": 1767885352000000000,
+          "mode": 493
+        },
+        "go": {
+          "path": "/usr/bin/go",
+          "bytes": 2115840,
+          "mtime_ns": 0,
+          "mode": 493
+        }
+      },
+      "project_policy_sha256": {
+        ".claude/settings.json": null,
+        ".claude/settings.local.json": null,
+        ".mcp.json": null,
+        ".claude-plugin/plugin.json": null
+      },
+      "config_sha256": "64f03ef3f2ee18dad6b57376f3ebe6fe84cb036a1a8b2dad7f665aa82d1a00a7",
+      "external_policy": "unobserved; global, managed, API and plugin runtime may differ"
+    },
+    "execution_unchanged": true,
+    "passed": true,
+    "workspace_sha256": "39388557d696d985034651b78a7fd9017efe6356353bdceea79c9a954cc82aae",
+    "workspace_unchanged": true,
+    "results": [
+      {
+        "gate": "build",
+        "command": [
+          "python3",
+          "-m",
+          "omega.build"
+        ],
+        "exit_code": 0,
+        "seconds": 4.255,
+        "output": "",
+        "truncated": false,
+        "output_tail": "",
+        "timed_out": false,
+        "output_limit_exceeded": false,
+        "total_output_bytes": 0,
+        "invalid_utf8": false
+      },
+      {
+        "gate": "tests",
+        "command": [
+          "python3",
+          "-m",
+          "omega.test_runner"
+        ],
+        "exit_code": 0,
+        "seconds": 6.83,
+        "output": "test_budget_fails_without_silent_truncation (test_context.ContextTests.test_budget_fails_without_silent_truncation) ... ok\ntest_changed_source_changes_fingerprint (test_context.ContextTests.test_changed_source_changes_fingerprint) ... ok\ntest_cli_compact_preserves_default_plan (test_context.ContextTests.test_cli_compact_preserves_default_plan) ... ok\ntest_cli_packet_budget_fails (test_context.ContextTests.test_cli_packet_budget_fails) ... ok\ntest_lossless_unicode_and_whitespace (test_context.ContextTests.test_lossless_unicode_and_whitespace) ... ok\ntest_missing_empty_and_ranges_fail (test_context.ContextTests.test_missing_empty_and_ranges_fail) ... ok\ntest_packet_preserves_source_and_deduplicates (test_context.ContextTests.test_packet_preserves_source_and_deduplicates) ... ok\ntest_private_binary_and_escape_rejected (test_context.ContextTests.test_private_binary_and_escape_rejected) ... ok\ntest_summary_keeps_failure_and_links_success (test_context.ContextTests.test_summary_keeps_failure_and_links_success) ... ok\ntest_audit_refuses_symlinked_policy_directory (test_hardening.AdapterSafety.test_audit_refuses_symlinked_policy_directory) ... ok\ntest_hook_does_not_import_executable_gate_config (test_hardening.AdapterSafety.test_hook_does_not_import_executable_gate_config) ... ok\ntest_local_cli_probe_uses_isolated_state (test_hardening.CompatibilitySafety.test_local_cli_probe_uses_isolated_state) ... ok\ntest_process_environment_override_does_not_mutate_parent (test_hardening.CompatibilitySafety.test_process_environment_override_does_not_mutate_parent) ... ok\ntest_empty_failed_or_inconsistent_test_marker_rejected (test_hardening.EvidenceSafety.test_empty_failed_or_inconsistent_test_marker_rejected) ... ok\ntest_exit_zero_without_test_execution_is_not_ready (test_hardening.EvidenceSafety.test_exit_zero_without_test_execution_is_not_ready) ... ok\ntest_hook_background_gate_requires_review (test_hardening.EvidenceSafety.test_hook_background_gate_requires_review) ... ok\ntest_hook_rejects_missing_cwd_and_policy_test_changes (test_hardening.EvidenceSafety.test_hook_rejects_missing_cwd_and_policy_test_changes) ... ok\ntest_private_parent_symlink_inside_repo_is_refused (test_hardening.EvidenceSafety.test_private_parent_symlink_inside_repo_is_refused) ... ok\ntest_scenario_record_is_not_gate_evidence (test_hardening.EvidenceSafety.test_scenario_record_is_not_gate_evidence) ... ok\ntest_test_marker_survives_truncated_prefix (test_hardening.EvidenceSafety.test_test_marker_survives_truncated_prefix) ... ok\ntest_artifact_namespace_and_traversal (test_hardening.PolicySafety.test_artifact_namespace_and_traversal) ... ok\ntest_artifact_symlink_inside_repo_refused (test_hardening.PolicySafety.test_artifact_symlink_inside_repo_refused) ... ok\ntest_empty_or_missing_gate_fails_before_execution (test_hardening.PolicySafety.test_empty_or_missing_gate_fails_before_execution) ... ok\ntest_invalid_later_gate_prevents_any_execution (test_hardening.PolicySafety.test_invalid_later_gate_prevents_any_execution) ... ok\ntest_map_uses_nul_and_preserves_odd_filename (test_hardening.PolicySafety.test_map_uses_nul_and_preserves_odd_filename) ... ok\ntest_private_alias_names_are_refused (test_hardening.PolicySafety.test_private_alias_names_are_refused) ... ok\ntest_capture_is_prefix_and_failure_exit_preserved (test_hardening.ProcessSafety.test_capture_is_prefix_and_failure_exit_preserved) ... ok\ntest_child_inheriting_stdout_is_bounded (test_hardening.ProcessSafety.test_child_inheriting_stdout_is_bounded) ... ok\ntest_flood_is_killed_without_unbounded_spool (test_hardening.ProcessSafety.test_flood_is_killed_without_unbounded_spool) ... ok\ntest_invalid_limits_refused (test_hardening.ProcessSafety.test_invalid_limits_refused) ... ok\ntest_missing_executable_is_reported (test_hardening.ProcessSafety.test_missing_executable_is_reported) ... ok\ntest_all_skipped_fails (test_hardening.TestRunnerSafety.test_all_skipped_fails) ... ok\ntest_expected_failure_alone_is_not_readiness (test_hardening.TestRunnerSafety.test_expected_failure_alone_is_not_readiness) ... ok\ntest_no_tests_fails (test_hardening.TestRunnerSafety.test_no_tests_fails) ... ok\ntest_malformed_result_shape_does_not_crash (test_interop_core.AdapterMalformedInput.test_malformed_result_shape_does_not_crash) ... ok\ntest_go_events_not_package_pass (test_interop_core.OutcomeAdapters.test_go_events_not_package_pass) ... ok\ntest_go_missing_terminal_duplicate_and_package_failure (test_interop_core.OutcomeAdapters.test_go_missing_terminal_duplicate_and_package_failure) ... ok\ntest_jest_counts (test_interop_core.OutcomeAdapters.test_jest_counts) ... ok\ntest_jest_zero_tests_and_boolean_counts_rejected (test_interop_core.OutcomeAdapters.test_jest_zero_tests_and_boolean_counts_rejected) ... ok\ntest_junit_actual_cases_and_invalid_totals (test_interop_core.OutcomeAdapters.test_junit_actual_cases_and_invalid_totals) ... ok\ntest_junit_entity_and_failed_case_rejected (test_interop_core.OutcomeAdapters.test_junit_entity_and_failed_case_rejected) ... ok\ntest_truncated_structured_formats_not_accepted (test_interop_core.OutcomeAdapters.test_truncated_structured_formats_not_accepted) ... ok\ntest_composition_substitution_and_unknown_arguments_refused (test_interop_core.PolicyContracts.test_composition_substitution_and_unknown_arguments_refused) ... ok\ntest_evidence_reconciler_record_uses_evidence_namespace (test_interop_core.PolicyContracts.test_evidence_reconciler_record_uses_evidence_namespace) ... ok\ntest_explanation_never_claims_platform_permission (test_interop_core.PolicyContracts.test_explanation_never_claims_platform_permission) ... ok\ntest_hook_and_cli_grammar_agree_on_invalid_summary (test_interop_core.PolicyContracts.test_hook_and_cli_grammar_agree_on_invalid_summary) ... ok\ntest_recommended_command_variants_allowed (test_interop_core.PolicyContracts.test_recommended_command_variants_allowed) ... ok\ntest_absolute_runner_does_not_import_host_omega_module (test_interop_core.PortableEngine.test_absolute_runner_does_not_import_host_omega_module) ... ok\ntest_doctor_reports_unknown_external_state (test_interop_core.PortableEngine.test_doctor_reports_unknown_external_state) ... ok\ntest_external_gates_require_explicit_policy (test_interop_core.PortableEngine.test_external_gates_require_explicit_policy) ... ok\ntest_map_envelope_bounded_with_visible_omissions_and_status_truncation (test_interop_core.PortableEngine.test_map_envelope_bounded_with_visible_omissions_and_status_truncation) ... ok\ntest_mode_change_invalidates_workspace (test_interop_core.PortableEngine.test_mode_change_invalidates_workspace) ... ok\ntest_portable_map_targets_host_not_engine (test_interop_core.PortableEngine.test_portable_map_targets_host_not_engine) ... ok\ntest_reviewed_external_gates_run_actual_target_tests (test_interop_core.PortableEngine.test_reviewed_external_gates_run_actual_target_tests) ... ok\ntest_tracked_runtime_state_refused_before_write (test_interop_core.PortableEngine.test_tracked_runtime_state_refused_before_write) ... ok\ntest_unignored_runtime_state_refused_without_modifying_ignore (test_interop_core.PortableEngine.test_unignored_runtime_state_refused_without_modifying_ignore) ... ok\ntest_empty_contract_sections_no_longer_score_full (test_interop_safety.InteropSafety.test_empty_contract_sections_no_longer_score_full) ... ok\ntest_fixture_results_cannot_authorize_native_release (test_interop_safety.InteropSafety.test_fixture_results_cannot_authorize_native_release) ... ok\ntest_handoff_refuses_path_escape_and_oversized_nodes (test_interop_safety.InteropSafety.test_handoff_refuses_path_escape_and_oversized_nodes) ... ok\ntest_handoff_rejects_competing_orchestrators (test_interop_safety.InteropSafety.test_handoff_rejects_competing_orchestrators) ... ok\ntest_handoff_rejects_cycles_and_unordered_writers (test_interop_safety.InteropSafety.test_handoff_rejects_cycles_and_unordered_writers) ... ok\ntest_handoff_respects_budget_without_claiming_to_spawn (test_interop_safety.InteropSafety.test_handoff_respects_budget_without_claiming_to_spawn) ... ok\ntest_hook_inventory_never_echoes_commands_or_secret_strings (test_interop_safety.InteropSafety.test_hook_inventory_never_echoes_commands_or_secret_strings) ... ok\ntest_inspection_does_not_execute_embedded_commands (test_interop_safety.InteropSafety.test_inspection_does_not_execute_embedded_commands) ... ok\ntest_inspection_reports_symlink_and_incomplete_root (test_interop_safety.InteropSafety.test_inspection_reports_symlink_and_incomplete_root) ... ok\ntest_interference_rejects_missing_arm_changed_prompt_and_model (test_interop_safety.InteropSafety.test_interference_rejects_missing_arm_changed_prompt_and_model) ... ok\ntest_json_inputs_reject_duplicates_nan_traversal_and_aliases (test_interop_safety.InteropSafety.test_json_inputs_reject_duplicates_nan_traversal_and_aliases) ... ok\ntest_metadata_and_multiline_description_safe_subset (test_interop_safety.InteropSafety.test_metadata_and_multiline_description_safe_subset) ... ok\ntest_skill_bundle_tracks_reference_changes (test_interop_safety.InteropSafety.test_skill_bundle_tracks_reference_changes) ... ok\ntest_usage_unknown_is_not_reported_as_zero (test_interop_safety.InteropSafety.test_usage_unknown_is_not_reported_as_zero) ... ok\ntest_yaml_tags_and_duplicate_keys_require_review (test_interop_safety.InteropSafety.test_yaml_tags_and_duplicate_keys_require_review) ... ok\ntest_configured_concurrency_cap_is_respected (test_interop_safety.ReviewRegressions.test_configured_concurrency_cap_is_respected) ... ok\ntest_context_source_read_is_bounded (test_interop_safety.ReviewRegressions.test_context_source_read_is_bounded) ... ok\ntest_context_task_requires_object_instead_of_crashing (test_interop_safety.ReviewRegressions.test_context_task_requires_object_instead_of_crashing) ... ok\ntest_different_tasks_can_have_different_fixed_acceptance (test_interop_safety.ReviewRegressions.test_different_tasks_can_have_different_fixed_acceptance) ... ok\ntest_duplicate_hook_json_is_not_silently_accepted (test_interop_safety.ReviewRegressions.test_duplicate_hook_json_is_not_silently_accepted) ... ok\ntest_duplicate_ownership_declarations_refused (test_interop_safety.ReviewRegressions.test_duplicate_ownership_declarations_refused) ... ok\ntest_hook_inspection_handles_depth_and_size_budgets_without_execution (test_interop_safety.ReviewRegressions.test_hook_inspection_handles_depth_and_size_budgets_without_execution) ... ok\ntest_huge_or_boolean_measurements_refused (test_interop_safety.ReviewRegressions.test_huge_or_boolean_measurements_refused) ... ok\ntest_inspection_refuses_symlink_in_root_ancestry (test_interop_safety.ReviewRegressions.test_inspection_refuses_symlink_in_root_ancestry) ... ok\ntest_interference_bundle_identity_fixed_across_arms (test_interop_safety.ReviewRegressions.test_interference_bundle_identity_fixed_across_arms) ... ok\ntest_interference_grader_and_bundle_provenance_required (test_interop_safety.ReviewRegressions.test_interference_grader_and_bundle_provenance_required) ... ok\ntest_no_regression_is_not_enough_when_combined_acceptance_fails (test_interop_safety.ReviewRegressions.test_no_regression_is_not_enough_when_combined_acceptance_fails) ... ok\ntest_non_orchestrator_cannot_declare_zero_agent_cost (test_interop_safety.ReviewRegressions.test_non_orchestrator_cannot_declare_zero_agent_cost) ... ok\ntest_prompt_is_fixed_across_repeated_trials (test_interop_safety.ReviewRegressions.test_prompt_is_fixed_across_repeated_trials) ... ok\ntest_unknown_hook_type_needs_review_without_echoing_value (test_interop_safety.ReviewRegressions.test_unknown_hook_type_needs_review_without_echoing_value) ... ok\ntest_compatibility_cli_detects_name_collision_without_running_skills (test_new_skill_workflows.NewSkillWorkflows.test_compatibility_cli_detects_name_collision_without_running_skills) ... ok\ntest_context_sufficiency_cli_verifies_content_ranges_and_task_invariants (test_new_skill_workflows.NewSkillWorkflows.test_context_sufficiency_cli_verifies_content_ranges_and_task_invariants) ... ok\ntest_evidence_reconciler_cli_rejects_source_drift (test_new_skill_workflows.NewSkillWorkflows.test_evidence_reconciler_cli_rejects_source_drift) ... ok\ntest_interference_cli_reports_fixture_regression_and_real_usage_fields (test_new_skill_workflows.NewSkillWorkflows.test_interference_cli_reports_fixture_regression_and_real_usage_fields) ... ok\ntest_memory_reconciliation_cli_preserves_both_conflicting_records (test_new_skill_workflows.NewSkillWorkflows.test_memory_reconciliation_cli_preserves_both_conflicting_records) ... ok\ntest_policy_explainer_cli_identifies_scope_without_granting_platform_access (test_new_skill_workflows.NewSkillWorkflows.test_policy_explainer_cli_identifies_scope_without_granting_platform_access) ... ok\ntest_project_adapter_cli_proposes_without_installing_or_writing_config (test_new_skill_workflows.NewSkillWorkflows.test_project_adapter_cli_proposes_without_installing_or_writing_config) ... ok\ntest_workflow_cli_checks_ownership_and_order (test_new_skill_workflows.NewSkillWorkflows.test_workflow_cli_checks_ownership_and_order) ... ok\ntest_benchmark_detects_regression (test_omega.OmegaTests.test_benchmark_detects_regression) ... ok\ntest_candidate_compare_missing_baseline (test_omega.OmegaTests.test_candidate_compare_missing_baseline) ... ok\ntest_candidate_lifecycle_preserves_stable (test_omega.OmegaTests.test_candidate_lifecycle_preserves_stable) ... ok\ntest_catalog_foundation_and_eight_extensions (test_omega.OmegaTests.test_catalog_foundation_and_eight_extensions) ... ok\ntest_dirty_checkout_refused (test_omega.OmegaTests.test_dirty_checkout_refused) ... ok\ntest_gate_failure_propagates (test_omega.OmegaTests.test_gate_failure_propagates) ... ok\ntest_git_truncation_refused (test_omega.OmegaTests.test_git_truncation_refused) ... ok\ntest_hook_denies_escape_and_policy_edit (test_omega.OmegaTests.test_hook_denies_escape_and_policy_edit) ... ok\ntest_hook_denies_shell_bypass (test_omega.OmegaTests.test_hook_denies_shell_bypass) ... ok\ntest_hook_rejects_malformed (test_omega.OmegaTests.test_hook_rejects_malformed) ... ok\ntest_hook_scoped_edit (test_omega.OmegaTests.test_hook_scoped_edit) ... ok\ntest_memory_scoped_and_commit_stamped (test_omega.OmegaTests.test_memory_scoped_and_commit_stamped) ... ok\ntest_memory_secret_rejection (test_omega.OmegaTests.test_memory_secret_rejection) ... ok\ntest_no_shell_expansion (test_omega.OmegaTests.test_no_shell_expansion) ... ok\ntest_path_escape (test_omega.OmegaTests.test_path_escape) ... ok\ntest_router_complexity (test_omega.OmegaTests.test_router_complexity) ... ok\ntest_router_contract (test_omega.OmegaTests.test_router_contract) ... ok\ntest_subprocess_failure (test_omega.OmegaTests.test_subprocess_failure) ... ok\ntest_symlink_escape (test_omega.OmegaTests.test_symlink_escape) ... ok\ntest_three_agent_specs (test_omega.OmegaTests.test_three_agent_specs) ... ok\ntest_timeout (test_omega.OmegaTests.test_timeout) ... ok\ntest_library_without_runtime_context_does_not_claim_evidence_current (test_quality_hardening.MemoryEvidence.test_library_without_runtime_context_does_not_claim_evidence_current) ... ok\ntest_memory_context_detects_environment_change (test_quality_hardening.MemoryEvidence.test_memory_context_detects_environment_change) ... ok\ntest_unbound_evidence_requires_review (test_quality_hardening.MemoryEvidence.test_unbound_evidence_requires_review) ... ok\ntest_unchanged_evidence_blob_does_not_hide_source_drift (test_quality_hardening.MemoryEvidence.test_unchanged_evidence_blob_does_not_hide_source_drift) ... ok\ntest_declared_ignored_dependency_file_changes_runtime_fingerprint (test_quality_hardening.RuntimeBinding.test_declared_ignored_dependency_file_changes_runtime_fingerprint) ... ok\ntest_environment_fingerprint_changes_without_exposing_value (test_quality_hardening.RuntimeBinding.test_environment_fingerprint_changes_without_exposing_value) ... ok\ntest_external_project_context_is_bound_to_engine_implementation (test_quality_hardening.Runti",
+        "truncated": true,
+        "output_tail": "(test_report_integrity.ReportLifecycle.test_symlink_hardlink_and_fifo_reports_fail_without_blocking) ... ok\ntest_benchmark_hash_tracks_execution_code (test_skill_evolution.SkillEvolution.test_benchmark_hash_tracks_execution_code) ... ok\ntest_bypass_wrong_identity_and_missing_command_rejected (test_skill_evolution.SkillEvolution.test_bypass_wrong_identity_and_missing_command_rejected) ... ok\ntest_current_gate_and_scenario_evidence_required (test_skill_evolution.SkillEvolution.test_current_gate_and_scenario_evidence_required) ... ok\ntest_duplicate_or_unknown_frontmatter_refused (test_skill_evolution.SkillEvolution.test_duplicate_or_unknown_frontmatter_refused) ... ok\ntest_legacy_contract_is_valid_but_needs_advanced_sections (test_skill_evolution.SkillEvolution.test_legacy_contract_is_valid_but_needs_advanced_sections) ... ok\ntest_missing_sections_cannot_pass_comparison (test_skill_evolution.SkillEvolution.test_missing_sections_cannot_pass_comparison) ... ok\ntest_no_evidence_is_not_eligible_for_review (test_skill_evolution.SkillEvolution.test_no_evidence_is_not_eligible_for_review) ... ok\ntest_oversized_skill_and_candidate_namespace (test_skill_evolution.SkillEvolution.test_oversized_skill_and_candidate_namespace) ... ok\ntest_stale_gate_evidence_refused (test_skill_evolution.SkillEvolution.test_stale_gate_evidence_refused) ... ok\ntest_branch_or_head_change_is_detected (test_workflows.ChangeWorkflow.test_branch_or_head_change_is_detected) ... ok\ntest_expired_plan_refuses_repair_and_readiness (test_workflows.ChangeWorkflow.test_expired_plan_refuses_repair_and_readiness) ... ok\ntest_gate_failure_if_command_mutates_workspace (test_workflows.ChangeWorkflow.test_gate_failure_if_command_mutates_workspace) ... ok\ntest_gate_record_invalidated_by_source_change (test_workflows.ChangeWorkflow.test_gate_record_invalidated_by_source_change) ... ok\ntest_plan_requires_clean_isolated_checkout (test_workflows.ChangeWorkflow.test_plan_requires_clean_isolated_checkout) ... ok\ntest_rename_checks_old_and_new_paths (test_workflows.ChangeWorkflow.test_rename_checks_old_and_new_paths) ... ok\ntest_repair_budget_enforced (test_workflows.ChangeWorkflow.test_repair_budget_enforced) ... ok\ntest_scoped_change_and_outside_path_detection (test_workflows.ChangeWorkflow.test_scoped_change_and_outside_path_detection) ... ok\ntest_explicit_existing_changes_preserved_outside_scope (test_workflows.ExistingChangeWorkflow.test_explicit_existing_changes_preserved_outside_scope) ... ok\ntest_index_only_changes_alter_snapshot (test_workflows.ExistingChangeWorkflow.test_index_only_changes_alter_snapshot) ... ok\ntest_cli_read_returns_nonzero_for_stale_memory (test_workflows.MemoryWorkflow.test_cli_read_returns_nonzero_for_stale_memory) ... ok\ntest_evidence_tamper_and_project_binding (test_workflows.MemoryWorkflow.test_evidence_tamper_and_project_binding) ... ok\ntest_missing_evidence_does_not_create_memory (test_workflows.MemoryWorkflow.test_missing_evidence_does_not_create_memory) ... ok\ntest_source_and_head_staleness (test_workflows.MemoryWorkflow.test_source_and_head_staleness) ... ok\ntest_duplicate_keys_and_malformed_memory_rejected (test_workflows.RecordSafety.test_duplicate_keys_and_malformed_memory_rejected) ... ok\ntest_repair_lock_prevents_concurrent_updates (test_workflows.RecordSafety.test_repair_lock_prevents_concurrent_updates) ... ok\ntest_scenario_evidence_cannot_replace_gates (test_workflows.RecordSafety.test_scenario_evidence_cannot_replace_gates) ... ok\ntest_worktree_container_itself_refused (test_workflows.RecordSafety.test_worktree_container_itself_refused) ... ok\ntest_actual_git_odd_filename_roundtrip (test_workflows.RepositoryWorkflow.test_actual_git_odd_filename_roundtrip) ... ok\ntest_workspace_hash_tracks_untracked_and_deleted (test_workflows.RepositoryWorkflow.test_workspace_hash_tracks_untracked_and_deleted) ... ok\n\n----------------------------------------------------------------------\nRan 194 tests in 6.655s\n\nOK\nOMEGA_TEST_RESULT {\"errors\": 0, \"expected_failures\": 0, \"failed\": 0, \"passed\": 194, \"run\": 194, \"skipped\": 0, \"unexpected_successes\": 0}\n",
+        "timed_out": false,
+        "output_limit_exceeded": false,
+        "total_output_bytes": 26990,
+        "invalid_utf8": false,
+        "adapter": "omega"
+      },
+      {
+        "gate": "security",
+        "command": [
+          "python3",
+          "-m",
+          "omega",
+          "audit",
+          "--select",
+          ".claude",
+          "--select",
+          "omega"
+        ],
+        "exit_code": 0,
+        "seconds": 0.191,
+        "output": "{\n  \"passed\": true,\n  \"complete_for_selected_paths\": true,\n  \"findings\": [],\n  \"coverage\": [\n    {\n      \"path\": \".claude/agents/omega-engineer.md\",\n      \"sha256\": \"1bf3176faefb03d160a0fbf8adbc18dd2529982882f13d18e7de5f8d4e43c229\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \".claude/agents/omega-investigator.md\",\n      \"sha256\": \"b76492b0b1798315633cfa2447dc2096066f4ef5d8fbafa7c4c7baba8eff91a7\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \".claude/agents/omega-verifier.md\",\n      \"sha256\": \"b0a00fb047c59bdf946882b9cf18e76fbad327061871c23c9c610d7ee6e94bd1\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \".claude/skills/controlled-change/SKILL.md\",\n      \"sha256\": \"9212d2625afb2470bd69c0286f42331c3ad6d1b8711977f6457eacac28e1fdb1\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \".claude/skills/omega-context-sufficiency-check/SKILL.md\",\n      \"sha256\": \"f57138ca5de04ac6992581f8ce324a912e7b78d804d7d4b5c745064f85fad566\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \".claude/skills/omega-effective-policy-explainer/SKILL.md\",\n      \"sha256\": \"d5b4a3417dbc65396b8edfa8b650a9bf9f5d002fb382cf59209840000fee4044\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \".claude/skills/omega-evidence-reconciler/SKILL.md\",\n      \"sha256\": \"01b756795e1c5443e0d4d31a989bb59ea3323ba56d7504067590adda8671f074\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \".claude/skills/omega-memory-reconciliation/SKILL.md\",\n      \"sha256\": \"bf600a482926b887a928808d0caf7ff5694e646d59ba0ed7ead7d26a33e10047\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \".claude/skills/omega-project-workflow-adapter/SKILL.md\",\n      \"sha256\": \"779105bf4928a0d9ca3c8e75f1502e4575c341b019f050b7d3b1f327a66d6dee\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \".claude/skills/omega-skill-compatibility-audit/SKILL.md\",\n      \"sha256\": \"4e3d1450c7befd0922542cd03caa58eac7ac3d6848287212c1f1766ed7e88e9c\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \".claude/skills/omega-skill-interference-benchmark/SKILL.md\",\n      \"sha256\": \"4ecc713b6af4c3ed65b18a6abdbafe6388db546ea4256b66ea2af6aaeb2a3f6b\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \".claude/skills/omega-workflow-handoff-contract/SKILL.md\",\n      \"sha256\": \"cb63966ac35ed3ce0e8fa1f1cb9246fe31c1c133797dab03fa03e5291f4fcd7b\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \".claude/skills/project-memory/SKILL.md\",\n      \"sha256\": \"b463f53c46aacb001d2b3e042793749ef58e38c8a7a2e75f9640a3dcb8bc067b\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \".claude/skills/quality-gates/SKILL.md\",\n      \"sha256\": \"96538d7f579939b979af42924377813665e247ddbfa3fbf9ffbf4f565a97ffc2\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \".claude/skills/repo-map/SKILL.md\",\n      \"sha256\": \"fab81a9761ff11589d3d8822dc65bf3d31523e79efc69acb6de9b0e0c8eedd0e\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \".claude/skills/skill-benchmark/SKILL.md\",\n      \"sha256\": \"707c7e20f592a5167f8777fa78281384cd04436ba699ab153e7ef9035bd5d073\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \"omega/__init__.py\",\n      \"sha256\": \"2c12b8ea17aeb6f9f72a6b02aca218bbc4508a46df9e365a8f6c45ad769e0b34\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/__main__.py\",\n      \"sha256\": \"0e727de0a6006ed3d7995907f8d72de21cbdfacbc1aaa1e3fe2898076d48dc68\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/adapters.py\",\n      \"sha256\": \"66d272cbdb262b016960228ecb201df12903b2cced8f060ba0c6bf87360542a7\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/analysis_tools.py\",\n      \"sha256\": \"c530481bb4332e0208484aa70877b4a4af1f1fa20931c88548de29cd14804754\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/arguments.py\",\n      \"sha256\": \"95f950ca36fd7083b5c0d5862fd4603528bb58a355ef9419a9a9be43cb6b8290\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/build.py\",\n      \"sha256\": \"f779edb72c107e78944d5c7e8b7fa2c507f1eebdfa8c771a5e2397c252cdfdc2\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/catalog.json\",\n      \"sha256\": \"707215b0aa060459793ed7a83aea909a9b6a19e3f91b170fb71acf5951715881\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \"omega/change.py\",\n      \"sha256\": \"00959855fd178d811a7515b42979b6ed25cbf0a07f2f05fb0411f60cf967a5b0\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/config.json\",\n      \"sha256\": \"31f7e5798205807ec8e941dfd041497029ffc67cb2a5a064826cb67f4c2d0bbe\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \"omega/context.py\",\n      \"sha256\": \"53743a082ef9594b46c24eb3649e3d2693e962b7d1cf027c6a5ed8220458c33c\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/extensions.json\",\n      \"sha256\": \"8b3d4aa3cd09bbb5d38418be2862a79b600508c13cd817320440bb1540717239\",\n      \"python_ast\": false\n    },\n    {\n      \"path\": \"omega/frontmatter.py\",\n      \"sha256\": \"049fed295175946740f844bd491e8f92f2da5ccf994a5e806404a7d6971f24a8\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/hook.py\",\n      \"sha256\": \"d32365aa47bcdcc66aa0a02658b8534c22f239f75181bd882361fe7c7fdf6953\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/interop.py\",\n      \"sha256\": \"74d31979dc44840a5b67ee89920c879a6cb98b2ccb3ed160abb9113a5fd48360\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/io.py\",\n      \"sha256\": \"81d4115b458edb797081ef378f2fa7c133fbef893206bf6d8a96171787f51b0a\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/policy.py\",\n      \"sha256\": \"bba54723fc7b668d061b85940618250994c3001befd9bf27e81cb2563bf3d579\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/process.py\",\n      \"sha256\": \"1d9b66a360929eb90e187030ac16cdd6efacef9f4de2c31b68aff5e55b934958\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/records.py\",\n      \"sha256\": \"628fa6f67a6a464c6ce0d72c4e926a673d7e5bdc0c5801d0c21a60f8144cf219\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/reports.py\",\n      \"sha256\": \"96c02d6b6b294b2e2432b099a5b6c741287dad9ad30c7f644f33392b1abcf1b7\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/safety.py\",\n      \"sha256\": \"f9ed223ce5f678808e957b2d970c451bea0853cf810f0749f7b68f09d7535e9c\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/security.py\",\n      \"sha256\": \"f59ff90edb6095c7fbcbaf79f235bc8817b2d79a394f3c6f7d677d01faf4ab1d\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/skills.py\",\n      \"sha256\": \"6d2dae709497ea30dd4b899c38e8b907f7950cdcf187a42607dfa4e487b04b69\",\n      \"python_ast\": true\n    },\n    {\n      \"path\": \"omega/test_runner.py\",\n      \"sha256\": \"4bc34f71d041928fbf579381a3c24eadb5c09fdb67075b4d6f295544c1014890\",\n      \"python_ast\": true\n    }\n  ],\n  \"exclusions\": [\n    {\n      \"path\": \"omega/__pycache__\",\n      \"reason\": \"generated Python bytecode\"\n    }\n  ],\n  \"files_scanned\": 39,\n  \"files_written\": false,\n  \"commands_executed\": false,\n  \"scope\": \"targeted Python AST, explicit bypass and possible-secret rules only; no taint/dependency/full-language assurance\"\n}\n",
+        "truncated": false,
+        "output_tail": "",
+        "timed_out": false,
+        "output_limit_exceeded": false,
+        "total_output_bytes": 7000,
+        "invalid_utf8": false
+      },
+      {
+        "gate": "regression",
+        "command": [
+          "python3",
+          "-m",
+          "omega",
+          "benchmark"
+        ],
+        "exit_code": 0,
+        "seconds": 0.154,
+        "output": "{\n  \"suite\": \"router-contract-v1\",\n  \"suite_sha256\": \"cfae5e03558d69f4c3aea867fed79e12ed67740bf07ccc2788b2e047ee748e38\",\n  \"cases\": [\n    {\n      \"id\": \"low\",\n      \"passed\": true\n    },\n    {\n      \"id\": \"medium\",\n      \"passed\": true\n    },\n    {\n      \"id\": \"high-conflict\",\n      \"passed\": true\n    }\n  ],\n  \"skills\": [\n    {\n      \"skill\": \"repo-map\",\n      \"sha256\": \"fab81a9761ff11589d3d8822dc65bf3d31523e79efc69acb6de9b0e0c8eedd0e\",\n      \"bundle_sha256\": \"dfb1239731d7c435ebad65890f86437910f81b15399bdc8036513721d1999ef5\",\n      \"resources\": [\n        {\n          \"path\": \"docs/INTEROPERABILITY_GUIDE.md\",\n          \"sha256\": \"597ed74aadc7ca71b7b7cec77b2ea344580a20d05e5e597c8bf7059f8f2ceecc\",\n          \"available\": true\n        }\n      ],\n      \"checks\": [\n        {\n          \"id\": \"frontmatter\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"identity\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"description\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"explicit-invocation\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"no-permission-bypass\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"command:map\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"command:plan\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"section:Inputs\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Workflow\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Evidence\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Failure handling\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Stop conditions\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"resources-resolve\",\n          \"passed\": true,\n          \"required\": true\n        }\n      ],\n      \"passed\": true,\n      \"advanced_passed\": true,\n      \"score\": 100.0,\n      \"quality_score\": null,\n      \"quality_evaluated\": false,\n      \"score_metric\": \"contract completeness only\",\n      \"scope\": \"offline document contract, not LLM instruction adherence or reasoning quality\"\n    },\n    {\n      \"skill\": \"controlled-change\",\n      \"sha256\": \"9212d2625afb2470bd69c0286f42331c3ad6d1b8711977f6457eacac28e1fdb1\",\n      \"bundle_sha256\": \"034ad2c8f38e5cee61ef567c87cc536cc39dfa138f13e25411220299a2d03ed7\",\n      \"resources\": [\n        {\n          \"path\": \"docs/INTEROPERABILITY_GUIDE.md\",\n          \"sha256\": \"597ed74aadc7ca71b7b7cec77b2ea344580a20d05e5e597c8bf7059f8f2ceecc\",\n          \"available\": true\n        }\n      ],\n      \"checks\": [\n        {\n          \"id\": \"frontmatter\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"identity\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"description\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"explicit-invocation\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"no-permission-bypass\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"command:isolate\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"section:Inputs\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Workflow\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Evidence\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Failure handling\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Stop conditions\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"resources-resolve\",\n          \"passed\": true,\n          \"required\": true\n        }\n      ],\n      \"passed\": true,\n      \"advanced_passed\": true,\n      \"score\": 100.0,\n      \"quality_score\": null,\n      \"quality_evaluated\": false,\n      \"score_metric\": \"contract completeness only\",\n      \"scope\": \"offline document contract, not LLM instruction adherence or reasoning quality\"\n    },\n    {\n      \"skill\": \"quality-gates\",\n      \"sha256\": \"96538d7f579939b979af42924377813665e247ddbfa3fbf9ffbf4f565a97ffc2\",\n      \"bundle_sha256\": \"2d15825467f8698eeddddc36798370bba5373936cc97f664410eed4a681ded9f\",\n      \"resources\": [\n        {\n          \"path\": \"docs/INTEROPERABILITY_GUIDE.md\",\n          \"sha256\": \"597ed74aadc7ca71b7b7cec77b2ea344580a20d05e5e597c8bf7059f8f2ceecc\",\n          \"available\": true\n        },\n        {\n          \"path\": \"docs/UPGRADE_0_4.md\",\n          \"sha256\": \"32b7b86f95393a61b3d3132ed293ff37707504252591c1250fc9e17cbfae71f6\",\n          \"available\": true\n        },\n        {\n          \"path\": \"docs/UPGRADE_0_5.md\",\n          \"sha256\": \"ef6769c9a0260f34df41015b23650333c8861046619a37448e29353325dbd7c0\",\n          \"available\": true\n        }\n      ],\n      \"checks\": [\n        {\n          \"id\": \"frontmatter\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"identity\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"description\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"explicit-invocation\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"no-permission-bypass\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"command:gates\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"command:rollback-check\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"section:Inputs\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Workflow\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Evidence\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Failure handling\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Stop conditions\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"resources-resolve\",\n          \"passed\": true,\n          \"required\": true\n        }\n      ],\n      \"passed\": true,\n      \"advanced_passed\": true,\n      \"score\": 100.0,\n      \"quality_score\": null,\n      \"quality_evaluated\": false,\n      \"score_metric\": \"contract completeness only\",\n      \"scope\": \"offline document contract, not LLM instruction adherence or reasoning quality\"\n    },\n    {\n      \"skill\": \"project-memory\",\n      \"sha256\": \"b463f53c46aacb001d2b3e042793749ef58e38c8a7a2e75f9640a3dcb8bc067b\",\n      \"bundle_sha256\": \"2961bbf8da020cd11a0fdc79a44f351c6ec17ebdafa8e9fc875b6a67578219cc\",\n      \"resources\": [\n        {\n          \"path\": \"docs/INTEROPERABILITY_GUIDE.md\",\n          \"sha256\": \"597ed74aadc7ca71b7b7cec77b2ea344580a20d05e5e597c8bf7059f8f2ceecc\",\n          \"available\": true\n        },\n        {\n          \"path\": \"docs/UPGRADE_0_4.md\",\n          \"sha256\": \"32b7b86f95393a61b3d3132ed293ff37707504252591c1250fc9e17cbfae71f6\",\n          \"available\": true\n        }\n      ],\n      \"checks\": [\n        {\n          \"id\": \"frontmatter\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"identity\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"description\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"explicit-invocation\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"no-permission-bypass\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"command:memory\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"section:Inputs\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Workflow\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Evidence\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Failure handling\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Stop conditions\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"resources-resolve\",\n          \"passed\": true,\n          \"required\": true\n        }\n      ],\n      \"passed\": true,\n      \"advanced_passed\": true,\n      \"score\": 100.0,\n      \"quality_score\": null,\n      \"quality_evaluated\": false,\n      \"score_metric\": \"contract completeness only\",\n      \"scope\": \"offline document contract, not LLM instruction adherence or reasoning quality\"\n    },\n    {\n      \"skill\": \"skill-benchmark\",\n      \"sha256\": \"707c7e20f592a5167f8777fa78281384cd04436ba699ab153e7ef9035bd5d073\",\n      \"bundle_sha256\": \"9211a2ce5eead19ea2cf3e6222d9cd1a97a29ed369f7292929307d490dfd0abb\",\n      \"resources\": [\n        {\n          \"path\": \"docs/INTEROPERABILITY_GUIDE.md\",\n          \"sha256\": \"597ed74aadc7ca71b7b7cec77b2ea344580a20d05e5e597c8bf7059f8f2ceecc\",\n          \"available\": true\n        },\n        {\n          \"path\": \"docs/UPGRADE_0_5.md\",\n          \"sha256\": \"ef6769c9a0260f34df41015b23650333c8861046619a37448e29353325dbd7c0\",\n          \"available\": true\n        }\n      ],\n      \"checks\": [\n        {\n          \"id\": \"frontmatter\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"identity\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"description\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"explicit-invocation\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"no-permission-bypass\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"command:candidate\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"command:compare\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"command:benchmark\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"section:Inputs\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Workflow\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Evidence\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Failure handling\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Stop conditions\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"resources-resolve\",\n          \"passed\": true,\n          \"required\": true\n        }\n      ],\n      \"passed\": true,\n      \"advanced_passed\": true,\n      \"score\": 100.0,\n      \"quality_score\": null,\n      \"quality_evaluated\": false,\n      \"score_metric\": \"contract completeness only\",\n      \"scope\": \"offline document contract, not LLM instruction adherence or reasoning quality\"\n    },\n    {\n      \"skill\": \"omega-skill-compatibility-audit\",\n      \"sha256\": \"4e3d1450c7befd0922542cd03caa58eac7ac3d6848287212c1f1766ed7e88e9c\",\n      \"bundle_sha256\": \"4233a580bb4ed5a94299c6d0c68a95d2b128ea342cf11996b73eb94d10a93873\",\n      \"resources\": [\n        {\n          \"path\": \"docs/INTEROPERABILITY_GUIDE.md\",\n          \"sha256\": \"597ed74aadc7ca71b7b7cec77b2ea344580a20d05e5e597c8bf7059f8f2ceecc\",\n          \"available\": true\n        }\n      ],\n      \"checks\": [\n        {\n          \"id\": \"frontmatter\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"identity\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"description\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"explicit-invocation\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"no-permission-bypass\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"command:skill-compatibility-audit\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"section:Inputs\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Workflow\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Evidence\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Failure handling\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Stop conditions\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"resources-resolve\",\n          \"passed\": true,\n          \"required\": true\n        }\n      ],\n      \"passed\": true,\n      \"advanced_passed\": true,\n      \"score\": 100.0,\n      \"quality_score\": null,\n      \"quality_evaluated\": false,\n      \"score_metric\": \"contract completeness only\",\n      \"scope\": \"offline document contract, not LLM instruction adherence or reasoning quality\"\n    },\n    {\n      \"skill\": \"omega-effective-policy-explainer\",\n      \"sha256\": \"d5b4a3417dbc65396b8edfa8b650a9bf9f5d002fb382cf59209840000fee4044\",\n      \"bundle_sha256\": \"970d61efbfc2c89154a6a4efb951512455a86ca46ba7a356816ce4b6866aace5\",\n      \"resources\": [\n        {\n          \"path\": \"docs/INTEROPERABILITY_GUIDE.md\",\n          \"sha256\": \"597ed74aadc7ca71b7b7cec77b2ea344580a20d05e5e597c8bf7059f8f2ceecc\",\n          \"available\": true\n        }\n      ],\n      \"checks\": [\n        {\n          \"id\": \"frontmatter\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"identity\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"description\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"explicit-invocation\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"no-permission-bypass\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"command:effective-policy-explainer\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"section:Inputs\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Workflow\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Evidence\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Failure handling\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Stop conditions\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"resources-resolve\",\n          \"passed\": true,\n          \"required\": true\n        }\n      ],\n      \"passed\": true,\n      \"advanced_passed\": true,\n      \"score\": 100.0,\n      \"quality_score\": null,\n      \"quality_evaluated\": false,\n      \"score_metric\": \"contract completeness only\",\n      \"scope\": \"offli",
+        "truncated": true,
+        "output_tail": "ailable\": true\n        },\n        {\n          \"path\": \"docs/UPGRADE_0_4.md\",\n          \"sha256\": \"32b7b86f95393a61b3d3132ed293ff37707504252591c1250fc9e17cbfae71f6\",\n          \"available\": true\n        }\n      ],\n      \"checks\": [\n        {\n          \"id\": \"frontmatter\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"identity\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"description\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"explicit-invocation\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"no-permission-bypass\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"command:memory-reconciliation\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"section:Inputs\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Workflow\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Evidence\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Failure handling\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Stop conditions\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"resources-resolve\",\n          \"passed\": true,\n          \"required\": true\n        }\n      ],\n      \"passed\": true,\n      \"advanced_passed\": true,\n      \"score\": 100.0,\n      \"quality_score\": null,\n      \"quality_evaluated\": false,\n      \"score_metric\": \"contract completeness only\",\n      \"scope\": \"offline document contract, not LLM instruction adherence or reasoning quality\"\n    },\n    {\n      \"skill\": \"omega-context-sufficiency-check\",\n      \"sha256\": \"f57138ca5de04ac6992581f8ce324a912e7b78d804d7d4b5c745064f85fad566\",\n      \"bundle_sha256\": \"7fe6cbb865d6c673209349d0a047845f858a9abd52725545813f51fb37872b35\",\n      \"resources\": [\n        {\n          \"path\": \"docs/INTEROPERABILITY_GUIDE.md\",\n          \"sha256\": \"597ed74aadc7ca71b7b7cec77b2ea344580a20d05e5e597c8bf7059f8f2ceecc\",\n          \"available\": true\n        }\n      ],\n      \"checks\": [\n        {\n          \"id\": \"frontmatter\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"identity\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"description\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"explicit-invocation\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"no-permission-bypass\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"command:context-sufficiency-check\",\n          \"passed\": true,\n          \"required\": true\n        },\n        {\n          \"id\": \"section:Inputs\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Workflow\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Evidence\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Failure handling\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"section:Stop conditions\",\n          \"passed\": true,\n          \"required\": false\n        },\n        {\n          \"id\": \"resources-resolve\",\n          \"passed\": true,\n          \"required\": true\n        }\n      ],\n      \"passed\": true,\n      \"advanced_passed\": true,\n      \"score\": 100.0,\n      \"quality_score\": null,\n      \"quality_evaluated\": false,\n      \"score_metric\": \"contract completeness only\",\n      \"scope\": \"offline document contract, not LLM instruction adherence or reasoning quality\"\n    }\n  ],\n  \"passed\": true,\n  \"scope\": \"router and offline skill contracts; native LLM skill efficacy not evaluated\"\n}\n",
+        "timed_out": false,
+        "output_limit_exceeded": false,
+        "total_output_bytes": 30111,
+        "invalid_utf8": false
+      }
+    ]
+  },
+  "typescript": {
+    "compiler_version": "Version 5.9.3",
+    "typecheck": "Passed as required build gate, noEmit, no emitted artifacts",
+    "strict_options": {
+      "target": "ES2023",
+      "module": "NodeNext",
+      "moduleResolution": "NodeNext",
+      "strict": true,
+      "noEmit": true,
+      "erasableSyntaxOnly": true,
+      "verbatimModuleSyntax": true,
+      "types": [
+        "node"
+      ],
+      "noUncheckedIndexedAccess": true,
+      "exactOptionalPropertyTypes": true
+    },
+    "dev_dependencies": [
+      {
+        "name": "@types/node",
+        "version": "24.19.0",
+        "integrity": "sha512-zY+5tKxXdhGh1PYI0ac+7juvEu4OI6vWtVVoj5i2m42jxAY1U+zHGt6QCyOFwykdP62sM3MJ9stoYYUw5aCWew==",
+        "dev": true
+      },
+      {
+        "name": "typescript",
+        "version": "5.9.3",
+        "integrity": "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==",
+        "dev": true
+      },
+      {
+        "name": "undici-types",
+        "version": "7.24.6",
+        "integrity": "sha512-WRNW+sJgj5OBN4/0JpHFqtqzhpbnV0GuB+OozA9gCL7a993SmU+1JBZCzLNxYsbMfIeDL+lTsphD5jN5N+n0zg==",
+        "dev": true
+      }
+    ],
+    "application_runtime_dependencies": [],
+    "installation": "Local integration/typescript only; exact versions and npm integrity lock; ignore-scripts; no global install, SDK, Jest or UI dependencies",
+    "test_report": {
+      "path": ".omega/report-integrity/final-typescript.xml",
+      "sha256": "69847898aec8ec3ff16e212438691914490126bf4805ab1bacb623859396f4d4",
+      "bytes": 2909
+    },
+    "test_cases": [
+      {
+        "name": "real Python map returns bounded repository metadata",
+        "passed": true,
+        "seconds": "0.691205"
+      },
+      {
+        "name": "real Python plan retains workflow and agent limits",
+        "passed": true,
+        "seconds": "0.136164"
+      },
+      {
+        "name": "mutations, shell commands and unknown fields never reach engine",
+        "passed": true,
+        "seconds": "0.000727"
+      },
+      {
+        "name": "paths cannot escape configured root or smuggle an executable option",
+        "passed": true,
+        "seconds": "0.000692"
+      },
+      {
+        "name": "context content equals direct Python output, without JS rewriting",
+        "passed": true,
+        "seconds": "0.185763"
+      },
+      {
+        "name": "output and timeout bounds reject instead of returning partial success",
+        "passed": true,
+        "seconds": "0.126747"
+      },
+      {
+        "name": "unavailable Python executable fails explicitly",
+        "passed": true,
+        "seconds": "0.003201"
+      },
+      {
+        "name": "Python semantic failure is retained rather than converted to success",
+        "passed": true,
+        "seconds": "0.138417"
+      },
+      {
+        "name": "Python source protections reject a selected symlink",
+        "passed": true,
+        "seconds": "0.077888"
+      },
+      {
+        "name": "open stdin without EOF is timed out and closed",
+        "passed": true,
+        "seconds": "0.022349"
+      },
+      {
+        "name": "stdin rejects oversized and invalid UTF-8 data",
+        "passed": true,
+        "seconds": "0.002570"
+      },
+      {
+        "name": "aggregate request byte budget also applies to direct API calls",
+        "passed": true,
+        "seconds": "0.008598"
+      },
+      {
+        "name": "pre-aborted and active requests honour cancellation",
+        "passed": true,
+        "seconds": "0.008295"
+      },
+      {
+        "name": "CLI deadline includes a caller that never ends stdin",
+        "passed": true,
+        "seconds": "0.296666"
+      },
+      {
+        "name": "stdin deadline rejects invalid timeout values",
+        "passed": true,
+        "seconds": "0.000794"
+      }
+    ]
+  },
+  "failures_observed_and_resolved": [
+    {
+      "issue": "Valid UTF-8 capture split inside a multibyte character was marked corrupt",
+      "before": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "-c",
+          "import sys;sys.stdout.write(\"á\"*200)"
+        ],
+        "exit_code": 0,
+        "seconds": 0.015,
+        "output": "á�",
+        "truncated": true,
+        "output_tail": "�á",
+        "timed_out": false,
+        "output_limit_exceeded": false,
+        "total_output_bytes": 400,
+        "invalid_utf8": true
+      },
+      "after": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "-c",
+          "import sys;sys.stdout.write(\"á\"*200)"
+        ],
+        "exit_code": 0,
+        "seconds": 0.016,
+        "output": "á�",
+        "truncated": true,
+        "output_tail": "�á",
+        "timed_out": false,
+        "output_limit_exceeded": false,
+        "total_output_bytes": 400,
+        "invalid_utf8": false
+      },
+      "fix": "Incremental decoder validates the full observed stream; bounded display retains truncation flags"
+    },
+    {
+      "issue": "Bridge CLI stdin without EOF had no input deadline",
+      "before": {
+        "stdin_open_wait_exceeded_350ms": true,
+        "exit_after_eof": 2
+      },
+      "after": "CLI and stream regression tests pass, including an open input pipe and cancellation",
+      "fix": "Single CLI deadline includes input and Python; bounded input destroys stalled stream"
+    },
+    {
+      "issue": "Full strict TypeScript compilation found possibly undefined project-root argument",
+      "before": "integration/typescript/omega-bridge.ts(124,123): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.\n  Type 'undefined' is not assignable to type 'string'.\n",
+      "after": "Version 5.9.3 required build gate passed",
+      "fix": "Explicit CLI project-root guard, pinned compiler and strict noEmit build"
+    },
+    {
+      "issue": "Final review harness initially changed PYTHONPATH relative to gate execution",
+      "observed": "compare rejected evidence rather than permitting promotion",
+      "resolution": "Corrected harness import path without changing subprocess environment; all 13 fresh comparisons pass; no validation weakened"
+    }
+  ],
+  "skill_changes_pre_apply_reviews": [
+    {
+      "skill": "quality-gates",
+      "stable_before_sha256": "1fed0e5c935cf4f8333db0155157e0dab3cd16e0483ac632f49cd8cf68a8d53b",
+      "candidate_sha256": "96538d7f579939b979af42924377813665e247ddbfa3fbf9ffbf4f565a97ffc2",
+      "candidate_bundle_sha256": "2d15825467f8698eeddddc36798370bba5373936cc97f664410eed4a681ded9f",
+      "resources": [
+        {
+          "path": "docs/INTEROPERABILITY_GUIDE.md",
+          "sha256": "597ed74aadc7ca71b7b7cec77b2ea344580a20d05e5e597c8bf7059f8f2ceecc",
+          "available": true
+        },
+        {
+          "path": "docs/UPGRADE_0_4.md",
+          "sha256": "32b7b86f95393a61b3d3132ed293ff37707504252591c1250fc9e17cbfae71f6",
+          "available": true
+        },
+        {
+          "path": "docs/UPGRADE_0_5.md",
+          "sha256": "ef6769c9a0260f34df41015b23650333c8861046619a37448e29353325dbd7c0",
+          "available": true
+        }
+      ],
+      "suite_sha256": "cfae5e03558d69f4c3aea867fed79e12ed67740bf07ccc2788b2e047ee748e38",
+      "workspace_sha256": "deab4a20743e42dc5a4eab1497746bfbba88586dbb8c167daab0a26b760937bc",
+      "execution_fingerprint": "3bccc0af8f3db441f587ad1708d2285e702ffb5abeaf2651059d0f7a62e9feca",
+      "contract_checks": [
+        {
+          "id": "frontmatter",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "identity",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "description",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "explicit-invocation",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "no-permission-bypass",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "command:gates",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "command:rollback-check",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "section:Inputs",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Workflow",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Evidence",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Failure handling",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Stop conditions",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "resources-resolve",
+          "passed": true,
+          "required": true
+        }
+      ],
+      "score_metric": "contract completeness only",
+      "quality_evaluated": false,
+      "scenario_command": [
+        "python3",
+        "-m",
+        "omega.test_runner",
+        "--start",
+        "tests",
+        "--pattern",
+        "test_workflows.py"
+      ],
+      "scenario_outcomes": {
+        "run": 20,
+        "passed": 20,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "expected_failures": 0,
+        "unexpected_successes": 0
+      },
+      "scenario_output_sha256": "a18c832213a5c00ad8ea10cfd57ccc20fb7e1d0cce7040b0837872621355403c",
+      "scenario_evidence": {
+        "path": ".omega/evidence/1792705096721233320-5e1ed26b.json",
+        "sha256": "60dc00dc43d848d4855665772bc433a586e668b5d3254acfd79d02e66812351e",
+        "bytes": 6513
+      },
+      "evidence_checks": [
+        {
+          "path": ".omega/evidence/1792705078510471624-3f665549.json",
+          "valid": true
+        },
+        {
+          "path": ".omega/evidence/1792705096721233320-5e1ed26b.json",
+          "valid": true
+        }
+      ],
+      "eligible_for_review": true,
+      "native_release_eligible": false,
+      "stable_modified_during_compare": false
+    },
+    {
+      "skill": "omega-project-workflow-adapter",
+      "stable_before_sha256": "7ac02457680fb25a7e93589b2e986fb75c6c0b83d4dccf5fcb3db48ae91419fc",
+      "candidate_sha256": "779105bf4928a0d9ca3c8e75f1502e4575c341b019f050b7d3b1f327a66d6dee",
+      "candidate_bundle_sha256": "b6761aa4181f3c08cae5972945fd9a19234613401f63898952b00304f4aa9493",
+      "resources": [
+        {
+          "path": "docs/INTEROPERABILITY_GUIDE.md",
+          "sha256": "597ed74aadc7ca71b7b7cec77b2ea344580a20d05e5e597c8bf7059f8f2ceecc",
+          "available": true
+        },
+        {
+          "path": "docs/PYTHON_TYPESCRIPT_BOUNDARY.md",
+          "sha256": "b72aebb1a117db245558fe2917bcb28882e53aa4882aeca374bed15c554eb362",
+          "available": true
+        },
+        {
+          "path": "docs/UPGRADE_0_4.md",
+          "sha256": "32b7b86f95393a61b3d3132ed293ff37707504252591c1250fc9e17cbfae71f6",
+          "available": true
+        },
+        {
+          "path": "docs/UPGRADE_0_5.md",
+          "sha256": "ef6769c9a0260f34df41015b23650333c8861046619a37448e29353325dbd7c0",
+          "available": true
+        }
+      ],
+      "suite_sha256": "cfae5e03558d69f4c3aea867fed79e12ed67740bf07ccc2788b2e047ee748e38",
+      "workspace_sha256": "deab4a20743e42dc5a4eab1497746bfbba88586dbb8c167daab0a26b760937bc",
+      "execution_fingerprint": "3bccc0af8f3db441f587ad1708d2285e702ffb5abeaf2651059d0f7a62e9feca",
+      "contract_checks": [
+        {
+          "id": "frontmatter",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "identity",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "description",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "explicit-invocation",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "no-permission-bypass",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "command:project-workflow-adapter",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "section:Inputs",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Workflow",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Evidence",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Failure handling",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Stop conditions",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "resources-resolve",
+          "passed": true,
+          "required": true
+        }
+      ],
+      "score_metric": "contract completeness only",
+      "quality_evaluated": false,
+      "scenario_command": [
+        "python3",
+        "-m",
+        "omega.test_runner",
+        "--start",
+        "tests",
+        "--pattern",
+        "test_new_skill_workflows.py"
+      ],
+      "scenario_outcomes": {
+        "run": 8,
+        "passed": 8,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "expected_failures": 0,
+        "unexpected_successes": 0
+      },
+      "scenario_output_sha256": "caa8c1d25adaed1bf4ee1bcaa4e5cc4dc5c727e40ccfdbbcc12cdba6347f58ac",
+      "scenario_evidence": {
+        "path": ".omega/evidence/1792705098210117085-16a4668f.json",
+        "sha256": "141fe8cd81fe9d498736ab76b8b34294cb90ab2ca5a9290316a9afd445188d2d",
+        "bytes": 5584
+      },
+      "evidence_checks": [
+        {
+          "path": ".omega/evidence/1792705078510471624-3f665549.json",
+          "valid": true
+        },
+        {
+          "path": ".omega/evidence/1792705098210117085-16a4668f.json",
+          "valid": true
+        }
+      ],
+      "eligible_for_review": true,
+      "native_release_eligible": false,
+      "stable_modified_during_compare": false
+    },
+    {
+      "skill": "omega-evidence-reconciler",
+      "stable_before_sha256": "e93e9f7f224229fdac8ceb1564863f2fb4d2915dc255622bb14172b0881fcaab",
+      "candidate_sha256": "01b756795e1c5443e0d4d31a989bb59ea3323ba56d7504067590adda8671f074",
+      "candidate_bundle_sha256": "802333b47d9a6ea2c8db240e34551988249aa22175223088cfee563d51129e0b",
+      "resources": [
+        {
+          "path": "docs/INTEROPERABILITY_GUIDE.md",
+          "sha256": "597ed74aadc7ca71b7b7cec77b2ea344580a20d05e5e597c8bf7059f8f2ceecc",
+          "available": true
+        },
+        {
+          "path": "docs/UPGRADE_0_4.md",
+          "sha256": "32b7b86f95393a61b3d3132ed293ff37707504252591c1250fc9e17cbfae71f6",
+          "available": true
+        },
+        {
+          "path": "docs/UPGRADE_0_5.md",
+          "sha256": "ef6769c9a0260f34df41015b23650333c8861046619a37448e29353325dbd7c0",
+          "available": true
+        }
+      ],
+      "suite_sha256": "cfae5e03558d69f4c3aea867fed79e12ed67740bf07ccc2788b2e047ee748e38",
+      "workspace_sha256": "deab4a20743e42dc5a4eab1497746bfbba88586dbb8c167daab0a26b760937bc",
+      "execution_fingerprint": "3bccc0af8f3db441f587ad1708d2285e702ffb5abeaf2651059d0f7a62e9feca",
+      "contract_checks": [
+        {
+          "id": "frontmatter",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "identity",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "description",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "explicit-invocation",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "no-permission-bypass",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "command:evidence-reconciler",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "section:Inputs",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Workflow",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Evidence",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Failure handling",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Stop conditions",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "resources-resolve",
+          "passed": true,
+          "required": true
+        }
+      ],
+      "score_metric": "contract completeness only",
+      "quality_evaluated": false,
+      "scenario_command": [
+        "python3",
+        "-m",
+        "omega.test_runner",
+        "--start",
+        "tests",
+        "--pattern",
+        "test_new_skill_workflows.py"
+      ],
+      "scenario_outcomes": {
+        "run": 8,
+        "passed": 8,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "expected_failures": 0,
+        "unexpected_successes": 0
+      },
+      "scenario_output_sha256": "eaeacb9cb9d5bfdd02f8448a4f041a100958afd0e1df4260aa239008a93a56f5",
+      "scenario_evidence": {
+        "path": ".omega/evidence/1792705099730397438-040f449c.json",
+        "sha256": "ef85999cf31c21622a63112aa60ea00f9816f4c5d61093e9a1fd7e5bd8671ce2",
+        "bytes": 5386
+      },
+      "evidence_checks": [
+        {
+          "path": ".omega/evidence/1792705078510471624-3f665549.json",
+          "valid": true
+        },
+        {
+          "path": ".omega/evidence/1792705099730397438-040f449c.json",
+          "valid": true
+        }
+      ],
+      "eligible_for_review": true,
+      "native_release_eligible": false,
+      "stable_modified_during_compare": false
+    },
+    {
+      "skill": "skill-benchmark",
+      "stable_before_sha256": "912fac09b3eaa3d0d4186155fbdfa546b03f00ebf199a18925fd51a1b6ee9d8e",
+      "candidate_sha256": "707c7e20f592a5167f8777fa78281384cd04436ba699ab153e7ef9035bd5d073",
+      "candidate_bundle_sha256": "9211a2ce5eead19ea2cf3e6222d9cd1a97a29ed369f7292929307d490dfd0abb",
+      "resources": [
+        {
+          "path": "docs/INTEROPERABILITY_GUIDE.md",
+          "sha256": "597ed74aadc7ca71b7b7cec77b2ea344580a20d05e5e597c8bf7059f8f2ceecc",
+          "available": true
+        },
+        {
+          "path": "docs/UPGRADE_0_5.md",
+          "sha256": "ef6769c9a0260f34df41015b23650333c8861046619a37448e29353325dbd7c0",
+          "available": true
+        }
+      ],
+      "suite_sha256": "cfae5e03558d69f4c3aea867fed79e12ed67740bf07ccc2788b2e047ee748e38",
+      "workspace_sha256": "deab4a20743e42dc5a4eab1497746bfbba88586dbb8c167daab0a26b760937bc",
+      "execution_fingerprint": "3bccc0af8f3db441f587ad1708d2285e702ffb5abeaf2651059d0f7a62e9feca",
+      "contract_checks": [
+        {
+          "id": "frontmatter",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "identity",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "description",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "explicit-invocation",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "no-permission-bypass",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "command:candidate",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "command:compare",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "command:benchmark",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "section:Inputs",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Workflow",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Evidence",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Failure handling",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Stop conditions",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "resources-resolve",
+          "passed": true,
+          "required": true
+        }
+      ],
+      "score_metric": "contract completeness only",
+      "quality_evaluated": false,
+      "scenario_command": [
+        "python3",
+        "-m",
+        "omega.test_runner",
+        "--start",
+        "tests",
+        "--pattern",
+        "test_workflows.py"
+      ],
+      "scenario_outcomes": {
+        "run": 20,
+        "passed": 20,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "expected_failures": 0,
+        "unexpected_successes": 0
+      },
+      "scenario_output_sha256": "c48c5bba8eb75f6473bdf0f95e63256dc3be0ee2152af62d3c54a06f0a931790",
+      "scenario_evidence": {
+        "path": ".omega/evidence/1792705100946504407-5a28ab6f.json",
+        "sha256": "bc58c2b8a5047ba83f66f2abe5cc6941312a77da99ed0892d38e39f4f4bd0b90",
+        "bytes": 6446
+      },
+      "evidence_checks": [
+        {
+          "path": ".omega/evidence/1792705078510471624-3f665549.json",
+          "valid": true
+        },
+        {
+          "path": ".omega/evidence/1792705100946504407-5a28ab6f.json",
+          "valid": true
+        }
+      ],
+      "eligible_for_review": true,
+      "native_release_eligible": false,
+      "stable_modified_during_compare": false
+    }
+  ],
+  "final_skill_reviews": [
+    {
+      "skill": "controlled-change",
+      "stable_before_sha256": "9212d2625afb2470bd69c0286f42331c3ad6d1b8711977f6457eacac28e1fdb1",
+      "candidate_sha256": "9212d2625afb2470bd69c0286f42331c3ad6d1b8711977f6457eacac28e1fdb1",
+      "candidate_bundle_sha256": "034ad2c8f38e5cee61ef567c87cc536cc39dfa138f13e25411220299a2d03ed7",
+      "resources": [
+        {
+          "path": "docs/INTEROPERABILITY_GUIDE.md",
+          "sha256": "597ed74aadc7ca71b7b7cec77b2ea344580a20d05e5e597c8bf7059f8f2ceecc",
+          "available": true
+        }
+      ],
+      "suite_sha256": "cfae5e03558d69f4c3aea867fed79e12ed67740bf07ccc2788b2e047ee748e38",
+      "workspace_sha256": "39388557d696d985034651b78a7fd9017efe6356353bdceea79c9a954cc82aae",
+      "execution_fingerprint": "3bccc0af8f3db441f587ad1708d2285e702ffb5abeaf2651059d0f7a62e9feca",
+      "contract_checks": [
+        {
+          "id": "frontmatter",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "identity",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "description",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "explicit-invocation",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "no-permission-bypass",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "command:isolate",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "section:Inputs",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Workflow",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Evidence",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Failure handling",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Stop conditions",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "resources-resolve",
+          "passed": true,
+          "required": true
+        }
+      ],
+      "score_metric": "contract completeness only",
+      "quality_evaluated": false,
+      "scenario_command": [
+        "python3",
+        "-m",
+        "omega.test_runner",
+        "--start",
+        "tests",
+        "--pattern",
+        "test_workflows.py"
+      ],
+      "scenario_outcomes": {
+        "run": 20,
+        "passed": 20,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "expected_failures": 0,
+        "unexpected_successes": 0
+      },
+      "scenario_output_sha256": "d41a6840cb56b2e9b81766bd0cd505fbd2deb1c22feba4f939593f8e93703d2c",
+      "scenario_evidence": {
+        "path": ".omega/evidence/1792729707832486345-8d846a99.json",
+        "sha256": "ee13f6bd4136cd78f0ef9a074148c01fd5cdfe0e68b9f014bc0a61beff84dde6",
+        "bytes": 6081
+      },
+      "evidence_checks": [
+        {
+          "path": ".omega/evidence/1792729637376652555-7fc524a6.json",
+          "valid": true
+        },
+        {
+          "path": ".omega/evidence/1792729707832486345-8d846a99.json",
+          "valid": true
+        }
+      ],
+      "eligible_for_review": true,
+      "native_release_eligible": false,
+      "stable_modified_during_compare": false
+    },
+    {
+      "skill": "omega-context-sufficiency-check",
+      "stable_before_sha256": "f57138ca5de04ac6992581f8ce324a912e7b78d804d7d4b5c745064f85fad566",
+      "candidate_sha256": "f57138ca5de04ac6992581f8ce324a912e7b78d804d7d4b5c745064f85fad566",
+      "candidate_bundle_sha256": "7fe6cbb865d6c673209349d0a047845f858a9abd52725545813f51fb37872b35",
+      "resources": [
+        {
+          "path": "docs/INTEROPERABILITY_GUIDE.md",
+          "sha256": "597ed74aadc7ca71b7b7cec77b2ea344580a20d05e5e597c8bf7059f8f2ceecc",
+          "available": true
+        }
+      ],
+      "suite_sha256": "cfae5e03558d69f4c3aea867fed79e12ed67740bf07ccc2788b2e047ee748e38",
+      "workspace_sha256": "39388557d696d985034651b78a7fd9017efe6356353bdceea79c9a954cc82aae",
+      "execution_fingerprint": "3bccc0af8f3db441f587ad1708d2285e702ffb5abeaf2651059d0f7a62e9feca",
+      "contract_checks": [
+        {
+          "id": "frontmatter",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "identity",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "description",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "explicit-invocation",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "no-permission-bypass",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "command:context-sufficiency-check",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "section:Inputs",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Workflow",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Evidence",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Failure handling",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Stop conditions",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "resources-resolve",
+          "passed": true,
+          "required": true
+        }
+      ],
+      "score_metric": "contract completeness only",
+      "quality_evaluated": false,
+      "scenario_command": [
+        "python3",
+        "-m",
+        "omega.test_runner",
+        "--start",
+        "tests",
+        "--pattern",
+        "test_new_skill_workflows.py"
+      ],
+      "scenario_outcomes": {
+        "run": 8,
+        "passed": 8,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "expected_failures": 0,
+        "unexpected_successes": 0
+      },
+      "scenario_output_sha256": "4cffe4fac969e0494e836f038cf7cc59983c8f85c3a5c67c1a5d6f9fff5364ba",
+      "scenario_evidence": {
+        "path": ".omega/evidence/1792729709680040307-c08aca82.json",
+        "sha256": "7bb459deec80623dbb265e2820222c774af72f724882dbaa9cd2b3fed9c8b7cd",
+        "bytes": 5068
+      },
+      "evidence_checks": [
+        {
+          "path": ".omega/evidence/1792729637376652555-7fc524a6.json",
+          "valid": true
+        },
+        {
+          "path": ".omega/evidence/1792729709680040307-c08aca82.json",
+          "valid": true
+        }
+      ],
+      "eligible_for_review": true,
+      "native_release_eligible": false,
+      "stable_modified_during_compare": false
+    },
+    {
+      "skill": "omega-effective-policy-explainer",
+      "stable_before_sha256": "d5b4a3417dbc65396b8edfa8b650a9bf9f5d002fb382cf59209840000fee4044",
+      "candidate_sha256": "d5b4a3417dbc65396b8edfa8b650a9bf9f5d002fb382cf59209840000fee4044",
+      "candidate_bundle_sha256": "970d61efbfc2c89154a6a4efb951512455a86ca46ba7a356816ce4b6866aace5",
+      "resources": [
+        {
+          "path": "docs/INTEROPERABILITY_GUIDE.md",
+          "sha256": "597ed74aadc7ca71b7b7cec77b2ea344580a20d05e5e597c8bf7059f8f2ceecc",
+          "available": true
+        }
+      ],
+      "suite_sha256": "cfae5e03558d69f4c3aea867fed79e12ed67740bf07ccc2788b2e047ee748e38",
+      "workspace_sha256": "39388557d696d985034651b78a7fd9017efe6356353bdceea79c9a954cc82aae",
+      "execution_fingerprint": "3bccc0af8f3db441f587ad1708d2285e702ffb5abeaf2651059d0f7a62e9feca",
+      "contract_checks": [
+        {
+          "id": "frontmatter",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "identity",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "description",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "explicit-invocation",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "no-permission-bypass",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "command:effective-policy-explainer",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "section:Inputs",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Workflow",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Evidence",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Failure handling",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Stop conditions",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "resources-resolve",
+          "passed": true,
+          "required": true
+        }
+      ],
+      "score_metric": "contract completeness only",
+      "quality_evaluated": false,
+      "scenario_command": [
+        "python3",
+        "-m",
+        "omega.test_runner",
+        "--start",
+        "tests",
+        "--pattern",
+        "test_new_skill_workflows.py"
+      ],
+      "scenario_outcomes": {
+        "run": 8,
+        "passed": 8,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "expected_failures": 0,
+        "unexpected_successes": 0
+      },
+      "scenario_output_sha256": "33b77d6e22410afcfb1be9ff0d61494a8a6818dd1049d6bc2abfe3cc3fd399cc",
+      "scenario_evidence": {
+        "path": ".omega/evidence/1792729711594168954-b68a2184.json",
+        "sha256": "3c69a5653dbe0d2df0f4ab6312faf3cbf52d1a484da27cd5c076c28d76878ac3",
+        "bytes": 5071
+      },
+      "evidence_checks": [
+        {
+          "path": ".omega/evidence/1792729637376652555-7fc524a6.json",
+          "valid": true
+        },
+        {
+          "path": ".omega/evidence/1792729711594168954-b68a2184.json",
+          "valid": true
+        }
+      ],
+      "eligible_for_review": true,
+      "native_release_eligible": false,
+      "stable_modified_during_compare": false
+    },
+    {
+      "skill": "omega-evidence-reconciler",
+      "stable_before_sha256": "01b756795e1c5443e0d4d31a989bb59ea3323ba56d7504067590adda8671f074",
+      "candidate_sha256": "01b756795e1c5443e0d4d31a989bb59ea3323ba56d7504067590adda8671f074",
+      "candidate_bundle_sha256": "802333b47d9a6ea2c8db240e34551988249aa22175223088cfee563d51129e0b",
+      "resources": [
+        {
+          "path": "docs/INTEROPERABILITY_GUIDE.md",
+          "sha256": "597ed74aadc7ca71b7b7cec77b2ea344580a20d05e5e597c8bf7059f8f2ceecc",
+          "available": true
+        },
+        {
+          "path": "docs/UPGRADE_0_4.md",
+          "sha256": "32b7b86f95393a61b3d3132ed293ff37707504252591c1250fc9e17cbfae71f6",
+          "available": true
+        },
+        {
+          "path": "docs/UPGRADE_0_5.md",
+          "sha256": "ef6769c9a0260f34df41015b23650333c8861046619a37448e29353325dbd7c0",
+          "available": true
+        }
+      ],
+      "suite_sha256": "cfae5e03558d69f4c3aea867fed79e12ed67740bf07ccc2788b2e047ee748e38",
+      "workspace_sha256": "39388557d696d985034651b78a7fd9017efe6356353bdceea79c9a954cc82aae",
+      "execution_fingerprint": "3bccc0af8f3db441f587ad1708d2285e702ffb5abeaf2651059d0f7a62e9feca",
+      "contract_checks": [
+        {
+          "id": "frontmatter",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "identity",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "description",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "explicit-invocation",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "no-permission-bypass",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "command:evidence-reconciler",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "section:Inputs",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Workflow",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Evidence",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Failure handling",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Stop conditions",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "resources-resolve",
+          "passed": true,
+          "required": true
+        }
+      ],
+      "score_metric": "contract completeness only",
+      "quality_evaluated": false,
+      "scenario_command": [
+        "python3",
+        "-m",
+        "omega.test_runner",
+        "--start",
+        "tests",
+        "--pattern",
+        "test_new_skill_workflows.py"
+      ],
+      "scenario_outcomes": {
+        "run": 8,
+        "passed": 8,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "expected_failures": 0,
+        "unexpected_successes": 0
+      },
+      "scenario_output_sha256": "e11761bbf7f887bcf12664fa0d08591fe17f94658a4b6712dd234d9164cb0d40",
+      "scenario_evidence": {
+        "path": ".omega/evidence/1792729713193880819-6beb558a.json",
+        "sha256": "2143a5f6285fe49cc6dba4fdb589e1fb8b1b61db1a6ded7388297a79ca14b09a",
+        "bytes": 5386
+      },
+      "evidence_checks": [
+        {
+          "path": ".omega/evidence/1792729637376652555-7fc524a6.json",
+          "valid": true
+        },
+        {
+          "path": ".omega/evidence/1792729713193880819-6beb558a.json",
+          "valid": true
+        }
+      ],
+      "eligible_for_review": true,
+      "native_release_eligible": false,
+      "stable_modified_during_compare": false
+    },
+    {
+      "skill": "omega-memory-reconciliation",
+      "stable_before_sha256": "bf600a482926b887a928808d0caf7ff5694e646d59ba0ed7ead7d26a33e10047",
+      "candidate_sha256": "bf600a482926b887a928808d0caf7ff5694e646d59ba0ed7ead7d26a33e10047",
+      "candidate_bundle_sha256": "d90c364b2191419749bc051bacfbbda8f80c1277624a2271ba6c4c30ee7b9ef6",
+      "resources": [
+        {
+          "path": "docs/INTEROPERABILITY_GUIDE.md",
+          "sha256": "597ed74aadc7ca71b7b7cec77b2ea344580a20d05e5e597c8bf7059f8f2ceecc",
+          "available": true
+        },
+        {
+          "path": "docs/UPGRADE_0_4.md",
+          "sha256": "32b7b86f95393a61b3d3132ed293ff37707504252591c1250fc9e17cbfae71f6",
+          "available": true
+        }
+      ],
+      "suite_sha256": "cfae5e03558d69f4c3aea867fed79e12ed67740bf07ccc2788b2e047ee748e38",
+      "workspace_sha256": "39388557d696d985034651b78a7fd9017efe6356353bdceea79c9a954cc82aae",
+      "execution_fingerprint": "3bccc0af8f3db441f587ad1708d2285e702ffb5abeaf2651059d0f7a62e9feca",
+      "contract_checks": [
+        {
+          "id": "frontmatter",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "identity",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "description",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "explicit-invocation",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "no-permission-bypass",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "command:memory-reconciliation",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "section:Inputs",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Workflow",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Evidence",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Failure handling",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Stop conditions",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "resources-resolve",
+          "passed": true,
+          "required": true
+        }
+      ],
+      "score_metric": "contract completeness only",
+      "quality_evaluated": false,
+      "scenario_command": [
+        "python3",
+        "-m",
+        "omega.test_runner",
+        "--start",
+        "tests",
+        "--pattern",
+        "test_new_skill_workflows.py"
+      ],
+      "scenario_outcomes": {
+        "run": 8,
+        "passed": 8,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "expected_failures": 0,
+        "unexpected_successes": 0
+      },
+      "scenario_output_sha256": "142080275366fa68c0e0251a2d51dfd6b4c743ed7a3cf0c11121cb61ae86bb54",
+      "scenario_evidence": {
+        "path": ".omega/evidence/1792729714804945993-82bb711a.json",
+        "sha256": "27dc2690036fee78776d74806c06603043ac86b579ddfc7f4255ec863870853e",
+        "bytes": 5224
+      },
+      "evidence_checks": [
+        {
+          "path": ".omega/evidence/1792729637376652555-7fc524a6.json",
+          "valid": true
+        },
+        {
+          "path": ".omega/evidence/1792729714804945993-82bb711a.json",
+          "valid": true
+        }
+      ],
+      "eligible_for_review": true,
+      "native_release_eligible": false,
+      "stable_modified_during_compare": false
+    },
+    {
+      "skill": "omega-project-workflow-adapter",
+      "stable_before_sha256": "779105bf4928a0d9ca3c8e75f1502e4575c341b019f050b7d3b1f327a66d6dee",
+      "candidate_sha256": "779105bf4928a0d9ca3c8e75f1502e4575c341b019f050b7d3b1f327a66d6dee",
+      "candidate_bundle_sha256": "b6761aa4181f3c08cae5972945fd9a19234613401f63898952b00304f4aa9493",
+      "resources": [
+        {
+          "path": "docs/INTEROPERABILITY_GUIDE.md",
+          "sha256": "597ed74aadc7ca71b7b7cec77b2ea344580a20d05e5e597c8bf7059f8f2ceecc",
+          "available": true
+        },
+        {
+          "path": "docs/PYTHON_TYPESCRIPT_BOUNDARY.md",
+          "sha256": "b72aebb1a117db245558fe2917bcb28882e53aa4882aeca374bed15c554eb362",
+          "available": true
+        },
+        {
+          "path": "docs/UPGRADE_0_4.md",
+          "sha256": "32b7b86f95393a61b3d3132ed293ff37707504252591c1250fc9e17cbfae71f6",
+          "available": true
+        },
+        {
+          "path": "docs/UPGRADE_0_5.md",
+          "sha256": "ef6769c9a0260f34df41015b23650333c8861046619a37448e29353325dbd7c0",
+          "available": true
+        }
+      ],
+      "suite_sha256": "cfae5e03558d69f4c3aea867fed79e12ed67740bf07ccc2788b2e047ee748e38",
+      "workspace_sha256": "39388557d696d985034651b78a7fd9017efe6356353bdceea79c9a954cc82aae",
+      "execution_fingerprint": "3bccc0af8f3db441f587ad1708d2285e702ffb5abeaf2651059d0f7a62e9feca",
+      "contract_checks": [
+        {
+          "id": "frontmatter",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "identity",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "description",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "explicit-invocation",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "no-permission-bypass",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "command:project-workflow-adapter",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "section:Inputs",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Workflow",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Evidence",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Failure handling",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Stop conditions",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "resources-resolve",
+          "passed": true,
+          "required": true
+        }
+      ],
+      "score_metric": "contract completeness only",
+      "quality_evaluated": false,
+      "scenario_command": [
+        "python3",
+        "-m",
+        "omega.test_runner",
+        "--start",
+        "tests",
+        "--pattern",
+        "test_new_skill_workflows.py"
+      ],
+      "scenario_outcomes": {
+        "run": 8,
+        "passed": 8,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "expected_failures": 0,
+        "unexpected_successes": 0
+      },
+      "scenario_output_sha256": "2ca52fb286a53872eefde3012767227904e7dbe8606b9530c92eaac9f902d572",
+      "scenario_evidence": {
+        "path": ".omega/evidence/1792729716445382383-600990f0.json",
+        "sha256": "855963d2684d70f9d905c9485869985d7ba7c3644d37c4be57cb8c3098707bf9",
+        "bytes": 5584
+      },
+      "evidence_checks": [
+        {
+          "path": ".omega/evidence/1792729637376652555-7fc524a6.json",
+          "valid": true
+        },
+        {
+          "path": ".omega/evidence/1792729716445382383-600990f0.json",
+          "valid": true
+        }
+      ],
+      "eligible_for_review": true,
+      "native_release_eligible": false,
+      "stable_modified_during_compare": false
+    },
+    {
+      "skill": "omega-skill-compatibility-audit",
+      "stable_before_sha256": "4e3d1450c7befd0922542cd03caa58eac7ac3d6848287212c1f1766ed7e88e9c",
+      "candidate_sha256": "4e3d1450c7befd0922542cd03caa58eac7ac3d6848287212c1f1766ed7e88e9c",
+      "candidate_bundle_sha256": "4233a580bb4ed5a94299c6d0c68a95d2b128ea342cf11996b73eb94d10a93873",
+      "resources": [
+        {
+          "path": "docs/INTEROPERABILITY_GUIDE.md",
+          "sha256": "597ed74aadc7ca71b7b7cec77b2ea344580a20d05e5e597c8bf7059f8f2ceecc",
+          "available": true
+        }
+      ],
+      "suite_sha256": "cfae5e03558d69f4c3aea867fed79e12ed67740bf07ccc2788b2e047ee748e38",
+      "workspace_sha256": "39388557d696d985034651b78a7fd9017efe6356353bdceea79c9a954cc82aae",
+      "execution_fingerprint": "3bccc0af8f3db441f587ad1708d2285e702ffb5abeaf2651059d0f7a62e9feca",
+      "contract_checks": [
+        {
+          "id": "frontmatter",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "identity",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "description",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "explicit-invocation",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "no-permission-bypass",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "command:skill-compatibility-audit",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "section:Inputs",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Workflow",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Evidence",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Failure handling",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Stop conditions",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "resources-resolve",
+          "passed": true,
+          "required": true
+        }
+      ],
+      "score_metric": "contract completeness only",
+      "quality_evaluated": false,
+      "scenario_command": [
+        "python3",
+        "-m",
+        "omega.test_runner",
+        "--start",
+        "tests",
+        "--pattern",
+        "test_new_skill_workflows.py"
+      ],
+      "scenario_outcomes": {
+        "run": 8,
+        "passed": 8,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "expected_failures": 0,
+        "unexpected_successes": 0
+      },
+      "scenario_output_sha256": "b13053307a24ae13c0f71deb8dc47b6468372d459cc67a40a0d33ec7e80e45e4",
+      "scenario_evidence": {
+        "path": ".omega/evidence/1792729718396778562-4e2006ce.json",
+        "sha256": "f735750a80fbd4f45a978599abc4d30532151ff53babfb404aa1606a47629bca",
+        "bytes": 5068
+      },
+      "evidence_checks": [
+        {
+          "path": ".omega/evidence/1792729637376652555-7fc524a6.json",
+          "valid": true
+        },
+        {
+          "path": ".omega/evidence/1792729718396778562-4e2006ce.json",
+          "valid": true
+        }
+      ],
+      "eligible_for_review": true,
+      "native_release_eligible": false,
+      "stable_modified_during_compare": false
+    },
+    {
+      "skill": "omega-skill-interference-benchmark",
+      "stable_before_sha256": "4ecc713b6af4c3ed65b18a6abdbafe6388db546ea4256b66ea2af6aaeb2a3f6b",
+      "candidate_sha256": "4ecc713b6af4c3ed65b18a6abdbafe6388db546ea4256b66ea2af6aaeb2a3f6b",
+      "candidate_bundle_sha256": "f27c74f9fce90a7093c25e50e90fd60874bf6f088e26a13a5f44be2b1c3c26db",
+      "resources": [
+        {
+          "path": "docs/INTEROPERABILITY_GUIDE.md",
+          "sha256": "597ed74aadc7ca71b7b7cec77b2ea344580a20d05e5e597c8bf7059f8f2ceecc",
+          "available": true
+        }
+      ],
+      "suite_sha256": "cfae5e03558d69f4c3aea867fed79e12ed67740bf07ccc2788b2e047ee748e38",
+      "workspace_sha256": "39388557d696d985034651b78a7fd9017efe6356353bdceea79c9a954cc82aae",
+      "execution_fingerprint": "3bccc0af8f3db441f587ad1708d2285e702ffb5abeaf2651059d0f7a62e9feca",
+      "contract_checks": [
+        {
+          "id": "frontmatter",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "identity",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "description",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "explicit-invocation",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "no-permission-bypass",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "command:skill-interference-benchmark",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "section:Inputs",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Workflow",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Evidence",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Failure handling",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Stop conditions",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "resources-resolve",
+          "passed": true,
+          "required": true
+        }
+      ],
+      "score_metric": "contract completeness only",
+      "quality_evaluated": false,
+      "scenario_command": [
+        "python3",
+        "-m",
+        "omega.test_runner",
+        "--start",
+        "tests",
+        "--pattern",
+        "test_new_skill_workflows.py"
+      ],
+      "scenario_outcomes": {
+        "run": 8,
+        "passed": 8,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "expected_failures": 0,
+        "unexpected_successes": 0
+      },
+      "scenario_output_sha256": "7fedf4570e75ea6e5190d33e68a35051b0dd6e5c63f06190c19997d2aae92cb7",
+      "scenario_evidence": {
+        "path": ".omega/evidence/1792729720111205560-4176de92.json",
+        "sha256": "687ca9b18ce670d81e41a39a4309d61b5423d219962027ac862bb3d5ac7f8ab9",
+        "bytes": 5077
+      },
+      "evidence_checks": [
+        {
+          "path": ".omega/evidence/1792729637376652555-7fc524a6.json",
+          "valid": true
+        },
+        {
+          "path": ".omega/evidence/1792729720111205560-4176de92.json",
+          "valid": true
+        }
+      ],
+      "eligible_for_review": true,
+      "native_release_eligible": false,
+      "stable_modified_during_compare": false
+    },
+    {
+      "skill": "omega-workflow-handoff-contract",
+      "stable_before_sha256": "cb63966ac35ed3ce0e8fa1f1cb9246fe31c1c133797dab03fa03e5291f4fcd7b",
+      "candidate_sha256": "cb63966ac35ed3ce0e8fa1f1cb9246fe31c1c133797dab03fa03e5291f4fcd7b",
+      "candidate_bundle_sha256": "89c490eed8e94513b9dfa975fe6d6b5fbca9d90dd2761d0bfef741e921759d0e",
+      "resources": [
+        {
+          "path": "docs/INTEROPERABILITY_GUIDE.md",
+          "sha256": "597ed74aadc7ca71b7b7cec77b2ea344580a20d05e5e597c8bf7059f8f2ceecc",
+          "available": true
+        },
+        {
+          "path": "docs/UPGRADE_0_4.md",
+          "sha256": "32b7b86f95393a61b3d3132ed293ff37707504252591c1250fc9e17cbfae71f6",
+          "available": true
+        }
+      ],
+      "suite_sha256": "cfae5e03558d69f4c3aea867fed79e12ed67740bf07ccc2788b2e047ee748e38",
+      "workspace_sha256": "39388557d696d985034651b78a7fd9017efe6356353bdceea79c9a954cc82aae",
+      "execution_fingerprint": "3bccc0af8f3db441f587ad1708d2285e702ffb5abeaf2651059d0f7a62e9feca",
+      "contract_checks": [
+        {
+          "id": "frontmatter",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "identity",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "description",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "explicit-invocation",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "no-permission-bypass",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "command:workflow-handoff-contract",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "section:Inputs",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Workflow",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Evidence",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Failure handling",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Stop conditions",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "resources-resolve",
+          "passed": true,
+          "required": true
+        }
+      ],
+      "score_metric": "contract completeness only",
+      "quality_evaluated": false,
+      "scenario_command": [
+        "python3",
+        "-m",
+        "omega.test_runner",
+        "--start",
+        "tests",
+        "--pattern",
+        "test_new_skill_workflows.py"
+      ],
+      "scenario_outcomes": {
+        "run": 8,
+        "passed": 8,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "expected_failures": 0,
+        "unexpected_successes": 0
+      },
+      "scenario_output_sha256": "b8039b712c8cee646d4291be8fba86e07701b993b69743fff32d3fa289c5f771",
+      "scenario_evidence": {
+        "path": ".omega/evidence/1792729721998770580-f5945347.json",
+        "sha256": "55e74214e65bb88410225c97b033729e9ccdd2797ff0772a5a8c8a1d5d94c76a",
+        "bytes": 5236
+      },
+      "evidence_checks": [
+        {
+          "path": ".omega/evidence/1792729637376652555-7fc524a6.json",
+          "valid": true
+        },
+        {
+          "path": ".omega/evidence/1792729721998770580-f5945347.json",
+          "valid": true
+        }
+      ],
+      "eligible_for_review": true,
+      "native_release_eligible": false,
+      "stable_modified_during_compare": false
+    },
+    {
+      "skill": "project-memory",
+      "stable_before_sha256": "b463f53c46aacb001d2b3e042793749ef58e38c8a7a2e75f9640a3dcb8bc067b",
+      "candidate_sha256": "b463f53c46aacb001d2b3e042793749ef58e38c8a7a2e75f9640a3dcb8bc067b",
+      "candidate_bundle_sha256": "2961bbf8da020cd11a0fdc79a44f351c6ec17ebdafa8e9fc875b6a67578219cc",
+      "resources": [
+        {
+          "path": "docs/INTEROPERABILITY_GUIDE.md",
+          "sha256": "597ed74aadc7ca71b7b7cec77b2ea344580a20d05e5e597c8bf7059f8f2ceecc",
+          "available": true
+        },
+        {
+          "path": "docs/UPGRADE_0_4.md",
+          "sha256": "32b7b86f95393a61b3d3132ed293ff37707504252591c1250fc9e17cbfae71f6",
+          "available": true
+        }
+      ],
+      "suite_sha256": "cfae5e03558d69f4c3aea867fed79e12ed67740bf07ccc2788b2e047ee748e38",
+      "workspace_sha256": "39388557d696d985034651b78a7fd9017efe6356353bdceea79c9a954cc82aae",
+      "execution_fingerprint": "3bccc0af8f3db441f587ad1708d2285e702ffb5abeaf2651059d0f7a62e9feca",
+      "contract_checks": [
+        {
+          "id": "frontmatter",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "identity",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "description",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "explicit-invocation",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "no-permission-bypass",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "command:memory",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "section:Inputs",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Workflow",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Evidence",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Failure handling",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Stop conditions",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "resources-resolve",
+          "passed": true,
+          "required": true
+        }
+      ],
+      "score_metric": "contract completeness only",
+      "quality_evaluated": false,
+      "scenario_command": [
+        "python3",
+        "-m",
+        "omega.test_runner",
+        "--start",
+        "tests",
+        "--pattern",
+        "test_workflows.py"
+      ],
+      "scenario_outcomes": {
+        "run": 20,
+        "passed": 20,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "expected_failures": 0,
+        "unexpected_successes": 0
+      },
+      "scenario_output_sha256": "6b87a8085156fb384d6f04089e83be84cea7d61a9280a4aa7890c2083eb241b1",
+      "scenario_evidence": {
+        "path": ".omega/evidence/1792729723784382165-f4544150.json",
+        "sha256": "79a5bd6b7d71a70d888c23bc9dffd8dab210c19ad9ab3199fccfe7129524a834",
+        "bytes": 6241
+      },
+      "evidence_checks": [
+        {
+          "path": ".omega/evidence/1792729637376652555-7fc524a6.json",
+          "valid": true
+        },
+        {
+          "path": ".omega/evidence/1792729723784382165-f4544150.json",
+          "valid": true
+        }
+      ],
+      "eligible_for_review": true,
+      "native_release_eligible": false,
+      "stable_modified_during_compare": false
+    },
+    {
+      "skill": "quality-gates",
+      "stable_before_sha256": "96538d7f579939b979af42924377813665e247ddbfa3fbf9ffbf4f565a97ffc2",
+      "candidate_sha256": "96538d7f579939b979af42924377813665e247ddbfa3fbf9ffbf4f565a97ffc2",
+      "candidate_bundle_sha256": "2d15825467f8698eeddddc36798370bba5373936cc97f664410eed4a681ded9f",
+      "resources": [
+        {
+          "path": "docs/INTEROPERABILITY_GUIDE.md",
+          "sha256": "597ed74aadc7ca71b7b7cec77b2ea344580a20d05e5e597c8bf7059f8f2ceecc",
+          "available": true
+        },
+        {
+          "path": "docs/UPGRADE_0_4.md",
+          "sha256": "32b7b86f95393a61b3d3132ed293ff37707504252591c1250fc9e17cbfae71f6",
+          "available": true
+        },
+        {
+          "path": "docs/UPGRADE_0_5.md",
+          "sha256": "ef6769c9a0260f34df41015b23650333c8861046619a37448e29353325dbd7c0",
+          "available": true
+        }
+      ],
+      "suite_sha256": "cfae5e03558d69f4c3aea867fed79e12ed67740bf07ccc2788b2e047ee748e38",
+      "workspace_sha256": "39388557d696d985034651b78a7fd9017efe6356353bdceea79c9a954cc82aae",
+      "execution_fingerprint": "3bccc0af8f3db441f587ad1708d2285e702ffb5abeaf2651059d0f7a62e9feca",
+      "contract_checks": [
+        {
+          "id": "frontmatter",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "identity",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "description",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "explicit-invocation",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "no-permission-bypass",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "command:gates",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "command:rollback-check",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "section:Inputs",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Workflow",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Evidence",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Failure handling",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Stop conditions",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "resources-resolve",
+          "passed": true,
+          "required": true
+        }
+      ],
+      "score_metric": "contract completeness only",
+      "quality_evaluated": false,
+      "scenario_command": [
+        "python3",
+        "-m",
+        "omega.test_runner",
+        "--start",
+        "tests",
+        "--pattern",
+        "test_workflows.py"
+      ],
+      "scenario_outcomes": {
+        "run": 20,
+        "passed": 20,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "expected_failures": 0,
+        "unexpected_successes": 0
+      },
+      "scenario_output_sha256": "ab51058481976144a1d143a1efd5f1a2a2025f1680c78eb1f77ab6fdde049421",
+      "scenario_evidence": {
+        "path": ".omega/evidence/1792729725145398956-7e321178.json",
+        "sha256": "57dcbb13c54fb6099c8d5d5c1f8b453e303d84f0caf93c21b3d62984eda436df",
+        "bytes": 6513
+      },
+      "evidence_checks": [
+        {
+          "path": ".omega/evidence/1792729637376652555-7fc524a6.json",
+          "valid": true
+        },
+        {
+          "path": ".omega/evidence/1792729725145398956-7e321178.json",
+          "valid": true
+        }
+      ],
+      "eligible_for_review": true,
+      "native_release_eligible": false,
+      "stable_modified_during_compare": false
+    },
+    {
+      "skill": "repo-map",
+      "stable_before_sha256": "fab81a9761ff11589d3d8822dc65bf3d31523e79efc69acb6de9b0e0c8eedd0e",
+      "candidate_sha256": "fab81a9761ff11589d3d8822dc65bf3d31523e79efc69acb6de9b0e0c8eedd0e",
+      "candidate_bundle_sha256": "dfb1239731d7c435ebad65890f86437910f81b15399bdc8036513721d1999ef5",
+      "resources": [
+        {
+          "path": "docs/INTEROPERABILITY_GUIDE.md",
+          "sha256": "597ed74aadc7ca71b7b7cec77b2ea344580a20d05e5e597c8bf7059f8f2ceecc",
+          "available": true
+        }
+      ],
+      "suite_sha256": "cfae5e03558d69f4c3aea867fed79e12ed67740bf07ccc2788b2e047ee748e38",
+      "workspace_sha256": "39388557d696d985034651b78a7fd9017efe6356353bdceea79c9a954cc82aae",
+      "execution_fingerprint": "3bccc0af8f3db441f587ad1708d2285e702ffb5abeaf2651059d0f7a62e9feca",
+      "contract_checks": [
+        {
+          "id": "frontmatter",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "identity",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "description",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "explicit-invocation",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "no-permission-bypass",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "command:map",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "command:plan",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "section:Inputs",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Workflow",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Evidence",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Failure handling",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Stop conditions",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "resources-resolve",
+          "passed": true,
+          "required": true
+        }
+      ],
+      "score_metric": "contract completeness only",
+      "quality_evaluated": false,
+      "scenario_command": [
+        "python3",
+        "-m",
+        "omega.test_runner",
+        "--start",
+        "tests",
+        "--pattern",
+        "test_workflows.py"
+      ],
+      "scenario_outcomes": {
+        "run": 20,
+        "passed": 20,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "expected_failures": 0,
+        "unexpected_successes": 0
+      },
+      "scenario_output_sha256": "61a962901f02320456ae7c1c32fd79a5c171c2f9cdfc381cda468bf49b47a131",
+      "scenario_evidence": {
+        "path": ".omega/evidence/1792729726562885093-067d8c62.json",
+        "sha256": "a4058eb37898d346d0c4ccd47af6d69ce7aeb076c15e703f0a961a10999dbd48",
+        "bytes": 6155
+      },
+      "evidence_checks": [
+        {
+          "path": ".omega/evidence/1792729637376652555-7fc524a6.json",
+          "valid": true
+        },
+        {
+          "path": ".omega/evidence/1792729726562885093-067d8c62.json",
+          "valid": true
+        }
+      ],
+      "eligible_for_review": true,
+      "native_release_eligible": false,
+      "stable_modified_during_compare": false
+    },
+    {
+      "skill": "skill-benchmark",
+      "stable_before_sha256": "707c7e20f592a5167f8777fa78281384cd04436ba699ab153e7ef9035bd5d073",
+      "candidate_sha256": "707c7e20f592a5167f8777fa78281384cd04436ba699ab153e7ef9035bd5d073",
+      "candidate_bundle_sha256": "9211a2ce5eead19ea2cf3e6222d9cd1a97a29ed369f7292929307d490dfd0abb",
+      "resources": [
+        {
+          "path": "docs/INTEROPERABILITY_GUIDE.md",
+          "sha256": "597ed74aadc7ca71b7b7cec77b2ea344580a20d05e5e597c8bf7059f8f2ceecc",
+          "available": true
+        },
+        {
+          "path": "docs/UPGRADE_0_5.md",
+          "sha256": "ef6769c9a0260f34df41015b23650333c8861046619a37448e29353325dbd7c0",
+          "available": true
+        }
+      ],
+      "suite_sha256": "cfae5e03558d69f4c3aea867fed79e12ed67740bf07ccc2788b2e047ee748e38",
+      "workspace_sha256": "39388557d696d985034651b78a7fd9017efe6356353bdceea79c9a954cc82aae",
+      "execution_fingerprint": "3bccc0af8f3db441f587ad1708d2285e702ffb5abeaf2651059d0f7a62e9feca",
+      "contract_checks": [
+        {
+          "id": "frontmatter",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "identity",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "description",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "explicit-invocation",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "no-permission-bypass",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "command:candidate",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "command:compare",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "command:benchmark",
+          "passed": true,
+          "required": true
+        },
+        {
+          "id": "section:Inputs",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Workflow",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Evidence",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Failure handling",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "section:Stop conditions",
+          "passed": true,
+          "required": false
+        },
+        {
+          "id": "resources-resolve",
+          "passed": true,
+          "required": true
+        }
+      ],
+      "score_metric": "contract completeness only",
+      "quality_evaluated": false,
+      "scenario_command": [
+        "python3",
+        "-m",
+        "omega.test_runner",
+        "--start",
+        "tests",
+        "--pattern",
+        "test_workflows.py"
+      ],
+      "scenario_outcomes": {
+        "run": 20,
+        "passed": 20,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "expected_failures": 0,
+        "unexpected_successes": 0
+      },
+      "scenario_output_sha256": "f48f62625b1c232b56e32e873859d938e51ab1772fd5cf278c3de62e6e3b6ec5",
+      "scenario_evidence": {
+        "path": ".omega/evidence/1792729727943734698-1a9e9ec8.json",
+        "sha256": "90726e068e8bb2446394258d764b9e6cedfee3dcfa678b50d48c9ccffac98740",
+        "bytes": 6447
+      },
+      "evidence_checks": [
+        {
+          "path": ".omega/evidence/1792729637376652555-7fc524a6.json",
+          "valid": true
+        },
+        {
+          "path": ".omega/evidence/1792729727943734698-1a9e9ec8.json",
+          "valid": true
+        }
+      ],
+      "eligible_for_review": true,
+      "native_release_eligible": false,
+      "stable_modified_during_compare": false
+    }
+  ],
+  "skill_review_scope": "Pre-apply candidate gate/scenario evidence was reviewed before copying four candidates to stable. Final reviews compare unchanged current skill copies after the implementation commit. eligibility is offline review only; native release stays false.",
+  "native_node_report_workflow": {
+    "summary": {
+      "fixture": ".omega/native-runners/7aa53b6236184e31bc49a2c55e9b3769",
+      "node_version": "v24.19.0",
+      "adapter": "junit",
+      "before_passed": false,
+      "after_passed": true,
+      "test_outcomes": {
+        "run": 2,
+        "passed": 1,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 1,
+        "expected_failures": 0,
+        "unexpected_successes": 0
+      },
+      "source_sha256": "0ec5062faab170572a435284b5253963013467df51ba80c8508952311335954a",
+      "gate_exit_codes": {
+        "build": 0,
+        "tests": 0,
+        "security": 0,
+        "regression": 0
+      },
+      "evidence": ".omega/native-runners/7aa53b6236184e31bc49a2c55e9b3769/.omega/evidence/1792729628091288906-c9dd777b.json",
+      "limits": "Node built-in test runner only; Jest and Go native unverified; regression repeats fixture tests; JS security uses text rules only",
+      "network_used": false,
+      "dependencies_installed": false,
+      "native_claude_executed": false,
+      "structured_report_file": true,
+      "report_metadata": {
+        "path": ".omega/reports/00080de6231c48c5b6984c9e56f98f31/junit.xml",
+        "adapter": "junit",
+        "fresh_namespace": true,
+        "fresh": true,
+        "unchanged": true,
+        "sha256": "a2e95b29609fd14f00ef8443f98a6cce345d2479ee4baa32a3e0ce6f705f9e0a",
+        "bytes": 605,
+        "identity": [
+          27,
+          1579918,
+          605,
+          1792729627737957020,
+          1792729627737957020,
+          1
+        ],
+        "content_ref": ".omega/evidence/1792729628091288906-c9dd777b.json#/results/1/report/content"
+      }
+    },
+    "gates": {
+      "schema": 1,
+      "project": "/workspace/skill/.omega/native-runners/7aa53b6236184e31bc49a2c55e9b3769",
+      "head": "1ebab67662fcbe5676f9513dbf7d2fa99cd21c47",
+      "created_utc": "2026-10-23T04:27:08.093903+00:00",
+      "kind": "gates",
+      "test_adapter": "junit",
+      "test_report": ".omega/reports/{run_id}/junit.xml",
+      "test_outcomes": {
+        "run": 2,
+        "passed": 1,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 1,
+        "expected_failures": 0,
+        "unexpected_successes": 0
+      },
+      "execution_fingerprint": "aa0b2c4129e09b1a6eabfcdb51ddc7fb65ee882d73db221b9d90dac76f7f66f9",
+      "execution_context": {
+        "python_version": "3.12.14",
+        "system": "Linux",
+        "machine": "x86_64",
+        "engine_sha256": "70e07e78c6c0790a9c28b6ae672d1d311a0c26c3985f6c5631165521603d084e",
+        "environment_sha256": {
+          "PATH": "89f45694eeac679d66982fb225aab97d2049249d842ac30dd09e31f18cdd97c7",
+          "PYTHONPATH": null,
+          "PYTHONHASHSEED": null,
+          "PYTHONOPTIMIZE": null,
+          "NODE_OPTIONS": null,
+          "NODE_PATH": "dbc7bc884f72c70bb3d320e868da710a56a621286fba48b3c6b610776b41b4fd",
+          "GOWORK": null,
+          "GOTOOLCHAIN": null,
+          "GOPROXY": null,
+          "GOSUMDB": null,
+          "GOCACHE": null
+        },
+        "declared_runtime_inputs_sha256": {},
+        "tools": {
+          "python": {
+            "path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12",
+            "bytes": 30894944,
+            "mtime_ns": 1791948610000000000,
+            "mode": 493
+          },
+          "node": {
+            "path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "bytes": 125989464,
+            "mtime_ns": 1791948609000000000,
+            "mode": 493
+          },
+          "npm": {
+            "path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/lib/node_modules/npm/bin/npm-cli.js",
+            "bytes": 54,
+            "mtime_ns": 1767885352000000000,
+            "mode": 493
+          },
+          "go": {
+            "path": "/usr/bin/go",
+            "bytes": 2115840,
+            "mtime_ns": 0,
+            "mode": 493
+          }
+        },
+        "project_policy_sha256": {
+          ".claude/settings.json": null,
+          ".claude/settings.local.json": null,
+          ".mcp.json": null,
+          ".claude-plugin/plugin.json": null
+        },
+        "config_sha256": "36ac251f59b227aaf29ed25001afdc9a071deb1b8c47d7cb6b8071977e4d264d",
+        "external_policy": "unobserved; global, managed, API and plugin runtime may differ"
+      },
+      "execution_unchanged": true,
+      "passed": true,
+      "workspace_sha256": "37ccaeb68c9a9c77a182404233f308aa37b80888107e943a2810e12eb1f65f1c",
+      "workspace_unchanged": true,
+      "results": [
+        {
+          "gate": "build",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "--check",
+            "calc.cjs"
+          ],
+          "exit_code": 0,
+          "seconds": 0.087,
+          "output": "",
+          "truncated": false,
+          "output_tail": "",
+          "timed_out": false,
+          "output_limit_exceeded": false,
+          "total_output_bytes": 0,
+          "invalid_utf8": false
+        },
+        {
+          "gate": "tests",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "--test",
+            "--test-reporter=spec",
+            "--test-reporter-destination=stdout",
+            "--test-reporter=junit",
+            "--test-reporter-destination=/workspace/skill/.omega/native-runners/7aa53b6236184e31bc49a2c55e9b3769/.omega/reports/00080de6231c48c5b6984c9e56f98f31/junit.xml",
+            "sum.test.cjs"
+          ],
+          "exit_code": 0,
+          "seconds": 0.238,
+          "output": "✔ addition (1.492858ms)\n﹣ deliberately deferred (0.842376ms) # SKIP\nℹ tests 2\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 1\nℹ todo 0\nℹ duration_ms 153.942983\n",
+          "truncated": false,
+          "output_tail": "",
+          "timed_out": false,
+          "output_limit_exceeded": false,
+          "total_output_bytes": 187,
+          "invalid_utf8": false,
+          "configured_command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "--test",
+            "--test-reporter=spec",
+            "--test-reporter-destination=stdout",
+            "--test-reporter=junit",
+            "--test-reporter-destination={report_path}",
+            "sum.test.cjs"
+          ],
+          "report": {
+            "path": ".omega/reports/00080de6231c48c5b6984c9e56f98f31/junit.xml",
+            "adapter": "junit",
+            "fresh_namespace": true,
+            "fresh": true,
+            "unchanged": true,
+            "sha256": "a2e95b29609fd14f00ef8443f98a6cce345d2479ee4baa32a3e0ce6f705f9e0a",
+            "bytes": 605,
+            "identity": [
+              27,
+              1579918,
+              605,
+              1792729627737957020,
+              1792729627737957020,
+              1
+            ],
+            "content": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<testsuites>\n\t<testcase name=\"addition\" time=\"0.001493\" classname=\"test\" file=\"/workspace/skill/.omega/native-runners/7aa53b6236184e31bc49a2c55e9b3769/sum.test.cjs\"/>\n\t<testcase name=\"deliberately deferred\" time=\"0.000842\" classname=\"test\" file=\"/workspace/skill/.omega/native-runners/7aa53b6236184e31bc49a2c55e9b3769/sum.test.cjs\">\n\t\t<skipped type=\"skipped\" message=\"true\"/>\n\t</testcase>\n\t<!-- tests 2 -->\n\t<!-- suites 0 -->\n\t<!-- pass 1 -->\n\t<!-- fail 0 -->\n\t<!-- cancelled 0 -->\n\t<!-- skipped 1 -->\n\t<!-- todo 0 -->\n\t<!-- duration_ms 153.942983 -->\n</testsuites>\n"
+          },
+          "adapter": "junit"
+        },
+        {
+          "gate": "security",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+            "/workspace/skill/omega_cli.py",
+            "--project-root",
+            "/workspace/skill/.omega/native-runners/7aa53b6236184e31bc49a2c55e9b3769",
+            "audit",
+            "--select",
+            "calc.cjs",
+            "--select",
+            "sum.test.cjs",
+            "--compact"
+          ],
+          "exit_code": 0,
+          "seconds": 0.073,
+          "output": "{\"passed\":true,\"complete_for_selected_paths\":true,\"findings\":[],\"coverage\":[{\"path\":\"calc.cjs\",\"sha256\":\"0ec5062faab170572a435284b5253963013467df51ba80c8508952311335954a\",\"python_ast\":false},{\"path\":\"sum.test.cjs\",\"sha256\":\"057f0ef96cf93a8d611812da5f7bd5d601c4a2be31457fb3d4eead44fc4ff294\",\"python_ast\":false}],\"exclusions\":[],\"files_scanned\":2,\"files_written\":false,\"commands_executed\":false,\"scope\":\"targeted Python AST, explicit bypass and possible-secret rules only; no taint/dependency/full-language assurance\"}\n",
+          "truncated": false,
+          "output_tail": "",
+          "timed_out": false,
+          "output_limit_exceeded": false,
+          "total_output_bytes": 517,
+          "invalid_utf8": false
+        },
+        {
+          "gate": "regression",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "--test",
+            "--test-reporter=junit",
+            "sum.test.cjs"
+          ],
+          "exit_code": 0,
+          "seconds": 0.192,
+          "output": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<testsuites>\n\t<testcase name=\"addition\" time=\"0.001210\" classname=\"test\" file=\"/workspace/skill/.omega/native-runners/7aa53b6236184e31bc49a2c55e9b3769/sum.test.cjs\"/>\n\t<testcase name=\"deliberately deferred\" time=\"0.001912\" classname=\"test\" file=\"/workspace/skill/.omega/native-runners/7aa53b6236184e31bc49a2c55e9b3769/sum.test.cjs\">\n\t\t<skipped type=\"skipped\" message=\"true\"/>\n\t</testcase>\n\t<!-- tests 2 -->\n\t<!-- suites 0 -->\n\t<!-- pass 1 -->\n\t<!-- fail 0 -->\n\t<!-- cancelled 0 -->\n\t<!-- skipped 1 -->\n\t<!-- todo 0 -->\n\t<!-- duration_ms 116.320596 -->\n</testsuites>\n",
+          "truncated": false,
+          "output_tail": "",
+          "timed_out": false,
+          "output_limit_exceeded": false,
+          "total_output_bytes": 605,
+          "invalid_utf8": false
+        }
+      ]
+    },
+    "report_sha256": "a2e95b29609fd14f00ef8443f98a6cce345d2479ee4baa32a3e0ce6f705f9e0a",
+    "reconciliation": {
+      "passed": true,
+      "records": [
+        {
+          "record": ".omega/evidence/1792729628091288906-c9dd777b.json",
+          "state": "current",
+          "requires_validation": false
+        }
+      ],
+      "scope": "known local source/runtime fingerprint only; external platform policy remains unobserved"
+    },
+    "runner": "Actual Node built-in runner, human spec stdout and JUnit file, red bug then green fix; after 1 pass and 1 deliberate skip",
+    "trust": "Fresh bounded report is not proof that an arbitrary runner is truthful; local artifacts are unsigned"
+  },
+  "demo": {
+    "fixture": ".omega/demo/0f58736891514136a809d222c74ec03c",
+    "baseline_commit": "2fc243fcf6736c96212759b0e3aebeb2dac16555",
+    "before_passed": false,
+    "after_passed": true,
+    "regression_tests": 1,
+    "isolated_branch": "omega/demo-fix",
+    "worktree_created": true,
+    "baseline_recoverable": true,
+    "memory": ".omega/memory/1792729692396973020-be8cb977.json",
+    "candidate_passed": true,
+    "stable_modified": false,
+    "rollback_diff_exit": 0,
+    "native_claude_executed": false,
+    "network_used": false
+  },
+  "efficiency": {
+    "suite": "token-efficiency-v1",
+    "metric": "UTF-8 bytes; actual tokens and native LLM quality unmeasured",
+    "passed": true,
+    "cases": [
+      {
+        "case": "plan-low",
+        "before_utf8_bytes": 718,
+        "after_utf8_bytes": 599,
+        "reduction_percent": 16.57,
+        "data_equivalent": true
+      },
+      {
+        "case": "plan-medium",
+        "before_utf8_bytes": 767,
+        "after_utf8_bytes": 635,
+        "reduction_percent": 17.21,
+        "data_equivalent": true
+      },
+      {
+        "case": "plan-high",
+        "before_utf8_bytes": 793,
+        "after_utf8_bytes": 656,
+        "reduction_percent": 17.28,
+        "data_equivalent": true
+      },
+      {
+        "case": "explicit-source-packet",
+        "before_utf8_bytes": 1117,
+        "after_utf8_bytes": 1043,
+        "reduction_percent": 6.62,
+        "data_equivalent": true
+      },
+      {
+        "case": "gate-logs-by-reference",
+        "before_utf8_bytes": 54129,
+        "after_utf8_bytes": 3479,
+        "reduction_percent": 93.57,
+        "data_equivalent": true
+      }
+    ],
+    "sources_sha256": {
+      "omega/context.py": "53743a082ef9594b46c24eb3649e3d2693e962b7d1cf027c6a5ed8220458c33c",
+      "omega/__main__.py": "0e727de0a6006ed3d7995907f8d72de21cbdfacbc1aaa1e3fe2898076d48dc68",
+      "tests/test_context.py": "324992baa7c5185803fa1adce6955e1b865787452e0413ac5fb838e831414fae",
+      "benchmarks/token_efficiency.py": "a4871db783e0d71d6ce845924a1d046fab67b9c1d8621165b3ab4eb8fa00bbd6"
+    },
+    "claude_native_evaluated": false
+  },
+  "doctor": {
+    "python": "3.12.14",
+    "git": "git version 2.52.0",
+    "claude": {
+      "available": true,
+      "source": "project-local",
+      "command": [
+        "/workspace/skill/.omega/tools/claude/node_modules/.bin/claude",
+        "--version"
+      ],
+      "exit_code": 0,
+      "seconds": 0.013,
+      "output": "2.1.308 (Claude Code)\n",
+      "truncated": false,
+      "output_tail": "",
+      "timed_out": false,
+      "output_limit_exceeded": false,
+      "total_output_bytes": 22,
+      "invalid_utf8": false
+    },
+    "native_integration": "Version probe only; skills, agents and hook behavior remain UNVERIFIED",
+    "hooks_enabled": "unknown",
+    "mcp_enabled": "unknown",
+    "project_settings_present": false,
+    "effective_policy": "Not resolved: user, managed and plugin settings were not inspected"
+  },
+  "claude": {
+    "version": "2.1.308",
+    "auth_probe_exit_code": 1,
+    "logged_in": false,
+    "native_task_executed": false,
+    "provider_tokens_measured": false,
+    "config_scope": ".omega/claude-state",
+    "captured_fields": [
+      "loggedIn"
+    ],
+    "reason": "No model request performed"
+  },
+  "ci": {
+    "verified": false,
+    "api_exit_code": 1,
+    "observed_error": "failed to get runs: Get \"https://api.github.com/repos/thanhuydiet207-a11y/skill/actions/runs?per_page=1&exclude_pull_requests=true\": Forbidden",
+    "scope": "Actions workflow configured, remote CI result not observable from this environment"
+  },
+  "limits": {
+    "max_agents": 2,
+    "max_repair_attempts": 2,
+    "max_task_seconds": 1800,
+    "max_gate_seconds": 120,
+    "max_context_bytes": 24000,
+    "max_evidence_bytes": 16000,
+    "max_estimated_tokens": 16000,
+    "max_output_bytes": 1048576
+  },
+  "remaining_limitations": [
+    "Native Claude skills, agents, hooks and reasoning unverified; isolated authentication probe logged out. No provider request or token/cost measurement.",
+    "No assertion that compressed context preserves all future model output; efficiency measures byte size and exact JSON/data reconstruction only.",
+    "MCP server and UI not implemented. Three agent files are specifications; seven planned roles are not executable agents.",
+    "Native Jest, Go and pytest not executed in this release; their report/parser coverage is synthetic. Node native report workflow is real.",
+    "Reports at most 256 KiB; output/evidence byte budgets fail closed. Local evidence has no signature/provider attestation.",
+    "Security audit is targeted rules, not dependency/taint analysis or full TypeScript AST security review.",
+    "Source/runtime fingerprints cover declared inputs; ignored installed dependencies, external services and managed/global policy are not fully attested.",
+    "No OS writer lock or sandbox; malicious processes can escape process groups or forge results when they control filesystem/executable commands.",
+    "GitHub Actions status unverified because API returned Forbidden. No deployment or production rollback was executed."
+  ],
+  "source_manifest": [
+    {
+      "path": ".claude/agents/omega-engineer.md",
+      "sha256": "1bf3176faefb03d160a0fbf8adbc18dd2529982882f13d18e7de5f8d4e43c229",
+      "bytes": 677,
+      "git_mode": "100644"
+    },
+    {
+      "path": ".claude/agents/omega-investigator.md",
+      "sha256": "b76492b0b1798315633cfa2447dc2096066f4ef5d8fbafa7c4c7baba8eff91a7",
+      "bytes": 607,
+      "git_mode": "100644"
+    },
+    {
+      "path": ".claude/agents/omega-verifier.md",
+      "sha256": "b0a00fb047c59bdf946882b9cf18e76fbad327061871c23c9c610d7ee6e94bd1",
+      "bytes": 575,
+      "git_mode": "100644"
+    },
+    {
+      "path": ".claude/skills/controlled-change/SKILL.md",
+      "sha256": "9212d2625afb2470bd69c0286f42331c3ad6d1b8711977f6457eacac28e1fdb1",
+      "bytes": 2708,
+      "git_mode": "100644"
+    },
+    {
+      "path": ".claude/skills/omega-context-sufficiency-check/SKILL.md",
+      "sha256": "f57138ca5de04ac6992581f8ce324a912e7b78d804d7d4b5c745064f85fad566",
+      "bytes": 1379,
+      "git_mode": "100644"
+    },
+    {
+      "path": ".claude/skills/omega-effective-policy-explainer/SKILL.md",
+      "sha256": "d5b4a3417dbc65396b8edfa8b650a9bf9f5d002fb382cf59209840000fee4044",
+      "bytes": 1362,
+      "git_mode": "100644"
+    },
+    {
+      "path": ".claude/skills/omega-evidence-reconciler/SKILL.md",
+      "sha256": "01b756795e1c5443e0d4d31a989bb59ea3323ba56d7504067590adda8671f074",
+      "bytes": 2206,
+      "git_mode": "100644"
+    },
+    {
+      "path": ".claude/skills/omega-memory-reconciliation/SKILL.md",
+      "sha256": "bf600a482926b887a928808d0caf7ff5694e646d59ba0ed7ead7d26a33e10047",
+      "bytes": 1757,
+      "git_mode": "100644"
+    },
+    {
+      "path": ".claude/skills/omega-project-workflow-adapter/SKILL.md",
+      "sha256": "779105bf4928a0d9ca3c8e75f1502e4575c341b019f050b7d3b1f327a66d6dee",
+      "bytes": 2194,
+      "git_mode": "100644"
+    },
+    {
+      "path": ".claude/skills/omega-skill-compatibility-audit/SKILL.md",
+      "sha256": "4e3d1450c7befd0922542cd03caa58eac7ac3d6848287212c1f1766ed7e88e9c",
+      "bytes": 1437,
+      "git_mode": "100644"
+    },
+    {
+      "path": ".claude/skills/omega-skill-interference-benchmark/SKILL.md",
+      "sha256": "4ecc713b6af4c3ed65b18a6abdbafe6388db546ea4256b66ea2af6aaeb2a3f6b",
+      "bytes": 1358,
+      "git_mode": "100644"
+    },
+    {
+      "path": ".claude/skills/omega-workflow-handoff-contract/SKILL.md",
+      "sha256": "cb63966ac35ed3ce0e8fa1f1cb9246fe31c1c133797dab03fa03e5291f4fcd7b",
+      "bytes": 1786,
+      "git_mode": "100644"
+    },
+    {
+      "path": ".claude/skills/project-memory/SKILL.md",
+      "sha256": "b463f53c46aacb001d2b3e042793749ef58e38c8a7a2e75f9640a3dcb8bc067b",
+      "bytes": 2687,
+      "git_mode": "100644"
+    },
+    {
+      "path": ".claude/skills/quality-gates/SKILL.md",
+      "sha256": "96538d7f579939b979af42924377813665e247ddbfa3fbf9ffbf4f565a97ffc2",
+      "bytes": 3429,
+      "git_mode": "100644"
+    },
+    {
+      "path": ".claude/skills/repo-map/SKILL.md",
+      "sha256": "fab81a9761ff11589d3d8822dc65bf3d31523e79efc69acb6de9b0e0c8eedd0e",
+      "bytes": 2328,
+      "git_mode": "100644"
+    },
+    {
+      "path": ".claude/skills/skill-benchmark/SKILL.md",
+      "sha256": "707c7e20f592a5167f8777fa78281384cd04436ba699ab153e7ef9035bd5d073",
+      "bytes": 3119,
+      "git_mode": "100644"
+    },
+    {
+      "path": ".github/workflows/omega.yml",
+      "sha256": "5194473f0c785f4bf5f0abc58249e93ee48422b179bcbc96a07139d2f0ee7c8e",
+      "bytes": 1483,
+      "git_mode": "100644"
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "716b06a800fe9b49311fb9a659130e1195f934837a3197e3e2f1e9812a1e4179",
+      "bytes": 58,
+      "git_mode": "100644"
+    },
+    {
+      "path": "CLAUDE.md",
+      "sha256": "facf21f584974b0633e12207cae59c4c5b33530c8f04cd755badaf955ee6b929",
+      "bytes": 3382,
+      "git_mode": "100644"
+    },
+    {
+      "path": "README.md",
+      "sha256": "48ce1462033eb02266cfd6be3cd0298f922a67f417ef2f10a967ce18f3f0ac92",
+      "bytes": 1972,
+      "git_mode": "100644"
+    },
+    {
+      "path": "benchmarks/cases.json",
+      "sha256": "aa8b72d73b0be7ebcb53dd3049f83c6b181148b0248cf1cb1ed6c607a0fd87bc",
+      "bytes": 507,
+      "git_mode": "100644"
+    },
+    {
+      "path": "benchmarks/demo.py",
+      "sha256": "ed8b8d743b0439aeeb1e6c4754cd1f3282316119e490251276cfb141f02a97e4",
+      "bytes": 3941,
+      "git_mode": "100644"
+    },
+    {
+      "path": "benchmarks/native_runners.py",
+      "sha256": "e96f4ddb38784e4b2c23be3a4da04ca739df6104228392153942f259876a9119",
+      "bytes": 4213,
+      "git_mode": "100644"
+    },
+    {
+      "path": "benchmarks/token_efficiency.py",
+      "sha256": "a4871db783e0d71d6ce845924a1d046fab67b9c1d8621165b3ab4eb8fa00bbd6",
+      "bytes": 2570,
+      "git_mode": "100644"
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "sha256": "5d8686fb51f8f2ec440b58f79bb5ab0528417aa2caf54778855087cbb4b7615f",
+      "bytes": 10755,
+      "git_mode": "100644"
+    },
+    {
+      "path": "docs/CLAUDE_COMPATIBILITY.md",
+      "sha256": "1c32e8c10d026eab55ef55705c999408f3b36fd5eb57644727ad6a89b631c115",
+      "bytes": 3290,
+      "git_mode": "100644"
+    },
+    {
+      "path": "docs/DEEP_HARDENING.md",
+      "sha256": "a2dadb9e286c18ecad5e8283aeb2e63776a515af4a0c9c6e2130d3ba94289b1c",
+      "bytes": 7690,
+      "git_mode": "100644"
+    },
+    {
+      "path": "docs/INTEROPERABILITY_GUIDE.md",
+      "sha256": "597ed74aadc7ca71b7b7cec77b2ea344580a20d05e5e597c8bf7059f8f2ceecc",
+      "bytes": 11986,
+      "git_mode": "100644"
+    },
+    {
+      "path": "docs/OPERATIONS.md",
+      "sha256": "46a10110c611eec2a4265e16152b8f40a92ef6d29eaef4755c5db8c54058e5da",
+      "bytes": 11199,
+      "git_mode": "100644"
+    },
+    {
+      "path": "docs/PYTHON_TYPESCRIPT_BOUNDARY.md",
+      "sha256": "b72aebb1a117db245558fe2917bcb28882e53aa4882aeca374bed15c554eb362",
+      "bytes": 4252,
+      "git_mode": "100644"
+    },
+    {
+      "path": "docs/SKILL_PLAYBOOKS.md",
+      "sha256": "6f7f3ae0d6f74cd30f8bb4b7b556beab35816091b972200f87f831ed19769680",
+      "bytes": 9468,
+      "git_mode": "100644"
+    },
+    {
+      "path": "docs/TOKEN_EFFICIENCY.md",
+      "sha256": "15d3549c5b683ec2fef6f80eaa0b3f6c7e75af919fc19a6f87c48f13c20fd94b",
+      "bytes": 5485,
+      "git_mode": "100644"
+    },
+    {
+      "path": "docs/UPGRADE_0_3.md",
+      "sha256": "61d013fddca4da2cb5ffc21d26a6f5cba805ce3583443250b05919ae277dda02",
+      "bytes": 11347,
+      "git_mode": "100644"
+    },
+    {
+      "path": "docs/UPGRADE_0_4.md",
+      "sha256": "32b7b86f95393a61b3d3132ed293ff37707504252591c1250fc9e17cbfae71f6",
+      "bytes": 7391,
+      "git_mode": "100644"
+    },
+    {
+      "path": "docs/UPGRADE_0_5.md",
+      "sha256": "ef6769c9a0260f34df41015b23650333c8861046619a37448e29353325dbd7c0",
+      "bytes": 6852,
+      "git_mode": "100644"
+    },
+    {
+      "path": "docs/VALIDATION.md",
+      "sha256": "2c886b6c49bf3aee38d1ce8541034f1bcdc53095578ecb944a0587c29e3cc9c6",
+      "bytes": 5153,
+      "git_mode": "100644"
+    },
+    {
+      "path": "integration/typescript/omega-bridge.test.mjs",
+      "sha256": "c137a7a2a5dd205346f13f577c8c3db2b9030dcb89cb84ddc7fd8d7b0ff21b1d",
+      "bytes": 6312,
+      "git_mode": "100644"
+    },
+    {
+      "path": "integration/typescript/omega-bridge.ts",
+      "sha256": "f7a5462310e9b32e927fe5106916b50abc706124fe8d5a2b8ff504ff504cb61e",
+      "bytes": 8918,
+      "git_mode": "100644"
+    },
+    {
+      "path": "integration/typescript/package-lock.json",
+      "sha256": "fe61b680ca36c045de10f385ecf27d52fe2d7b662a29e556c5693dff8b794b15",
+      "bytes": 1466,
+      "git_mode": "100644"
+    },
+    {
+      "path": "integration/typescript/package.json",
+      "sha256": "69b2aa67509a67ab50e1e9cce553dad8c7d293d232f691bbd5ae7aad4351dbd8",
+      "bytes": 322,
+      "git_mode": "100644"
+    },
+    {
+      "path": "integration/typescript/tsconfig.json",
+      "sha256": "a57a1257066831918292be81d8f522699a79605c16a59806723578bf75dda87d",
+      "bytes": 357,
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/__init__.py",
+      "sha256": "2c12b8ea17aeb6f9f72a6b02aca218bbc4508a46df9e365a8f6c45ad769e0b34",
+      "bytes": 22,
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/__main__.py",
+      "sha256": "0e727de0a6006ed3d7995907f8d72de21cbdfacbc1aaa1e3fe2898076d48dc68",
+      "bytes": 25422,
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/adapters.py",
+      "sha256": "66d272cbdb262b016960228ecb201df12903b2cced8f060ba0c6bf87360542a7",
+      "bytes": 6550,
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/analysis_tools.py",
+      "sha256": "c530481bb4332e0208484aa70877b4a4af1f1fa20931c88548de29cd14804754",
+      "bytes": 9717,
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/arguments.py",
+      "sha256": "95f950ca36fd7083b5c0d5862fd4603528bb58a355ef9419a9a9be43cb6b8290",
+      "bytes": 1947,
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/build.py",
+      "sha256": "f779edb72c107e78944d5c7e8b7fa2c507f1eebdfa8c771a5e2397c252cdfdc2",
+      "bytes": 935,
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/catalog.json",
+      "sha256": "707215b0aa060459793ed7a83aea909a9b6a19e3f91b170fb71acf5951715881",
+      "bytes": 5303,
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/change.py",
+      "sha256": "00959855fd178d811a7515b42979b6ed25cbf0a07f2f05fb0411f60cf967a5b0",
+      "bytes": 6714,
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/config.json",
+      "sha256": "31f7e5798205807ec8e941dfd041497029ffc67cb2a5a064826cb67f4c2d0bbe",
+      "bytes": 740,
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/context.py",
+      "sha256": "53743a082ef9594b46c24eb3649e3d2693e962b7d1cf027c6a5ed8220458c33c",
+      "bytes": 2746,
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/extensions.json",
+      "sha256": "8b3d4aa3cd09bbb5d38418be2862a79b600508c13cd817320440bb1540717239",
+      "bytes": 597,
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/frontmatter.py",
+      "sha256": "049fed295175946740f844bd491e8f92f2da5ccf994a5e806404a7d6971f24a8",
+      "bytes": 2895,
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/hook.py",
+      "sha256": "d32365aa47bcdcc66aa0a02658b8534c22f239f75181bd882361fe7c7fdf6953",
+      "bytes": 928,
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/interop.py",
+      "sha256": "74d31979dc44840a5b67ee89920c879a6cb98b2ccb3ed160abb9113a5fd48360",
+      "bytes": 13518,
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/io.py",
+      "sha256": "81d4115b458edb797081ef378f2fa7c133fbef893206bf6d8a96171787f51b0a",
+      "bytes": 1702,
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/policy.py",
+      "sha256": "bba54723fc7b668d061b85940618250994c3001befd9bf27e81cb2563bf3d579",
+      "bytes": 5536,
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/process.py",
+      "sha256": "1d9b66a360929eb90e187030ac16cdd6efacef9f4de2c31b68aff5e55b934958",
+      "bytes": 3690,
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/records.py",
+      "sha256": "628fa6f67a6a464c6ce0d72c4e926a673d7e5bdc0c5801d0c21a60f8144cf219",
+      "bytes": 10220,
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/reports.py",
+      "sha256": "96c02d6b6b294b2e2432b099a5b6c741287dad9ad30c7f644f33392b1abcf1b7",
+      "bytes": 4713,
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/safety.py",
+      "sha256": "f9ed223ce5f678808e957b2d970c451bea0853cf810f0749f7b68f09d7535e9c",
+      "bytes": 3182,
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/security.py",
+      "sha256": "f59ff90edb6095c7fbcbaf79f235bc8817b2d79a394f3c6f7d677d01faf4ab1d",
+      "bytes": 6772,
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/skills.py",
+      "sha256": "6d2dae709497ea30dd4b899c38e8b907f7950cdcf187a42607dfa4e487b04b69",
+      "bytes": 4492,
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega/test_runner.py",
+      "sha256": "4bc34f71d041928fbf579381a3c24eadb5c09fdb67075b4d6f295544c1014890",
+      "bytes": 1199,
+      "git_mode": "100644"
+    },
+    {
+      "path": "omega_cli.py",
+      "sha256": "ae4bc545c34f074a5bbd167c3adf538bcff99869949dc7d3495272707da15728",
+      "bytes": 347,
+      "git_mode": "100644"
+    },
+    {
+      "path": "tests/test_context.py",
+      "sha256": "324992baa7c5185803fa1adce6955e1b865787452e0413ac5fb838e831414fae",
+      "bytes": 3904,
+      "git_mode": "100644"
+    },
+    {
+      "path": "tests/test_hardening.py",
+      "sha256": "e25621eba5da44ef683b25439f32137e32292299c5561c979930e15e63caad5b",
+      "bytes": 9952,
+      "git_mode": "100644"
+    },
+    {
+      "path": "tests/test_interop_core.py",
+      "sha256": "769c29b4f3f83548e420983ec8d587945297f1c7bd23e44e600dbc462f9f5f45",
+      "bytes": 9870,
+      "git_mode": "100644"
+    },
+    {
+      "path": "tests/test_interop_safety.py",
+      "sha256": "511b207d53594dcdad58d78e22cc075d36be312fb769161cdc7345e31321e82f",
+      "bytes": 12726,
+      "git_mode": "100644"
+    },
+    {
+      "path": "tests/test_new_skill_workflows.py",
+      "sha256": "b26406dd0b44b1929f13211032bbf0960244dbc070aa0fb15cec80da2d48f1cf",
+      "bytes": 8143,
+      "git_mode": "100644"
+    },
+    {
+      "path": "tests/test_omega.py",
+      "sha256": "8743881c00d8884b3682e39f26ac0cf148886693a449ea34c901746a28723a76",
+      "bytes": 7617,
+      "git_mode": "100644"
+    },
+    {
+      "path": "tests/test_quality_hardening.py",
+      "sha256": "8af629679f30774499883b44a869e161df4726aa556c0e554e82ee2ec82a31fe",
+      "bytes": 15128,
+      "git_mode": "100644"
+    },
+    {
+      "path": "tests/test_report_integrity.py",
+      "sha256": "8cc1aee936527c0fd484cb543eb37459e37ad9151f9f9a36d0474a91b1a1df5e",
+      "bytes": 10419,
+      "git_mode": "100644"
+    },
+    {
+      "path": "tests/test_skill_evolution.py",
+      "sha256": "174e85e13b0ed41b13fa09c7ac0e2adc2d1ef6251624fb92d02a4f57f2f5c90a",
+      "bytes": 7307,
+      "git_mode": "100644"
+    },
+    {
+      "path": "tests/test_workflows.py",
+      "sha256": "41b26d65d9a6eb648e68daf6ccdc4a62fd70437afea941e7d035ea447025358a",
+      "bytes": 10544,
+      "git_mode": "100644"
+    }
+  ]
+}
