@@ -1,4 +1,6 @@
-# OMEGA
+# OMEGA — quy tắc bảo trì checkout
+
+Plugin không tự nạp file này thành system/project context. Skill và agent phải mang các quy tắc thiết yếu của chính chúng; đọc file này bằng đường dẫn plugin tường minh khi cần bảo trì engine. Đồng thời tuân thủ policy của repository đích.
 
 Đọc `docs/ARCHITECTURE.md` theo nhu cầu, không tải toàn bộ catalog.
 Chạy `python3 -m omega doctor` và `python3 -m omega map` trước thay đổi.

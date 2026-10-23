@@ -57,7 +57,7 @@ Worktree phải nằm trong `.omega/worktrees/`, không symlink thoát repositor
 
 ## Agent và quyền
 
-3 spec nằm trong `.claude/agents/`; đọc docs kiến trúc để giao việc. Bash là công cụ mạnh: chỉ lời nhắc read-only chưa đảm bảo quyền read-only. Chưa lưu permissions vào `.claude/settings.json` vì chưa xác minh Claude. Không dùng mode bỏ qua quyền. Kiểm tra `claude --version`, `claude --help` và docs của đúng phiên bản, sau đó xác minh agent tool visibility và các yêu cầu từ chối trong sandbox trước cho dùng thật.
+3 spec nằm trong `agents/`; plugin inventory đã nhận đủ, xem [CLAUDE_PLUGIN.md](CLAUDE_PLUGIN.md). Đọc docs kiến trúc để giao việc; reasoning của agent chưa nghiệm thu. Bash là công cụ mạnh: chỉ lời nhắc read-only chưa đảm bảo quyền read-only. Chưa lưu permissions vào `.claude/settings.json` vì chưa xác minh Claude. Không dùng mode bỏ qua quyền. Kiểm tra `claude --version`, `claude --help` và docs của đúng phiên bản, sau đó xác minh agent tool visibility và các yêu cầu từ chối trong sandbox trước cho dùng thật.
 
 ## Hook adapter (chưa kích hoạt)
 
@@ -114,3 +114,7 @@ Chạy `python3 benchmarks/native_runners.py` để kiểm chứng Node built-in
 ## Bản 0.5
 
 Setup dev tools và test_report cho stdout/stderr lẫn log: [UPGRADE_0_5.md](UPGRADE_0_5.md). Dùng `python3 benchmarks/native_runners.py --report-file` để chạy Node/JUnit thực tế. Không xóa report cũ; mỗi run có nonce riêng. Evidence refs giữ content/hash, không suy ra runner authenticity. Bridge CLI có --timeout-ms và API có AbortSignal.
+
+## Plugin 0.7
+
+Cài bằng marketplace GitHub, gọi /omega:omega. Không cài Python dependency vào target; dùng CLAUDE_PLUGIN_ROOT/omega_cli.py tuyệt đối với --project-root và không ghi vào cache. Xem [CLAUDE_PLUGIN.md](CLAUDE_PLUGIN.md) cho lifecycle probe, ZIP, namespace, prerequisites và rollback. Native validation cần chỉ rõ từng manifest, không chỉ validate thư mục marketplace.

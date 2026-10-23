@@ -29,6 +29,10 @@
       "--select",
       ".claude",
       "--select",
+      "agents",
+      "--select",
+      ".claude-plugin",
+      "--select",
       "omega"
     ],
     "regression": [

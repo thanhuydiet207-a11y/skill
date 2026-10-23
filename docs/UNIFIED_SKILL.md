@@ -1,5 +1,7 @@
 # OMEGA 0.6: một skill, 13 chế độ
 
+> Snapshot thiết kế consolidation 0.6. Bản 0.7 giữ một skill này và đóng gói plugin; xem [CLAUDE_PLUGIN.md](CLAUDE_PLUGIN.md) để cài và gọi /omega:omega. Các số liệu 204 tests bên dưới thuộc snapshot 0.6.
+
 ## Cách dùng
 
 Trong Claude Code, gọi entry duy nhất:
@@ -25,7 +27,7 @@ omega/modes.json            # mode -> commands và reference
 omega/catalog.json          # 44 capability: 13 implemented, 31 planned
 ```
 
-Các tài liệu reference không có frontmatter skill và không mang tên SKILL.md. Nội dung quy trình cũ được giữ nguyên khi chuyển; chỉ bỏ frontmatter đăng ký riêng. Không có 13 alias skill ẩn hoặc skill placeholder. Ba agent spec vẫn ở .claude/agents; gộp skill không chứng minh agent runtime đã chạy.
+Các tài liệu reference không có frontmatter skill và không mang tên SKILL.md. Nội dung quy trình cũ được giữ nguyên khi chuyển; chỉ bỏ frontmatter đăng ký riêng. Không có 13 alias skill ẩn hoặc skill placeholder. Ba agent spec vẫn ở agents/; gộp skill không chứng minh agent runtime đã chạy.
 
 Entry có bảng để đọc đúng reference theo ý định. Không preload tất cả tài liệu. Plan chỉ đọc metadata, trả skills=[omega], modes và references của intent; không gửi nội dung reference vào packet và không tự dispatch agent. Với bước cần công cụ khác, đọc reference tương ứng tại thời điểm dùng. Contract validator đọc các tài liệu để hash/kiểm tra integrity; việc đó không phải nạp tất cả vào context của model.
 

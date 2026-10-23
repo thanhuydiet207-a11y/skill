@@ -85,6 +85,7 @@ def plan(complexity, conflict=False, intent="change", workflow=None):
             'schedule': 'sequential; parallel only independent read tasks',
             'max_concurrent_agents': min(2,CONFIG['limits']['max_agents']), 'isolation': 'worktree' if conflict else 'branch',
             'skills':['omega'],'modes':modes,
+            'reference_root':str(ENGINE_ROOT),
             'references':[f'.claude/skills/omega/{MODES[name]["reference"]}' for name in modes],
             'selection':'one omega entry; explicit intent selects reference metadata only; no automatic agent dispatch',
             'limits': CONFIG['limits'], 'execution': 'manual Claude orchestration; no API calls'}

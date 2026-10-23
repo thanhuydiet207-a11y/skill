@@ -97,7 +97,7 @@ class OmegaTests(unittest.TestCase):
             self.assertEqual(p.returncode,2);self.assertNotIn('Traceback',p.stderr)
 
     def test_three_agent_specs(self):
-        self.assertEqual(len(list((app.ROOT/'.claude/agents').glob('*.md'))),3)
+        self.assertEqual(len(list((app.ROOT/'agents').glob('*.md'))),3)
 
     def test_candidate_compare_missing_baseline(self):
         with patch.object(sys,'argv',['omega','compare','--baseline','.omega/absent.json']):

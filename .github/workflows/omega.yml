@@ -30,5 +30,7 @@ jobs:
         run: python3 benchmarks/demo.py
       - name: Lossless context efficiency benchmark
         run: python3 benchmarks/token_efficiency.py
+      - name: Export tracked plugin bundle without installing tools or modifying user settings
+        run: python3 benchmarks/plugin_packaging.py
       - name: Whitespace validation
         run: git diff --check

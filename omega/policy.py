@@ -6,7 +6,7 @@ from omega.arguments import parser,validate
 from omega.safety import source_path,artifact_path
 
 ENGINE=Path(__file__).resolve().parent.parent
-PROTECTED={'.git','.claude','omega','tests','benchmarks','.github','.omega'}
+PROTECTED={'.git','.claude','.claude-plugin','agents','omega','tests','benchmarks','.github','.omega'}
 SAFE_COMMANDS={'doctor','map','plan','audit','benchmark','gates','memory','memory-read','context',
                'rollback-check','candidate','compare','change-plan','change-check','change-attempt','isolate',
                'skill-compatibility-audit','effective-policy-explainer','workflow-handoff-contract',
@@ -44,6 +44,7 @@ def explain(payload,root=ENGINE):
     if argv in (['git','status','--short'],['git','diff','--check'],['git','diff','--stat']):
         return answer(True,'Allowlisted read-only Git command')
     if not argv or argv[0] not in ('python3','python'):return answer(False,'Executable outside allowlist')
+    if argv[1:2]==['-B']:argv=[argv[0],*argv[2:]]  # Suppress cache writes; no other interpreter flags accepted.
     if argv[1:3]==['-m','omega']:
         if root!=ENGINE:return answer(False,'Use the absolute OMEGA runner for another project')
         words=argv[3:]

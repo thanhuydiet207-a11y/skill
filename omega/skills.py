@@ -85,9 +85,9 @@ def assess(root,skill,candidate=None):
 def suite_digest(root):
     # Discover additions as well as edits: a new test/module must invalidate a baseline.
     root=Path(root).resolve();h=hashlib.sha256()
-    for folder in ('omega','tests','benchmarks','integration/typescript'):
+    for folder in ('omega','tests','benchmarks','integration/typescript','.claude-plugin','agents'):
         h.update(folder.encode()+b'\0')
-        paths=source_files(root,folder,('.py','.json','.ts','.mjs'))
+        paths=source_files(root,folder,('.py','.json','.ts','.mjs','.md'))
         for path in paths:
             name=str(path.relative_to(root));verified=source_path(root,name)
             h.update(name.encode()+b'\0'+verified.read_bytes()+b'\0')

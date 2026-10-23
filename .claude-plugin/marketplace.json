@@ -1,0 +1,15 @@
+{
+  "name": "omega-marketplace",
+  "description": "OMEGA engineering plugin maintained in thanhuydiet207-a11y/skill.",
+  "owner": {
+    "name": "thanhuydiet207-a11y"
+  },
+  "plugins": [
+    {
+      "name": "omega",
+      "source": "./",
+      "description": "OMEGA engineering skill, specialist agents and local Python evidence workflows.",
+      "version": "0.7.0"
+    }
+  ]
+}

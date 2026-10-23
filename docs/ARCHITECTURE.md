@@ -49,7 +49,7 @@ Tên cũ giữ làm mode ID/reference, không còn slash skill độc lập ho�
 
 ## 10 vai trò chuyên môn
 
-Quyền trong bảng là **mục tiêu policy**; prompt không thay thế OS sandbox/Claude permissions. 3 hàng đầu có file trong `.claude/agents/`, 7 hàng sau chưa tạo agent runtime.
+Quyền trong bảng là **mục tiêu policy**; prompt không thay thế OS sandbox/Claude permissions. 3 hàng đầu có file trong `agents/`, 7 hàng sau chưa tạo agent runtime.
 
 | Agent | Trạng thái | Quyền dự kiến | Nhiệm vụ và đầu ra |
 |---|---|---|---|
@@ -109,3 +109,7 @@ Python xử lý policy/analysis/security/memory/evidence, TypeScript bridge cung
 ## Kiểm chứng 0.5
 
 Python tiếp tục là lõi. Engine build gọi Python compile và strict TypeScript noEmit; npm chỉ cung cấp dev compiler/type definitions đã pin, không SDK/runtime ứng dụng. Gate test_report hỗ trợ capture Jest/JUnit tách log và ràng buộc template/argv/content, không là chữ ký xác thực runner. Bridge deadline gồm stdin và hỗ trợ cancellation. Chi tiết: [UPGRADE_0_5.md](UPGRADE_0_5.md).
+
+## Phân phối plugin 0.7
+
+Manifest .claude-plugin/plugin.json dùng custom skills path trỏ tới entry omega hiện có, agent ở agents/ theo layout chuẩn. Marketplace .claude-plugin/marketplace.json phân phối plugin từ root repository. Native Claude 2.1.308 nhận 1 skill/3 agent, không hook/MCP. Cache engine và target Git root tách biệt qua runner tuyệt đối; không viết policy engine TypeScript mới. Cách cài/benchmark/giới hạn: [CLAUDE_PLUGIN.md](CLAUDE_PLUGIN.md).

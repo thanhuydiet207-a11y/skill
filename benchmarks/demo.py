@@ -17,7 +17,7 @@ def main():
     base.mkdir(parents=True,exist_ok=True)
     fixture=base/uuid.uuid4().hex
     fixture.mkdir()
-    for name in ('omega','benchmarks','.claude','docs'):
+    for name in ('omega','benchmarks','.claude','.claude-plugin','agents','docs'):
         shutil.copytree(ROOT/name,fixture/name,ignore=shutil.ignore_patterns('__pycache__','evidence'))
     (fixture/'.gitignore').write_text('.omega/\n__pycache__/\n')
     (fixture/'calc.py').write_text('def add(a,b):\n    return a-b\n')

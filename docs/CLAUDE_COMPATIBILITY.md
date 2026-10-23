@@ -31,3 +31,7 @@ Sau cài, đọc install.cjs và metadata platform package, rồi chạy riêng 
 ## Bản 0.3
 
 Doctor trả hooks_enabled/mcp_enabled=unknown vì không quan sát đủ managed/user/plugin policy. Version probe không là bằng chứng discovery/permissions. Grammar CLI và hook adapter đã dùng chung; adapter vẫn chưa được đăng ký trong Claude. State probe chỉ tạo trong .omega đã review ignore và không có file tracked.
+
+## Plugin 0.7
+
+Claude Code 2.1.308 hỗ trợ plugin validate/install/details, marketplace và --plugin-dir ZIP. Đã chạy strict validate riêng plugin.json/marketplace.json, thêm marketplace local vào CLAUDE_CONFIG_DIR riêng, install/list/details; inventory nhận một skill omega và ba agent, không hooks/MCP. Export ZIP cũng được native details nhận. Engine từ cache chạy Git fixture target, không import omega.py của target và không sửa cache. Đây là discovery/lifecycle bằng native CLI; không có lời gọi model, activation trace trong phiên suy luận hoặc provider token measurement. Xem [CLAUDE_PLUGIN.md](CLAUDE_PLUGIN.md).

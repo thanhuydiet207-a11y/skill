@@ -1,0 +1,18 @@
+{
+  "name": "omega",
+  "version": "0.7.0",
+  "description": "Evidence-based engineering: one skill, 13 on-demand workflows and three specialist agents backed by a local Python engine.",
+  "author": {
+    "name": "thanhuydiet207-a11y",
+    "url": "https://github.com/thanhuydiet207-a11y"
+  },
+  "homepage": "https://github.com/thanhuydiet207-a11y/skill/blob/main/docs/CLAUDE_PLUGIN.md",
+  "repository": "https://github.com/thanhuydiet207-a11y/skill",
+  "keywords": [
+    "engineering",
+    "testing",
+    "evidence",
+    "python"
+  ],
+  "skills": "./.claude/skills/"
+}
