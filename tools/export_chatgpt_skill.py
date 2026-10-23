@@ -6,6 +6,7 @@ OMEGA runtime, register tools, or claim native ChatGPT execution support.
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
 import re
 import sys
@@ -88,15 +89,15 @@ def build(output, force=False):
     output = Path(output)
     if not output.is_absolute():
         output = ROOT / output
-    output = output.absolute()
+    output = Path(os.path.abspath(output))
     if not output.is_relative_to(ROOT):
         raise ValueError("Output must stay inside this repository")
     parent = output.parent
+    if output.is_symlink() or any(p.is_symlink() for p in [parent, *parent.parents] if p != ROOT.parent):
+        raise ValueError("Output path must not traverse symlinks")
     parent.mkdir(parents=True, exist_ok=True)
     if output.exists() and not force:
         raise ValueError("Output already exists; pass --force to replace this generated artifact")
-    if output.is_symlink() or any(p.is_symlink() for p in [parent, *parent.parents] if p != ROOT.parent):
-        raise ValueError("Output path must not traverse symlinks")
     files, fields = collect_files()
     manifest = []
     mode = "w" if force else "x"
