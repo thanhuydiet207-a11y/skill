@@ -34,3 +34,5 @@ jobs:
         run: python3 benchmarks/plugin_packaging.py
       - name: Whitespace validation
         run: git diff --check
+      - name: ChatGPT skill upload bundle contract
+        run: python3 benchmarks/chatgpt_skill_export.py
