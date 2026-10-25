@@ -5,14 +5,14 @@
 Trong Claude Code:
 
 ```text
-/plugin marketplace add thanhuydiet207-a11y/skill
+/plugin marketplace add thanhuydiet207-a11y/hutao
 /plugin install omega@omega-marketplace
 ```
 
 Hoặc một lệnh trên phiên bản hỗ trợ option marketplace:
 
 ```text
-/plugin install omega --marketplace thanhuydiet207-a11y/skill
+/plugin install omega --marketplace thanhuydiet207-a11y/hutao
 ```
 
 Khởi động lại phiên Claude Code để áp dụng, rồi gọi:
@@ -22,7 +22,7 @@ Khởi động lại phiên Claude Code để áp dụng, rồi gọi:
 /omega:omega sửa lỗi đang mô tả, giữ API và chạy kiểm thử
 ```
 
-CLI tương ứng có thể dùng `claude plugin marketplace add thanhuydiet207-a11y/skill`, `claude plugin install omega@omega-marketplace --scope user` và `claude plugin list --json`. Có thể chọn scope project/local theo chính sách của project; không copy settings từ môi trường thử nghiệm.
+CLI tương ứng có thể dùng `claude plugin marketplace add thanhuydiet207-a11y/hutao`, `claude plugin install omega@omega-marketplace --scope user` và `claude plugin list --json`. Có thể chọn scope project/local theo chính sách của project; không copy settings từ môi trường thử nghiệm.
 
 Định dạng này dành cho plugin Claude Code. Chỉ upload SKILL.md hoặc ZIP như tài liệu trong Claude Web không thực thi engine. Bản đã kiểm chứng là Claude Code **2.1.308**; kiểm tra `claude --version` và `claude plugin --help` ở máy dùng thật. Cài đặt/discovery đã được thử, phiên suy luận native và hiệu quả token vẫn chưa nghiệm thu.
 
@@ -39,6 +39,17 @@ CLI tương ứng có thể dùng `claude plugin marketplace add thanhuydiet207-
 Manifest khai custom skills path để giữ một nguồn SKILL.md. Agents dùng thư mục chuẩn agents/: native inventory phải hiện **1 skill, 3 agents, 0 hooks, 0 MCP servers**. Không đăng ký hook, MCP, startup command, permission override, installer script hoặc dependency tự cài. Agent tool list/prompt không thay permissions/sandbox của host; vẫn cần review lệnh thực tế.
 
 Trong checkout nguồn, `/omega` là project skill. Bản cài plugin dùng namespace `/omega:omega`. Nếu bật plugin ngay trong chính checkout OMEGA, có thể thấy cả hai cách gọi từ cùng nguồn; không có file alias thứ hai. File .claude/CLAUDE.md phục vụ bảo trì checkout, không được coi là context tự động của plugin. Skill/agent mang quy tắc thiết yếu và đọc policy của project đích.
+
+## Tiết kiệm token mà không cắt chất lượng
+
+Các tối ưu tích hợp sẵn là tùy chọn và lossless theo contract đã kiểm tra:
+
+- `--compact` giảm whitespace ngoài JSON string; parse lại phải cho cùng object.
+- `context --select PATH[:START:END]` chỉ gửi nguồn được chọn tường minh, giữ nội dung, dòng và hash; vượt budget thì báo lỗi, không âm thầm bỏ nguồn.
+- `gates --summary --compact` vẫn chạy mọi gate, giữ kết quả và mã thoát; log thành công có thể được tham chiếu trong evidence. Lỗi vẫn phải hiện đủ để điều tra.
+- RTK là tùy chọn ở cấp shell, không phải dependency plugin. Không tự cài hoặc sửa shell config. Nếu summary không đủ rõ, chạy lệnh gốc và xem raw output.
+
+Hướng dẫn và giới hạn: [TOKEN_EFFICIENCY.md](TOKEN_EFFICIENCY.md), [RTK_INTEGRATION.md](RTK_INTEGRATION.md). Số byte không chứng minh số token billing hoặc chất lượng LLM không đổi; cần A/B trên cùng task/model/gates và đọc token usage từ runtime/provider.
 
 ## Chạy engine trong project khác
 
