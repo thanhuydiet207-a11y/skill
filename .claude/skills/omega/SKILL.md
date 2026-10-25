@@ -25,6 +25,14 @@ python3 -B "${CLAUDE_PLUGIN_ROOT}/omega_cli.py" --project-root "$PWD" plan --com
 1. Chạy `python3 -m omega doctor --compact`, `python3 -m omega map --compact` khi ở engine. Project khác dùng omega_cli.py tuyệt đối với --project-root. Nếu engine không có: ghi **manual guidance only / engine not run**, không thay lệnh thật bằng kết quả tự viết. Version/help không chứng minh skill được kích hoạt.
 2. Phân loại ý định và chạy `python3 -m omega plan --complexity medium --compact` hoặc --input có intent rõ. Đây là kế hoạch, không tự dispatch. Một orchestrator; tối đa 2 agent chỉ khi được phép, 2 lượt sửa, checkpoint 30 phút và budget token ước tính 16k; tôn trọng policy dự án đích. Task nhỏ làm trực tiếp; Git/ghi file có một owner, branch/worktree tách khi cần.
 3. Đọc đúng reference trong bảng dưới khi cần bước đó. Không nạp tất cả references/docs vào context; giữ acceptance, nguồn liên quan và evidence refs. Bảng là routing do người điều phối thực hiện, không có slash command con tự chạy Python.
+4. Khi sửa, tái hiện trước; ghi rõ contract và chính sách chưa xác nhận thay vì tự chọn rồi viết test theo. Thay đổi trong scope, kiểm tra rủi ro và chạy bốn gates được review; zero/all-skipped không đủ pass. Phân biệt test tự viết, test độc lập và test đã nhìn thấy; không gọi chúng là hidden tests.
+5. Với skill evolution dùng --skill omega. Không đổi stable hoặc reference sau benchmark rồi dùng lại proof cũ. Tên 13 skill cũ là chế độ tham chiếu, không còn là entry skill/đích release riêng. Dùng --compact/--summary; log đầy đủ nằm ở evidence, không bỏ kiểm thử để giảm context.
+
+### Token-efficient command output
+
+Use `--compact`, explicit `context --select`, and `gates --summary --compact` where appropriate. These reduce formatting/repeated successful log payloads; they do not authorize omitting source dependencies, failed test detail, exit codes, acceptance criteria, or any quality gate. If output is ambiguous, truncated, or inconsistent, inspect the evidence reference and rerun the underlying command directly.
+
+RTK may be used as an optional host-level shell wrapper only when the user has installed/configured it. Never install it, mutate shell startup files, or assume it exists. Preserve stderr, failure names, assertion/compiler/security details; fall back to raw commands when the summary is insufficient. See `docs/RTK_INTEGRATION.md`. Terminal byte reduction is not proof of provider token/cost reduction or unchanged native LLM quality.
 
 | Chế độ / khi dùng | Hướng dẫn chỉ tải khi cần |
 |---|---|
@@ -41,9 +49,6 @@ python3 -B "${CLAUDE_PLUGIN_ROOT}/omega_cli.py" --project-root "$PWD" plan --com
 | omega-evidence-reconciler: kiểm tra bằng chứng còn hiệu lực | [evidence](references/omega-evidence-reconciler.md) |
 | omega-memory-reconciliation: đối chiếu quyết định cũ | [memory check](references/omega-memory-reconciliation.md) |
 | omega-context-sufficiency-check: kiểm tra nguồn/context đủ | [context check](references/omega-context-sufficiency-check.md) |
-
-4. Khi sửa, tái hiện trước; ghi rõ contract và chính sách chưa xác nhận thay vì tự chọn rồi viết test theo. Thay đổi trong scope, kiểm tra rủi ro và chạy bốn gates được review; zero/all-skipped không đủ pass. Phân biệt test tự viết, test độc lập và test đã nhìn thấy; không gọi chúng là hidden tests.
-5. Với skill evolution dùng --skill omega. Không đổi stable hoặc reference sau benchmark rồi dùng lại proof cũ. Tên 13 skill cũ là chế độ tham chiếu, không còn là entry skill/đích release riêng. Dùng --compact/--summary; log đầy đủ nằm ở evidence, không bỏ kiểm thử để giảm context.
 
 ## Evidence
 
