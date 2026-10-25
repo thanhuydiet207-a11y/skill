@@ -26,6 +26,12 @@ Chặn path thoát repository, mọi symlink kể cả nằm trong project, bina
 
 `--summary` chỉ dành cho `gates`. Mọi gate vẫn thực thi. Success log được lưu trong evidence như cũ và trả JSON pointer; output gate lỗi vẫn hiện, kèm flag truncation nếu có. Khi cần điều tra, mở log qua reference thay vì chạy lại gate chỉ để xem log. Phiên bản 0.2 giữ prefix 16 KB và tail tối đa 4 KB khi bị cắt, tổng output tối đa 1 MB rồi dừng tiến trình; không tuyên bố khôi phục phần ngoài hai đoạn này. CLI không cache pass/fail hoặc tái sử dụng kết quả cũ.
 
+## RTK tùy chọn
+
+RTK có thể giảm nhiễu ở đầu ra terminal, nhưng là công cụ ở cấp shell, không phải dependency của plugin. Hãy cài và cấu hình thủ công chỉ sau khi review hướng dẫn chính thức; không tự sửa shell config trong lúc cài OMEGA/HUTAO. Xem [RTK_INTEGRATION.md](RTK_INTEGRATION.md).
+
+Giữ nguyên mã thoát, stderr, tên test lỗi, assertion diff, lỗi biên dịch, phát hiện bảo mật và đối số lệnh. Nếu summary thiếu chi tiết hoặc mâu thuẫn với exit code, chạy lệnh gốc và kiểm tra raw output. Không dùng RTK để bỏ gate hoặc coi log đã rút gọn là bằng chứng đầy đủ. Đo byte output và token billing riêng biệt.
+
 ## Kỷ luật dùng context
 
 - Giữ task, acceptance, phạm vi, ràng buộc an toàn và bằng chứng bắt buộc trong mọi handoff. Không rút gọn các điều kiện này.
