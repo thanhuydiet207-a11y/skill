@@ -18,5 +18,5 @@ graders:
   type: llm
   weight: 2
   criteria: |
-    Đạt khi câu trả lời: (1) kết luận evidence cũ KHÔNG còn được chấp nhận; (2) chỉ ra phần so sánh độ "fresh" trong `omega/__main__.py` đối chiếu `workspace_sha256`, `head` (`git rev-parse HEAD`) và `execution_fingerprint` của evidence với trạng thái hiện tại; (3) nhắc `valid_gates` trong `omega/records.py` kiểm tra từng gate (exit code 0, `workspace_unchanged`, `execution_unchanged`, outcome test hợp lệ); (4) không bịa file hay hàm không tồn tại.
+    Đạt khi câu trả lời: (1) kết luận evidence cũ KHÔNG còn được chấp nhận; (2) chỉ ra ít nhất một chỗ trong code đối chiếu `workspace_sha256` (hash nội dung workspace) của evidence với trạng thái hiện tại, cùng `head` và/hoặc `execution_fingerprint`. Chỗ đó có thể là `check()` trong `omega/change.py` (lệnh change-check) hoặc phần so sánh evidence trong `omega/__main__.py` (lệnh compare); cả hai đều đúng; (3) giải thích hash workspace được tính từ nội dung file (`omega/records.py`, `workspace`/`workspace_entries`), nên sửa một file làm hash đổi; (4) không bịa file hay hàm không tồn tại.
     Không đạt nếu chỉ nói chung chung mà không chỉ ra vị trí trong code, hoặc kết luận evidence cũ vẫn dùng được.
