@@ -2,10 +2,14 @@
 
 Cập nhật bản cài: `claude plugin marketplace update omega-marketplace` rồi `claude plugin update omega@omega-marketplace`.
 
+## 0.7.4
+
+- Chạy được trên checkout chỉ đọc: `gates` báo đủ kết quả với `evidence: null` và lý do thay vì thoát mã 2 và mất kết quả; gate `build` ghi bytecode ra thư mục tạm; `doctor` kiểm tra Claude bằng config tạm.
+- Eval `gates-status` chạy lại sau bản sửa: có và không có OMEGA cùng đạt 1.00 (trước đó 0.67 so với 1.00).
+
 ## 0.7.3
 
 - `omega/catalog.json` chỉ còn 13 chế độ đã triển khai. 31 capability và 7 vai trò agent chưa có file chuyển sang [docs/ROADMAP.md](docs/ROADMAP.md).
-- Chạy được trên checkout chỉ đọc: `gates` báo đủ kết quả với `evidence: null` và lý do thay vì thoát mã 2 và mất kết quả; gate `build` ghi bytecode ra thư mục tạm; `doctor` kiểm tra Claude bằng config tạm.
 - Thêm bộ eval `evals/` cho `claude plugin eval`, so sánh có và không có plugin. Giai đoạn 1 (8 case, 3 lần mỗi nhánh) chưa có case nào OMEGA làm tốt hơn; `gates-status` kém hơn vì engine không ghi được `.omega/` trên checkout chỉ đọc. Chi tiết: [evals/README.md](evals/README.md).
 
 ## 0.7.2
