@@ -45,6 +45,6 @@ Hoàn thành stage dự kiến trước final gates. Không chạy lặp vô h�
 
 [verification-hardening.json](evidence/verification-hardening.json) là snapshot 0.4 (176 Python, 9 Node tests), không phải nguồn hiện tại. Report-file Node/JUnit đã chạy thật với stdout người đọc riêng; Jest JSON dùng synthetic fixtures. Npm compiler dev dependencies và integrity nằm trong package-lock, không có install scripts/global install.
 
-[report-integrity.json](evidence/report-integrity.json) và [UPGRADE_0_5.md](UPGRADE_0_5.md) là snapshot 0.5 (194 Python, 15 Node tests, 13 skill riêng). Từ 0.6 chỉ có một entry omega. Lỗi đếm subtest thất bại đang được theo dõi riêng; số tests pass trong suite không chứng minh đường báo cáo đó đã sửa.
+[report-integrity.json](evidence/report-integrity.json) và [UPGRADE_0_5.md](UPGRADE_0_5.md) là snapshot 0.5 (194 Python, 15 Node tests, 13 skill riêng). Từ 0.6 chỉ có một entry omega. Lỗi đếm subtest thất bại đã sửa: omega/test_runner.py đếm mỗi test method một lần theo kết quả xấu nhất; có regression test riêng trong tests/test_hardening.py.
 
 [unified-skill.json](evidence/unified-skill.json) là snapshot 0.6 với 204 Python/15 Node tests. Từ 0.7 có native plugin install/inventory và cache-to-target fixture; đây không phải activation trace hoặc chất lượng LLM. ZIP/manifest strict validation không thay security review hoặc official directory listing approval.
