@@ -13,7 +13,7 @@ Trong Claude Code, gọi entry duy nhất:
 /omega kiểm tra xung đột với các skill khác đang dùng
 ```
 
-Đây là yêu cầu cho Claude điều phối theo skill, không phải Python tự diễn giải ngôn ngữ tự nhiên. Engine vẫn chạy bằng argv đã review. Frontmatter có disable-model-invocation=true: người dùng gọi tường minh. Phiên local mới xác minh Claude Code 2.1.308 bằng version/help; native activation và reasoning chưa nghiệm thu.
+Đây là yêu cầu cho Claude điều phối theo skill, không phải Python tự diễn giải ngôn ngữ tự nhiên. Engine vẫn chạy bằng argv đã review. Frontmatter không đặt disable-model-invocation: Claude có thể tự gọi khi tác vụ khớp description, người dùng vẫn gọi tường minh được. Phiên local mới xác minh Claude Code 2.1.308 bằng version/help; native activation và reasoning chưa nghiệm thu.
 
 Phải có checkout chứa omega, omega_cli.py, docs và skill bundle để dùng công cụ. Chỉ đưa SKILL.md vào Claude Web không làm `python3 -m omega` xuất hiện. Nếu môi trường chỉ đọc hướng dẫn, ghi **manual guidance only / engine not run**; không tạo kết quả giả hoặc nhận phiên đó là benchmark engine.
 

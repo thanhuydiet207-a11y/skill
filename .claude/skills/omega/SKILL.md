@@ -1,7 +1,6 @@
 ---
 name: omega
-description: Phân tích repository, điều tra và sửa lỗi có kiểm soát, kiểm thử, bộ nhớ dự án và đánh giá skill bằng bằng chứng; chọn chế độ theo tác vụ.
-disable-model-invocation: true
+description: Quy trình kỹ thuật dựa trên bằng chứng với engine Python OMEGA (evidence, quality gates, controlled change). Dùng khi người dùng nhắc OMEGA; khi cần sửa code có kiểm soát với phạm vi, acceptance, rollback và giới hạn lượt sửa; khi phải chạy build/tests/security/regression gates trước khi báo hoàn tất; khi đọc hoặc ghi bộ nhớ dự án; khi benchmark, so sánh hoặc kiểm tra xung đột giữa các skill. Không dùng cho câu hỏi nhanh, sửa nhỏ không cần evidence hoặc việc không liên quan đến code.
 argument-hint: "[tác vụ hoặc chế độ]"
 ---
 
