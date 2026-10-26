@@ -180,6 +180,14 @@ class EvidenceSafety(unittest.TestCase):
 
 
 class AdapterSafety(unittest.TestCase):
+    def test_counts_without_a_passing_test_are_rejected(self):
+        from omega.adapters import normalized
+        base=dict.fromkeys(('run','passed','failed','errors','skipped','expected_failures','unexpected_successes'),0)
+        # Tests ran but none passed: a check on run alone would accept these.
+        for extra in ({'run':1,'skipped':1},{'run':2,'skipped':1,'expected_failures':1}):
+            with self.subTest(extra=extra):self.assertIsNone(normalized({**base,**extra}))
+        self.assertIsNotNone(normalized({**base,'run':1,'passed':1}))
+
     def test_audit_refuses_symlinked_policy_directory(self):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d);(root/'.claude').mkdir();(root/'elsewhere').mkdir()

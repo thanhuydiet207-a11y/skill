@@ -7,7 +7,7 @@ Chỉ nên làm một mục khi eval cho thấy nó cải thiện kết quả so
 ## Ưu tiên từ kết quả eval
 
 1. ~~Cho engine chạy trên checkout chỉ đọc.~~ Đã làm ở 0.7.4: `gates` vẫn báo kết quả với `evidence: null`, `build` ghi bytecode ra thư mục tạm, `doctor` dùng config tạm. Evidence vẫn chỉ lưu trong `.omega/` của project.
-2. ~~Đo thay đổi code có kiểm soát.~~ Đã đo bằng case sửa lỗi cài sẵn (Write/Edit ghi được trong workspace eval): có và không có OMEGA cùng 1.00; với prompt thường, skill không được tự gọi. Bước tiếp theo là case khó hơn để phân biệt hai nhánh.
+2. ~~Đo thay đổi code có kiểm soát.~~ Đã đo bằng case sửa lỗi cài sẵn (Write/Edit ghi được trong workspace eval): có và không có OMEGA cùng 1.00; với prompt thường, skill không được tự gọi. Case khó hơn (lỗi trong hàm dùng chung, tag `phase3`) cũng chưa phân biệt được hai nhánh; nó làm lộ một lỗ hổng test đã được vá. Bước tiếp theo: đo trên một project khác ngoài repo này.
 
 ## 31 capability chưa triển khai
 

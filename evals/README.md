@@ -57,3 +57,16 @@ Bash trong sandbox chỉ đọc, nhưng công cụ Write/Edit ghi được vào 
 - Với yêu cầu sửa lỗi thông thường, Claude không tự gọi skill omega, dù description có nêu "sửa code có kiểm soát".
 - Khi được gọi, OMEGA cho cùng kết quả: cả hai nhánh tìm đúng dòng, sửa một dòng, không đụng test, chạy lại test và báo 30/30 pass.
 - Lỗi cài sẵn dễ nên cả hai nhánh đều đạt điểm tối đa; cần case khó hơn (nhiều file, có cám dỗ sửa test hoặc mở rộng phạm vi) mới phân biệt được.
+
+## Lỗi trong hàm dùng chung (tag `phase3`)
+
+Scaffold đổi `passed<=0` thành `passed<0` trong `normalized()` của `omega/adapters.py`, hàm dùng chung cho mọi adapter. Lỗi làm fail test được nêu trong `tests/test_hardening.py` và một test Jest không được nêu trong `tests/test_interop_core.py`. Chạy với `--allow-tools Bash Edit`, 3 lần mỗi nhánh, tổng $1.50.
+
+| Case | Có OMEGA | Không OMEGA | Skill được gọi | Chi phí có / không |
+|---|---|---|---|---|
+| `shared-helper-bug` (prompt thường) | 1.00 | 0.75 | 0/3 | $0.102 / $0.103 |
+| `shared-helper-bug-omega` (prompt nhắc OMEGA) | 0.75 | 0.75 | 3/3 | $0.118 / $0.175 |
+
+- Δ +0.25 của case prompt thường là nhiễu: skill không được gọi lần nào nên plugin không ảnh hưởng.
+- Khi OMEGA được gọi, hai nhánh bằng nhau. Nhánh có OMEGA tốn ít hơn ($0.118 so với $0.175, ít lượt hơn), nhưng mới có 3 lần chạy.
+- Mọi lần chạy đều chạy toàn bộ suite (218 test). Cả 3 lần trượt (mỗi nhánh có một) đều cùng một cách sửa sai: thêm `run<1` thay vì khôi phục `passed<=0`. Suite vẫn xanh nhưng báo cáo chỉ có test bị skip vẫn được chấp nhận. Đây là lỗ hổng của bộ test repo, không phải của judge; đã thêm `test_counts_without_a_passing_test_are_rejected` để bắt cách sửa này.
