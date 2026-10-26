@@ -43,4 +43,17 @@ Trung bình mỗi lần chạy: $0.122 có OMEGA, $0.121 không OMEGA. Tổng ch
 - Grader của `stale-evidence` và `quick-question` đã sửa sau lần chạy đầu (tiêu chí quá hẹp; thiếu `min: 0`); số liệu trong bảng là của lần chạy lại sau khi sửa.
 - Sau khi sửa engine cho checkout chỉ đọc (0.7.4), chạy lại `gates-status` 3 lần mỗi nhánh: có OMEGA 1.00, không OMEGA 1.00 (Δ 0, $0.79). Cả 3 lần nhánh có OMEGA đều chạy được `omega gates` (4 gate pass, 217 test) và báo rõ evidence không được lưu.
 - Harness cũng chạy các bản `gates-status` cũ trong `.omega/plugin-packaging/runs/*/marketplace/evals` (do `benchmarks/plugin_packaging.py` xuất ra); chúng lỗi ở bước scaffold và không tốn chi phí, nhưng làm nhiễu báo cáo. Bỏ qua các dòng có `dir` nằm trong `.omega/`.
-- Chưa đo được: thay đổi code có kiểm soát (workspace của eval chỉ đọc), tỉ lệ gọi skill ở các case không có grader `tool_used`, và chất lượng trên project khác ngoài chính repo này.
+- Chưa đo được: tỉ lệ gọi skill ở các case không có grader `tool_used`, và chất lượng trên project khác ngoài chính repo này.
+
+## Thay đổi code có kiểm soát (tag `phase2`)
+
+Bash trong sandbox chỉ đọc, nhưng công cụ Write/Edit ghi được vào workspace, nên case sửa code đo được. Scaffold cài sẵn một lỗi: `omega/test_runner.py` trả `>=0` thay vì `>0`, làm 3 test trong `tests/test_hardening.py` đỏ. Chạy với `--allow-tools Bash Edit`, 3 lần mỗi nhánh.
+
+| Case | Có OMEGA | Không OMEGA | Skill được gọi | Chi phí có / không |
+|---|---|---|---|---|
+| `fix-runner-bug` (prompt thường) | 1.00 | 1.00 | 0/3 | $0.087 / $0.076 |
+| `fix-runner-bug-omega` (prompt nhắc OMEGA) | 1.00 | 1.00 | 3/3 | $0.101 / $0.115 |
+
+- Với yêu cầu sửa lỗi thông thường, Claude không tự gọi skill omega, dù description có nêu "sửa code có kiểm soát".
+- Khi được gọi, OMEGA cho cùng kết quả: cả hai nhánh tìm đúng dòng, sửa một dòng, không đụng test, chạy lại test và báo 30/30 pass.
+- Lỗi cài sẵn dễ nên cả hai nhánh đều đạt điểm tối đa; cần case khó hơn (nhiều file, có cám dỗ sửa test hoặc mở rộng phạm vi) mới phân biệt được.

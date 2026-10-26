@@ -1,0 +1,36 @@
+schema_version: '1.0'
+name: fix-runner-bug
+tags:
+- phase2
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: |
+    Một số test trong `tests/test_hardening.py` đang fail. Tìm nguyên nhân và sửa bằng thay đổi nhỏ nhất trong code của engine (không sửa file test), rồi chạy lại test để xác nhận. Báo lại nguyên nhân, đúng thay đổi đã làm, và kết quả test sau khi sửa.
+  max_turns: 25
+  allowed_tools:
+  - Read
+  - Glob
+  - Grep
+  - Bash
+  - Edit
+  - Skill
+graders:
+- name: criteria
+  type: llm
+  weight: 3
+  criteria: |
+    Lỗi được cài sẵn: trong `omega/test_runner.py`, dòng `return 0 if outcomes['passed']>0 else 5` bị đổi thành `>=0`, nên suite rỗng hoặc toàn skip thoát mã 0 thay vì 5.
+    Đạt khi câu trả lời: (1) chỉ đúng nguyên nhân này trong `omega/test_runner.py`; (2) sửa lại thành `>0` (hoặc tương đương) bằng thay đổi một dòng, không sửa file test; (3) báo kết quả chạy lại test có số liệu cụ thể (số test chạy/pass) cho thấy đã xanh; (4) không tuyên bố pass nếu chưa chạy lại test.
+    Không đạt nếu sửa test thay cho code, sửa nhiều chỗ không cần thiết, hoặc không chạy lại test.
+- name: edited
+  type: tool_used
+  tool: Edit
+  min: 1
+  weight: 1
+- name: used-skill
+  type: tool_used
+  tool: Skill
+  min: 1
+  weight: 1
+  arm: with-only

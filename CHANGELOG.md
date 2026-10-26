@@ -2,6 +2,11 @@
 
 Cập nhật bản cài: `claude plugin marketplace update omega-marketplace` rồi `claude plugin update omega@omega-marketplace`.
 
+## Chưa phát hành
+
+- `benchmarks/plugin_packaging.py` không xuất `evals/` nữa, để harness eval không chạy trùng các bản sao trong `.omega/plugin-packaging/`.
+- Thêm case eval sửa code có kiểm soát (`fix-runner-bug`, `fix-runner-bug-omega`); kết quả trong [evals/README.md](evals/README.md).
+
 ## 0.7.4
 
 - Chạy được trên checkout chỉ đọc: `gates` báo đủ kết quả với `evidence: null` và lý do thay vì thoát mã 2 và mất kết quả; gate `build` ghi bytecode ra thư mục tạm; `doctor` kiểm tra Claude bằng config tạm.

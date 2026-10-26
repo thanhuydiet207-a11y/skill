@@ -55,6 +55,15 @@ class PluginPackaging(unittest.TestCase):
                 self.assertFalse(any('.omega' in p.split('/') or 'node_modules' in p.split('/') or p=='notes.txt' for p in bundle.namelist()))
             self.assertTrue((payload/'omega_cli.py').is_file())
 
+    def test_archive_excludes_tracked_eval_suite(self):
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d);base=self.fixture(root)
+            (root/'evals/case').mkdir(parents=True);(root/'evals/case/case.yaml').write_text('name: case\n')
+            subprocess.run(['git','add','evals'],cwd=root,check=True)
+            payload,archive,manifest=export_plugin(root,base)
+            self.assertFalse(any(row['path'].startswith('evals/') for row in manifest))
+            self.assertFalse((payload/'evals').exists())
+
     def test_archive_refuses_tracked_symlinks(self):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d);base=self.fixture(root);(root/'alias.py').symlink_to(root/'omega_cli.py')

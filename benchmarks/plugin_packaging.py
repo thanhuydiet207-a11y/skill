@@ -24,7 +24,8 @@ def export_plugin(root,base):
     """Only tracked, bounded regular sources. Ignore/runtime trees are never shipped."""
     result=execute(['git','ls-files','-z'],root,capture_bytes=1048576)
     if result['exit_code'] or result['truncated']:raise ValueError('Cannot obtain complete tracked file list')
-    names=[x for x in result['output'].split('\0') if x]
+    # evals/ is a maintainer suite; exported copies under .omega/ would be rediscovered as duplicate eval cases.
+    names=[x for x in result['output'].split('\0') if x and not x.startswith('evals/')]
     if not names or len(names)>512:raise ValueError('Plugin file count budget exceeded')
     manifest=[];total=0;payload=base/'marketplace'
     archive=base/'omega.zip'
