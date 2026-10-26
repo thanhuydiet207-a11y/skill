@@ -11,6 +11,21 @@ claude plugin eval . --scaffold --trust-plugin --no-publish --case <tên-case> -
 - `--case` lặp lại chỉ nhận giá trị cuối; chạy từng case một.
 - Harness quét cả bản xuất cũ trong `.omega/plugin-packaging/runs/*/marketplace/evals`; tên case phải khác các bản cũ đó (`gate-report`, `no-git-root`, `change-plan`).
 
+## Đo token và công cụ (P0 của kế hoạch 0.8)
+
+`aggregate-result.json` chỉ có điểm, chi phí, thời gian và số lượt. Token và số lần gọi công cụ nằm trong trace của từng lượt, chỉ được giữ khi chạy với `--keep-temp`:
+
+```bash
+claude plugin eval . --scaffold --trust-plugin --no-publish --keep-temp --case <tên-case> --allow-tools Bash Edit --output-dir /tmp/run-x
+python3 benchmarks/eval_metrics.py current=/tmp/run-x --json /tmp/run-x/metrics.json
+```
+
+- Token lấy từ event `result` cuối trace (số runtime báo): input, cache read, cache write, output. `mean_input_tokens` là tổng ba loại input. Lượt không có trace để token là `null`; không quy đổi byte thành token.
+- Số lần gọi công cụ và skill được gọi đếm từ các khối `tool_use`.
+- `cost_per_success_usd` là tổng chi phí chia số lượt đạt; không xác định khi không lượt nào đạt.
+- So sánh A/B/C: chạy suite với plugin hiện tại (nhánh `with` = B, `without` = A) và với checkout của bản ứng viên (nhánh `with` = C), rồi truyền cả hai thư mục: `current=DIR1 candidate=DIR2`.
+- Giới hạn: harness tự quyết thứ tự chạy các nhánh (chưa hoán đổi được), và mỗi lượt `--keep-temp` để lại một thư mục `/tmp/claude-eval-*` khoảng 250 KB cần tự xoá.
+
 ## Kết quả bước 0 (1 lần chạy mỗi nhánh, chưa có ý nghĩa thống kê)
 
 | Case | Có OMEGA | Không OMEGA | Ghi chú |

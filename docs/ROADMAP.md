@@ -4,6 +4,8 @@ Các mục dưới đây **chưa tồn tại** trong engine, skill hay agent. Ch
 
 Chỉ nên làm một mục khi eval cho thấy nó cải thiện kết quả so với không dùng OMEGA. Kết quả giai đoạn 1 ([evals/README.md](../evals/README.md)) chưa có case nào OMEGA làm tốt hơn.
 
+Hướng tổng thể cho 0.8: [PLAN_0_8.md](PLAN_0_8.md) (đo lường trước, rồi mới context, workflow, router).
+
 ## Ưu tiên từ kết quả eval
 
 1. ~~Cho engine chạy trên checkout chỉ đọc.~~ Đã làm ở 0.7.4: `gates` vẫn báo kết quả với `evidence: null`, `build` ghi bytecode ra thư mục tạm, `doctor` dùng config tạm. Evidence vẫn chỉ lưu trong `.omega/` của project.

@@ -6,9 +6,9 @@ Cập nhật bản cài: `claude plugin marketplace update omega-marketplace` r�
 
 - `benchmarks/plugin_packaging.py` không xuất `evals/` nữa, để harness eval không chạy trùng các bản sao trong `.omega/plugin-packaging/`.
 - Thêm case eval sửa code có kiểm soát (`fix-runner-bug`, `fix-runner-bug-omega`); kết quả trong [evals/README.md](evals/README.md).
-
 - Test mới chặn báo cáo có test chạy nhưng không test nào pass (ví dụ chỉ có test bị skip); eval `phase3` cho thấy cách sửa `run<1` lọt qua bộ test cũ.
 - Thêm case eval `shared-helper-bug` và `shared-helper-bug-omega`.
+- Kế hoạch 0.8 ([docs/PLAN_0_8.md](docs/PLAN_0_8.md)), bắt đầu từ P0: `benchmarks/eval_metrics.py` đọc trace của `claude plugin eval` để báo token input/output/cache, số lần gọi công cụ, skill được gọi và chi phí trên mỗi lượt thành công.
 
 ## 0.7.4
 
