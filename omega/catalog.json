@@ -9,36 +9,6 @@
     "reference": ".claude/skills/omega/references/repo-map.md"
   },
   {
-    "group": "Intelligence",
-    "name": "task-triage",
-    "state": "planned",
-    "origin": "foundation"
-  },
-  {
-    "group": "Intelligence",
-    "name": "dependency-map",
-    "state": "planned",
-    "origin": "foundation"
-  },
-  {
-    "group": "Intelligence",
-    "name": "impact-analysis",
-    "state": "planned",
-    "origin": "foundation"
-  },
-  {
-    "group": "Intelligence",
-    "name": "root-cause",
-    "state": "planned",
-    "origin": "foundation"
-  },
-  {
-    "group": "Intelligence",
-    "name": "architecture-review",
-    "state": "planned",
-    "origin": "foundation"
-  },
-  {
     "group": "Engineering",
     "name": "controlled-change",
     "state": "implemented",
@@ -46,36 +16,6 @@
     "skill": "omega",
     "mode": "controlled-change",
     "reference": ".claude/skills/omega/references/controlled-change.md"
-  },
-  {
-    "group": "Engineering",
-    "name": "bug-fix",
-    "state": "planned",
-    "origin": "foundation"
-  },
-  {
-    "group": "Engineering",
-    "name": "refactor",
-    "state": "planned",
-    "origin": "foundation"
-  },
-  {
-    "group": "Engineering",
-    "name": "api-change",
-    "state": "planned",
-    "origin": "foundation"
-  },
-  {
-    "group": "Engineering",
-    "name": "migration",
-    "state": "planned",
-    "origin": "foundation"
-  },
-  {
-    "group": "Engineering",
-    "name": "integration",
-    "state": "planned",
-    "origin": "foundation"
   },
   {
     "group": "Quality",
@@ -87,36 +27,6 @@
     "reference": ".claude/skills/omega/references/quality-gates.md"
   },
   {
-    "group": "Quality",
-    "name": "test-design",
-    "state": "planned",
-    "origin": "foundation"
-  },
-  {
-    "group": "Quality",
-    "name": "regression-analysis",
-    "state": "planned",
-    "origin": "foundation"
-  },
-  {
-    "group": "Quality",
-    "name": "security-review",
-    "state": "planned",
-    "origin": "foundation"
-  },
-  {
-    "group": "Quality",
-    "name": "performance-check",
-    "state": "planned",
-    "origin": "foundation"
-  },
-  {
-    "group": "Quality",
-    "name": "rollback-check",
-    "state": "planned",
-    "origin": "foundation"
-  },
-  {
     "group": "Knowledge",
     "name": "project-memory",
     "state": "implemented",
@@ -126,72 +36,6 @@
     "reference": ".claude/skills/omega/references/project-memory.md"
   },
   {
-    "group": "Knowledge",
-    "name": "evidence-index",
-    "state": "planned",
-    "origin": "foundation"
-  },
-  {
-    "group": "Knowledge",
-    "name": "decision-record",
-    "state": "planned",
-    "origin": "foundation"
-  },
-  {
-    "group": "Knowledge",
-    "name": "context-pack",
-    "state": "planned",
-    "origin": "foundation"
-  },
-  {
-    "group": "Knowledge",
-    "name": "knowledge-refresh",
-    "state": "planned",
-    "origin": "foundation"
-  },
-  {
-    "group": "Knowledge",
-    "name": "handoff",
-    "state": "planned",
-    "origin": "foundation"
-  },
-  {
-    "group": "Operations",
-    "name": "environment-doctor",
-    "state": "planned",
-    "origin": "foundation"
-  },
-  {
-    "group": "Operations",
-    "name": "workspace-isolation",
-    "state": "planned",
-    "origin": "foundation"
-  },
-  {
-    "group": "Operations",
-    "name": "release-plan",
-    "state": "planned",
-    "origin": "foundation"
-  },
-  {
-    "group": "Operations",
-    "name": "incident-response",
-    "state": "planned",
-    "origin": "foundation"
-  },
-  {
-    "group": "Operations",
-    "name": "dependency-health",
-    "state": "planned",
-    "origin": "foundation"
-  },
-  {
-    "group": "Operations",
-    "name": "observability",
-    "state": "planned",
-    "origin": "foundation"
-  },
-  {
     "group": "Evolution",
     "name": "skill-benchmark",
     "state": "implemented",
@@ -199,36 +43,6 @@
     "skill": "omega",
     "mode": "skill-benchmark",
     "reference": ".claude/skills/omega/references/skill-benchmark.md"
-  },
-  {
-    "group": "Evolution",
-    "name": "skill-evaluation",
-    "state": "planned",
-    "origin": "foundation"
-  },
-  {
-    "group": "Evolution",
-    "name": "skill-candidate",
-    "state": "planned",
-    "origin": "foundation"
-  },
-  {
-    "group": "Evolution",
-    "name": "skill-promotion",
-    "state": "planned",
-    "origin": "foundation"
-  },
-  {
-    "group": "Evolution",
-    "name": "cost-review",
-    "state": "planned",
-    "origin": "foundation"
-  },
-  {
-    "group": "Evolution",
-    "name": "workflow-retrospective",
-    "state": "planned",
-    "origin": "foundation"
   },
   {
     "group": "Intelligence",

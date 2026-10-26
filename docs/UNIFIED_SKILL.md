@@ -24,7 +24,7 @@ Phải có checkout chứa omega, omega_cli.py, docs và skill bundle để dùn
   SKILL.md                  # entry/routing và quy tắc dùng chung
   references/*.md           # 13 quy trình từ các skill trước
 omega/modes.json            # mode -> commands và reference
-omega/catalog.json          # 44 capability: 13 implemented, 31 planned
+omega/catalog.json          # 13 chế độ đã triển khai; phần chưa làm ở docs/ROADMAP.md
 ```
 
 Các tài liệu reference không có frontmatter skill và không mang tên SKILL.md. Nội dung quy trình cũ được giữ nguyên khi chuyển; chỉ bỏ frontmatter đăng ký riêng. Không có 13 alias skill ẩn hoặc skill placeholder. Ba agent spec vẫn ở agents/; gộp skill không chứng minh agent runtime đã chạy.
