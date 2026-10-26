@@ -1,0 +1,19 @@
+schema_version: '1.0'
+name: trivial-question
+tags:
+- tier
+execution:
+  prompt: |
+    Giải thích ngắn gọn khác nhau giữa list và tuple trong Python, kèm một ví dụ.
+  max_turns: 6
+  allowed_tools:
+  - Read
+  - Glob
+  - Grep
+  - Agent
+graders:
+- name: criteria
+  type: llm
+  weight: 3
+  criteria: |
+    Đạt khi câu trả lời đúng (list thay đổi được, tuple không; tuple hash được nếu mọi phần tử hash được), ngắn gọn và có một ví dụ.

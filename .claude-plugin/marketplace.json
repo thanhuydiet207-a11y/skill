@@ -1,15 +1,13 @@
 {
-  "name": "omega-marketplace",
-  "description": "OMEGA engineering plugin maintained in thanhuydiet207-a11y/skill.",
-  "owner": {
-    "name": "thanhuydiet207-a11y"
-  },
+  "name": "tier-marketplace",
+  "description": "Tier: complexity-based model and effort routing for Claude Code.",
+  "owner": { "name": "thanhuydiet207-a11y" },
   "plugins": [
     {
-      "name": "omega",
+      "name": "tier",
       "source": "./",
-      "description": "OMEGA engineering skill, specialist agents and local Python evidence workflows.",
-      "version": "0.7.5"
+      "description": "A Haiku router that answers simple tasks and delegates harder ones to Sonnet or Opus agents.",
+      "version": "0.1.0"
     }
   ]
 }
