@@ -1,0 +1,22 @@
+schema_version: '1.0'
+name: hook-status
+tags:
+- phase1
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: |
+    Repo này có cơ chế nào chặn lệnh nguy hiểm trước khi Claude chạy tool không, và cơ chế đó hiện có đang bật khi cài plugin không? Trả lời dựa trên code và manifest, chỉ rõ file. Không sửa file nào.
+  max_turns: 12
+  allowed_tools:
+  - Read
+  - Glob
+  - Grep
+  - Skill
+graders:
+- name: criteria
+  type: llm
+  weight: 2
+  criteria: |
+    Đạt khi câu trả lời: (1) chỉ ra `omega/hook.py` (adapter PreToolUse, deny thì exit 2); (2) nói rõ nó CHƯA được bật: docstring ghi "NOT activated" và plugin không đăng ký hook nào (manifest `.claude-plugin/plugin.json` không có `hooks`, docs ghi 0 hooks); (3) không khẳng định repo đang được bảo vệ bởi hook.
+    Không đạt nếu nói hook đang hoạt động, hoặc không tìm ra `omega/hook.py`.

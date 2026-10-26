@@ -1,5 +1,7 @@
 schema_version: '1.0'
 name: doctor-outside-git-plan
+tags:
+- phase1
 context:
   scaffold_script: scaffold.sh
 execution:

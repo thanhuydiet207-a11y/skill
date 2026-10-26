@@ -1,0 +1,25 @@
+schema_version: '1.0'
+name: quick-question
+tags:
+- phase1
+execution:
+  prompt: |
+    Giải thích ngắn gọn khác nhau giữa list và tuple trong Python, kèm một ví dụ.
+  max_turns: 4
+  allowed_tools:
+  - Read
+  - Glob
+  - Grep
+  - Skill
+graders:
+- name: criteria
+  type: llm
+  weight: 1
+  criteria: |
+    Đạt khi câu trả lời đúng (list thay đổi được, tuple không; tuple hash được nếu phần tử hash được), ngắn gọn và có một ví dụ.
+- name: no-skill
+  type: tool_used
+  tool: Skill
+  max: 0
+  weight: 1
+  arm: with-only
