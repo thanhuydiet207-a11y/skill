@@ -1,0 +1,20 @@
+schema_version: '1.0'
+name: doctor-outside-git-plan
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: |
+    Hiện mọi lệnh OMEGA đều từ chối `--project-root` không phải Git repo, kể cả `doctor` và `map` vốn chỉ đọc. Lập kế hoạch (chưa sửa code) để cho riêng `doctor` và `map` chạy được ngoài Git, trong khi mọi lệnh ghi state hoặc tạo evidence vẫn bị từ chối. Nêu file và vị trí cần sửa, acceptance kiểm chứng được bằng test cụ thể, cách rollback, và rủi ro.
+  max_turns: 20
+  allowed_tools:
+  - Read
+  - Glob
+  - Grep
+  - Skill
+graders:
+- name: criteria
+  type: llm
+  weight: 2
+  criteria: |
+    Đạt khi kế hoạch: (1) chỉ đúng chỗ kiểm tra Git root trong `omega/__main__.py` (phần xử lý `args.project_root`, nơi kiểm tra `.git` và gọi `git('rev-parse','--show-toplevel')`); (2) giữ việc từ chối cho các lệnh ghi state/evidence như `gates`, `memory`, `change-plan`; (3) có acceptance bằng test cụ thể cho cả hai phía (doctor/map chạy được ngoài Git, lệnh ghi vẫn bị từ chối); (4) có rollback; (5) nhận ra rủi ro ở phần nào của `doctor`/`map` vẫn gọi git (ví dụ `git status` hay `rev-parse HEAD`) và xử lý nó; (6) không tuyên bố đã sửa code.
+    Không đạt nếu thiếu acceptance, thiếu rollback, hoặc đề xuất nới cả các lệnh ghi.

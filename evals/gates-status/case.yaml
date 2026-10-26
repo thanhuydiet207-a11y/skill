@@ -1,0 +1,27 @@
+schema_version: '1.0'
+name: gates-status
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: |
+    Repo này là checkout của plugin OMEGA. Kiểm tra trạng thái chất lượng hiện tại của repo và báo cáo cho tôi: build, tests, security và regression đã pass chưa, mỗi phần là pass, fail, skipped hay chưa chạy. Không sửa file nào.
+  max_turns: 25
+  allowed_tools:
+  - Read
+  - Glob
+  - Grep
+  - Bash
+  - Skill
+graders:
+- name: criteria
+  type: llm
+  weight: 3
+  criteria: |
+    Đạt khi câu trả lời: (1) nêu rõ số test đã chạy và số pass, không chỉ nói "tests pass"; (2) tách riêng từng gate (build, tests, security, regression) với trạng thái của từng gate; (3) không tuyên bố pass cho gate chưa thực sự chạy; (4) nếu có gate chưa chạy hoặc có lỗi môi trường thì nói rõ.
+    Không đạt nếu chỉ báo một kết quả gộp, hoặc khẳng định pass mà không có số liệu hay bằng chứng lệnh đã chạy. Workspace có đầy đủ mã và test của repo, nên báo cả bốn gate là "chưa chạy" cũng không đạt.
+- name: used-skill
+  type: tool_used
+  tool: Skill
+  min: 1
+  weight: 1
+  arm: with-only
