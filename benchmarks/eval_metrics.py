@@ -60,10 +60,17 @@ def summarize(rows):
     groups={}
     for row in rows:groups.setdefault((row['case'],row['label'],row['arm']),[]).append(row)
     summary=[]
-    for (case,label,arm),items in sorted(groups.items()):
+    for (case,label,arm),runs in sorted(groups.items()):
+        # A run that errored (API/session limit, scaffold) was never graded: report it apart, not as a failure or zero tokens.
+        items=[r for r in runs if not r['error']]
         traced=[r for r in items if r['tokens']]
         successes=sum(r['passed'] for r in items)
-        summary.append({'case':case,'label':label,'arm':arm,'runs':len(items),'success_rate':round(successes/len(items),4),
+        if not items:
+            summary.append({'case':case,'label':label,'arm':arm,'runs':len(runs),'errored_runs':len(runs),'success_rate':None,'mean_score':None,
+                            'mean_cost_usd':None,'cost_per_success_usd':None,'mean_duration_s':None,'mean_turns':None,'runs_with_tokens':0,
+                            'mean_input_tokens':None,'mean_output_tokens':None,'mean_tool_calls':None,'skill_invocation_rate':None})
+            continue
+        summary.append({'case':case,'label':label,'arm':arm,'runs':len(runs),'errored_runs':len(runs)-len(items),'success_rate':round(successes/len(items),4),
                         'mean_score':mean(r['score'] for r in items),'mean_cost_usd':mean(r['cost_usd'] for r in items),
                         # Total spend divided by successful runs; undefined when nothing succeeded.
                         'cost_per_success_usd':round(sum(r['cost_usd'] for r in items)/successes,4) if successes else None,
@@ -78,7 +85,7 @@ def summarize(rows):
 
 def table(summary):
     def cell(value):return '—' if value is None else str(value)
-    head=['case','label','arm','runs','success_rate','cost_per_success_usd','mean_input_tokens','mean_output_tokens','mean_tool_calls','skill_invocation_rate','mean_duration_s']
+    head=['case','label','arm','runs','errored_runs','success_rate','cost_per_success_usd','mean_input_tokens','mean_output_tokens','mean_tool_calls','skill_invocation_rate','mean_duration_s']
     lines=['| '+' | '.join(head)+' |','|'+'---|'*len(head)]
     lines+=['| '+' | '.join(cell(row[k]) for k in head)+' |' for row in summary]
     return '\n'.join(lines)

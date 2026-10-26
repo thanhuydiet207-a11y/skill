@@ -47,5 +47,18 @@ class EvalMetrics(unittest.TestCase):
             self.assertEqual((with_arm['mean_tool_calls'],with_arm['skill_invocation_rate']),(3,1.0))
             self.assertEqual(without_arm['runs_with_tokens'],0);self.assertIsNone(without_arm['mean_input_tokens'])
 
+    def test_errored_runs_are_counted_apart_from_outcomes_and_tokens(self):
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d);self.results(root)
+            data=json.loads((root/'aggregate-result.json').read_text())
+            zero=root/'zero.jsonl';zero.write_text(json.dumps({'type':'result','usage':{'input_tokens':0,'output_tokens':0}})+'\n')
+            failed=run(0,False,0,str(zero));failed['error']='exit 1: session limit'
+            data['cases'][0]['arms']['without'].append(failed)
+            (root/'aggregate-result.json').write_text(json.dumps(data))
+            _,rows=load('current',root)
+            without_arm=summarize(rows)[1]
+            self.assertEqual((without_arm['runs'],without_arm['errored_runs'],without_arm['success_rate']),(2,1,1.0))
+            self.assertEqual(without_arm['runs_with_tokens'],0)  # The errored run's zero usage is not a measurement.
+
 
 if __name__=='__main__':unittest.main()

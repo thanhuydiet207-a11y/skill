@@ -24,6 +24,8 @@ python3 benchmarks/eval_metrics.py current=/tmp/run-x --json /tmp/run-x/metrics.
 - Số lần gọi công cụ và skill được gọi đếm từ các khối `tool_use`.
 - `cost_per_success_usd` là tổng chi phí chia số lượt đạt; không xác định khi không lượt nào đạt.
 - So sánh A/B/C: chạy suite với plugin hiện tại (nhánh `with` = B, `without` = A) và với checkout của bản ứng viên (nhánh `with` = C), rồi truyền cả hai thư mục: `current=DIR1 candidate=DIR2`.
+- Lượt chạy có `error` (giới hạn phiên, lỗi API, scaffold lỗi) không được chấm: báo riêng ở `errored_runs`, không tính vào tỉ lệ thành công hay token.
+- Số đo đầu tiên (`fix-runner-bug-omega`, nhánh có OMEGA, 3 lượt đạt): trung bình 158.801 token input (gần hết là cache read), 1.433 token output, 7 lần gọi công cụ (Skill 1, Bash 3–4, Read 1–2, Edit 1), $0.112 mỗi lượt thành công. Nhánh không OMEGA và case `shared-helper-bug-omega` dừng vì hết giới hạn phiên, nên chưa có số so sánh.
 - Giới hạn: harness tự quyết thứ tự chạy các nhánh (chưa hoán đổi được), và mỗi lượt `--keep-temp` để lại một thư mục `/tmp/claude-eval-*` khoảng 250 KB cần tự xoá.
 
 ## Kết quả bước 0 (1 lần chạy mỗi nhánh, chưa có ý nghĩa thống kê)
