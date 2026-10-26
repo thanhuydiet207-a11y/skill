@@ -5,7 +5,7 @@ Plugin không tự nạp file này thành system/project context. Skill và agen
 Đọc `docs/ARCHITECTURE.md` theo nhu cầu, không tải toàn bộ catalog.
 Chạy `python3 -m omega doctor` và `python3 -m omega map` trước thay đổi.
 Router: `python3 -m omega plan --complexity low|medium|high [--conflict]`.
-Có một skill omega tại .claude/skills/omega/SKILL.md, gồm 13 chế độ reference và 3 agent spec. Gọi /omega, đọc đúng reference theo tác vụ; không nạp tất cả 13 tài liệu. Các mục planned không được coi là khả dụng. Native skill/agent runtime vẫn chưa nghiệm thu.
+Có một skill omega tại .claude/skills/omega/SKILL.md, gồm 13 chế độ reference và 3 agent spec. Gọi /omega, đọc đúng reference theo tác vụ; không nạp tất cả 13 tài liệu. Mục trong docs/ROADMAP.md chưa tồn tại, không được coi là khả dụng. Native skill/agent runtime vẫn chưa nghiệm thu.
 Mỗi agent nhận task, phạm vi file, acceptance, giới hạn, evidence cần trả và branch.
 Tối đa 2 agent cùng lúc, không giao 2 writer trên cùng file; high chạy investigator rồi engineer rồi verifier, chỉ parallel các việc độc lập.
 Không tự cấp quyền, bypass permissions, push/deploy/xóa dữ liệu hoặc sửa ngoài repository khi chưa được duyệt.

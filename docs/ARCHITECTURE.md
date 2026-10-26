@@ -21,48 +21,32 @@ flowchart TD
 
 CLI stdlib hỗ trợ kế hoạch và bằng chứng; Claude Code mới là runtime suy luận và giao việc. Không có lời gọi LLM/MCP ngầm. CLI Claude Code 2.1.308 đã chạy version/help; native task execution chưa được kiểm chứng do chưa xác thực. Không tuyên bố agent tự chạy hoặc hooks đã bảo vệ phiên làm việc.
 
-## 36 capability gốc, 8 extension, 6 nhóm
+## 13 chế độ đã triển khai
 
-Catalog máy đọc: `omega/catalog.json`. Mỗi nhóm gốc có 6 capability, giữ nguyên origin=foundation. Bảng dưới mô tả 36 mục gốc, trong đó 5 mục in đậm đã triển khai; 8 extension bổ sung đưa catalog lên 44. Từ 0.6, **chỉ một SKILL.md tên omega**: 13 capability đã triển khai là chế độ/reference trong skill đó, còn 31 mục planned. Registry `omega/modes.json` ánh xạ từng chế độ tới commands và reference; origin trong catalog là nguồn gốc capability, không phải số entry skill.
+Catalog máy đọc: `omega/catalog.json`, chỉ gồm các chế độ chạy được. **Chỉ một SKILL.md tên omega**; mỗi chế độ là một reference trong skill đó. Registry `omega/modes.json` ánh xạ từng chế độ tới commands và reference. Các capability chưa làm nằm ở [ROADMAP.md](ROADMAP.md).
 
-| Nhóm | Skill |
+| Nhóm | Chế độ |
 |---|---|
-| Intelligence | **repo-map**, task-triage, dependency-map, impact-analysis, root-cause, architecture-review |
-| Engineering | **controlled-change**, bug-fix, refactor, api-change, migration, integration |
-| Quality | **quality-gates**, test-design, regression-analysis, security-review, performance-check, rollback-check |
-| Knowledge | **project-memory**, evidence-index, decision-record, context-pack, knowledge-refresh, handoff |
-| Operations | environment-doctor, workspace-isolation, release-plan, incident-response, dependency-health, observability |
-| Evolution | **skill-benchmark**, skill-evaluation, skill-candidate, skill-promotion, cost-review, workflow-retrospective |
-
-Capabilities phụ như doctor/isolate/rollback-check có CLI helper nhưng chưa thành skill độc lập. Một skill được coi là triển khai khi có quy trình, công cụ chạy được, kiểm thử hợp đồng và giới hạn rõ ràng; hiệu quả của skill với LLM là nghiệm thu riêng chưa đạt.
-
-| Nhóm | Extension đã triển khai |
-|---|---|
-| Intelligence | omega-skill-compatibility-audit, omega-context-sufficiency-check |
-| Engineering | omega-workflow-handoff-contract |
-| Quality | omega-skill-interference-benchmark, omega-evidence-reconciler |
-| Knowledge | omega-memory-reconciliation |
+| Intelligence | repo-map, omega-skill-compatibility-audit, omega-context-sufficiency-check |
+| Engineering | controlled-change, omega-workflow-handoff-contract |
+| Quality | quality-gates, omega-skill-interference-benchmark, omega-evidence-reconciler |
+| Knowledge | project-memory, omega-memory-reconciliation |
 | Operations | omega-effective-policy-explainer, omega-project-workflow-adapter |
-| Evolution | dùng analyzer interference qua intent evolve; chưa thêm extension vào nhóm này |
+| Evolution | skill-benchmark |
+
+Lệnh phụ như doctor/isolate/rollback-check có CLI helper nhưng không là chế độ riêng. Một chế độ được coi là triển khai khi có quy trình, công cụ chạy được, kiểm thử hợp đồng và giới hạn rõ ràng. Hiệu quả với LLM đo riêng bằng [evals](../evals/README.md); giai đoạn 1 chưa có case nào OMEGA làm tốt hơn không dùng OMEGA.
 
 Tên cũ giữ làm mode ID/reference, không còn slash skill độc lập hoặc đích --skill riêng. CLI map/gates/memory và các command chức năng giữ nguyên; candidate/benchmark dùng --skill omega. Plan trả skills=[omega], modes và reference paths theo intent, không preload nội dung hoặc tự dispatch. Cách chuyển: [UNIFIED_SKILL.md](UNIFIED_SKILL.md). Quy tắc phối hợp và schema: [INTEROPERABILITY_GUIDE.md](INTEROPERABILITY_GUIDE.md).
 
-## 10 vai trò chuyên môn
+## 3 agent
 
-Quyền trong bảng là **mục tiêu policy**; prompt không thay thế OS sandbox/Claude permissions. 3 hàng đầu có file trong `agents/`, 7 hàng sau chưa tạo agent runtime.
+Quyền trong bảng là **mục tiêu policy**; prompt không thay thế OS sandbox/Claude permissions. Mỗi agent có file trong `agents/`. Các vai trò khác chưa có file nằm ở [ROADMAP.md](ROADMAP.md).
 
-| Agent | Trạng thái | Quyền dự kiến | Nhiệm vụ và đầu ra |
-|---|---|---|---|
-| omega-investigator | spec đã tạo | Read/Grep/Glob; Bash đọc được review | inventory, tái hiện lỗi, nguyên nhân + path:line |
-| omega-engineer | spec đã tạo | Read/Edit/Write trong phạm vi; Bash được duyệt | patch nhỏ, acceptance, evidence |
-| omega-verifier | spec đã tạo | Read + chạy gates được review | kết quả độc lập và rủi ro regression |
-| omega-architect | thiết kế | chỉ đọc | phương án, ADR, tradeoff |
-| omega-security | thiết kế | chỉ đọc + scanner được duyệt | finding kèm tác động và bằng chứng |
-| omega-test-designer | thiết kế | chỉ ghi tests được giao | regression fixture, negative cases |
-| omega-knowledge | thiết kế | đọc evidence, ghi memory đã lọc | ADR, kiến thức theo commit, không bí mật |
-| omega-operations | thiết kế | đọc config; lệnh môi trường được duyệt | dependency/service readiness; không deploy |
-| omega-performance | thiết kế | đọc + benchmark trong sandbox | đo baseline/candidate cùng điều kiện |
-| omega-evolution | thiết kế | đọc stable; ghi candidate riêng | benchmark, đề xuất, không tự promote |
+| Agent | Quyền | Nhiệm vụ và đầu ra |
+|---|---|---|
+| omega-investigator | Read/Grep/Glob; Bash đọc được review | inventory, tái hiện lỗi, nguyên nhân + path:line |
+| omega-engineer | Read/Edit/Write trong phạm vi; Bash được duyệt | patch nhỏ, acceptance, evidence |
+| omega-verifier | Read + chạy gates được review | kết quả độc lập và rủi ro regression |
 
 Mẫu giao việc: `{task_id, objective, allowed_paths, prohibited_actions, branch, acceptance, inputs, evidence_required, deadline, max_attempts}`. Agent trả `{summary, changed_paths, commands, results, evidence, uncertainties}`. Orchestrator nhận trách nhiệm tổng hợp, không coi agent báo pass là bằng chứng nếu thiếu exit code/output.
 
@@ -92,7 +76,7 @@ Audit là bộ quy tắc tĩnh giới hạn, **không** là phân tích taint, s
 ## Tiêu chí nghiệm thu
 
 - [x] Không dependency Python bên thứ ba; doctor phát hiện và chạy version probe tool Claude cục bộ khi có.
-- [x] 36 capability gốc + 8 extension được phân nhóm; một skill omega có 13 chế độ và 3 agent spec có nội dung vận hành.
+- [x] Một skill omega có 13 chế độ và 3 agent spec có nội dung vận hành; phần chưa làm tách sang ROADMAP.md.
 - [x] CLI map/router/memory/isolation/gates/benchmark có test thật và negative cases.
 - [x] Không kích hoạt hook trước kiểm tra compatibility; MCP tắt mặc định.
 - [ ] Chạy slash skill và giao agent thực tế bằng một phiên Claude được xác thực.

@@ -12,13 +12,11 @@ from omega.hook import authorize
 
 
 class OmegaTests(unittest.TestCase):
-    def test_catalog_foundation_and_eight_extensions(self):
+    def test_catalog_lists_only_implemented_modes(self):
         catalog=json.loads((app.ROOT/'omega/catalog.json').read_text())
-        self.assertEqual(len(catalog),44)
-        self.assertEqual(sum(x.get("origin")=="foundation" for x in catalog),36)
-        self.assertEqual(len({x['name'] for x in catalog}),44)
-        self.assertEqual(sum(x['state']=='implemented' for x in catalog),13)
-        self.assertEqual(len({x['group'] for x in catalog}),6)
+        self.assertEqual(len(catalog),13)
+        self.assertEqual(len({x['name'] for x in catalog}),13)
+        self.assertTrue(all(x['state']=='implemented' for x in catalog))
         from omega.skills import MODES
         self.assertEqual(set(MODES),{x['name'] for x in catalog if x['state']=='implemented'})
         self.assertEqual([p.parent.name for p in (app.ROOT/'.claude/skills').glob('*/SKILL.md')],['omega'])

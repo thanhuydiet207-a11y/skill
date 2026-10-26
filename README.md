@@ -27,12 +27,13 @@ python3 -m omega plan --complexity medium
 python3 -m omega gates
 ```
 
-- [Kiến trúc: 36 capability gốc + 8 extension, 10 vai trò](docs/ARCHITECTURE.md)
+- [Kiến trúc: 13 chế độ, 3 agent](docs/ARCHITECTURE.md) · [Roadmap: phần chưa làm](docs/ROADMAP.md)
+- [Eval: có và không có OMEGA](evals/README.md)
 - [Cấu hình và sử dụng từng thành phần](docs/OPERATIONS.md)
 - [Bằng chứng kiểm thử và giới hạn](docs/VALIDATION.md)
 - [Quy tắc điều phối Claude](.claude/CLAUDE.md)
 
-**Bản 0.7: plugin + marketplace tự host trên GitHub**, giữ một skill omega, 13 quy trình, 3 agent và toàn bộ CLI chức năng. Catalog có 44 capability: 13 đã triển khai dưới dạng chế độ của omega, 31 còn planned; 7 vai trò agent khác là thiết kế.
+**Bản 0.7: plugin + marketplace tự host trên GitHub**, gồm một skill omega với 13 chế độ, 3 agent và toàn bộ CLI chức năng. Eval giai đoạn 1 (8 case, có và không có plugin) chưa cho thấy case nào OMEGA làm tốt hơn; chi tiết ở [evals/README.md](evals/README.md).
 
 [Cách dùng và chuyển sang một skill](docs/UNIFIED_SKILL.md) · [Python core + TypeScript bridge, MCP/UI boundary](docs/PYTHON_TYPESCRIPT_BOUNDARY.md) · [Hướng dẫn sử dụng](docs/INTEROPERABILITY_GUIDE.md).
 
