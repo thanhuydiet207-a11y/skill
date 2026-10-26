@@ -1,0 +1,33 @@
+schema_version: '1.0'
+name: route-context-sufficiency-check
+tags:
+- routing
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: |
+    Trước khi sửa lỗi trong `ledger/amounts.py`, kiểm tra xem phần context (đoạn code và test) tôi đã gom có đủ để sửa đúng chưa.
+  max_turns: 12
+  allowed_tools:
+  - Read
+  - Glob
+  - Grep
+  - Bash
+  - Skill
+graders:
+- name: criteria
+  type: llm
+  weight: 1
+  criteria: |
+    Đạt khi câu trả lời xử lý đúng yêu cầu bằng nội dung có thật (không bịa kết quả) và nói rõ phần nào chưa kiểm tra.
+- name: used-skill
+  type: tool_used
+  tool: Skill
+  min: 1
+  weight: 1
+- name: ran-mode-command
+  type: tool_used
+  tool: Bash
+  input_match: 'context-sufficiency-check'
+  min: 1
+  weight: 1
