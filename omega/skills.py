@@ -52,7 +52,6 @@ def assess(root,skill,candidate=None):
     checks=[{'id':'frontmatter','passed':valid,'required':True},
             {'id':'identity','passed':fields.get('name')==skill,'required':True},
             {'id':'description','passed':isinstance(fields.get('description'),str) and bool(fields.get('description','').strip()),'required':True},
-            {'id':'explicit-invocation','passed':fields.get('disable-model-invocation') is True,'required':True},
             {'id':'no-permission-bypass','passed':not any(x in text for x in ('--dangerously-skip-permissions','bypassPermissions','curl -k ')),'required':True}]
     for command in COMMANDS[skill]:
         checks.append({'id':'command:'+command,'passed':bool(re.search(r'python3 -m omega '+re.escape(command)+r'(?=[\s`]|$)',text)),'required':True})

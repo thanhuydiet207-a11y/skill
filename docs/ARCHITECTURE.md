@@ -73,7 +73,7 @@ Mẫu giao việc: `{task_id, objective, allowed_paths, prohibited_actions, bran
 - High: investigator → engineer → verifier; conflict dùng worktree. Tối đa 2 agent đồng thời khi read task độc lập, không writer chồng phạm vi.
 - Complexity do người điều phối chọn dựa trên số component, mức không chắc chắn, rủi ro dữ liệu/API và khả năng rollback; CLI không tự đo chính xác complexity.
 - Plan nhận intent change/investigate/verify/knowledge/evolve/interoperability và workflow DAG tường minh. Handoff validator tìm cycle, owner trùng, writer không có quan hệ phụ thuộc, vượt agent budget. Lịch batch là đề xuất, không phải scheduler.
-- Skill `disable-model-invocation: true` chủ ý chỉ gọi tường minh. Không tải catalog đầy đủ vào mỗi agent; chỉ gửi acceptance, file liên quan, vài evidence tốt nhất.
+- Skill cho phép Claude tự gọi khi tác vụ khớp description; người dùng vẫn gọi tường minh được bằng /omega. Không tải catalog đầy đủ vào mỗi agent; chỉ gửi acceptance, file liên quan, vài evidence tốt nhất.
 - Toàn JSON inventory giới hạn 24 KB, báo omitted_count và status_truncated; evidence output mỗi command giữ prefix 16 KB và tail khi bị cắt. Git control data có budget riêng tối đa 1 MB, bị cắt thì từ chối dùng. Truncation không được hiểu là toàn bộ log. Dữ liệu có thể vẫn nhạy cảm: review trước khi chia sẻ.
 - Ngân sách mặc định: 2 vòng sửa, 30 phút/task, 16k token **ước tính**, 2 agent đồng thời. Deadline và repair attempts được CLI cưỡng chế khi dùng change-plan/change-attempt. Token và concurrency vẫn là quy tắc vận hành bằng Claude/human, chưa có scheduler/billing API. Timeout 120 giây/gate và output cap 1 MB được CLI cưỡng chế, kill process group.
 

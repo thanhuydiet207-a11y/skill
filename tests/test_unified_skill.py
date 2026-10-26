@@ -13,7 +13,7 @@ class UnifiedSkill(unittest.TestCase):
     def test_only_one_skill_is_discovered_and_all_modes_are_covered(self):
         result=compatibility(ENGINE_ROOT)
         self.assertTrue(result['passed']);self.assertEqual([x['name'] for x in result['skills']],['omega'])
-        self.assertEqual(result['skills'][0]['activation'],'explicit')
+        self.assertEqual(result['skills'][0]['activation'],'model-eligible-or-unspecified')
         contract=assess(ENGINE_ROOT,'omega');self.assertTrue(contract['advanced_passed'])
         self.assertEqual({x['id'] for x in contract['modes']},set(MODES));self.assertEqual(len(MODES),13)
 

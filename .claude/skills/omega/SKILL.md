@@ -1,7 +1,6 @@
 ---
 name: omega
 description: Phân tích repository, điều tra và sửa lỗi có kiểm soát, kiểm thử, bộ nhớ dự án và đánh giá skill bằng bằng chứng; chọn chế độ theo tác vụ.
-disable-model-invocation: true
 argument-hint: "[tác vụ hoặc chế độ]"
 ---
 
