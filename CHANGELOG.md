@@ -8,6 +8,7 @@ Cập nhật bản cài: `claude plugin marketplace update omega-marketplace` r�
 - Thêm case eval sửa code có kiểm soát (`fix-runner-bug`, `fix-runner-bug-omega`); kết quả trong [evals/README.md](evals/README.md).
 - Test mới chặn báo cáo có test chạy nhưng không test nào pass (ví dụ chỉ có test bị skip); eval `phase3` cho thấy cách sửa `run<1` lọt qua bộ test cũ.
 - Thêm case eval `shared-helper-bug` và `shared-helper-bug-omega`.
+- Project mẫu `evals/fixtures/ledger` cho baseline sạch; các case chép repo OMEGA để lộ `.claude/` cho cả nhánh không plugin. Kết quả A/B 10 lượt mỗi nhánh: khi skill chạy, +28% token input và +11% chi phí mỗi lượt thành công, chất lượng ngang nhau; quyết định `keep experimental`.
 - Kế hoạch 0.8 ([docs/PLAN_0_8.md](docs/PLAN_0_8.md)), bắt đầu từ P0: `benchmarks/eval_metrics.py` đọc trace của `claude plugin eval` để báo token input/output/cache, số lần gọi công cụ, skill được gọi và chi phí trên mỗi lượt thành công.
 
 ## 0.7.4

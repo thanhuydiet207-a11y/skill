@@ -28,6 +28,33 @@ python3 benchmarks/eval_metrics.py current=/tmp/run-x --json /tmp/run-x/metrics.
 - Số đo đầu tiên (`fix-runner-bug-omega`, nhánh có OMEGA, 3 lượt đạt): trung bình 158.801 token input (gần hết là cache read), 1.433 token output, 7 lần gọi công cụ (Skill 1, Bash 3–4, Read 1–2, Edit 1), $0.112 mỗi lượt thành công. Nhánh không OMEGA và case `shared-helper-bug-omega` dừng vì hết giới hạn phiên, nên chưa có số so sánh.
 - Giới hạn: harness tự quyết thứ tự chạy các nhánh (chưa hoán đổi được), và mỗi lượt `--keep-temp` để lại một thư mục `/tmp/claude-eval-*` khoảng 250 KB cần tự xoá.
 
+## Baseline sạch: project `ledger` (tag `external`)
+
+Project mẫu `evals/fixtures/ledger` không có file nào của OMEGA, nên nhánh không plugin là Claude Code thuần (0 lượt gọi skill). Lỗi cài sẵn: `parse_amount` cắt cụt sai số dấu phẩy động, làm fail test được nêu và một test ở file khác. 10 lượt mỗi nhánh, có trace, tổng $3.36. Số liệu từng lượt: [results-ledger-ab.json](results-ledger-ab.json).
+
+| Prompt | Nhánh | Đạt | Chi phí / lượt đạt | Token input TB | Token output TB | Gọi công cụ TB | Thời gian TB |
+|---|---|---|---|---|---|---|---|
+| Thường | có plugin | 10/10 | $0.0767 | 116.080 | 1.478 | 6,2 | 38,9 s |
+| Thường | không plugin | 10/10 | $0.0752 | 117.735 | 1.461 | 6,8 | 35,6 s |
+| Nhắc OMEGA | có plugin | 10/10 | $0.1016 | 162.787 | 1.971 | 7,4 | 41,0 s |
+| Nhắc OMEGA | không plugin | 9/10 | $0.0918 | 127.119 | 1.911 | 7,0 | 40,7 s |
+
+- Prompt thường: skill được gọi 0/10 lượt; cài plugin không đổi kết quả hay chi phí (chênh 2%, trong phạm vi nhiễu).
+- Prompt nhắc OMEGA: skill được gọi 10/10 lượt. Chất lượng ngang nhau: lượt trượt duy nhất của nhánh không plugin thực ra sửa đúng (`Decimal` trong `parse_amount`, 3/3 test pass), judge chấm sai. Overhead khi OMEGA chạy: +35.668 token input mỗi tác vụ (+28%), +11% chi phí mỗi lượt thành công, thời gian gần như không đổi.
+
+### Bảng quyết định (mục 8 của PLAN_0_8)
+
+| Mục | Nội dung |
+|---|---|
+| Giả thuyết | Quy trình OMEGA (skill omega) làm sửa lỗi đúng hơn hoặc rẻ hơn |
+| Baseline / candidate | Claude Code không plugin / Claude Code + plugin omega 0.7.4, cùng model và prompt |
+| Task | Sửa lỗi trong hàm dùng chung trên project ngoài (`ledger`) |
+| Token / chi phí | +28% token input, +11% chi phí mỗi lượt thành công khi skill chạy |
+| Chất lượng | Ngang nhau (10/10 so với 10/10 sau khi trừ một lượt judge chấm sai) |
+| Độ trễ, công cụ | 41,0 s so với 40,7 s; 7,4 so với 7,0 lần gọi công cụ |
+| Tập xác nhận | Chưa có; mới một task |
+| Quyết định | `keep experimental`: không đạt ngưỡng giảm 15% của kế hoạch, và không cải thiện chất lượng. Không nên mở rộng tự gọi skill. |
+
 ## Cảnh báo: baseline của các case chép repo OMEGA không sạch
 
 `evals/scaffold.sh` chép nguyên repo OMEGA vào workspace, kể cả `.claude/skills/omega/SKILL.md` và `.claude/CLAUDE.md`. Claude Code nạp hai file này từ thư mục làm việc, nên ở mọi case dùng scaffold đó, nhánh "không plugin" vẫn có quy tắc OMEGA trong context và có thể gọi project skill `omega`. Trong lần đo `fix-runner-bug-omega` 10 lượt mỗi nhánh, 3/10 lượt của nhánh không plugin đã gọi skill `omega`.
