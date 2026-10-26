@@ -65,6 +65,6 @@ Sửa reference hoặc docs liên quan sau scenario làm bundle cũ hết hiệu
 
 204 Python tests và 15 Node bridge tests đạt trong lượt kiểm tra consolidation; báo cáo snapshot: [unified-skill.json](evidence/unified-skill.json). Mười test mới kiểm tra entry discovery, các intent, mode coverage, reference bị thiếu/sửa/bypass/symlink, resource budget, transitive hash và migration hint. Bộ Node/JUnit và demo Git được chạy riêng; không tính lại thành test mới của Python suite.
 
-Một entry gọn hơn tổng 13 tài liệu giúp người dùng gọi thống nhất. Chưa có số token provider hoặc thí nghiệm native để kết luận output không đổi hay chất lượng tăng. Báo cáo thử nghiệm sample do người dùng gửi là dữ liệu tham khảo, không thay bằng chứng kích hoạt. Lỗi đếm subtest thất bại đã phát hiện ở 0.5 vẫn là việc riêng chưa sửa trong migration này; không tuyên bố đã xử lý chỉ vì suite xanh.
+Một entry gọn hơn tổng 13 tài liệu giúp người dùng gọi thống nhất. Chưa có số token provider hoặc thí nghiệm native để kết luận output không đổi hay chất lượng tăng. Báo cáo thử nghiệm sample do người dùng gửi là dữ liệu tham khảo, không thay bằng chứng kích hoạt. Lỗi đếm subtest thất bại phát hiện ở 0.5 đã sửa sau migration này, kèm regression test riêng.
 
 Rollback dùng reviewed revert commit và kiểm thử lại từ baseline Git; không reset/clean/xóa state. Hook/MCP/native agents chưa kích hoạt; native Claude A/B và token/cost tiếp tục unverified.

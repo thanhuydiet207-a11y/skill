@@ -13,9 +13,13 @@ def main():
     sys.path.insert(0,str(Path.cwd()))  # Target tests intentionally import their own application.
     suite=unittest.defaultTestLoader.discover(args.start,pattern=args.pattern)
     result=unittest.TextTestRunner(verbosity=2,stream=sys.stdout).run(suite)
-    outcomes={'run':result.testsRun,'failed':len(result.failures),'errors':len(result.errors),
-              'skipped':len(result.skipped),'expected_failures':len(result.expectedFailures),
-              'unexpected_successes':len(result.unexpectedSuccesses)}
+    outcomes={'run':result.testsRun};seen=set()
+    # unittest records one entry per failed subtest but testsRun counts methods; count each method once, worst outcome first.
+    for key,tests in (('errors',[t for t,_ in result.errors]),('failed',[t for t,_ in result.failures]),
+                      ('unexpected_successes',result.unexpectedSuccesses),('expected_failures',[t for t,_ in result.expectedFailures]),
+                      ('skipped',[t for t,_ in result.skipped])):
+        methods={getattr(t,'test_case',t) for t in tests}-seen
+        outcomes[key]=len(methods);seen|=methods
     outcomes['passed']=outcomes['run']-sum(outcomes[x] for x in ('failed','errors','skipped','expected_failures','unexpected_successes'))
     print('OMEGA_TEST_RESULT '+json.dumps(outcomes,sort_keys=True))
     if not result.wasSuccessful():return 1

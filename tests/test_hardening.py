@@ -93,6 +93,13 @@ class TestRunnerSafety(unittest.TestCase):
     def test_expected_failure_alone_is_not_readiness(self):
         p=self.execute_fixture('import unittest\nclass T(unittest.TestCase):\n @unittest.expectedFailure\n def test_one(self): self.fail()\n')
         self.assertEqual(p.returncode,5);self.assertIn('"expected_failures": 1',p.stdout)
+    def test_failed_subtests_count_once_per_method(self):
+        p=self.execute_fixture('import unittest\nclass T(unittest.TestCase):\n def test_ok(self): pass\n'
+                               ' def test_many(self):\n  for i in range(3):\n   with self.subTest(i=i): self.fail()\n'
+                               ' def test_mixed(self):\n  with self.subTest(1): pass\n  with self.subTest(2): raise OSError\n  with self.subTest(3): self.fail()\n')
+        counts=json.loads(p.stdout.splitlines()[-1].removeprefix('OMEGA_TEST_RESULT '))
+        self.assertEqual(p.returncode,1)
+        self.assertEqual((counts['run'],counts['passed'],counts['failed'],counts['errors']),(3,1,1,1))
 
 
 class EvidenceSafety(unittest.TestCase):

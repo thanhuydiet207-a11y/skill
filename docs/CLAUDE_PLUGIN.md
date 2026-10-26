@@ -94,6 +94,6 @@ Validate thư mục chứa cả hai có thể chọn marketplace thay plugin; kh
 
 Bằng chứng snapshot: [plugin-packaging.json](evidence/plugin-packaging.json). Plugin lifecycle/discovery không chứng minh Claude đã dùng skill/agent để giải tác vụ. Model auth, activation trace của phiên suy luận, A/B, token/cost và native quality tiếp tục unverified; projected token cost của inventory chỉ là ước tính.
 
-Npm dev tools đã pin vẫn cần nếu phát triển và chạy full engine build; plugin install không tự cài chúng. Build/tests/security/regression kiểm tra scope cụ thể, không là chứng nhận toàn diện. Hook adapter vẫn có trong source để review sau, chưa được plugin đăng ký. Bộ đếm subtest thất bại cũ là known issue riêng, chưa sửa bởi việc đóng gói.
+Npm dev tools đã pin vẫn cần nếu phát triển và chạy full engine build; plugin install không tự cài chúng. Build/tests/security/regression kiểm tra scope cụ thể, không là chứng nhận toàn diện. Hook adapter vẫn có trong source để review sau, chưa được plugin đăng ký. Bộ đếm subtest thất bại đã sửa sau đợt đóng gói, kèm regression test.
 
 Chỉ update plugin sau review diff, benchmark/gates. Rollback plugin bằng phiên bản/commit đã review và quy trình cài đặt hỗ trợ của Claude Code; dữ liệu .omega trong target là state project riêng, không tự xóa khi đổi plugin.
