@@ -1,44 +1,37 @@
-# OMEGA
+# Tier
 
-Hệ thống AI Engineering đóng gói thành **plugin Claude Code**: một skill omega, 13 chế độ nội bộ và 3 agent. Python stdlib làm lõi; TypeScript là bridge điều phối/giao tiếp. Runtime Python dùng stdlib; TypeScript bridge không có dependency ứng dụng, type-check dùng dev tools đã pin.
+Plugin cho Claude Code tự chọn model và mức effort theo độ phức tạp của tác vụ. Luồng chính chạy bằng agent `tier-router` (Haiku, effort thấp): nó tự trả lời việc đơn giản và giao việc khó hơn cho agent Sonnet (effort trung bình) hoặc Opus (effort cao).
 
 ```text
 /plugin marketplace add thanhuydiet207-a11y/skill
-/plugin install omega@omega-marketplace
+/plugin install tier@tier-marketplace
 ```
 
-Hoặc: `/plugin install omega --marketplace thanhuydiet207-a11y/skill`. Khởi động lại phiên rồi gọi `/omega:omega phân tích repository này`. [Cài đặt, ZIP và kiểm chứng plugin](docs/CLAUDE_PLUGIN.md).
+Khởi động lại phiên để áp dụng. Plugin có `settings.json` đặt `tier-router` làm agent mặc định, nên **mọi phiên** có bật plugin đều chạy qua bộ định tuyến. Tắt bằng `claude plugin disable tier` khi không muốn.
 
-Cập nhật lên bản mới (rồi khởi động lại phiên):
+## Ba bậc
+
+| Bậc | Ai làm | Model, effort | Khi nào |
+|---|---|---|---|
+| direct | `tier-router` | Haiku, low | Câu hỏi, giải thích, tra cứu, hoặc sửa hiển nhiên trong một file không ai phụ thuộc |
+| standard | `tier-standard` | Sonnet, medium | Lỗi hoặc tính năng trong vài file, có cách kiểm chứng |
+| deep | `tier-deep` | Opus, high | Nguyên nhân chưa rõ liên module, sửa code dùng chung hoặc interface, refactor, có rủi ro, hoặc standard không làm xong |
+
+Router chọn bậc theo 4 tín hiệu: phạm vi ảnh hưởng, mức bất định, rủi ro, khả năng kiểm chứng. Không dựa vào độ dài prompt. Câu trả lời mở đầu bằng một dòng `Tier: ... - lý do`. Nếu standard báo chạm code dùng chung hoặc không xong, router nâng lên deep đúng một lần.
+
+## Đo
+
+Mọi thay đổi phải có số liệu so với Claude Code mặc định (không plugin) trước khi được coi là cải thiện.
 
 ```bash
-claude plugin marketplace update omega-marketplace
-claude plugin update omega@omega-marketplace
+claude plugin eval . --scaffold --trust-plugin --no-publish --keep-temp --allow-tools Bash Edit --output-dir /tmp/run
+python3 tools/eval_metrics.py tier=/tmp/run --json /tmp/run/metrics.json
 ```
 
-Entry duy nhất là [.claude/skills/omega/SKILL.md](.claude/skills/omega/SKILL.md); references chỉ đọc khi cần. Plugin chứa Python engine và dùng đường dẫn cache tuyệt đối để thao tác project đích. Trong checkout nguồn vẫn có local `/omega`. Chỉ tải SKILL.md vào Claude Web không cài engine.
+Bảng gồm tỉ lệ đạt, chi phí mỗi lượt đạt, token theo model, agent nào được giao việc và model nào thực sự phục vụ. Các lượt có `error` (hết giới hạn phiên, lỗi API) được đếm riêng. `--keep-temp` để lại thư mục `/tmp/claude-eval-*` cần xoá tay. Kết quả: [evals/README.md](evals/README.md). Test của công cụ đo: `python3 -m unittest discover -s tools`.
 
-```bash
-# Cài dev tools cần cho full engine build; không chạy lifecycle scripts:
-npm ci --prefix integration/typescript --ignore-scripts --no-audit --no-fund --cache "$PWD/.omega/npm-cache"
-python3 -m omega doctor
-python3 -m omega map
-python3 -m omega plan --complexity medium
-python3 -m omega gates
-```
+## Giới hạn đã biết
 
-- [Kiến trúc: 13 chế độ, 3 agent](docs/ARCHITECTURE.md) · [Roadmap: phần chưa làm](docs/ROADMAP.md)
-- [Eval: có và không có OMEGA](evals/README.md)
-- [Cấu hình và sử dụng từng thành phần](docs/OPERATIONS.md)
-- [Bằng chứng kiểm thử và giới hạn](docs/VALIDATION.md)
-- [Quy tắc điều phối Claude](.claude/CLAUDE.md)
-
-**Bản 0.7: plugin + marketplace tự host trên GitHub**, gồm một skill omega với 13 chế độ, 3 agent và toàn bộ CLI chức năng. Eval giai đoạn 1 (8 case, có và không có plugin) chưa cho thấy case nào OMEGA làm tốt hơn; chi tiết ở [evals/README.md](evals/README.md).
-
-[Cách dùng và chuyển sang một skill](docs/UNIFIED_SKILL.md) · [Python core + TypeScript bridge, MCP/UI boundary](docs/PYTHON_TYPESCRIPT_BOUNDARY.md) · [Hướng dẫn sử dụng](docs/INTEROPERABILITY_GUIDE.md).
-
-Đã xác minh Claude Code 2.1.308: strict validation hai manifest, cài local marketplace vào config riêng, inventory bản cài và ZIP, engine trong install cache chạy project fixture đỏ → xanh. Chưa có trace phiên suy luận để nghiệm thu skill/agent reasoning hoặc token model. Plugin không đăng ký hook/MCP; managed/user policy bên ngoài vẫn chưa quan sát đầy đủ.
-
-Tối ưu context không đổi quality gates: [Token efficiency](docs/TOKEN_EFFICIENCY.md).
-
-Báo cáo lịch sử 0.2: [Deep hardening](docs/DEEP_HARDENING.md). Kết quả hiện tại được phân biệt rõ trong [Validation](docs/VALIDATION.md).
+- Khoá `effort` trong agent không có cách quan sát việc áp dụng; chỉ `model` được xác nhận (model phục vụ lượt chạy đọc được từ trace).
+- Phân loại do Haiku làm nên có thể sai: giao thừa gây tốn, giao thiếu gây làm sai. Số liệu trong `evals/README.md` cho biết mức độ.
+- Plugin áp dụng cho cả phiên, không theo từng tác vụ; chưa có cách bật theo project ngoài việc bật/tắt plugin.

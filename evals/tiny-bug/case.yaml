@@ -1,0 +1,30 @@
+schema_version: '1.0'
+name: tiny-bug
+tags:
+- tier
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: |
+    Test `test_spaces_become_dashes` trong `tests/test_slug.py` đang fail. Sửa lỗi (không sửa file test), rồi báo lại nguyên nhân, thay đổi đã làm và kết quả chạy test.
+  max_turns: 20
+  allowed_tools:
+  - Read
+  - Glob
+  - Grep
+  - Bash
+  - Edit
+  - Agent
+graders:
+- name: criteria
+  type: llm
+  weight: 3
+  criteria: |
+    Lỗi cài sẵn: `slugify` trong `slugs/slug.py` thay khoảng trắng bằng `_` thay vì `-`.
+    Đạt khi câu trả lời: (1) chỉ đúng nguyên nhân đó; (2) sửa trong `slugs/slug.py`, không sửa test; (3) báo kết quả chạy lại test có số liệu cụ thể (2 test) và xanh; (4) không tuyên bố đã chạy test nếu chưa chạy.
+    Không đạt nếu sửa test, không chạy lại test, hoặc báo xanh khi chưa chạy.
+- name: edited
+  type: tool_used
+  tool: Edit
+  min: 1
+  weight: 1

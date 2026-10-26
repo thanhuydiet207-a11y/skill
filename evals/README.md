@@ -1,72 +1,42 @@
-# OMEGA plugin evals
+# Eval của Tier
 
-Đo OMEGA bằng `claude plugin eval`, có nhánh không plugin để so sánh (Δ = điểm có plugin − không plugin).
+Mỗi case chạy hai nhánh: có plugin, và không plugin (Claude Code mặc định, Sonnet). Thư mục `fixtures/` là project mẫu không có file nào của plugin, nên nhánh không plugin là baseline sạch. `scaffold.sh` của mỗi case chép fixture vào workspace và commit.
 
-```bash
-claude plugin eval . --scaffold --trust-plugin --no-publish --case <tên-case> --allow-tools Bash
-```
+| Case | Bậc kỳ vọng | Lỗi cài sẵn |
+|---|---|---|
+| `trivial-question` | direct | Không có (câu hỏi Python) |
+| `tiny-bug` | direct hoặc standard | `slugify` dùng `_` thay `-`, một file |
+| `ledger-bug` | standard | `parse_amount` cắt cụt số thực, dùng chung bởi 2 module; làm đỏ test ở 2 file |
 
-- `--scaffold` chạy `scaffold.sh` của case: chép bản commit HEAD của repo (kèm `node_modules` TypeScript nếu có) vào workspace và commit làm baseline. Không có cờ này thì workspace trống và mọi kết quả đều vô nghĩa.
-- Case dùng Bash cần sandbox: `bubblewrap` và `socat`.
-- `--case` lặp lại chỉ nhận giá trị cuối; chạy từng case một.
-- Harness quét cả bản xuất cũ trong `.omega/plugin-packaging/runs/*/marketplace/evals`; tên case phải khác các bản cũ đó (`gate-report`, `no-git-root`, `change-plan`).
+Bậc kỳ vọng là nhận định ban đầu, không phải đáp án đúng duy nhất: tiêu chí đánh giá chính là tỉ lệ đạt và chi phí mỗi lượt đạt so với baseline.
 
-## Kết quả bước 0 (1 lần chạy mỗi nhánh, chưa có ý nghĩa thống kê)
+## Kết quả
 
-| Case | Có OMEGA | Không OMEGA | Ghi chú |
+Nhánh không plugin là Claude Code mặc định (Sonnet). Mỗi ô là 5 lượt. Số liệu từng lượt: `results/round1-router-v1.json`, `results/round2-router-v2.json`.
+
+**Vòng 1, router v1** (chưa có bước tìm nơi gọi). Router xếp **cả 15 lượt là `direct`**, không giao việc lần nào; mọi việc do Haiku tự làm.
+
+| Case | Đạt: plugin / mặc định | Chi phí mỗi lượt đạt: plugin / mặc định |
+|---|---|---|
+| `trivial-question` | 4/5 / 5/5 | $0.0037 / $0.0443 |
+| `tiny-bug` | 5/5 / 5/5 | $0.0046 / $0.0595 |
+| `ledger-bug` | 4/5 / 5/5 | $0.0100 / $0.0751 |
+
+**Vòng 2, router v2** (bắt buộc tìm nơi gọi trước khi tự sửa; hàm dùng chung đã biết nguyên nhân thuộc `standard`). Đo lại 2 case có code, cả hai nhánh.
+
+| Case | Router chọn | Đạt: plugin / mặc định | Chi phí mỗi lượt đạt: plugin / mặc định |
 |---|---|---|---|
-| `empty-suite` | 1.00 | 1.00 | Điều tra code thuần; cả hai nhánh chỉ đúng file và dòng |
-| `doctor-outside-git-plan` | 1.00 | 1.00 | Lập kế hoạch; cả hai đạt |
-| `gates-status` | 0.00 | 1.00 | Workspace của sandbox chỉ đọc, engine không tạo được `.omega/`; skill cấm thay bằng lệnh tự chạy nên dừng ở "chưa chạy". Nhánh không plugin chạy thẳng `unittest` (215 test) và báo trung thực |
+| `tiny-bug` | `direct` 5/5 (Haiku) | 5/5 / 5/5 | $0.0050 / $0.0589 |
+| `ledger-bug` | `standard` 5/5 (Haiku định tuyến, Sonnet sửa) | 5/5 / 4/5 | $0.0576 / $0.0863 |
 
-Phát hiện: OMEGA không chạy được trên checkout chỉ đọc vì cả `doctor` lẫn `gates` đều ghi state vào `.omega/` trong project.
+- Bản v2 giao đúng việc: lỗi một file làm thẳng bằng Haiku (rẻ hơn khoảng 92%), lỗi ở hàm dùng chung được giao cho Sonnet. Với `ledger-bug`, gộp hai vòng nhánh mặc định đạt 9/10 với chi phí mỗi lượt đạt khoảng $0.080, so với $0.058 của plugin v2 (thấp hơn khoảng 28%).
+- Token input của `ledger-bug` khi giao việc cao hơn (khoảng 197k so với 93k–110k) vì cả Haiku lẫn Sonnet cùng đọc; chi phí vẫn thấp hơn nhờ phần lớn token do Haiku xử lý. `eval_metrics.py` cộng token theo từng model.
+- Mỗi lượt giao việc qua `tier-standard` mất khoảng 53 giây so với khoảng 32 giây khi một model làm thẳng.
 
-## Kết quả giai đoạn 1 (8 case, 3 lần mỗi nhánh)
+### Giới hạn (quan trọng)
 
-Chạy với `--tag phase1 --runs 3 --scaffold --allow-tools Bash`. Điểm là trung bình 3 lần; chi phí là trung bình mỗi lần chạy.
-
-| Case | Có OMEGA | Không OMEGA | Δ | Chi phí có / không |
-|---|---|---|---|---|
-| `doctor-outside-git-plan` | 1.00 | 1.00 | 0 | $0.270 / $0.249 |
-| `empty-suite` | 1.00 | 1.00 | 0 | $0.168 / $0.137 |
-| `gates-status` | 0.67 | 1.00 | −0.33 | $0.096 / $0.156 |
-| `hook-status` | 1.00 | 1.00 | 0 | $0.105 / $0.100 |
-| `jest-report` | 1.00 | 1.00 | 0 | $0.113 / $0.082 |
-| `quick-question` | 1.00 | 0.67 | +0.33 | $0.030 / $0.028 |
-| `release-files` | 1.00 | 1.00 | 0 | $0.101 / $0.102 |
-| `stale-evidence` | 1.00 | 1.00 | 0 | $0.094 / $0.113 |
-
-Trung bình mỗi lần chạy: $0.122 có OMEGA, $0.121 không OMEGA. Tổng chi phí giai đoạn 1 khoảng $6.8.
-
-- Chưa có case nào OMEGA làm tốt hơn. Δ +0.33 của `quick-question` là nhiễu: plugin không tham gia (skill được gọi 0/3 lần, đúng mong muốn), và nhánh không plugin sai một lần ở câu hỏi Python đơn giản. Độ nhiễu của judge với 3 lần chạy vì thế khoảng ±0.33.
-- `gates-status` là thiệt hại thật: skill được gọi 3/3 lần, engine không ghi được `.omega/` trong workspace chỉ đọc, và skill cấm tự chạy lệnh thay engine. Nhánh không plugin chạy thẳng từng lệnh gate và báo được nhiều hơn.
-- Grader của `stale-evidence` và `quick-question` đã sửa sau lần chạy đầu (tiêu chí quá hẹp; thiếu `min: 0`); số liệu trong bảng là của lần chạy lại sau khi sửa.
-- Sau khi sửa engine cho checkout chỉ đọc (0.7.4), chạy lại `gates-status` 3 lần mỗi nhánh: có OMEGA 1.00, không OMEGA 1.00 (Δ 0, $0.79). Cả 3 lần nhánh có OMEGA đều chạy được `omega gates` (4 gate pass, 217 test) và báo rõ evidence không được lưu.
-- Harness cũng chạy các bản `gates-status` cũ trong `.omega/plugin-packaging/runs/*/marketplace/evals` (do `benchmarks/plugin_packaging.py` xuất ra); chúng lỗi ở bước scaffold và không tốn chi phí, nhưng làm nhiễu báo cáo. Bỏ qua các dòng có `dir` nằm trong `.omega/`.
-- Chưa đo được: tỉ lệ gọi skill ở các case không có grader `tool_used`, và chất lượng trên project khác ngoài chính repo này.
-
-## Thay đổi code có kiểm soát (tag `phase2`)
-
-Bash trong sandbox chỉ đọc, nhưng công cụ Write/Edit ghi được vào workspace, nên case sửa code đo được. Scaffold cài sẵn một lỗi: `omega/test_runner.py` trả `>=0` thay vì `>0`, làm 3 test trong `tests/test_hardening.py` đỏ. Chạy với `--allow-tools Bash Edit`, 3 lần mỗi nhánh.
-
-| Case | Có OMEGA | Không OMEGA | Skill được gọi | Chi phí có / không |
-|---|---|---|---|---|
-| `fix-runner-bug` (prompt thường) | 1.00 | 1.00 | 0/3 | $0.087 / $0.076 |
-| `fix-runner-bug-omega` (prompt nhắc OMEGA) | 1.00 | 1.00 | 3/3 | $0.101 / $0.115 |
-
-- Với yêu cầu sửa lỗi thông thường, Claude không tự gọi skill omega, dù description có nêu "sửa code có kiểm soát".
-- Khi được gọi, OMEGA cho cùng kết quả: cả hai nhánh tìm đúng dòng, sửa một dòng, không đụng test, chạy lại test và báo 30/30 pass.
-- Lỗi cài sẵn dễ nên cả hai nhánh đều đạt điểm tối đa; cần case khó hơn (nhiều file, có cám dỗ sửa test hoặc mở rộng phạm vi) mới phân biệt được.
-
-## Lỗi trong hàm dùng chung (tag `phase3`)
-
-Scaffold đổi `passed<=0` thành `passed<0` trong `normalized()` của `omega/adapters.py`, hàm dùng chung cho mọi adapter. Lỗi làm fail test được nêu trong `tests/test_hardening.py` và một test Jest không được nêu trong `tests/test_interop_core.py`. Chạy với `--allow-tools Bash Edit`, 3 lần mỗi nhánh, tổng $1.50.
-
-| Case | Có OMEGA | Không OMEGA | Skill được gọi | Chi phí có / không |
-|---|---|---|---|---|
-| `shared-helper-bug` (prompt thường) | 1.00 | 0.75 | 0/3 | $0.102 / $0.103 |
-| `shared-helper-bug-omega` (prompt nhắc OMEGA) | 0.75 | 0.75 | 3/3 | $0.118 / $0.175 |
-
-- Δ +0.25 của case prompt thường là nhiễu: skill không được gọi lần nào nên plugin không ảnh hưởng.
-- Khi OMEGA được gọi, hai nhánh bằng nhau. Nhánh có OMEGA tốn ít hơn ($0.118 so với $0.175, ít lượt hơn), nhưng mới có 3 lần chạy.
-- Mọi lần chạy đều chạy toàn bộ suite (218 test). Cả 3 lần trượt (mỗi nhánh có một) đều cùng một cách sửa sai: thêm `run<1` thay vì khôi phục `passed<=0`. Suite vẫn xanh nhưng báo cáo chỉ có test bị skip vẫn được chấp nhận. Đây là lỗ hổng của bộ test repo, không phải của judge; đã thêm `test_counts_without_a_passing_test_are_rejected` để bắt cách sửa này.
+- **Có nguy cơ khớp quá mức vào bộ đo.** Bản v2 được sửa dựa trên chính các lượt của `ledger-bug`, rồi đo lại cũng trên case đó. Chưa có tập xác nhận gồm tác vụ chưa dùng khi sửa. Chưa thể coi v2 là cải thiện cho đến khi đo trên tác vụ mới.
+- Chỉ 5 lượt mỗi ô; chênh lệch một lượt (0,2 điểm) nằm trong nhiễu của judge.
+- `trivial-question` chưa đo lại với v2. Lượt trượt ở vòng 1 có thể do judge chấm khắt khe về chi tiết "tuple hash được".
+- Chưa có case khó (nguyên nhân chưa rõ, liên module, có rủi ro) nên bậc `deep` (Opus) **chưa từng được gọi** và chưa được kiểm chứng.
+- Khoá `effort` chưa quan sát được; chỉ model phục vụ lượt chạy đọc được từ trace.

@@ -1,0 +1,33 @@
+name: Tier checks
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Metrics tool tests
+        run: python3 -m unittest discover -s tools
+      - name: Manifests, settings and agent frontmatter parse
+        run: |
+          python3 - <<'PY'
+          import json, re, pathlib
+          for f in ('.claude-plugin/plugin.json', '.claude-plugin/marketplace.json', 'settings.json'):
+              json.loads(pathlib.Path(f).read_text())
+          settings = json.loads(pathlib.Path('settings.json').read_text())
+          agents = {}
+          for f in sorted(pathlib.Path('agents').glob('*.md')):
+              head = re.match(r'---\n(.*?)\n---\n', f.read_text(), re.S)
+              assert head, f'{f}: missing frontmatter'
+              fields = dict(line.split(': ', 1) for line in head[1].splitlines() if ': ' in line)
+              assert {'name', 'description', 'model'} <= set(fields), f'{f}: needs name, description, model'
+              agents[fields['name']] = fields['model']
+          assert settings['agent'] == 'tier:tier-router' and 'tier-router' in agents, 'default agent must be tier-router'
+          print('agents:', agents)
+          PY

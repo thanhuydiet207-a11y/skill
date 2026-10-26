@@ -1,18 +1,12 @@
 {
-  "name": "omega",
-  "version": "0.7.4",
-  "description": "Evidence-based engineering: one skill, 13 on-demand workflows and three specialist agents backed by a local Python engine.",
+  "name": "tier",
+  "version": "0.1.0",
+  "description": "Matches model and effort to task complexity: a cheap Haiku router answers simple tasks and delegates harder ones to Sonnet or Opus agents.",
   "author": {
     "name": "thanhuydiet207-a11y",
     "url": "https://github.com/thanhuydiet207-a11y"
   },
-  "homepage": "https://github.com/thanhuydiet207-a11y/skill/blob/main/docs/CLAUDE_PLUGIN.md",
+  "homepage": "https://github.com/thanhuydiet207-a11y/skill",
   "repository": "https://github.com/thanhuydiet207-a11y/skill",
-  "keywords": [
-    "engineering",
-    "testing",
-    "evidence",
-    "python"
-  ],
-  "skills": "./.claude/skills/"
+  "keywords": ["routing", "model", "effort", "cost"]
 }
