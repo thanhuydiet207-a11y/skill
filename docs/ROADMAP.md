@@ -6,7 +6,7 @@ Chỉ nên làm một mục khi eval cho thấy nó cải thiện kết quả so
 
 ## Ưu tiên từ kết quả eval
 
-1. Cho engine ghi state ngoài project khi checkout chỉ đọc (`doctor` và `gates` hiện bắt buộc tạo `.omega/` trong project).
+1. ~~Cho engine chạy trên checkout chỉ đọc.~~ Đã làm ở 0.7.3: `gates` vẫn báo kết quả với `evidence: null`, `build` ghi bytecode ra thư mục tạm, `doctor` dùng config tạm. Evidence vẫn chỉ lưu trong `.omega/` của project.
 2. Đo thay đổi code có kiểm soát bằng một case có workspace ghi được; đây là phần OMEGA nhắm tới nhưng chưa đo được.
 
 ## 31 capability chưa triển khai

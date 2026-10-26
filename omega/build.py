@@ -1,13 +1,19 @@
 """Engine build gate: Python compilation and pinned TypeScript compiler, no installation."""
 from pathlib import Path
 import sys
+import tempfile
 from omega.process import execute
 
 ROOT=Path(__file__).resolve().parent.parent
 
 
 def main():
-    commands=[['python3','-m','compileall','-q','omega','tests','benchmarks','omega_cli.py'],
+    with tempfile.TemporaryDirectory() as cache:return build(cache)
+
+
+def build(cache):
+    # Bytecode goes to a temp prefix so the gate also works on a read-only checkout.
+    commands=[['python3','-X','pycache_prefix='+cache,'-m','compileall','-q','omega','tests','benchmarks','omega_cli.py'],
               ['node',str(ROOT/'integration/typescript/node_modules/typescript/bin/tsc'),'--noEmit','-p',str(ROOT/'integration/typescript/tsconfig.json')]]
     for command in commands:
         result=execute(command,ROOT,timeout=45)

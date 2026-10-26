@@ -116,6 +116,26 @@ class NonGitProject(unittest.TestCase):
         self.assertIn('git init',p.stderr);self.assertNotIn('fatal:',p.stderr)
 
 
+class ReadOnlyProject(unittest.TestCase):
+    def test_gates_report_results_when_evidence_cannot_be_written(self):
+        import contextlib,errno,io
+        canned={'kind':'gates','passed':True,'results':[{'gate':'tests','exit_code':0,'output':'215 passed'}]}
+        out=io.StringIO()
+        with patch.object(sys,'argv',['omega','gates','--summary','--compact']),patch.object(app,'gates',return_value=dict(canned)),\
+             patch.object(app,'save',side_effect=OSError(errno.EROFS,'Read-only file system')),contextlib.redirect_stdout(out):
+            code=app.main()
+        result=json.loads(out.getvalue())
+        self.assertEqual(code,0);self.assertIsNone(result['evidence'])
+        self.assertIn('not writable',result['evidence_unsaved'])
+        self.assertEqual(result['results'][0]['output'],'215 passed')
+
+    def test_other_write_errors_still_fail(self):
+        import contextlib,errno,io
+        with patch.object(sys,'argv',['omega','gates','--compact']),patch.object(app,'gates',return_value={'kind':'gates','passed':True,'results':[]}),\
+             patch.object(app,'save',side_effect=OSError(errno.ENOSPC,'No space left on device')),contextlib.redirect_stdout(io.StringIO()):
+            with self.assertRaises(OSError):app.main()
+
+
 class EvidenceSafety(unittest.TestCase):
     def test_exit_zero_without_test_execution_is_not_ready(self):
         commands={name:[sys.executable,'-c','pass'] for name in app.CONFIG['gates']}

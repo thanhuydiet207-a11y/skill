@@ -43,6 +43,7 @@ def packet(root, selections, max_bytes=24000):
 
 def gate_summary(result):
     """Keep all outcomes; successful prefix/tail logs remain in referenced evidence."""
+    if result.get('evidence') is None:return result  # Nothing to reference, so keep every log inline.
     rows=[]
     for i,source in enumerate(result['results']):
         row=dict(source)
