@@ -20,6 +20,8 @@ def main():
                       ('skipped',[t for t,_ in result.skipped])):
         methods={getattr(t,'test_case',t) for t in tests}-seen
         outcomes[key]=len(methods);seen|=methods
+    # setUpClass/module errors are reported on a holder that testsRun never counted.
+    outcomes['run']+=sum(type(t).__name__=='_ErrorHolder' for t in seen)
     outcomes['passed']=outcomes['run']-sum(outcomes[x] for x in ('failed','errors','skipped','expected_failures','unexpected_successes'))
     print('OMEGA_TEST_RESULT '+json.dumps(outcomes,sort_keys=True))
     if not result.wasSuccessful():return 1
