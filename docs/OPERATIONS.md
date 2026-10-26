@@ -14,7 +14,7 @@ python3 -m omega rollback-check
 
 Kết quả JSON ra stdout; lỗi CLI exit 2, gate fail exit 1. `gates` lưu record vào `.omega/evidence/`. Không coi doctor exit 0 là Claude đã dùng được: đọc trường `claude` và `native_integration`.
 
-## Một skill omega, 13 chế độ
+## Một skill omega, 5 chế độ
 
 Chỉ entry `.claude/skills/omega/SKILL.md` được đăng ký. Các tên trong hai bảng dưới là mode ID; hướng dẫn nằm ở `.claude/skills/omega/references/MODE.md`. Cách dùng: [UNIFIED_SKILL.md](UNIFIED_SKILL.md).
 
@@ -26,18 +26,18 @@ Chỉ entry `.claude/skills/omega/SKILL.md` được đăng ký. Các tên trong
 | project-memory | `python3 -m omega memory --title "ADR: stdlib" --body "Dùng stdlib để tránh dependency; evidence: ..."` | JSON commit-stamped |
 | skill-benchmark | `python3 -m omega benchmark` | từng router case pass/fail |
 
-8 chế độ bổ sung giữ prefix omega- trong mode ID; command tương ứng bỏ prefix:
+8 lệnh mở rộng (từng là chế độ omega-*, từ 0.7.5 không còn trong skill; hướng dẫn ở [EXTENSIONS.md](EXTENSIONS.md)):
 
-| Chế độ | Command | Kết quả |
+| Lệnh | Command | Kết quả |
 |---|---|---|
-| omega-skill-compatibility-audit | `skill-compatibility-audit --skill-root .claude/skills` | static collisions, selected scopes |
-| omega-effective-policy-explainer | `effective-policy-explainer --input INPUT` | quyết định OMEGA, platform unknown |
-| omega-workflow-handoff-contract | `workflow-handoff-contract --input INPUT` | DAG/owners/writers, lịch đề xuất |
-| omega-skill-interference-benchmark | `skill-interference-benchmark --input INPUT` | A/B/A+B acceptance, provenance, regression |
-| omega-project-workflow-adapter | `project-workflow-adapter` | proposal cần review, exit 1 |
-| omega-evidence-reconciler | `evidence-reconciler --record RECORD` | current/stale gate evidence |
-| omega-memory-reconciliation | `memory-reconciliation --input INPUT` | conflicting/stale memory; giữ nguyên records |
-| omega-context-sufficiency-check | `context-sufficiency-check --input INPUT` | invariants/ranges/hash/content |
+| skill-compatibility-audit | `skill-compatibility-audit --skill-root .claude/skills` | static collisions, selected scopes |
+| effective-policy-explainer | `effective-policy-explainer --input INPUT` | quyết định OMEGA, platform unknown |
+| workflow-handoff-contract | `workflow-handoff-contract --input INPUT` | DAG/owners/writers, lịch đề xuất |
+| skill-interference-benchmark | `skill-interference-benchmark --input INPUT` | A/B/A+B acceptance, provenance, regression |
+| project-workflow-adapter | `project-workflow-adapter` | proposal cần review, exit 1 |
+| evidence-reconciler | `evidence-reconciler --record RECORD` | current/stale gate evidence |
+| memory-reconciliation | `memory-reconciliation --input INPUT` | conflicting/stale memory; giữ nguyên records |
+| context-sufficiency-check | `context-sufficiency-check --input INPUT` | invariants/ranges/hash/content |
 
 Chạy bằng `python3 -m omega COMMAND --compact`. Schema và giới hạn từng command: [INTEROPERABILITY_GUIDE.md](INTEROPERABILITY_GUIDE.md). Chỉ đọc reference của bước đang làm.
 

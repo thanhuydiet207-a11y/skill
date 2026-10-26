@@ -7,7 +7,7 @@ from omega.safety import source_path, artifact_path, source_files
 
 COMMANDS={'omega':['doctor','map','plan']}
 MODES=json.loads((Path(__file__).resolve().parent/'modes.json').read_text())
-if not isinstance(MODES,dict) or len(MODES)!=13:raise ValueError('Invalid OMEGA mode registry')
+if not isinstance(MODES,dict) or len(MODES)!=5:raise ValueError('Invalid OMEGA mode registry')
 for name,mode in MODES.items():
     if not re.fullmatch('[a-z0-9][a-z0-9-]{0,63}',name) or not isinstance(mode,dict) or set(mode)!={'commands','reference'}:
         raise ValueError('Invalid OMEGA mode')

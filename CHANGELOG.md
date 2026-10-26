@@ -2,8 +2,9 @@
 
 Cập nhật bản cài: `claude plugin marketplace update omega-marketplace` rồi `claude plugin update omega@omega-marketplace`.
 
-## Chưa phát hành
+## 0.7.5
 
+- **Xoá 8 chế độ mở rộng khỏi skill `omega`** (compatibility audit, policy explainer, handoff contract, interference benchmark, workflow adapter, evidence reconciler, memory reconciliation, context sufficiency). Eval cho thấy 5/8 không bao giờ được gọi từ prompt thường và chỉ 1/8 được tới đúng cách. Skill còn 5 chế độ (repo-map, controlled-change, quality-gates, project-memory, skill-benchmark). Lệnh CLI và test của 8 lệnh này giữ nguyên; hướng dẫn gốc ở [docs/EXTENSIONS.md](docs/EXTENSIONS.md). `plan` với intent `interoperability` giờ không trả chế độ nào.
 - `benchmarks/plugin_packaging.py` không xuất `evals/` nữa, để harness eval không chạy trùng các bản sao trong `.omega/plugin-packaging/`.
 - Thêm case eval sửa code có kiểm soát (`fix-runner-bug`, `fix-runner-bug-omega`); kết quả trong [evals/README.md](evals/README.md).
 - Test mới chặn báo cáo có test chạy nhưng không test nào pass (ví dụ chỉ có test bị skip); eval `phase3` cho thấy cách sửa `run<1` lọt qua bộ test cũ.

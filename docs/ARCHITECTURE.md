@@ -21,17 +21,16 @@ flowchart TD
 
 CLI stdlib hỗ trợ kế hoạch và bằng chứng; Claude Code mới là runtime suy luận và giao việc. Không có lời gọi LLM/MCP ngầm. CLI Claude Code 2.1.308 đã chạy version/help; native task execution chưa được kiểm chứng do chưa xác thực. Không tuyên bố agent tự chạy hoặc hooks đã bảo vệ phiên làm việc.
 
-## 13 chế độ đã triển khai
+## 5 chế độ của skill
 
-Catalog máy đọc: `omega/catalog.json`, chỉ gồm các chế độ chạy được. **Chỉ một SKILL.md tên omega**; mỗi chế độ là một reference trong skill đó. Registry `omega/modes.json` ánh xạ từng chế độ tới commands và reference. Các capability chưa làm nằm ở [ROADMAP.md](ROADMAP.md).
+Catalog máy đọc: `omega/catalog.json`, chỉ gồm các chế độ chạy được. **Chỉ một SKILL.md tên omega**; mỗi chế độ là một reference trong skill đó. Registry `omega/modes.json` ánh xạ từng chế độ tới commands và reference. Các capability chưa làm nằm ở [ROADMAP.md](ROADMAP.md); tám lệnh phân tích từng là chế độ riêng nay ở [EXTENSIONS.md](EXTENSIONS.md).
 
 | Nhóm | Chế độ |
 |---|---|
-| Intelligence | repo-map, omega-skill-compatibility-audit, omega-context-sufficiency-check |
-| Engineering | controlled-change, omega-workflow-handoff-contract |
-| Quality | quality-gates, omega-skill-interference-benchmark, omega-evidence-reconciler |
-| Knowledge | project-memory, omega-memory-reconciliation |
-| Operations | omega-effective-policy-explainer, omega-project-workflow-adapter |
+| Intelligence | repo-map |
+| Engineering | controlled-change |
+| Quality | quality-gates |
+| Knowledge | project-memory |
 | Evolution | skill-benchmark |
 
 Lệnh phụ như doctor/isolate/rollback-check có CLI helper nhưng không là chế độ riêng. Một chế độ được coi là triển khai khi có quy trình, công cụ chạy được, kiểm thử hợp đồng và giới hạn rõ ràng. Hiệu quả với LLM đo riêng bằng [evals](../evals/README.md); giai đoạn 1 chưa có case nào OMEGA làm tốt hơn không dùng OMEGA.

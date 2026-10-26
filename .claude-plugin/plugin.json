@@ -1,7 +1,7 @@
 {
   "name": "omega",
-  "version": "0.7.4",
-  "description": "Evidence-based engineering: one skill, 13 on-demand workflows and three specialist agents backed by a local Python engine.",
+  "version": "0.7.5",
+  "description": "Evidence-based engineering: one skill, 5 on-demand workflows and three specialist agents backed by a local Python engine.",
   "author": {
     "name": "thanhuydiet207-a11y",
     "url": "https://github.com/thanhuydiet207-a11y"

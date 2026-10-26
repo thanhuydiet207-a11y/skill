@@ -1,6 +1,6 @@
 # Kết quả thực thi
 
-Bản 0.7: **212 Python tests riêng biệt pass**, **15 TypeScript bridge tests pass**, một plugin omega có một skill/13 chế độ và 3 agent. Strict manifests, local marketplace install và ZIP inventory đã kiểm chứng với Claude Code 2.1.308; engine trong install cache chạy fixture đỏ → xanh. Báo cáo: [plugin-packaging.json](evidence/plugin-packaging.json); cách cài: [CLAUDE_PLUGIN.md](CLAUDE_PLUGIN.md).
+Bản 0.7: **212 Python tests riêng biệt pass**, **15 TypeScript bridge tests pass**, một plugin omega có một skill/13 chế độ và 3 agent (từ 0.7.5: 5 chế độ). Strict manifests, local marketplace install và ZIP inventory đã kiểm chứng với Claude Code 2.1.308; engine trong install cache chạy fixture đỏ → xanh. Báo cáo: [plugin-packaging.json](evidence/plugin-packaging.json); cách cài: [CLAUDE_PLUGIN.md](CLAUDE_PLUGIN.md).
 
 ## Phạm vi kiểm chứng hiện tại
 

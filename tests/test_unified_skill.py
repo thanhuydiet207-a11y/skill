@@ -15,15 +15,28 @@ class UnifiedSkill(unittest.TestCase):
         self.assertTrue(result['passed']);self.assertEqual([x['name'] for x in result['skills']],['omega'])
         self.assertEqual(result['skills'][0]['activation'],'model-eligible-or-unspecified')
         contract=assess(ENGINE_ROOT,'omega');self.assertTrue(contract['advanced_passed'])
-        self.assertEqual({x['id'] for x in contract['modes']},set(MODES));self.assertEqual(len(MODES),13)
+        self.assertEqual({x['id'] for x in contract['modes']},set(MODES));self.assertEqual(len(MODES),5)
 
     def test_each_plan_keeps_one_entry_and_only_selected_reference_paths(self):
         for intent in ('change','investigate','verify','knowledge','evolve','interoperability'):
             result=plan('high',True,intent)
-            self.assertEqual(result['skills'],['omega']);self.assertLess(len(result['references']),13)
+            self.assertEqual(result['skills'],['omega']);self.assertLess(len(result['references']),len(MODES))
             self.assertEqual(result['references'],[f'.claude/skills/omega/{MODES[m]["reference"]}' for m in result['modes']])
             self.assertTrue(all((ENGINE_ROOT/x).is_file() for x in result['references']))
             self.assertEqual(result['isolation'],'worktree');self.assertEqual(result['max_concurrent_agents'],2)
+
+    def test_extension_commands_are_documented_and_not_skill_modes(self):
+        import re
+        from omega.arguments import parser as make_parser
+        docs=(ENGINE_ROOT/'docs/EXTENSIONS.md').read_text()
+        commands=re.findall(r'^Lệnh: `([a-z-]+)`',docs,re.M)
+        self.assertEqual(len(commands),8)
+        for command in commands:
+            with self.subTest(command=command):
+                self.assertTrue(any(command in action.choices for action in make_parser()._actions if action.choices),'not a CLI command')
+                self.assertNotIn('omega-'+command,MODES)
+                self.assertFalse((ENGINE_ROOT/f'.claude/skills/omega/references/omega-{command}.md').exists())
+        self.assertNotIn('references/omega-',(ENGINE_ROOT/'.claude/skills/omega/SKILL.md').read_text())
 
     def test_missing_reference_cannot_silently_remove_a_mode(self):
         with tempfile.TemporaryDirectory() as d:
@@ -52,7 +65,7 @@ class UnifiedSkill(unittest.TestCase):
             before=assess(root,'omega');self.assertTrue(before['passed'])
             guide.write_text('Cycle references/repo-map.md\nVersion B\n');after=assess(root,'omega')
             self.assertNotEqual(before['bundle_sha256'],after['bundle_sha256'])
-            self.assertEqual(len(after['resources']),14)
+            self.assertEqual(len(after['resources']),6)
 
     def test_symlink_reference_is_not_certified(self):
         with tempfile.TemporaryDirectory() as d:

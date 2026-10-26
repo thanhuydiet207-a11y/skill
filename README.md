@@ -1,6 +1,6 @@
 # OMEGA
 
-Hệ thống AI Engineering đóng gói thành **plugin Claude Code**: một skill omega, 13 chế độ nội bộ và 3 agent. Python stdlib làm lõi; TypeScript là bridge điều phối/giao tiếp. Runtime Python dùng stdlib; TypeScript bridge không có dependency ứng dụng, type-check dùng dev tools đã pin.
+Hệ thống AI Engineering đóng gói thành **plugin Claude Code**: một skill omega, 5 chế độ nội bộ và 3 agent. Python stdlib làm lõi; TypeScript là bridge điều phối/giao tiếp. Runtime Python dùng stdlib; TypeScript bridge không có dependency ứng dụng, type-check dùng dev tools đã pin.
 
 ```text
 /plugin marketplace add thanhuydiet207-a11y/skill
@@ -27,13 +27,13 @@ python3 -m omega plan --complexity medium
 python3 -m omega gates
 ```
 
-- [Kiến trúc: 13 chế độ, 3 agent](docs/ARCHITECTURE.md) · [Roadmap: phần chưa làm](docs/ROADMAP.md)
+- [Kiến trúc: 5 chế độ, 3 agent](docs/ARCHITECTURE.md) · [Roadmap: phần chưa làm](docs/ROADMAP.md)
 - [Eval: có và không có OMEGA](evals/README.md)
 - [Cấu hình và sử dụng từng thành phần](docs/OPERATIONS.md)
 - [Bằng chứng kiểm thử và giới hạn](docs/VALIDATION.md)
 - [Quy tắc điều phối Claude](.claude/CLAUDE.md)
 
-**Bản 0.7: plugin + marketplace tự host trên GitHub**, gồm một skill omega với 13 chế độ, 3 agent và toàn bộ CLI chức năng. Eval giai đoạn 1 (8 case, có và không có plugin) chưa cho thấy case nào OMEGA làm tốt hơn; chi tiết ở [evals/README.md](evals/README.md).
+**Bản 0.7: plugin + marketplace tự host trên GitHub**, gồm một skill omega với 5 chế độ, 3 agent và toàn bộ CLI chức năng (tám lệnh phân tích mở rộng ở [docs/EXTENSIONS.md](docs/EXTENSIONS.md)). Eval giai đoạn 1 (8 case, có và không có plugin) chưa cho thấy case nào OMEGA làm tốt hơn; chi tiết ở [evals/README.md](evals/README.md).
 
 [Cách dùng và chuyển sang một skill](docs/UNIFIED_SKILL.md) · [Python core + TypeScript bridge, MCP/UI boundary](docs/PYTHON_TYPESCRIPT_BOUNDARY.md) · [Hướng dẫn sử dụng](docs/INTEROPERABILITY_GUIDE.md).
 

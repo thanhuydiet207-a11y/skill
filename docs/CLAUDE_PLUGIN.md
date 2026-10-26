@@ -44,7 +44,7 @@ Trong phiên Claude Code có thể dùng `/plugin` để mở trình quản lý 
 |---|---|
 | Manifest plugin omega | .claude-plugin/plugin.json |
 | Marketplace omega-marketplace | .claude-plugin/marketplace.json, source ./ |
-| Một skill, 13 mode references | .claude/skills/omega/SKILL.md và references/ |
+| Một skill, 5 mode references | .claude/skills/omega/SKILL.md và references/ |
 | Ba agent | agents/omega-investigator.md, omega-engineer.md, omega-verifier.md |
 | Python engine | omega_cli.py và omega/ |
 

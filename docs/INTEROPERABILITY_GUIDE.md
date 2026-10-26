@@ -2,7 +2,7 @@
 
 ## Những gì đã thực thi được
 
-OMEGA có một skill omega với 13 mode references; xem [UNIFIED_SKILL.md](UNIFIED_SKILL.md). Tám command phân tích interoperability chạy local bằng Python chuẩn. Chúng không cài skill ngoài, không gọi model/MCP, không tự dispatch agent, không sửa policy hoặc chọn người thắng cho quyết định kỹ thuật. Một proposal hoặc static check không phải chứng nhận tương thích native.
+OMEGA có một skill omega với 5 mode references; tám lệnh phân tích dưới đây không còn là chế độ, hướng dẫn gốc ở [EXTENSIONS.md](EXTENSIONS.md); xem [UNIFIED_SKILL.md](UNIFIED_SKILL.md). Tám command phân tích interoperability chạy local bằng Python chuẩn. Chúng không cài skill ngoài, không gọi model/MCP, không tự dispatch agent, không sửa policy hoặc chọn người thắng cho quyết định kỹ thuật. Một proposal hoặc static check không phải chứng nhận tương thích native.
 
 5 skill cũ giữ tên để không phá lời gọi đã có. 8 skill mới dùng tiền tố `omega-` để giảm trùng tên. Đây là tên file/frontmatter, không phải khẳng định plugin namespace đã được Claude đăng ký. OMEGA không tự có quyền ưu tiên cao hơn skill khác.
 

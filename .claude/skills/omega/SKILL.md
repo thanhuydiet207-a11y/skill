@@ -32,17 +32,9 @@ python3 -B "${CLAUDE_PLUGIN_ROOT}/omega_cli.py" --project-root "$PWD" plan --com
 | quality-gates: build/tests/security/regression/rollback | [quality-gates](references/quality-gates.md) |
 | project-memory: ghi/đọc quyết định và bằng chứng | [project-memory](references/project-memory.md) |
 | skill-benchmark: candidate, benchmark, review | [skill-benchmark](references/skill-benchmark.md) |
-| omega-skill-compatibility-audit: kiểm tra xung đột skill khác | [compatibility](references/omega-skill-compatibility-audit.md) |
-| omega-effective-policy-explainer: giải thích policy/quyền | [policy](references/omega-effective-policy-explainer.md) |
-| omega-workflow-handoff-contract: ownership và lịch giao việc | [handoff](references/omega-workflow-handoff-contract.md) |
-| omega-skill-interference-benchmark: phân tích kết quả A/B/A+B | [interference](references/omega-skill-interference-benchmark.md) |
-| omega-project-workflow-adapter: đề xuất gates cho project | [adapter](references/omega-project-workflow-adapter.md) |
-| omega-evidence-reconciler: kiểm tra bằng chứng còn hiệu lực | [evidence](references/omega-evidence-reconciler.md) |
-| omega-memory-reconciliation: đối chiếu quyết định cũ | [memory check](references/omega-memory-reconciliation.md) |
-| omega-context-sufficiency-check: kiểm tra nguồn/context đủ | [context check](references/omega-context-sufficiency-check.md) |
 
 4. Khi sửa, tái hiện trước; ghi rõ contract và chính sách chưa xác nhận thay vì tự chọn rồi viết test theo. Thay đổi trong scope, kiểm tra rủi ro và chạy bốn gates được review; zero/all-skipped không đủ pass. Phân biệt test tự viết, test độc lập và test đã nhìn thấy; không gọi chúng là hidden tests.
-5. Với skill evolution dùng --skill omega. Không đổi stable hoặc reference sau benchmark rồi dùng lại proof cũ. Tên 13 skill cũ là chế độ tham chiếu, không còn là entry skill/đích release riêng. Dùng --compact/--summary; log đầy đủ nằm ở evidence, không bỏ kiểm thử để giảm context.
+5. Với skill evolution dùng --skill omega. Không đổi stable hoặc reference sau benchmark rồi dùng lại proof cũ. Tên skill cũ là chế độ tham chiếu, không còn là entry skill/đích release riêng. Tám lệnh mở rộng (compatibility audit, policy explainer, handoff contract, interference benchmark, workflow adapter, evidence reconciler, memory reconciliation, context sufficiency) không còn là chế độ; hướng dẫn nằm ở docs/EXTENSIONS.md, chỉ đọc khi người dùng yêu cầu đúng việc đó. Dùng --compact/--summary; log đầy đủ nằm ở evidence, không bỏ kiểm thử để giảm context.
 
 ## Evidence
 

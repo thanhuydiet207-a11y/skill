@@ -71,11 +71,11 @@ def plan(complexity, conflict=False, intent="change", workflow=None):
              'high': ['omega-investigator','omega-engineer','omega-verifier']}
     selections={
         'change':['repo-map','controlled-change','quality-gates','project-memory'],
-        'investigate':['repo-map','omega-context-sufficiency-check'],
-        'verify':['quality-gates','omega-evidence-reconciler'],
-        'knowledge':['project-memory','omega-memory-reconciliation'],
-        'evolve':['skill-benchmark','omega-skill-interference-benchmark'],
-        'interoperability':['omega-skill-compatibility-audit','omega-effective-policy-explainer','omega-workflow-handoff-contract']}
+        'investigate':['repo-map'],
+        'verify':['quality-gates'],
+        'knowledge':['project-memory'],
+        'evolve':['skill-benchmark'],
+        'interoperability':[]}  # Extension commands are documented in docs/EXTENSIONS.md, not skill modes.
     if intent not in selections or complexity not in roles or type(conflict) is not bool:raise ValueError('Invalid plan intent/complexity/conflict')
     contract=None
     if workflow is not None:

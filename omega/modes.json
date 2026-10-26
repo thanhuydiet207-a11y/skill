@@ -37,53 +37,5 @@
       "benchmark"
     ],
     "reference": "references/skill-benchmark.md"
-  },
-  "omega-skill-compatibility-audit": {
-    "commands": [
-      "skill-compatibility-audit"
-    ],
-    "reference": "references/omega-skill-compatibility-audit.md"
-  },
-  "omega-effective-policy-explainer": {
-    "commands": [
-      "effective-policy-explainer"
-    ],
-    "reference": "references/omega-effective-policy-explainer.md"
-  },
-  "omega-workflow-handoff-contract": {
-    "commands": [
-      "workflow-handoff-contract"
-    ],
-    "reference": "references/omega-workflow-handoff-contract.md"
-  },
-  "omega-skill-interference-benchmark": {
-    "commands": [
-      "skill-interference-benchmark"
-    ],
-    "reference": "references/omega-skill-interference-benchmark.md"
-  },
-  "omega-project-workflow-adapter": {
-    "commands": [
-      "project-workflow-adapter"
-    ],
-    "reference": "references/omega-project-workflow-adapter.md"
-  },
-  "omega-evidence-reconciler": {
-    "commands": [
-      "evidence-reconciler"
-    ],
-    "reference": "references/omega-evidence-reconciler.md"
-  },
-  "omega-memory-reconciliation": {
-    "commands": [
-      "memory-reconciliation"
-    ],
-    "reference": "references/omega-memory-reconciliation.md"
-  },
-  "omega-context-sufficiency-check": {
-    "commands": [
-      "context-sufficiency-check"
-    ],
-    "reference": "references/omega-context-sufficiency-check.md"
   }
 }

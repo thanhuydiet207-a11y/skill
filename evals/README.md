@@ -47,7 +47,7 @@ Chạy trên project `ledger` (baseline sạch), plugin 0.7.4.
 | `omega-project-workflow-adapter` | 0/3 | 0/3 | 3/3 |
 | `omega-workflow-handoff-contract` | 0/3 | 0/3 | 3/3 |
 
-Chỉ 1/8 chế độ được dùng; 5/8 không lần nào được gọi. Câu trả lời vẫn đạt 24/24 mà không cần chế độ, nên judge cho thấy Claude làm được các việc này mà không có OMEGA (tiêu chí của judge lỏng: chỉ đòi nội dung có thật và nêu phần chưa kiểm tra, không đòi dùng đúng công cụ).
+Chỉ 1/8 chế độ được dùng; 5/8 không lần nào được gọi. Từ 0.7.5 8 chế độ này đã bị xoá khỏi skill và 8 case `route-*` được xoá theo (xem lịch sử Git); kết quả giữ lại ở đây. Câu trả lời vẫn đạt 24/24 mà không cần chế độ, nên judge cho thấy Claude làm được các việc này mà không có OMEGA (tiêu chí của judge lỏng: chỉ đòi nội dung có thật và nêu phần chưa kiểm tra, không đòi dùng đúng công cụ).
 
 **3. Agent `omega-investigator`: hoạt động, chưa chứng minh có lợi.** Case `agent-investigate` yêu cầu giao việc điều tra cho agent này. Có plugin: 3/3 lượt tạo đúng 1 subagent, tìm đúng nguyên nhân 2/3 lượt (lượt trượt không nêu hàm dùng chung), $0.107 mỗi lượt. Không plugin: agent không tồn tại, Claude dừng lại hỏi ý kiến (0/3), $0.050. Hai nhánh không so sánh công bằng được: nhánh không plugin không có agent này để dùng. Chưa đo so với agent `general-purpose` có sẵn. Hai agent còn lại (`omega-engineer`, `omega-verifier`) chưa có case.
 

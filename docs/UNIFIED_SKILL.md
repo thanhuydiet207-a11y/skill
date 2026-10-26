@@ -1,4 +1,4 @@
-# OMEGA 0.6: một skill, 13 chế độ
+# OMEGA 0.6: một skill, 13 chế độ (từ 0.7.5 còn 5; tám chế độ mở rộng chuyển sang [EXTENSIONS.md](EXTENSIONS.md))
 
 > Snapshot thiết kế consolidation 0.6. Bản 0.7 giữ một skill này và đóng gói plugin; xem [CLAUDE_PLUGIN.md](CLAUDE_PLUGIN.md) để cài và gọi /omega:omega. Các số liệu 204 tests bên dưới thuộc snapshot 0.6.
 
