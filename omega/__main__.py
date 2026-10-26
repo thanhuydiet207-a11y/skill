@@ -1,5 +1,6 @@
 """OMEGA: local, dependency-free engineering evidence tools (not an LLM runtime)."""
 import argparse
+import errno
 import hashlib
 import json
 import os
@@ -7,6 +8,7 @@ from pathlib import Path
 import re
 import shutil
 import sys
+import tempfile
 import time
 import uuid
 
@@ -138,9 +140,11 @@ def doctor():
     if binary:
         runtime_ready()
         state=artifact_path(ROOT,'.omega/claude-state/runtime.marker','claude-state',False).parent
-        state.mkdir(parents=True,exist_ok=True)
-        environment=dict(os.environ);environment['CLAUDE_CONFIG_DIR']=str(state)
-        native={'available':True,'source':source,**execute([binary,'--version'],ROOT,timeout=15,env=environment)}
+        try:state.mkdir(parents=True,exist_ok=True)
+        except OSError:state=None  # Read-only checkout: probe with a throwaway config dir instead.
+        with tempfile.TemporaryDirectory() as scratch:
+            environment=dict(os.environ);environment['CLAUDE_CONFIG_DIR']=str(state or scratch)
+            native={'available':True,'source':source,**execute([binary,'--version'],ROOT,timeout=15,env=environment)}
     return {'python':sys.version.split()[0],'git':git('--version'),'claude':native,
             'native_integration':'Version probe only; skills, agents and hook behavior remain UNVERIFIED',
             'hooks_enabled':'unknown','mcp_enabled':'unknown',
@@ -300,7 +304,12 @@ def _dispatch():
         code=0 if result['passed'] else 1
     elif args.command=='gates':
         result=gates();code=0 if result['passed'] else 1
-        result['evidence']=save('evidence',result)
+        try:result['evidence']=save('evidence',result)
+        except OSError as exc:
+            # A read-only checkout still gets its gate results; only the reusable evidence record is lost.
+            if exc.errno not in (errno.EROFS,errno.EACCES,errno.EPERM):raise
+            result['evidence']=None
+            result['evidence_unsaved']=f'Project is not writable ({exc.strerror}); results are shown but no evidence was persisted, so compare/change-check cannot reuse them'
         if args.summary:
             from omega.context import gate_summary
             result=gate_summary(result)
