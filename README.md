@@ -9,6 +9,13 @@ Hệ thống AI Engineering đóng gói thành **plugin Claude Code**: một ski
 
 Hoặc: `/plugin install omega --marketplace thanhuydiet207-a11y/skill`. Khởi động lại phiên rồi gọi `/omega:omega phân tích repository này`. [Cài đặt, ZIP và kiểm chứng plugin](docs/CLAUDE_PLUGIN.md).
 
+Cập nhật lên bản mới (rồi khởi động lại phiên):
+
+```bash
+claude plugin marketplace update omega-marketplace
+claude plugin update omega@omega-marketplace
+```
+
 Entry duy nhất là [.claude/skills/omega/SKILL.md](.claude/skills/omega/SKILL.md); references chỉ đọc khi cần. Plugin chứa Python engine và dùng đường dẫn cache tuyệt đối để thao tác project đích. Trong checkout nguồn vẫn có local `/omega`. Chỉ tải SKILL.md vào Claude Web không cài engine.
 
 ```bash

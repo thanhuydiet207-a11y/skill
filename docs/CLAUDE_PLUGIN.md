@@ -24,6 +24,18 @@ Khởi động lại phiên Claude Code để áp dụng, rồi gọi:
 
 CLI tương ứng có thể dùng `claude plugin marketplace add thanhuydiet207-a11y/skill`, `claude plugin install omega@omega-marketplace --scope user` và `claude plugin list --json`. Có thể chọn scope project/local theo chính sách của project; không copy settings từ môi trường thử nghiệm.
 
+### Cập nhật
+
+Làm mới marketplace từ GitHub rồi cập nhật plugin, sau đó khởi động lại phiên Claude Code:
+
+```bash
+claude plugin marketplace update omega-marketplace
+claude plugin update omega@omega-marketplace
+claude plugin list --json   # kiểm tra version mới
+```
+
+Trong phiên Claude Code có thể dùng `/plugin` để mở trình quản lý plugin và chọn cập nhật. Claude Code so sánh `version` trong `.claude-plugin/plugin.json`; người bảo trì phải tăng version (cùng `marketplace.json` và `omega/__init__.py`) mỗi khi phát hành thay đổi, nếu không bản cài sẽ không nhận bản mới.
+
 Định dạng này dành cho plugin Claude Code. Chỉ upload SKILL.md hoặc ZIP như tài liệu trong Claude Web không thực thi engine. Bản đã kiểm chứng là Claude Code **2.1.308**; kiểm tra `claude --version` và `claude plugin --help` ở máy dùng thật. Cài đặt/discovery đã được thử, phiên suy luận native và hiệu quả token vẫn chưa nghiệm thu.
 
 ## Thành phần
