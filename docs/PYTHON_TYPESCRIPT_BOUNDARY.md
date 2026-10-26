@@ -16,7 +16,7 @@ flowchart LR
 
 ## Dùng bridge
 
-Node >=24, Python >=3.10, Git, POSIX. Bridge runtime không cần package ứng dụng bên thứ ba, service hoặc port. Full engine build cần npm ci cho dev compiler/type definitions đã pin; xem UPGRADE_0_5.md. Node chạy TypeScript bằng type stripping; bản 0.5 đã chạy thêm strict tsc/noEmit trong build gate với TypeScript 5.9.3 và @types/node 24.19.0 đã pin. Node kiểm chứng local: 24.19.0. CI cấu hình đúng phiên bản, action setup-node pin SHA tag đã kiểm tra.
+Node >=24, Python >=3.10, Git, POSIX. Bridge runtime không cần package ứng dụng bên thứ ba, service hoặc port. Full engine build cần npm ci cho dev compiler/type definitions đã pin; xem UPGRADE_0_5.md. Node chạy TypeScript bằng type stripping; build gate chạy strict tsc/noEmit với TypeScript 7.0.2 (compiler native) và @types/node 24.19.2 đã pin (giữ nhánh 24 khớp runtime Node 24). Node kiểm chứng local: 24.19.0. CI cấu hình đúng phiên bản, action setup-node pin SHA tag đã kiểm tra.
 
 ```bash
 node --test integration/typescript/omega-bridge.test.mjs
