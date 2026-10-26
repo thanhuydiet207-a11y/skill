@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"$CLAUDE_PROJECT_DIR\" && { [ -x integration/typescript/node_modules/.bin/tsc ] || npm ci --prefix integration/typescript --ignore-scripts --no-audit --no-fund >&2; }"
+          }
+        ]
+      }
+    ]
+  }
+}
