@@ -6,6 +6,18 @@ Chỉ nên làm một mục khi eval cho thấy nó cải thiện kết quả so
 
 Hướng tổng thể cho 0.8: [PLAN_0_8.md](PLAN_0_8.md) (đo lường trước, rồi mới context, workflow, router).
 
+## Quyết định cho từng phần của skill (từ eval, chi tiết ở evals/README.md)
+
+| Phần | Bằng chứng | Quyết định |
+|---|---|---|
+| Skill omega khi được gọi | Ngang chất lượng, +28% token input | `keep experimental` |
+| `repo-map`, `quality-gates` | Chỉ `doctor`/`map` được chạy; `gates` đo ở case riêng, ngang không dùng | `keep experimental` |
+| `controlled-change` | Workflow không được tuân theo; không đo được trong sandbox | `keep experimental`, chưa có bằng chứng |
+| 8 chế độ mở rộng | Định tuyến 1/8; 5/8 không bao giờ được gọi | Ứng viên `remove` khỏi skill, chuyển sang tài liệu |
+| `project-memory`, `skill-benchmark` | Chưa có case | Chưa đánh giá |
+| Agent `omega-investigator` | Hoạt động (3/3 lượt), chưa so với `general-purpose` | `keep experimental` |
+| Agent `omega-engineer`, `omega-verifier` | Chưa có case | Chưa đánh giá |
+
 ## Ưu tiên từ kết quả eval
 
 1. ~~Cho engine chạy trên checkout chỉ đọc.~~ Đã làm ở 0.7.4: `gates` vẫn báo kết quả với `evidence: null`, `build` ghi bytecode ra thư mục tạm, `doctor` dùng config tạm. Evidence vẫn chỉ lưu trong `.omega/` của project.

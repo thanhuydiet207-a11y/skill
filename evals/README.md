@@ -28,6 +28,29 @@ python3 benchmarks/eval_metrics.py current=/tmp/run-x --json /tmp/run-x/metrics.
 - Số đo đầu tiên (`fix-runner-bug-omega`, nhánh có OMEGA, 3 lượt đạt): trung bình 158.801 token input (gần hết là cache read), 1.433 token output, 7 lần gọi công cụ (Skill 1, Bash 3–4, Read 1–2, Edit 1), $0.112 mỗi lượt thành công. Nhánh không OMEGA và case `shared-helper-bug-omega` dừng vì hết giới hạn phiên, nên chưa có số so sánh.
 - Giới hạn: harness tự quyết thứ tự chạy các nhánh (chưa hoán đổi được), và mỗi lượt `--keep-temp` để lại một thư mục `/tmp/claude-eval-*` khoảng 250 KB cần tự xoá.
 
+## Các phần còn lại của skill: workflow, chế độ mở rộng, agent
+
+Chạy trên project `ledger` (baseline sạch), plugin 0.7.4.
+
+**1. `controlled-change` (workflow `change-plan`/`change-attempt`): không được thực hiện.** Khi prompt nhắc OMEGA, Claude nạp skill rồi chỉ chạy `doctor` và `map`, sau đó sửa lỗi bằng cách thông thường (đọc code, sửa, chạy lại test). Nó không chạy `plan`, `change-plan`, `change-attempt` hay `gates` (đọc từng lệnh Bash trong trace). Workflow này cũng không thể đo trong sandbox của harness: `change-plan` cần ghi `.omega/changes`, đang ở branch khác `main`/`master` và cây thư mục sạch. Vì vậy chưa có bằng chứng quy trình 6 bước của `controlled-change` được tuân theo hay có ích; những gì đo được ở các case sửa lỗi là hiệu ứng của riêng `doctor`/`map` và việc nạp skill.
+
+**2. 8 chế độ mở rộng: gần như không được định tuyến tới.** Mỗi chế độ có một case mô tả đúng tác vụ bằng lời thường, không nhắc OMEGA (tag `routing`, 3 lượt, chỉ nhánh có plugin, $1.76). Cột "gọi skill" và "chạy lệnh của chế độ" là số lượt trên 3:
+
+| Chế độ | Gọi skill | Chạy lệnh của chế độ | Câu trả lời đạt |
+|---|---|---|---|
+| `omega-skill-compatibility-audit` | 3/3 | 3/3 | 3/3 |
+| `omega-evidence-reconciler` | 2/3 | 0/3 | 3/3 |
+| `omega-skill-interference-benchmark` | 1/3 | 0/3 | 3/3 |
+| `omega-context-sufficiency-check` | 0/3 | 0/3 | 3/3 |
+| `omega-effective-policy-explainer` | 0/3 | 0/3 | 3/3 |
+| `omega-memory-reconciliation` | 0/3 | 0/3 | 3/3 |
+| `omega-project-workflow-adapter` | 0/3 | 0/3 | 3/3 |
+| `omega-workflow-handoff-contract` | 0/3 | 0/3 | 3/3 |
+
+Chỉ 1/8 chế độ được dùng; 5/8 không lần nào được gọi. Câu trả lời vẫn đạt 24/24 mà không cần chế độ, nên judge cho thấy Claude làm được các việc này mà không có OMEGA (tiêu chí của judge lỏng: chỉ đòi nội dung có thật và nêu phần chưa kiểm tra, không đòi dùng đúng công cụ).
+
+**3. Agent `omega-investigator`: hoạt động, chưa chứng minh có lợi.** Case `agent-investigate` yêu cầu giao việc điều tra cho agent này. Có plugin: 3/3 lượt tạo đúng 1 subagent, tìm đúng nguyên nhân 2/3 lượt (lượt trượt không nêu hàm dùng chung), $0.107 mỗi lượt. Không plugin: agent không tồn tại, Claude dừng lại hỏi ý kiến (0/3), $0.050. Hai nhánh không so sánh công bằng được: nhánh không plugin không có agent này để dùng. Chưa đo so với agent `general-purpose` có sẵn. Hai agent còn lại (`omega-engineer`, `omega-verifier`) chưa có case.
+
 ## Baseline sạch: project `ledger` (tag `external`)
 
 Project mẫu `evals/fixtures/ledger` không có file nào của OMEGA, nên nhánh không plugin là Claude Code thuần (0 lượt gọi skill). Lỗi cài sẵn: `parse_amount` cắt cụt sai số dấu phẩy động, làm fail test được nêu và một test ở file khác. 10 lượt mỗi nhánh, có trace, tổng $3.36. Số liệu từng lượt: [results-ledger-ab.json](results-ledger-ab.json).

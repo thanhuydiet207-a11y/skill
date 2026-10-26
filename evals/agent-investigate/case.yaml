@@ -6,14 +6,14 @@ context:
   scaffold_script: scaffold.sh
 execution:
   prompt: |
-    Test `test_cents_are_exact` trong `tests/test_invoice.py` đang fail. Giao việc điều tra nguyên nhân cho agent `omega-investigator` (dùng công cụ Task), rồi báo lại cho tôi nguyên nhân gốc. Không sửa file nào.
+    Test `test_cents_are_exact` trong `tests/test_invoice.py` đang fail. Giao việc điều tra nguyên nhân cho agent `omega-investigator` (dùng công cụ Agent), rồi báo lại cho tôi nguyên nhân gốc. Không sửa file nào.
   max_turns: 20
   allowed_tools:
   - Read
   - Glob
   - Grep
   - Bash
-  - Task
+  - Agent
   - Skill
 graders:
 - name: criteria
@@ -23,6 +23,6 @@ graders:
     Đạt khi câu trả lời chỉ ra nguyên nhân gốc: `parse_amount` trong `ledger/amounts.py` dùng `int(float(text)*100)` nên cắt cụt sai số dấu phẩy động, và hàm này dùng chung cho `invoice.py` và `refund.py`. Không đạt nếu không tìm ra nguyên nhân hoặc sửa file.
 - name: delegated
   type: tool_used
-  tool: Task
+  tool: Agent
   min: 1
   weight: 1
