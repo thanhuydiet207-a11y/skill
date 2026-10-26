@@ -93,6 +93,12 @@ class TestRunnerSafety(unittest.TestCase):
     def test_expected_failure_alone_is_not_readiness(self):
         p=self.execute_fixture('import unittest\nclass T(unittest.TestCase):\n @unittest.expectedFailure\n def test_one(self): self.fail()\n')
         self.assertEqual(p.returncode,5);self.assertIn('"expected_failures": 1',p.stdout)
+    def test_setup_class_error_keeps_counts_consistent(self):
+        p=self.execute_fixture('import unittest\nclass A(unittest.TestCase):\n @classmethod\n def setUpClass(cls): raise OSError\n def test_a(self): pass\n'
+                               'class B(unittest.TestCase):\n def test_b(self): pass\n')
+        counts=json.loads(p.stdout.splitlines()[-1].removeprefix('OMEGA_TEST_RESULT '))
+        self.assertEqual(p.returncode,1)
+        self.assertEqual((counts['run'],counts['passed'],counts['errors']),(2,1,1))
     def test_failed_subtests_count_once_per_method(self):
         p=self.execute_fixture('import unittest\nclass T(unittest.TestCase):\n def test_ok(self): pass\n'
                                ' def test_many(self):\n  for i in range(3):\n   with self.subTest(i=i): self.fail()\n'
@@ -100,6 +106,14 @@ class TestRunnerSafety(unittest.TestCase):
         counts=json.loads(p.stdout.splitlines()[-1].removeprefix('OMEGA_TEST_RESULT '))
         self.assertEqual(p.returncode,1)
         self.assertEqual((counts['run'],counts['passed'],counts['failed'],counts['errors']),(3,1,1,1))
+
+
+class NonGitProject(unittest.TestCase):
+    def test_project_root_outside_git_explains_what_to_do(self):
+        with tempfile.TemporaryDirectory() as d:
+            p=subprocess.run([sys.executable,'-m','omega','--project-root',d,'doctor','--compact'],cwd=app.ROOT,text=True,capture_output=True)
+        self.assertEqual(p.returncode,2)
+        self.assertIn('git init',p.stderr);self.assertNotIn('fatal:',p.stderr)
 
 
 class EvidenceSafety(unittest.TestCase):

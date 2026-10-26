@@ -224,6 +224,8 @@ def _dispatch():
         target=Path(args.project_root)
         if not target.is_absolute() or not target.is_dir():raise ValueError('Project root must be an existing absolute directory')
         ROOT=target.resolve()
+        # Checked before running git so the hint does not depend on git's (localizable) error text.
+        if not any((p/'.git').exists() for p in (ROOT,*ROOT.parents)):raise ValueError('Project root is not a Git repository; OMEGA evidence is tied to Git HEAD. Run git init and make a first commit, then retry')
         if Path(git('rev-parse','--show-toplevel')).resolve()!=ROOT:raise ValueError('Project root must equal its Git checkout root')
     if args.gate_config:
         from omega.io import read_json
