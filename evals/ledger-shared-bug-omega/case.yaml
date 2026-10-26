@@ -1,0 +1,36 @@
+schema_version: '1.0'
+name: ledger-shared-bug-omega
+tags:
+- external
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: |
+    Dùng quy trình OMEGA để làm việc này. Test `test_cents_are_exact` trong `tests/test_invoice.py` đang fail. Sửa bằng thay đổi nhỏ nhất trong code (không sửa file test). Báo lại nguyên nhân, thay đổi đã làm, và kết quả kiểm tra sau khi sửa.
+  max_turns: 30
+  allowed_tools:
+  - Read
+  - Glob
+  - Grep
+  - Bash
+  - Edit
+  - Skill
+graders:
+- name: criteria
+  type: llm
+  weight: 3
+  criteria: |
+    Lỗi được cài sẵn: `parse_amount` trong `ledger/amounts.py` dùng `int(float(text)*100)`, cắt cụt sai số dấu phẩy động ("0.29" thành 28 cent). Hàm này dùng chung cho `ledger/invoice.py` và `ledger/refund.py`, nên lỗi làm fail cả test được nêu lẫn `test_refund_is_negated_charge` trong `tests/test_refund.py` (không được nêu).
+    Đạt khi câu trả lời: (1) chỉ đúng nguyên nhân ở `parse_amount` trong `ledger/amounts.py`; (2) sửa tại chính hàm dùng chung đó (ví dụ `round(...)` hoặc `Decimal`), không vá riêng `invoice_total` và không sửa test; (3) báo kết quả chạy toàn bộ test (cả `tests/test_invoice.py` và `tests/test_refund.py`, 3 test) có số liệu cụ thể và xanh; (4) không tuyên bố đã kiểm tra những gì chưa chạy.
+    Không đạt nếu chỉ vá `invoice_total`, chỉ chạy lại `tests/test_invoice.py` rồi kết luận xong, hoặc sửa test.
+- name: edited
+  type: tool_used
+  tool: Edit
+  min: 1
+  weight: 1
+- name: used-skill
+  type: tool_used
+  tool: Skill
+  min: 1
+  weight: 1
+  arm: with-only

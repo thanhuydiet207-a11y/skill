@@ -28,6 +28,14 @@ python3 benchmarks/eval_metrics.py current=/tmp/run-x --json /tmp/run-x/metrics.
 - Số đo đầu tiên (`fix-runner-bug-omega`, nhánh có OMEGA, 3 lượt đạt): trung bình 158.801 token input (gần hết là cache read), 1.433 token output, 7 lần gọi công cụ (Skill 1, Bash 3–4, Read 1–2, Edit 1), $0.112 mỗi lượt thành công. Nhánh không OMEGA và case `shared-helper-bug-omega` dừng vì hết giới hạn phiên, nên chưa có số so sánh.
 - Giới hạn: harness tự quyết thứ tự chạy các nhánh (chưa hoán đổi được), và mỗi lượt `--keep-temp` để lại một thư mục `/tmp/claude-eval-*` khoảng 250 KB cần tự xoá.
 
+## Cảnh báo: baseline của các case chép repo OMEGA không sạch
+
+`evals/scaffold.sh` chép nguyên repo OMEGA vào workspace, kể cả `.claude/skills/omega/SKILL.md` và `.claude/CLAUDE.md`. Claude Code nạp hai file này từ thư mục làm việc, nên ở mọi case dùng scaffold đó, nhánh "không plugin" vẫn có quy tắc OMEGA trong context và có thể gọi project skill `omega`. Trong lần đo `fix-runner-bug-omega` 10 lượt mỗi nhánh, 3/10 lượt của nhánh không plugin đã gọi skill `omega`.
+
+Không thể xoá `.claude/` khỏi bản chép vì test của repo đọc chính các file đó. Vì vậy Δ của các case dưới đây chỉ so sánh "plugin + file dự án OMEGA" với "chỉ file dự án OMEGA", không phải với Claude Code không có OMEGA. Baseline sạch dùng project mẫu ở `evals/fixtures/` (tag `external`).
+
+Lần đo `fix-runner-bug-omega` (10 lượt mỗi nhánh, có trace, $2.32): cả hai nhánh 10/10 đạt. Có plugin: $0.108 mỗi lượt thành công, 162.133 token input, 1.417 token output, 7,0 lần gọi công cụ. Không plugin (nhưng có file dự án OMEGA): $0.125, 174.021, 1.926, 8,6.
+
 ## Kết quả bước 0 (1 lần chạy mỗi nhánh, chưa có ý nghĩa thống kê)
 
 | Case | Có OMEGA | Không OMEGA | Ghi chú |
